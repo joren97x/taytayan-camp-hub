@@ -1,8 +1,12 @@
 <script setup>
+
+import AuthLayout from '@/Layouts/AuthLayout.vue'
 import { computed } from 'vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+
+defineOptions({
+    layout: AuthLayout
+})
 
 const props = defineProps({
     status: {
@@ -20,32 +24,29 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Email Verification" />
-
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
-            we just emailed to you? If you didn't receive the email, we will gladly send you another.
-        </div>
-
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400" v-if="verificationLinkSent">
-            A new verification link has been sent to the email address you provided during registration.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
-                </PrimaryButton>
-
+    <Head title="Email Verification" />
+        <q-card class="q-pa-xl q-mt-xl">
+            <q-card-section>
+                <p class="text-h6 q-mb-lg">Email Verification</p>
+                <p>
+                    Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
+                    we just emailed to you? If you didn't receive the email, we will gladly send you another.
+                </p>
+                <q-banner inline-actions class="text-white bg-positive q-mb-md" v-if="verificationLinkSent">
+                    A new verification link has been sent to the email address you provided during registration.
+                </q-banner>
+            </q-card-section>
+            
+            <q-card-actions align="between">
+                <q-form class="q-pa-xl" @submit="submit">
+                    <q-btn no-caps color="primary" type="submit" :loading="form.processing" :disabled="form.processing">Resend Verification Email</q-btn>
+                </q-form>
                 <Link
                     :href="route('logout')"
                     method="post"
-                    as="button"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >Log Out</Link
                 >
-            </div>
-        </form>
-    </GuestLayout>
+                    <q-btn no-caps outline color="negative">Logout</q-btn>
+                </Link>
+            </q-card-actions>
+        </q-card>
 </template>

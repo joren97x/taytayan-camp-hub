@@ -1,8 +1,5 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -23,7 +20,7 @@ const form = useForm({
 </script>
 
 <template>
-    <section>
+    <!-- <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
 
@@ -98,5 +95,43 @@ const form = useForm({
                 </Transition>
             </div>
         </form>
-    </section>
+    </section> -->
+    <q-form @submit="form.patch(route('profile.update'))">
+        <q-card>
+            <q-card-section>
+                <div class="text-h6 q-mb-sm">Profile Information</div>
+                <div class="q-mb-lg">Update your account's profile information and email address.</div>
+                <q-input
+                    filled
+                    v-model="form.name"
+                    label="Name"
+                    lazy-rules
+                    :error="form.errors.name ? true : false"
+                    :error-message="form.errors.name"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                />
+                <q-input
+                    filled
+                    v-model="form.email"
+                    label="Email Address"
+                    lazy-rules
+                    :hint="!mustVerifyEmail || !user.email_verified_at === null ? 'Verified' : ''"
+                    :error="form.errors.email ? true : false"
+                    :error-message="form.errors.email"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                />
+                <q-banner :class="$q.dark.isActive ? 'bg-grey-8' : 'bg-grey-4'" v-if="mustVerifyEmail && user.email_verified_at === null">
+                    Your email has not been verified.
+                    <Link
+                        :href="route('verification.send')"
+                        method="post"
+                        as="button"
+                    >
+                        <q-btn outline no-caps color="blue" label="Resend Verification Email" />
+                    </Link>
+                </q-banner>
+                <q-btn label="Save" type="submit" :loading="form.processing" :disable="form.processing" class="q-mt-sm" unelevated no-caps color="blue" />
+            </q-card-section>
+        </q-card>
+    </q-form>
 </template>

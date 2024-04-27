@@ -1,10 +1,11 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+
+import AuthLayout from '@/Layouts/AuthLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3';
+
+defineOptions({
+    layout: AuthLayout
+})
 
 const props = defineProps({
     email: {
@@ -32,61 +33,65 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Reset Password" />
+    <Head title="Reset Password" />
+    <q-form @submit="submit">
+        <q-card class="q-pa-xl" flat>
+            <Link :href="route('login')">
+                <q-btn no-caps flat color="primary">
+                    <q-icon name="arrow_back" class="q-mr-sm"></q-icon>
+                    Go back to login
+                </q-btn>
+            </Link>
+            <q-card-section>
+                <div class="text-h6 q-mb-lg">Password Reset</div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
+                <q-input
+                    filled
+                    label="Email"
                     v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                    :error="form.errors.email ? true : false"
+                    :error-message="form.errors.email"
+                >
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
+                </q-input>
+               
+                <q-input
+                    filled
                     v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
+                    label="New Password"
+                    :type="!showPassword ? 'password' : 'text'" 
+                    lazy-rules
+                    :error="form.errors.password ? true : false"
+                    :error-message="form.errors.password"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                >
+                    <template v-slot:append>
+                        <q-icon
+                            :name="showPassword ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="showPassword = !showPassword"
+                        />
+                    </template>
+                </q-input>
+                <q-input
+                    filled
                     v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
+                    label="Confirm Password"
+                    lazy-rules
+                    :type="!showPassword2 ? 'password' : 'text'" 
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                >
+                    <template v-slot:append>
+                        <q-icon
+                            :name="showPassword2 ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="showPassword2 = !showPassword2"
+                        />
+                    </template>
+                </q-input>
+                <q-btn label="Reset Password" :loading="form.processing" :disabled="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+            </q-card-section>
 
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+        </q-card>
+    </q-form>
 </template>

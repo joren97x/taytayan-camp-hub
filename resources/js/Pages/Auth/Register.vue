@@ -1,10 +1,11 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+
+import AuthLayout from '@/Layouts/AuthLayout.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3';
+
+defineOptions({
+    layout: AuthLayout
+})
 
 const form = useForm({
     name: '',
@@ -21,83 +22,81 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
+    <Head title="Register" />
+    <q-form @submit="submit">
+        <q-card class="q-pa-xl" flat>
+            <q-card-section>
+                <p class="text-h6 q-mb-lg">Create your account</p>
+                <q-input
+                    filled
                     v-model="form.email"
-                    required
-                    autocomplete="username"
+                    label="Email Address"
+                    lazy-rules
+                    :error="form.errors.email ? true : false"
+                    :error-message="form.errors.email"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
+                <q-input
+                    filled
+                    v-model="form.name"
+                    label="Full Name"
+                    lazy-rules
+                    :error="form.errors.name ? true : false"
+                    :error-message="form.errors.name"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                <q-input 
+                    v-model="form.password" 
+                    filled 
+                    :type="!showPassword ? 'password' : 'text'" 
+                    label="Password"
+                    :error="form.errors.password ? true : false"
+                    :error-message="form.errors.password"
                 >
-                    Already registered?
-                </Link>
+                    <template v-slot:append>
+                        <q-icon
+                            :name="showPassword ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="showPassword = !showPassword"
+                        />
+                    </template>
+                </q-input>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                <q-input 
+                    v-model="form.password_confirmation" 
+                    filled 
+                    :error="form.errors.password_confirmation ? true : false"
+                    :error-message="form.errors.password_confirmation"
+                    :type="!showPassword2 ? 'password' : 'text'" 
+                    label="Confirm Password"
+                >
+                    <template v-slot:append>
+                        <q-icon
+                            :name="showPassword2 ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="showPassword2 = !showPassword2"
+                        />
+                    </template>
+                </q-input>
+
+                <q-btn label="Register" :loading="form.processing" :disabled="form.processing" no-caps type="submit" class="full-width q-mt-lg" color="primary"/>
+            </q-card-section>
+
+            <q-card-section>
+                <p class="text-center">
+                    Already have an account? 
+                    <Link 
+                        :href="route('login')"  
+                        class="text-primary" 
+                        style="text-decoration: none"
+                    >
+                        Log in here
+                    </Link>
+                </p>
+            </q-card-section>
+
+        </q-card>
+    </q-form>
 </template>

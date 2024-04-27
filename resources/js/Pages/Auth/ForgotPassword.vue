@@ -1,10 +1,11 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+
+import AuthLayout from '@/Layouts/AuthLayout.vue'
+import { Head, useForm, Link } from '@inertiajs/vue3';
+
+defineOptions({
+    layout: AuthLayout
+})
 
 defineProps({
     status: {
@@ -22,40 +23,37 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Forgot Password" />
-
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
-        </div>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
+    <Head title="Forgot Password" />
+    <q-form @submit="submit">
+        <q-card class="q-pa-xl" flat>
+            
+            <Link :href="route('login')">
+                <q-btn no-caps flat color="primary">
+                    <q-icon name="arrow_back" class="q-mr-sm"></q-icon>
+                    Go back to login
+                </q-btn>
+            </Link>
+            <q-card-section>
+                <div class="text-h6 q-mb-lg">Forgot Password</div>
+                <p>
+                    Forgot your password? No problem. Just let us know your email address and we will email you a password reset
+                    link that will allow you to choose a new one.
+                </p>
+                <q-banner inline-actions class="text-white bg-positive q-mb-md" v-if="status">
+                    {{ status }}
+                </q-banner>
+                <q-input
+                    filled
                     v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+                    label="Email"
+                    lazy-rules
+                    :error="form.errors.email ? true : false"
+                    :error-message="form.errors.email"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
+                <q-btn label="Reset" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+            </q-card-section>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+        </q-card>
+    </q-form>
 </template>

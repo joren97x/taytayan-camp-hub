@@ -1,8 +1,5 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -34,7 +31,7 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section>
+    <!-- <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Update Password</h2>
 
@@ -101,5 +98,41 @@ const updatePassword = () => {
                 </Transition>
             </div>
         </form>
-    </section>
+    </section> -->
+    <q-form @submit="updatePassword">
+        <q-card class="q-mt-xl">
+            <q-card-section>
+                <div class="text-h6 q-mb-sm">Update Password</div>
+                <div class="q-mb-lg">Ensure your account is using a long, random password to stay secure.</div>
+                <q-input
+                    filled
+                    v-model="form.current_password"
+                    label="Current Password"
+                    lazy-rules
+                    :error="form.errors.current_password ? true : false"
+                    :error-message="form.errors.current_password"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                />
+                <q-input
+                    filled
+                    v-model="form.password"
+                    label="New Password"
+                    lazy-rules
+                    :error="form.password ? true : false"
+                    :error-message="form.password"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                />
+                <q-input
+                    filled
+                    v-model="form.password_confirmation"
+                    label="Confirm New Password"
+                    lazy-rules
+                    :error="form.errors.password_confirmation ? true : false"
+                    :error-message="form.errors.password_confirmation"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
+                />
+                <q-btn label="Save" :processing="form.processing" type="submit" :disabled="form.processing" unelevated no-caps color="blue" />
+            </q-card-section>
+        </q-card>
+    </q-form>
 </template>

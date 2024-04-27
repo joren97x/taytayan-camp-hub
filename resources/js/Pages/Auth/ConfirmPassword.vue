@@ -1,10 +1,11 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+
+import AuthLayout from '@/Layouts/AuthLayout.vue'
+import { Head, useForm } from '@inertiajs/vue3'
+
+defineOptions({
+    layout: AuthLayout
+})
 
 const form = useForm({
     password: '',
@@ -21,30 +22,29 @@ const submit = () => {
     <GuestLayout>
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+        <q-banner>
             This is a secure area of the application. Please confirm your password before continuing.
-        </div>
+        </q-banner>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
-                </PrimaryButton>
-            </div>
-        </form>
+        <q-form @submit="submit">
+            <q-card>
+                <q-card-section>
+                    <div class="text-h6 q-mb-lg">Forgot Password</div>
+                    <q-banner inline-actions class="text-white bg-positive q-mb-md" v-if="status">
+                        {{ status }}
+                    </q-banner>
+                    <q-input
+                        filled
+                        v-model="form.password"
+                        label="Password"
+                        lazy-rules
+                        :error="form.errors.password ? true : false"
+                        :error-message="form.errors.password"
+                        :rules="[ val => val && val.length > 0 || 'Please type something']"
+                    />
+                    <q-btn label="Reset" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+                </q-card-section>
+            </q-card>
+        </q-form>
     </GuestLayout>
 </template>

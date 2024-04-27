@@ -1,11 +1,10 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import AuthLayout from '@/Layouts/AuthLayout.vue'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+
+defineOptions({
+    layout: AuthLayout
+})
 
 defineProps({
     canResetPassword: {
@@ -14,81 +13,82 @@ defineProps({
     status: {
         type: String,
     },
-});
+})
 
 const form = useForm({
     email: '',
     password: '',
     remember: false,
-});
+})
 
 const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
-    });
-};
+    })
+}
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
+    <Head title="Log in" />
+    <q-form @submit="submit">
+        <q-card class="q-pa-xl" flat>
+            <q-card-section>
+                <div class="text-h6 q-mb-lg">Login to Taytayan Camp Hub</div>
+                <q-input
+                    filled
                     v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+                    label="Email Address"
+                    lazy-rules
+                    :error="form.errors.email ? true : false"
+                    :error-message="form.errors.email"
+                    :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                <q-input 
+                    v-model="form.password" 
+                    filled 
+                    :error="form.errors.password ? true : false"
+                    :error-message="form.errors.password"
+                    :type="!showPassword ? 'password' : 'text'" 
+                    label="Password"
                 >
-                    Forgot your password?
-                </Link>
+                    <template v-slot:append>
+                        <q-icon
+                            :name="showPassword ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="showPassword = !showPassword"
+                        />
+                    </template>
+                </q-input>
+                
+                <div class="row" justify="between">
+                    <q-checkbox v-model="form.remember" label="Remember me" />
+                    <p class="text-right q-mt-md">
+                        <Link 
+                            :href="route('password.request')" 
+                            class="text-primary" 
+                            style="text-decoration: none"
+                        >
+                            Forgot your password?
+                        </Link>
+                    </p>
+                </div>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                <q-btn label="Log in" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+            </q-card-section>
+
+            <q-card-section>
+                <p class="text-center">
+                    Don't have an account? 
+                    <Link 
+                        :href="route('register')"  
+                        class="text-primary" 
+                        style="text-decoration: none"
+                    >
+                        Sign up here for free
+                    </Link>
+                </p>
+            </q-card-section>
+
+        </q-card>
+    </q-form>
 </template>
