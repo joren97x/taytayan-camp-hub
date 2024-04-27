@@ -5,7 +5,7 @@ import './bootstrap';
 import '@quasar/extras/roboto-font/roboto-font.css'
 import '@quasar/extras/material-icons/material-icons.css'
 
-import { Quasar } from 'quasar'
+import { Quasar, Notify } from 'quasar'
 import 'quasar/src/css/index.sass'
 
 
@@ -25,24 +25,42 @@ createInertiaApp({
             .use(ZiggyVue)
 
             .use(Quasar, {
-                plugins: {}, // import Quasar plugins and add here
-                /*
+                plugins: {
+                  Notify
+                }, // import Quasar plugins and add here
+                
                 config: {
                   brand: {
-                    // primary: '#e46262',
-                    // ... or all other brand colors
+                    primary: '#0e9cff',
+                    secondary: '#f7a11a',
+                    accent: '#9C27B0',
+            
+                    dark: '#1d1d1d',
+                    'dark-page': '#121212',
+            
+                    positive: '#21BA45',
+                    negative: '#f2223a',
+                    info: '#31CCEC',
+                    warning: '#F2C037'
                   },
-                  notify: {...}, // default set of options for Notify Quasar plugin
-                  loading: {...}, // default set of options for Loading Quasar plugin
-                  loadingBar: { ... }, // settings for LoadingBar Quasar plugin
+                  notify: {
+                    color: 'green',
+                    textColor: 'white',
+                    message: 'Hi this is a message',
+                    html: false,
+                    position: 'bottom'
+                  }, // default set of options for Notify Quasar plugin
+                  // loading: {...},  default set of options for Loading Quasar plugin
+                   // loadingBar: { ... }, settings for LoadingBar Quasar plugin
                   // ..and many more (check Installation card on each Quasar component/directive/plugin)
                 }
-                 */
+                 
             })
 
             .mount(el);
     },
     progress: {
         color: '#1976D2',
+        
     },
 });

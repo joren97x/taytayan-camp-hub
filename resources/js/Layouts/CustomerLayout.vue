@@ -1,6 +1,7 @@
 <script setup>
 
 import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3';
 import Footer from '@/Components/Customer/Footer.vue'
 import FoodCardItem from '@/Components/Customer/Milkteas/FoodCardItem.vue'
 
@@ -26,15 +27,21 @@ async function onLogout() {
                 Taytayan Camp Hub
                 </q-toolbar-title>
                 <q-space />
-                <q-btn flat no-caps to="/milktea-menu">Milktea Menu</q-btn>
+                <Link :href="route('milktea-menu')">
+                    <q-btn flat no-caps>Milktea Menu</q-btn>
+                </Link>
                 <q-btn flat no-caps to="/events">Explore Events</q-btn>
                 <q-btn flat no-caps to="/campsites">Book Campsite</q-btn>
                 <q-space />
-                <div>
-                    <q-btn flat no-caps to="/register">Register</q-btn>
-                    <q-btn no-caps color="secondary" unelevated to="/login">Login</q-btn>
+                <div v-if="!$page.props.auth.user">
+                    <Link :href="route('register')">
+                        <q-btn flat no-caps to="/register">Register</q-btn>
+                    </Link>
+                    <Link :href="route('login')">
+                        <q-btn no-caps color="secondary" unelevated to="/login">Login</q-btn>
+                    </Link>
                 </div>
-                <div>
+                <div v-else>
                     <q-btn flat icon="search" round></q-btn>
                     <q-btn flat icon="notifications" round>
                         <q-badge color="red" floating>4</q-badge>
@@ -57,7 +64,7 @@ async function onLogout() {
                         <q-avatar size="42px">
                             <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
                         </q-avatar>
-                        <q-menu max-width>
+                        <q-menu>
                             <q-list>
                                 <q-item>
                                     <q-item-section top avatar>
@@ -66,8 +73,8 @@ async function onLogout() {
                                         </q-avatar>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label>John doe</q-item-label>
-                                        <q-item-label caption lines="1">John@doe.com</q-item-label>
+                                        <q-item-label> {{ $page.props.auth.user.name }} </q-item-label>
+                                        <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
                                     </q-item-section>
                                 </q-item>
                                 <q-separator />
@@ -96,12 +103,14 @@ async function onLogout() {
                                     </q-item-section>
                                     <q-item-section>Settings</q-item-section>
                                 </q-item>
-                                <q-item clickable @click="onLogout()">
-                                    <q-item-section avatar>
-                                        <q-icon name="logout" />
-                                    </q-item-section>
-                                    <q-item-section>Logout</q-item-section>
-                                </q-item>
+                                <Link :href="route('logout')" method="post">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="logout" />
+                                        </q-item-section>
+                                        <q-item-section>Logout</q-item-section>
+                                    </q-item>
+                                </Link>
                             </q-list>
                         </q-menu>
                     </q-btn>
@@ -138,7 +147,7 @@ async function onLogout() {
                 </q-item-section>
             </q-item>
             <q-list>
-                <FoodCartItem v-for="n in 3" :key="n" />
+                <FoodCardItem v-for="n in 3" :key="n" />
             </q-list>
             <div class="q-pa-sm full-width" style="position: absolute; bottom: 0;">
                 <q-btn 

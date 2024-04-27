@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\MilkteaViewController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+require __DIR__.'/milktea.php';
 require __DIR__.'/auth.php';
