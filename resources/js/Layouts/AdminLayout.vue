@@ -12,13 +12,24 @@ const leftDrawerOpen = ref(false)
     <q-layout view="lHh LpR lFf">
         <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
             <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
-                <div class="absolute-bottom bg-transparent">
-                    <q-avatar size="56px" class="q-mb-sm">
-                        <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                    </q-avatar>
-                    <div class="text-weight-bold">Razvan Stoenescu</div>
-                    <div>@rstoenescu</div>
-                </div>
+                    <q-item  class="absolute-bottom">
+                        <q-item-section top avatar>
+                        <q-avatar color="primary" text-color="white" icon="bluetooth" />
+                        </q-item-section>
+
+                        <q-item-section >
+                            <q-item-label>John Doe</q-item-label>
+                            <q-item-label caption lines="2" class="text-white">Sasdadwadaw.</q-item-label>
+                        </q-item-section>
+
+                        <q-item-section side top>
+                            <Link :href="route('logout')" method="post">
+                                <q-btn icon="logout" round flat color="red">
+                                    <q-tooltip>Logout</q-tooltip>
+                                </q-btn>
+                            </Link>
+                        </q-item-section>
+                    </q-item>
             </q-img>
             <!-- drawer content -->
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">

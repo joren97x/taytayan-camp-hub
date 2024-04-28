@@ -13,11 +13,14 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('homepage');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/home', function () {
+    return Inertia::render('Customer/Index');
+})->middleware(['auth'])->name('home');
+
+Route::get('/milktea-menu', [MilkteaViewController::class, 'index'])->name('milktea-menu');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
