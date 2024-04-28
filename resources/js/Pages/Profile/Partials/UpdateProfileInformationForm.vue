@@ -14,7 +14,8 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
-    name: user.name,
+    first_name: user.first_name,
+    last_name: user.last_name,
     email: user.email,
 });
 </script>
@@ -101,15 +102,30 @@ const form = useForm({
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Profile Information</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
-                <q-input
-                    filled
-                    v-model="form.name"
-                    label="Name"
-                    lazy-rules
-                    :error="form.errors.name ? true : false"
-                    :error-message="form.errors.name"
-                    :rules="[ val => val && val.length > 0 || 'Please type something']"
-                />
+                <div class="row q-col-gutter-md">
+                    <div class="col-6">
+                        <q-input
+                            filled
+                            v-model="form.first_name"
+                            label="First Name"
+                            lazy-rules
+                            :error="form.errors.first_name ? true : false"
+                            :error-message="form.errors.first_name"
+                            :rules="[ val => val && val.length > 0 || 'Please type something']"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <q-input
+                            filled
+                            v-model="form.last_name"
+                            label="Last Name"
+                            lazy-rules
+                            :error="form.errors.last_name ? true : false"
+                            :error-message="form.errors.last_name"
+                            :rules="[ val => val && val.length > 0 || 'Please type something']"
+                        />
+                    </div>
+                </div>
                 <q-input
                     filled
                     v-model="form.email"

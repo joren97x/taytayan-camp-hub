@@ -25,6 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+require __DIR__.'/admin.php';
 require __DIR__.'/milktea.php';
 require __DIR__.'/auth.php';

@@ -1,17 +1,12 @@
 <script setup>
 
 import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3'
 import Footer from '@/Components/Customer/Footer.vue'
 import FoodCardItem from '@/Components/Customer/Milkteas/FoodCardItem.vue'
 
-
 const rightDrawerOpen = ref(false)
 const clearCartDialog = ref(false)
-
-async function onLogout() {
-    
-}
 
 </script>
 
@@ -56,10 +51,20 @@ async function onLogout() {
                             </q-list>
                         </q-menu>
                     </q-btn>
-                    <q-btn flat round icon="shopping_cart" @click="rightDrawerOpen = !rightDrawerOpen">
+                    <q-btn 
+                        flat 
+                        round 
+                        icon="shopping_cart" 
+                        @click="rightDrawerOpen = !rightDrawerOpen"
+                    >
                         <q-badge color="red" floating>4</q-badge>
                     </q-btn>
-                    <q-btn flat rounded :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'" @click="$q.dark.toggle()"/>
+                    <q-btn 
+                        flat 
+                        rounded 
+                        :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'" 
+                        @click="$q.dark.toggle()"
+                    />
                     <q-btn flat round>
                         <q-avatar size="42px">
                             <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
@@ -73,7 +78,7 @@ async function onLogout() {
                                         </q-avatar>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label> {{ $page.props.auth.user.name }} </q-item-label>
+                                        <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
                                         <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
                                     </q-item-section>
                                 </q-item>
@@ -97,12 +102,14 @@ async function onLogout() {
                                     <q-item-section>Orders</q-item-section>
                                 </q-item>
                                 <q-separator />
-                                <q-item clickable to="/settings">
-                                    <q-item-section avatar>
-                                        <q-icon name="manage_accounts" />
-                                    </q-item-section>
-                                    <q-item-section>Settings</q-item-section>
-                                </q-item>
+                                <Link :href="route('profile.edit')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="manage_accounts" />
+                                        </q-item-section>
+                                        <q-item-section>Profile</q-item-section>
+                                    </q-item>
+                                </Link>
                                 <Link :href="route('logout')" method="post">
                                     <q-item clickable>
                                         <q-item-section avatar>
@@ -124,12 +131,25 @@ async function onLogout() {
                 <q-item-section class="text-h6">RJC Cafe</q-item-section>
                 <q-item-section side>
                     <div class="text-grey-8 q-gutter-xs">
-                        <q-btn icon="delete" color="red" round flat no-caps @click="clearCartDialog = true">
+                        <q-btn 
+                            icon="delete" 
+                            color="red" 
+                            round 
+                            flat 
+                            no-caps 
+                            @click="clearCartDialog = true"
+                        >
                             <q-tooltip>
                                 Clear cart
                             </q-tooltip>
                         </q-btn>
-                        <q-btn class="gt-xs" flat round icon="close" @click="rightDrawerOpen = false">
+                        <q-btn 
+                            class="gt-xs" 
+                            flat 
+                            round 
+                            icon="close" 
+                            @click="rightDrawerOpen = false"
+                        >
                             <q-tooltip>
                                 Close cart
                             </q-tooltip>

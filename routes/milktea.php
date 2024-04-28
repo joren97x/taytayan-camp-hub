@@ -8,7 +8,7 @@ Route::get('/milktea-menu', [MilkteaViewController::class, 'index'])->name('milk
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/orders', [MilkteaViewController::class, 'orders'])->name('orders');
+    Route::get('/orders', [MilkteaViewController::class, 'orders'])->name('customer.orders');
     Route::get('/milktea-checkout', [MilkteaViewController::class, 'checkout'])->name('milktea-checkout');
 
 });
