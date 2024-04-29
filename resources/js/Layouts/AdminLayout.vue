@@ -14,12 +14,12 @@ const leftDrawerOpen = ref(false)
             <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
                     <q-item  class="absolute-bottom">
                         <q-item-section top avatar>
-                        <q-avatar color="primary" text-color="white" icon="bluetooth" />
+                            <q-avatar color="primary" text-color="white" icon="bluetooth" />
                         </q-item-section>
 
-                        <q-item-section >
-                            <q-item-label>John Doe</q-item-label>
-                            <q-item-label caption lines="2" class="text-white">Sasdadwadaw.</q-item-label>
+                        <q-item-section>
+                            <q-item-label>Joren Hyeung Nim</q-item-label>
+                            <q-item-label caption lines="2" class="text-white">Administrator</q-item-label>
                         </q-item-section>
 
                         <q-item-section side top>
@@ -64,7 +64,7 @@ const leftDrawerOpen = ref(false)
                                     </q-item-section>
                                 </q-item>
                             </Link>
-                            <Link :href="route('admin.group_modifiers')">
+                            <Link :href="route('admin.modifier_groups')">
                                 <q-item clickable v-ripple>
                                     <q-item-section avatar>
                                         <q-icon name="star" />

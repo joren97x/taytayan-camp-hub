@@ -17,8 +17,12 @@ class AdminMilkteaViewController extends Controller
         return Inertia::render('Admin/Milktea/Orders');
     }
 
-    public function group_modifiers() {
-        return Inertia::render('Admin/Milktea/GroupModifiers');
+    public function modifier_groups() {
+        return Inertia::render('Admin/Milktea/ModifierGroups');
+    }
+
+    public function new_modifier_group() {
+        return Inertia::render('Admin/Milktea/NewModifierGroup');
     }
 
 }

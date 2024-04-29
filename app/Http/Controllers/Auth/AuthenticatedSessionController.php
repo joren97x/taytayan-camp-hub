@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
                 break;
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('home', absolute: false));
     }
 
     /**
