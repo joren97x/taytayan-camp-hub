@@ -1,19 +1,34 @@
 <script setup>
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import AdminLayout from './AdminLayout.vue'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({
     layout: AdminLayout
 })
 
-const page = ref('group modifiers')
+const page = ref('Milkteas')
+const txt = ref('')
 const buttonToggles = [
-    { label: 'Orders', value: 'Orders' },
-    { label: 'Items', value: 'Items' },
+    { label: 'Milkteas', value: 'milkteas' },
     { label: 'Categories', value: 'Categories' },
-    { label: 'Modifier Groups', value: 'Modifier Groups' },
+    { label: 'Modifier Groups', value: 'modifier-groups' },
+    { label: 'Orders', value: 'orders' },
 ]
+
+watch(page, () => {
+    if(page.value === 'milkteas') {
+        router.visit(`/admin/${page.value}`, {
+            preserveState: true
+        })
+    }
+    else {
+        router.visit(`/admin/milkteas/${page.value}`, {
+            preserveState: true
+        })
+    }
+})
 
 </script>
 
@@ -29,7 +44,7 @@ const buttonToggles = [
             toggle-color="primary"
             :options="buttonToggles"
         />
-        </q-toolbar>
+    </q-toolbar>
         <slot/>
     </div>
   

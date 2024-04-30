@@ -22,25 +22,19 @@ const price = ref('None')
         <div class="q-pa-md">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">New Modifier Group</span>
+                <span class="text-h6 q-mt-xs q-ml-sm">New Milktea</span>
                 <q-space/>
                 <q-btn no-caps color="primary" class="q-mr-sm">Save</q-btn>
             </div>
             <q-separator class="q-my-md" />
             <q-input label="Name" filled></q-input>
-            <q-select 
-                filled 
-                use-chips
-                v-model="item" 
-                label="Items" 
-                multiple 
-                class="q-mt-md" 
-                :options="[
-                    'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle',
-                ]"
-                :options-html="true"
-            >
-            </q-select>
+            <q-card class="my-card" flat bordered>
+                <q-card-section horizontal>
+                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
+                </q-card-section>
+                <q-card-section>hello</q-card-section>
+            </q-card>
+            <br>
             <q-btn icon="add" flat @click="dialog = !dialog" class="q-mt-md" no-caps color="primary" label="Create New Item" />
             <br>
             <q-checkbox label="Require customers to select item?"/>

@@ -34,16 +34,18 @@ const leftDrawerOpen = ref(false)
             <!-- drawer content -->
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
                 <q-list>
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="dashboard" />
-                        </q-item-section>
-                        <q-item-section>
-                            Dashboard
-                        </q-item-section>
-                    </q-item>
-                    <q-expansion-item icon="local_cafe" label="Milkteas">
-                        <q-card class="q-mx-md">
+                    <Link :href="route('admin.dashboard')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="dashboard" />
+                            </q-item-section>
+                            <q-item-section>
+                                Dashboard
+                            </q-item-section>
+                        </q-item>
+                    </Link>
+                    <!-- <q-expansion-item icon="local_cafe" label="Milkteas"> -->
+                        <!-- <q-card class="q-mx-md"> -->
                             <Link :href="route('admin.milktea.index')">
                                 <q-item clickable v-ripple>
                                     <q-item-section avatar>
@@ -54,7 +56,7 @@ const leftDrawerOpen = ref(false)
                                     </q-item-section>
                                 </q-item>
                             </Link>
-                            <Link :href="route('admin.orders')">
+                            <!-- <Link :href="route('admin.orders')">
                                 <q-item clickable v-ripple>
                                     <q-item-section avatar>
                                         <q-icon name="star" />
@@ -85,7 +87,7 @@ const leftDrawerOpen = ref(false)
                                 </q-item>
                             </Link>
                         </q-card>
-                    </q-expansion-item>
+                    </q-expansion-item> -->
                     <q-expansion-item icon="event" label="Events">
                         <q-card class="q-mx-md">
                             <q-item clickable v-ripple v-for="n in 3" :key="n">

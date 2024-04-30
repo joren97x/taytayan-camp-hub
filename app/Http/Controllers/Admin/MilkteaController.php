@@ -23,6 +23,7 @@ class MilkteaController extends Controller
     public function create()
     {
         //
+        return Inertia::render('Admin/Milktea/NewMilktea');
     }
 
     /**
