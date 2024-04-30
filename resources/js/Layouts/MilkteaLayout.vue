@@ -12,20 +12,24 @@ const page = ref('Milkteas')
 const txt = ref('')
 const buttonToggles = [
     { label: 'Milkteas', value: 'milkteas' },
-    { label: 'Categories', value: 'Categories' },
+    { label: 'Categories', value: 'categories' },
     { label: 'Modifier Groups', value: 'modifier-groups' },
     { label: 'Orders', value: 'orders' },
+    { label: 'Reviews', value: 'reviews' },
 ]
 
 watch(page, () => {
-    if(page.value === 'milkteas') {
-        router.visit(`/admin/${page.value}`, {
+    if(page.value === 'reviews') {
+        router.visit(`/admin/milkteas/${page.value}`, {
             preserveState: true
         })
     }
     else {
-        router.visit(`/admin/milkteas/${page.value}`, {
-            preserveState: true
+        router.visit(`/admin/${page.value}`, {
+            preserveState: true,
+            onFinish: (err) => {
+                console.log(err)
+            }
         })
     }
 })

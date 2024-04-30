@@ -2,40 +2,34 @@
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 
 defineOptions({
     layout: AdminLayout
 })
 
 const columns = [
-  { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
-  { name: 'contains', align: 'center', label: 'Contains', field: 'contains', sortable: true },
-  { name: 'itemsUsing', align: 'center', label: 'Items using', field: 'itemsUsing', sortable: true },
-  { name: 'fat', align: 'center', label: 'Actions', field: 'fat', sortable: true },
+    { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
+    { name: 'items', align: 'center', label: 'Items', field: 'items', sortable: true },
+    { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
 const rows = [
-  {
-    name: 'Choose your drink',
-    contains: 'coke, sprite, water, or smn',
-    itemsUsing: 'item 1, item 2, item 3',
-    fat: 'still figuring out how'
-  },
-  {
-    name: 'Sugar Level',
-    contains: '20%, 50%, 80%, none',
-    itemsUsing: 'matcha milktea, some milktea, uhhh milktea',
-    fat: 'still figuring out how'
-  },
-  
+    {
+        name: 'Milktea',
+        items: 'item 1, item 2, item 3'
+    },
+    {
+        name: 'Drinks',
+        items: 'item 1, item 2, item 3'
+    },
 ]
 
 </script>
 
 <template>
     
-    <Head title="Group Modifiers" />
+    <Head title="Categories" />
     <MilkteaLayout>
         <div class="q-pa-md">
             <q-table
@@ -46,16 +40,22 @@ const rows = [
                 :columns="columns"
                 row-key="name"
             >
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <q-btn no-caps unelevated>Edit</q-btn>
+                        <q-btn no-caps unelevated>Delete</q-btn>
+                    </q-td>
+                </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Modifier Groups</p>
+                    <p class="text-h6 q-pt-md">Categories</p>
                     <q-space />
                         <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <Link :href="route('admin.new_modifier_group')">
-                        <q-btn class="q-ml-sm" color="primary" no-caps label="New Group" />
+                    <Link :href="route('admin.category.create')">
+                        <q-btn class="q-ml-sm" color="primary" no-caps label="New Category" />
                     </Link>
                 </template>
                 
