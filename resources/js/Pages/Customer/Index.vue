@@ -1,7 +1,7 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import FeaturedProductCard from '@/Components/Customer/Milkteas/FeaturedProductCard.vue'
+import FeaturedProductCard from '@/Components/Customer/Product/FeaturedProductCard.vue'
 import { Head } from '@inertiajs/vue3'
 
 defineOptions({

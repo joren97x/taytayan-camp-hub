@@ -3,7 +3,7 @@
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -17,12 +17,12 @@ const price = ref('None')
 
 <template>
     
-    <Head title="New Modifiers Groups" />
+    <Head title="New Category" />
     <MilkteaLayout>
         <div class="q-pa-md">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">New Modifier Group</span>
+                <span class="text-h6 q-mt-xs q-ml-sm">New Category</span>
                 <q-space/>
                 <q-btn no-caps color="primary" class="q-mr-sm">Save</q-btn>
             </div>

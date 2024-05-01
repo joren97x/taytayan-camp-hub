@@ -46,13 +46,13 @@ const leftDrawerOpen = ref(false)
                     </Link>
                     <!-- <q-expansion-item icon="local_cafe" label="Milkteas"> -->
                         <!-- <q-card class="q-mx-md"> -->
-                            <Link :href="route('admin.milktea.index')">
+                            <Link :href="route('admin.product.index')">
                                 <q-item clickable v-ripple>
                                     <q-item-section avatar>
                                         <q-icon name="star" />
                                     </q-item-section>
                                     <q-item-section>
-                                        Milktea
+                                        Product
                                     </q-item-section>
                                 </q-item>
                             </Link>

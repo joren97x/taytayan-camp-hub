@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class AdminViewController extends Controller
+class ViewController extends Controller
 {
     //
     public function dashboard() {

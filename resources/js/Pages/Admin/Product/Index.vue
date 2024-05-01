@@ -1,7 +1,7 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 import { ref } from 'vue'
 import { Link, Head } from '@inertiajs/vue3';
 
@@ -88,7 +88,7 @@ const rows = [
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <Link :href="route('admin.milktea.create')">
+                    <Link :href="route('admin.product.create')">
                         <q-btn no-caps color="primary">Add new item</q-btn>
                     </Link>
                 </template>

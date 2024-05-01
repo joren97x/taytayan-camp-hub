@@ -8,19 +8,19 @@ defineOptions({
     layout: AdminLayout
 })
 
-const page = ref('Milkteas')
+const page = ref('Product')
 const txt = ref('')
 const buttonToggles = [
-    { label: 'Milkteas', value: 'milkteas' },
+    { label: 'Product', value: 'product' },
     { label: 'Categories', value: 'categories' },
-    { label: 'Modifier Groups', value: 'modifier-groups' },
+    { label: 'Modifier Group', value: 'modifier-group' },
     { label: 'Orders', value: 'orders' },
     { label: 'Reviews', value: 'reviews' },
 ]
 
 watch(page, () => {
     if(page.value === 'reviews') {
-        router.visit(`/admin/milkteas/${page.value}`, {
+        router.visit(`/admin/product/${page.value}`, {
             preserveState: true
         })
     }

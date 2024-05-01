@@ -2,7 +2,7 @@
 
 import { Head } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -12,8 +12,8 @@ defineOptions({
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Orders" />
     <MilkteaLayout>
-        <h1>Reviews</h1>
+        <h1>Orders</h1>
     </MilkteaLayout>
 </template>

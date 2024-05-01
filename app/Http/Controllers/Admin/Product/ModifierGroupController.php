@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Product;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class ModifierGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Milktea/Categories');
+        return Inertia::render('Admin/Product/ModifierGroups');
     }
 
     /**
@@ -23,7 +23,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Milktea/NewCategory');
+        return Inertia::render('Admin/Product/NewModifierGroup');
     }
 
     /**

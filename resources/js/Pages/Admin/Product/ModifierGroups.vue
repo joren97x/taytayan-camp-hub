@@ -1,8 +1,8 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
+import { Head, Link } from '@inertiajs/vue3'
 
 defineOptions({
     layout: AdminLayout
@@ -54,7 +54,7 @@ const rows = [
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <Link :href="route('admin.new_modifier_group')">
+                    <Link :href="route('admin.modifier_group.create')">
                         <q-btn class="q-ml-sm" color="primary" no-caps label="New Group" />
                     </Link>
                 </template>

@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import Footer from '@/Components/Customer/Footer.vue'
-import FoodCardItem from '@/Components/Customer/Milkteas/FoodCardItem.vue'
+import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 
 const rightDrawerOpen = ref(false)
 const clearCartDialog = ref(false)
@@ -22,8 +22,8 @@ const clearCartDialog = ref(false)
                 Taytayan Camp Hub
                 </q-toolbar-title>
                 <q-space />
-                <Link :href="route('milktea-menu')">
-                    <q-btn flat no-caps>Milktea Menu</q-btn>
+                <Link :href="route('products')">
+                    <q-btn flat no-caps>Product Menu</q-btn>
                 </Link>
                 <q-btn flat no-caps to="/events">Explore Events</q-btn>
                 <q-btn flat no-caps to="/campsites">Book Campsite</q-btn>
@@ -170,13 +170,15 @@ const clearCartDialog = ref(false)
                 <FoodCardItem v-for="n in 3" :key="n" />
             </q-list>
             <div class="q-pa-sm full-width" style="position: absolute; bottom: 0;">
-                <q-btn 
-                    to="/food-checkout"
-                    class="full-width"
-                    color="blue" 
-                    label="Checkout" 
-                    no-caps
-                />
+                <Link :href="route('product-checkout')">
+                    <q-btn 
+                        to="/food-checkout"
+                        class="full-width"
+                        color="blue" 
+                        label="Checkout" 
+                        no-caps
+                    />
+                </Link>
             </div>
         </q-drawer>
 

@@ -19,8 +19,6 @@ Route::get('/home', function () {
     return Inertia::render('Customer/Index');
 })->middleware(['auth'])->name('home');
 
-Route::get('/milktea-menu', [MilkteaViewController::class, 'index'])->name('milktea-menu');
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,5 +27,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/admin.php';
-require __DIR__.'/milktea.php';
+require __DIR__.'/customer.php';
 require __DIR__.'/auth.php';

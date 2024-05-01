@@ -1,10 +1,10 @@
 <script setup>
 
-    import { ref, onMounted } from 'vue'
+    import { ref } from 'vue'
     import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-    import CompletedOrderItem from '@/Components/Customer/Milkteas/CompletedOrderItem.vue'
-    import PendingOrderItem from '@/Components/Customer/Milkteas/PendingOrderItem.vue'
-    import CancelledOrderItem from '@/Components/Customer/Milkteas/CancelledOrderItem.vue'
+    import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
+    import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
+    import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
     import { Head } from '@inertiajs/vue3'
 
     defineOptions({

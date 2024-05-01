@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Product;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class MilkteaController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class MilkteaController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Milktea/Index');
+        return Inertia::render('Admin/Product/Index');
     }
 
     /**
@@ -23,7 +23,7 @@ class MilkteaController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Milktea/NewMilktea');
+        return Inertia::render('Admin/Product/NewProduct');
     }
 
     /**

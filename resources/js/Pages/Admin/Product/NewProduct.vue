@@ -2,7 +2,7 @@
 
 import { Head } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -17,7 +17,7 @@ defineOptions({
         <div class="q-pa-md q-mb-xl">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">New Milktea</span>
+                <span class="text-h6 q-mt-xs q-ml-sm">New Product</span>
                 <q-space/>
                 <q-btn no-caps color="primary" class="q-mr-sm">Save</q-btn>
             </div>

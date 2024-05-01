@@ -1,7 +1,7 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/MilkteaLayout.vue'
+import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 
 defineOptions({

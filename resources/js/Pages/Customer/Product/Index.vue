@@ -3,8 +3,8 @@
 import { Head } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import ProductCard from '@/Components/Customer/Milkteas/ProductCard.vue'
-import FeaturedProductCard from '@/Components/Customer/Milkteas/FeaturedProductCard.vue'
+import ProductCard from '@/Components/Customer/Product/ProductCard.vue'
+import FeaturedProductCard from '@/Components/Customer/Product/FeaturedProductCard.vue'
 
 defineOptions({
     layout: CustomerLayout

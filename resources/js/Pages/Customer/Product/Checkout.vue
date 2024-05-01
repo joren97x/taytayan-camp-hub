@@ -1,7 +1,7 @@
 <script setup>
 
     import { ref } from 'vue'
-    import FoodCartItem from '@/Components/Customer/Milkteas/FoodCartItem.vue'
+    import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 
     const mode = ref('Delivery')
     const payment_method = ref('GCash')
@@ -126,7 +126,7 @@
                                 </q-item-section>
                             </q-item>
                             <q-list>
-                                <FoodCartItem v-for="n in 3" :key="n"/>
+                                <FoodCardItem v-for="n in 3" :key="n"></FoodCardItem>
                             </q-list>
                         </q-card-section>
                     </q-card>
