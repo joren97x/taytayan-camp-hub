@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\ModifierItem;
 use Illuminate\Http\Request;
 
 class ModifierItemController extends Controller
@@ -29,6 +30,18 @@ class ModifierItemController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required'
+        ]);
+
+        //e update if ge update na nimo ang database kay nalimtan ang description OK
+        // ModifierItem::create($request->all());
+        ModifierItem::create([
+            'name' => $request->name,
+            'price' => $request->price
+        ]);
+        return back();
     }
 
     /**

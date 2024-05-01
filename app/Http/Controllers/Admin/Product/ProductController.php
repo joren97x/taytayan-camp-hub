@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\CategoryProduct;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -14,7 +17,13 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Product/Index');
+        $products = Product::with('categories')->get();
+
+        return Inertia::render('Admin/Product/Index', 
+        [
+            'categories' => Category::all(),
+            'products' => Product::with('categories')->get()
+        ]);
     }
 
     /**
@@ -23,7 +32,7 @@ class ProductController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/NewProduct');
+        return Inertia::render('Admin/Product/NewProduct', ['categories' => Category::all()]);
     }
 
     /**
@@ -32,6 +41,33 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'photo' => 'required',
+            'price' => 'required',
+            'categories' => 'required'
+        ]);
+
+        $photo = $request->photo[0]->getClientOriginalName();
+        $request->photo[0]->move(public_path('/images'), $photo);
+
+        $product = Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'photo' => $photo,
+            'price' => $request->price
+        ]);
+
+        foreach ($request->categories as $category) {
+            CategoryProduct::create([
+                'product_id' => $product->id,
+                'category_id' => $category
+            ]);
+        }
+
+        return redirect(route('admin.product.index', absolute: false));
+
     }
 
     /**

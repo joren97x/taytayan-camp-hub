@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class CategoryController extends Controller
+class ModifierGroupItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +13,6 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Product/Categories', 
-        [
-            'categories' => Category::with('products')->get()
-        ]);
     }
 
     /**
@@ -27,7 +21,6 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/NewCategory');
     }
 
     /**
@@ -36,12 +29,6 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'name' => 'required|string|max:255'
-        ]);
-        Category::create($request->all());
-        return redirect(route('admin.category.index', absolute: false));
-
     }
 
     /**

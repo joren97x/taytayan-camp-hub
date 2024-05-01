@@ -11,9 +11,9 @@ defineOptions({
 const page = ref('Product')
 const txt = ref('')
 const buttonToggles = [
-    { label: 'Product', value: 'product' },
+    { label: 'Products', value: 'products' },
     { label: 'Categories', value: 'categories' },
-    { label: 'Modifier Group', value: 'modifier-group' },
+    { label: 'Modifier Groups', value: 'modifier-groups' },
     { label: 'Orders', value: 'orders' },
     { label: 'Reviews', value: 'reviews' },
 ]

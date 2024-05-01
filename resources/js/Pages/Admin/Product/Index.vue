@@ -9,13 +9,19 @@ defineOptions({
     layout: AdminLayout
 })
 
+const props = defineProps({
+    categories: Object,
+    products: Object
+})
+
+const categoryOptions = props.categories.map(category => category.name)
 const category = ref('')
 
 const columns = [
   { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
   { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
   { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
-  { name: 'category', align: 'center', label: 'Category', field: 'category', sortable: true },
+  { name: 'categories', align: 'center', label: 'Categories', field: 'categories', sortable: true },
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -24,14 +30,14 @@ const rows = [
     name: 'Matcha Milktea',
     photo: 'https://cdn.quasar.dev/img/chicken-salad.jpg',
     price: '30.00',
-    category: 'Milktea',
+    categories: 'Milktea',
     actions: 'still figuring out how'
   },
   {
     name: 'Chocolate Milktea',
     photo: 'https://cdn.quasar.dev/img/chicken-salad.jpg',
     price: '40.00',
-    category: 'Some uhh',
+    categories: 'Some uhh',
     actions: 'still figuring out how'
   },
 ]
@@ -43,22 +49,30 @@ const rows = [
     <Head title="Milkteas" />
     <MilkteaLayout>
         <div class="q-pa-md">
+            {{ props.products[0].categories }}
             <q-table
                 class="my-sticky-header-column-table"
                 flat
                 title="Treats"
-                :rows="rows"
+                :rows="props.products"
                 :columns="columns"
                 row-key="name"
             >
                 <template v-slot:body-cell-photo="props">
                     <q-td :props="props">
-                        <q-img :src="props.row.photo" style="width: 50px; height: 50px;" />
+                        <q-img :src="`/images/${props.row.photo}`" style="width: 50px; height: 50px;" />
                     </q-td>
                 </template>
                 <template v-slot:body-cell-price="props">
                     <q-td :props="props">
                         P{{ props.row.price }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-categories="props">
+                    <q-td :props="props">
+                        <span v-for="category in props.row.categories" :key="category.id">
+                            {{ category.name + ', ' }}
+                        </span>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -76,12 +90,7 @@ const rows = [
                         filled
                         dense
                         v-model="category"
-                        :options="[
-                            'Milkteas',
-                            'Drinks',
-                            'Or some uhh',
-                            'wateva'
-                        ]"
+                        :options="categoryOptions"
                     />
                     <q-input filled dense label="Search..." class="q-mx-md" debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>

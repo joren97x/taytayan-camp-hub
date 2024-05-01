@@ -8,22 +8,17 @@ defineOptions({
     layout: AdminLayout
 })
 
+const props = defineProps({
+    categories: Object
+})
+
+const rows = props.categories
 const columns = [
     { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
     { name: 'items', align: 'center', label: 'Items', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
-const rows = [
-    {
-        name: 'Milktea',
-        items: 'item 1, item 2, item 3'
-    },
-    {
-        name: 'Drinks',
-        items: 'item 1, item 2, item 3'
-    },
-]
 
 </script>
 
@@ -40,6 +35,13 @@ const rows = [
                 :columns="columns"
                 row-key="name"
             >
+                <template v-slot:body-cell-items="props">
+                    <q-td :props="props">
+                        <span v-for="product in props.row.products" :key="product.id">
+                            {{ product.name + ', ' }}
+                        </span>
+                    </q-td>
+                </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <q-btn no-caps unelevated>Edit</q-btn>

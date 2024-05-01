@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ModifierItem;
 
 class ModifierGroupController extends Controller
 {
@@ -23,7 +24,7 @@ class ModifierGroupController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/NewModifierGroup');
+        return Inertia::render('Admin/Product/NewModifierGroup', ['modifier_items' => ModifierItem::all()]);
     }
 
     /**
