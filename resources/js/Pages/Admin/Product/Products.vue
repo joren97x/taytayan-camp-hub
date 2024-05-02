@@ -77,7 +77,10 @@ const rows = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated>Edit</q-btn>
+                        <Link :href="route(`admin.product.edit`, props.row.id)">
+                            {{ props.row.id }}
+                            <q-btn no-caps unelevated>Edit</q-btn>
+                        </Link>
                         <q-btn no-caps unelevated>Delete</q-btn>
                     </q-td>
                 </template>

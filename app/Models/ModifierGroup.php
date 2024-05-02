@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ModifierItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ModifierGroup extends Model
 {
@@ -15,5 +16,10 @@ class ModifierGroup extends Model
         'required_quantity',
         'max_quantity'
     ];
+
+    public function modifier_items()
+    {
+        return $this->belongsToMany(ModifierItem::class, 'modifier_group_items');
+    }
 
 }

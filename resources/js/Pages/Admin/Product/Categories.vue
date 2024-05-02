@@ -12,13 +12,11 @@ const props = defineProps({
     categories: Object
 })
 
-const rows = props.categories
 const columns = [
     { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
     { name: 'items', align: 'center', label: 'Items', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
-
 
 </script>
 
@@ -31,7 +29,7 @@ const columns = [
                 class="my-sticky-header-column-table"
                 flat
                 title="Treats"
-                :rows="rows"
+                :rows="props.categories"
                 :columns="columns"
                 row-key="name"
             >

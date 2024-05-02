@@ -15,12 +15,14 @@ Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('
 Route::resource('/admin/products', ProductController::class)->names([
     'index' => 'admin.product.index',
     'create' => 'admin.product.create',
-    'store' => 'admin.product.store'
+    'store' => 'admin.product.store',
+    'edit' => 'admin.product.edit'
 ]);
 
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_group.index',
     'create' => 'admin.modifier_group.create',
+    'store' => 'admin.modifier_group.store'
 ]);
 
 Route::resource('/admin/categories', CategoryController::class)->names([
@@ -30,5 +32,5 @@ Route::resource('/admin/categories', CategoryController::class)->names([
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([
-    'store' => 'admin.modifier_items.store'
+    'store' => 'admin.modifier_item.store'
 ]);

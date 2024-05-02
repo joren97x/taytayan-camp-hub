@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ModifierGroup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ModifierItem extends Model
 {
@@ -14,5 +15,10 @@ class ModifierItem extends Model
         'description',
         'price'
     ];
+
+    public function modifier_groups()
+    {
+        return $this->belongsToMany(ModifierGroup::class, 'modifier_group_items');
+    }
 
 }

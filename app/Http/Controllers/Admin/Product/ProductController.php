@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\ModifierGroup;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -17,9 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::with('categories')->get();
-
-        return Inertia::render('Admin/Product/Index', 
+        return Inertia::render('Admin/Product/Products', 
         [
             'categories' => Category::all(),
             'products' => Product::with('categories')->get()
@@ -84,6 +83,13 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         //
+        return Inertia::render('Admin/Product/EditProduct', 
+        [
+            'categories' => Category::all(),
+            'product' => Product::with('categories')->find($id),
+            'modifier_groups' => ModifierGroup::all()
+        ]);
+
     }
 
     /**
