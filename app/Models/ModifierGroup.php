@@ -22,4 +22,9 @@ class ModifierGroup extends Model
         return $this->belongsToMany(ModifierItem::class, 'modifier_group_items');
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'products');
+    }
+
 }

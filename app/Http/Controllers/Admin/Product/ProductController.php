@@ -87,7 +87,8 @@ class ProductController extends Controller
         [
             'categories' => Category::all(),
             'product' => Product::with('categories')->find($id),
-            'modifier_groups' => ModifierGroup::all()
+            // 'product' => Product::with(['categories', 'modifier_groups'])->find($id),
+            'modifier_groups' => ModifierGroup::with('modifier_items')->get()
         ]);
 
     }

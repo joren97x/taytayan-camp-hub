@@ -49,7 +49,6 @@ const rows = [
     <Head title="Milkteas" />
     <MilkteaLayout>
         <div class="q-pa-md">
-            {{ props.products[0].categories }}
             <q-table
                 class="my-sticky-header-column-table"
                 flat

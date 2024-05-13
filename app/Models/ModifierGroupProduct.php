@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CategoryProduct extends Model
+class ModifierGroupProduct extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'product_id',
-        'category_id'
+        'modifier_group_id'
     ];
 
 }

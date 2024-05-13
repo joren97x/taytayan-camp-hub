@@ -26,6 +26,11 @@ const form = useForm({
     categories: props.product.categories
 })
 
+const columns = [
+  { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
+  { name: 'options', align: 'center', label: 'Options', field: 'options', sortable: true },
+]
+
 const submit = () => {
     form.post(route('admin.product.store'), {
         onFinish: () => form.reset('name', 'description', 'photo', 'price'),
@@ -35,6 +40,8 @@ const submit = () => {
     })
 }
 
+const selected = ref([])
+
 </script>
 
 <template>
@@ -42,13 +49,13 @@ const submit = () => {
     <Head title="Edit Product" />
     <MilkteaLayout>
         <div class="q-pa-md q-mb-xl">
-            <p class="text-weight-bold">Categories: </p>
+            <p class="text-weight-bold">Product: </p>
             {{ props.categories }}
             <q-separator></q-separator>
             <p class="text-weight-bold">Modifier Groups: </p>
             {{ props.modifier_groups }}
             <q-separator></q-separator>
-            <p class="text-weight-bold">Product: </p>
+            <p class="text-weight-bold">Categories: </p>
             {{ props.product.categories }}
             <q-form @submit="submit">
                 <div class="row">
@@ -187,9 +194,38 @@ const submit = () => {
                 </div>
             </q-form>
         </div>
-        <q-dialog v-model="addModifierGroupDialog">
+        <q-dialog v-model="addModifierGroupDialog" full-width>
             <q-card>
-                <q-card-section>Add modifier group dialog yippie :3</q-card-section>
+                <q-card-section>
+                    <q-table
+                        class="my-sticky-header-column-table"
+                        flat
+                        title="Add Modifier Group"
+                        :rows="props.modifier_groups"
+                        :columns="columns"
+                        row-key="name"
+                        selection="multiple"
+                        v-model:selected="selected"
+                    >
+                        <template v-slot:body-cell-name="props">
+                            <q-td :props="props">
+                                {{ props.row.name }}
+                            </q-td>
+                        </template>
+                        <template v-slot:body-cell-options="props">
+                            <q-td :props="props">
+                                <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
+                                    {{ modifier_item.name + ', ' }}
+                                </span>
+                            </q-td>
+                        </template>
+                    </q-table>
+                    {{ selected }}
+                </q-card-section>
+                <q-card-actions align="right">
+                    <q-btn unelevated no-caps v-close-popup>Cancel</q-btn>
+                    <q-btn unelevated no-caps color="primary">Save</q-btn>
+                </q-card-actions>
             </q-card>
         </q-dialog>
     </MilkteaLayout>

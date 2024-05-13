@@ -44,82 +44,46 @@ const leftDrawerOpen = ref(false)
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <!-- <q-expansion-item icon="local_cafe" label="Milkteas"> -->
-                        <!-- <q-card class="q-mx-md"> -->
-                            <Link :href="route('admin.product.index')">
-                                <q-item clickable v-ripple>
-                                    <q-item-section avatar>
-                                        <q-icon name="star" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                        Product
-                                    </q-item-section>
-                                </q-item>
-                            </Link>
-                            <!-- <Link :href="route('admin.orders')">
-                                <q-item clickable v-ripple>
-                                    <q-item-section avatar>
-                                        <q-icon name="star" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                        Orders
-                                    </q-item-section>
-                                </q-item>
-                            </Link>
-                            <Link :href="route('admin.modifier_groups')">
-                                <q-item clickable v-ripple>
-                                    <q-item-section avatar>
-                                        <q-icon name="star" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                        Group Modifiers
-                                    </q-item-section>
-                                </q-item>
-                            </Link>
-                            <Link :href="route('admin.milktea.reviews')">
-                                <q-item clickable v-ripple>
-                                    <q-item-section avatar>
-                                        <q-icon name="star" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                        Reviews
-                                    </q-item-section>
-                                </q-item>
-                            </Link>
-                        </q-card>
-                    </q-expansion-item> -->
-                    <q-expansion-item icon="event" label="Events">
-                        <q-card class="q-mx-md">
-                            <q-item clickable v-ripple v-for="n in 3" :key="n">
-                                <q-item-section avatar>
-                                    <q-icon name="star" />
-                                </q-item-section>
-                                <q-item-section>
-                                    Dashboard
-                                </q-item-section>
-                            </q-item>
-                        </q-card>
-                    </q-expansion-item>
-                    <q-expansion-item icon="holiday_village" label="Campsites">
-                        <q-card class="q-mx-md">
-                            <q-item clickable v-ripple v-for="n in 3" :key="n">
-                                <q-item-section avatar>
-                                    <q-icon name="star" />
-                                </q-item-section>
-                                <q-item-section>
-                                    Dashboard
-                                </q-item-section>
-                            </q-item>
-                        </q-card>
-                    </q-expansion-item>
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="send" />
-                        </q-item-section>
-                        <q-item-section>
-                            User Management
-                        </q-item-section>
-                    </q-item>
+                    <Link :href="route('admin.product.index')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="star" />
+                            </q-item-section>
+                            <q-item-section>
+                                Products
+                            </q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('admin.product.index')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="star" />
+                            </q-item-section>
+                            <q-item-section>
+                                Events
+                            </q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('admin.product.index')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="star" />
+                            </q-item-section>
+                            <q-item-section>
+                                Camp
+                            </q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('admin.user.index')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="send" />
+                            </q-item-section>
+                            <q-item-section>
+                                User Management
+                            </q-item-section>
+                        </q-item>
+                    </Link>
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
                             <q-icon name="drafts" />
@@ -145,3 +109,11 @@ const leftDrawerOpen = ref(false)
         </q-page-container>
     </q-layout>
 </template>
+
+<style scoped>
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
