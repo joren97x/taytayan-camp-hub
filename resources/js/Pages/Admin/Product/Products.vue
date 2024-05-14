@@ -25,23 +25,6 @@ const columns = [
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
-const rows = [
-  {
-    name: 'Matcha Milktea',
-    photo: 'https://cdn.quasar.dev/img/chicken-salad.jpg',
-    price: '30.00',
-    categories: 'Milktea',
-    actions: 'still figuring out how'
-  },
-  {
-    name: 'Chocolate Milktea',
-    photo: 'https://cdn.quasar.dev/img/chicken-salad.jpg',
-    price: '40.00',
-    categories: 'Some uhh',
-    actions: 'still figuring out how'
-  },
-]
-
 </script>
 
 <template>
@@ -77,7 +60,6 @@ const rows = [
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route(`admin.product.edit`, props.row.id)">
-                            {{ props.row.id }}
                             <q-btn no-caps unelevated>Edit</q-btn>
                         </Link>
                         <q-btn no-caps unelevated>Delete</q-btn>

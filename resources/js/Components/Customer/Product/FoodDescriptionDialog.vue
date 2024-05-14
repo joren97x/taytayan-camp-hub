@@ -3,7 +3,7 @@
 import { computed } from 'vue'
 
 const emit = defineEmits(['close'])
-const props = defineProps({ dialog: Boolean })
+const props = defineProps({ dialog: Boolean, product: Object })
 const show = computed(() => props.dialog)
 
 </script>
@@ -21,43 +21,43 @@ const show = computed(() => props.dialog)
             </q-item>
             <div class="row q-col-gutter-md">
                 <div class="col-5" style="position: relative;">
-                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="position: sticky; top: 50px;" />
+                    <q-img :src="`/images/${product.photo}`" style="position: sticky; top: 50px;" />
                 </div>
                 <div class="col-7">
                     <p>
                         <span class="text-h5">
-                            Cafe Basilico
+                            {{ product.name }}
                         </span>
                         <br>
                         <span class="text-h6 text-weight-light">
-                            P30.00
+                            P{{ product.price }}
                         </span>
                     </p>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam, totam?
+                        {{ product.description }}
                     </p>
                     <q-separator/>
-                    <div v-for="n in 2" :key="n">
+                    <div v-for="modifier_group in product.modifier_groups" :key="modifier_group.id">
                         <q-item>
                             <q-item-section class="text-h6">
-                                Choose your size
+                                {{ modifier_group.name }}
                                 <q-item-label caption>Choose 1</q-item-label>
                             </q-item-section>
-                            <q-item-section side>
+                            <q-item-section side v-if="modifier_group.required">
                                 <q-chip :class="$q.dark.isActive ? 'bg-grey-8' : ''">Required</q-chip>
                             </q-item-section>
                         </q-item>
                         <q-list>
-                            <q-item clickable v-ripple>
+                            <q-item clickable v-ripple v-for="modifier_item in modifier_group.modifier_items" :key="modifier_item.id">
                                 <q-item-section>
-                                    <q-item-label>Small</q-item-label>
-                                    <q-item-label caption>Caption</q-item-label>
+                                    <q-item-label>{{ modifier_item.name }}</q-item-label>
+                                    <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
                                 </q-item-section>
                                 <q-item-section side>
                                     <q-checkbox color="secondary"/>
                                 </q-item-section>
                             </q-item>
-                            <q-item clickable v-ripple>
+                            <!-- <q-item clickable v-ripple>
                                 <q-item-section>
                                     <q-item-label>Medium</q-item-label>
                                     <q-item-label caption>+P5.00</q-item-label>
@@ -74,7 +74,7 @@ const show = computed(() => props.dialog)
                                 <q-item-section side>
                                     <q-checkbox color="secondary"/>
                                 </q-item-section>
-                            </q-item>
+                            </q-item> -->
                         </q-list>
                         <q-separator/>
                     </div>

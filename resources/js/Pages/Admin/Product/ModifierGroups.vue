@@ -26,7 +26,6 @@ const columns = [
     <Head title="Group Modifiers" />
     <MilkteaLayout>
         <div class="q-pa-md">
-            {{ props }}
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -51,6 +50,13 @@ const columns = [
                     <q-td :props="props">
                         <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
                             {{ modifier_item.name + ', ' }}
+                        </span>
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-productsUsing="props">
+                    <q-td :props="props">
+                        <span v-for="product in props.row.products" :key="product.id">
+                            {{ product.name + ', ' }}
                         </span>
                     </q-td>
                 </template>

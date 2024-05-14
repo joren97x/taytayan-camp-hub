@@ -10,6 +10,11 @@ defineOptions({
     layout: CustomerLayout
 })
 
+const props = defineProps({
+    categories: Object,
+    // products: Object
+})
+
 const slide = ref(1)
 const categories = [
     'Milktea',
@@ -23,6 +28,7 @@ const currentCategory = ref(null)
 
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
+        console.log(entry)
         if (entry.isIntersecting) {
             currentCategory.value = entry.target.id
         }
@@ -72,19 +78,20 @@ function scrollToSection(section) {
                             active-class="bg-secondary text-white" 
                             :active="currentCategory == category" 
                             clickable 
-                            @click="scrollToSection(category)" 
+                            @click="scrollToSection(category.id)" 
                             v-ripple 
-                            v-for="category in categories" 
-                            :key="category"
+                            v-for="category in props.categories" 
+                            :key="category.id"
                         >
                             <q-item-section>
-                                {{ category }}
+                                {{ category.name }}
                             </q-item-section>
                         </q-item>
                     </q-list>
                 </div>
             </div>
             <div class="col-9">
+                <!-- {{ props }} -->
                 <q-item>
                     <q-item-section class="text-h6">
                         Featured items
@@ -118,11 +125,11 @@ function scrollToSection(section) {
                         </q-carousel-slide>
                     </q-carousel>
                 </div>
-                <div v-for="(category, i) in categories" :key="i" class="q-mt-md category" :id="category">
-                    <q-item class="text-h6">{{ category }}</q-item>
+                <div v-for="(category, i) in props.categories" :key="i" class="q-mt-md category" :id="category.id">
+                    <q-item class="text-h6">{{ category.name }}</q-item>
                     <div class="row q-col-gutter-md">
-                        <div class="col-6" v-for="n in 5" :key="n">
-                            <ProductCard/>
+                        <div class="col-6" v-for="product in category.products" :key="product.id">
+                            <ProductCard :product="product" />
                         </div>
                     </div>
                 </div>

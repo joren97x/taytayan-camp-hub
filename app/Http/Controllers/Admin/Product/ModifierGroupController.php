@@ -20,7 +20,7 @@ class ModifierGroupController extends Controller
 
         return Inertia::render('Admin/Product/ModifierGroups', 
         [
-            'modifier_groups' => ModifierGroup::with('modifier_items')->get()
+            'modifier_groups' => ModifierGroup::with(['modifier_items', 'products'])->get()
         ]);
     }
 

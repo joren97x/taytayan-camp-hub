@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import MilkteaLayout from '@/Layouts/ProductLayout.vue'
 import { useQuasar } from 'quasar'
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 defineOptions({
     layout: AdminLayout
@@ -18,12 +18,17 @@ const props = defineProps({
 
 const addModifierGroupDialog = ref(false)
 const $q = useQuasar()
+const selected = ref([])
 const form = useForm({
     name: props.product.name,
     description: props.product.description,
     photo: props.product.photo,
     price: props.product.price,
     categories: props.product.categories
+})
+
+const addModifierGroupForm = useForm({
+    modifier_group_ids: props.product.modifier_groups.map((m) => m.id)
 })
 
 const columns = [
@@ -40,7 +45,27 @@ const submit = () => {
     })
 }
 
-const selected = ref([])
+const updateProductModifierGroup = () => {
+    console.log(props.product.id)
+    addModifierGroupForm.put(route('admin.product.update_modifier_group', props.product.id), {
+        onSuccess: () => {
+            addModifierGroupDialog.value = false
+            $q.notify('Product Modifier Groups Updated')
+        }
+    })
+}
+
+onMounted(() => {
+    selected.value = props.modifier_groups.filter(group => 
+        addModifierGroupForm.modifier_group_ids.includes(group.id)
+    )
+})
+
+watch(selected, (modifier_group) => {
+    console.log(modifier_group)
+    addModifierGroupForm.modifier_group_ids = modifier_group.map(row => row.id)
+})
+
 
 </script>
 
@@ -49,14 +74,14 @@ const selected = ref([])
     <Head title="Edit Product" />
     <MilkteaLayout>
         <div class="q-pa-md q-mb-xl">
-            <p class="text-weight-bold">Product: </p>
-            {{ props.categories }}
+            <!-- <p class="text-weight-bold">Product: </p>
+            {{ props.product }}
             <q-separator></q-separator>
             <p class="text-weight-bold">Modifier Groups: </p>
             {{ props.modifier_groups }}
             <q-separator></q-separator>
             <p class="text-weight-bold">Categories: </p>
-            {{ props.product.categories }}
+            {{ props.product.categories }} -->
             <q-form @submit="submit">
                 <div class="row">
                     <q-btn icon="arrow_back" flat round></q-btn>
@@ -142,32 +167,38 @@ const selected = ref([])
                 </q-input>
                 <p class="text-weight-bold text-h6">Modifier Groups</p>
                 <p class="text-weight-light">
-                    Modifier groups allow customers to 
-                    use toppings and more to customize items
+                    Modifier groups allow customers to customize items
                 </p>
                 <q-expansion-item
                     switch-toggle-side
                     expand-separator
-                    v-for="n in 3"
-                    :key="n"
+                    v-for="modifier_group in product.modifier_groups"
+                    :key="modifier_group.id"
                 >
                 <template v-slot:header>
                     <q-item-section>
-                        Choose your size
+                        {{ modifier_group.name }}
                     </q-item-section>
 
-                    <q-item-section side>
+                    <q-item-section side v-if="modifier_group.required">
                         <div class="row items-center">
                             <q-chip>Required</q-chip>
-                            <q-btn icon="more_vert" round unelevated></q-btn>
                         </div>
                     </q-item-section>
                 </template>
                     <q-card>
                     <q-card-section>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-                        commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-                        eveniet doloribus ullam aliquid.
+                        <q-list>
+                            <q-item v-for="modifier_item in modifier_group.modifier_items" :key="modifier_item.id">
+                                <q-item-section>
+                                    <q-item-label>{{ modifier_item.name }}</q-item-label>
+                                </q-item-section>
+
+                                <q-item-section side top>
+                                    <q-item-label caption>P{{ modifier_item.price }}</q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
                     </q-card-section>
                     </q-card>
                 </q-expansion-item>
@@ -196,36 +227,46 @@ const selected = ref([])
         </div>
         <q-dialog v-model="addModifierGroupDialog" full-width>
             <q-card>
-                <q-card-section>
-                    <q-table
-                        class="my-sticky-header-column-table"
-                        flat
-                        title="Add Modifier Group"
-                        :rows="props.modifier_groups"
-                        :columns="columns"
-                        row-key="name"
-                        selection="multiple"
-                        v-model:selected="selected"
-                    >
-                        <template v-slot:body-cell-name="props">
-                            <q-td :props="props">
-                                {{ props.row.name }}
-                            </q-td>
-                        </template>
-                        <template v-slot:body-cell-options="props">
-                            <q-td :props="props">
-                                <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
-                                    {{ modifier_item.name + ', ' }}
-                                </span>
-                            </q-td>
-                        </template>
-                    </q-table>
-                    {{ selected }}
-                </q-card-section>
-                <q-card-actions align="right">
-                    <q-btn unelevated no-caps v-close-popup>Cancel</q-btn>
-                    <q-btn unelevated no-caps color="primary">Save</q-btn>
-                </q-card-actions>
+                <q-form @submit="updateProductModifierGroup">
+                    <q-card-section>
+                        <q-table
+                            class="my-sticky-header-column-table"
+                            flat
+                            title="Add Modifier Group"
+                            :rows="props.modifier_groups"
+                            :columns="columns"
+                            row-key="name"
+                            selection="multiple"
+                            v-model:selected="selected"
+                        >
+                            <template v-slot:body-cell-name="props">
+                                <q-td :props="props">
+                                    {{ props.row.name }}
+                                </q-td>
+                            </template>
+                            <template v-slot:body-cell-options="props">
+                                <q-td :props="props">
+                                    <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
+                                        {{ modifier_item.name + ', ' }}
+                                    </span>
+                                </q-td>
+                            </template>
+                        </q-table>
+                    </q-card-section>
+                    <q-card-actions align="right">
+                        <q-btn unelevated no-caps v-close-popup>Cancel</q-btn>
+                        <q-btn 
+                            unelevated 
+                            no-caps 
+                            type="submit" 
+                            color="primary" 
+                            :loading="addModifierGroupForm.processing"
+                            :disable="addModifierGroupForm.processing"
+                        >
+                            Save
+                        </q-btn>
+                    </q-card-actions>
+                </q-form>
             </q-card>
         </q-dialog>
     </MilkteaLayout>

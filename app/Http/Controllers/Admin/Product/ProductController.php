@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\ModifierGroup;
+use App\Models\ModifierGroupProduct;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -86,8 +87,7 @@ class ProductController extends Controller
         return Inertia::render('Admin/Product/EditProduct', 
         [
             'categories' => Category::all(),
-            'product' => Product::with('categories')->find($id),
-            // 'product' => Product::with(['categories', 'modifier_groups'])->find($id),
+            'product' => Product::with(['categories', 'modifier_groups.modifier_items'])->find($id),
             'modifier_groups' => ModifierGroup::with('modifier_items')->get()
         ]);
 
@@ -108,4 +108,19 @@ class ProductController extends Controller
     {
         //
     }
+
+    public function update_modifier_group(Request $request, string $id)
+    {
+
+        ModifierGroupProduct::where('product_id', $id)->delete();
+
+        foreach ($request->modifier_group_ids as $modifier_group_id) {
+            ModifierGroupProduct::create([
+                'modifier_group_id' => $modifier_group_id,
+                'product_id' => $id
+            ]);
+        }
+        return back();
+    }
+
 }
