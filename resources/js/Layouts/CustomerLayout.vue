@@ -13,7 +13,7 @@ const clearCartDialog = ref(false)
 <template>
     <q-layout view="hHh lpR lfr">
 
-        <q-header>
+        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'">
             <q-toolbar class="q-pa-md">
                 <q-toolbar-title>
                 <q-avatar>

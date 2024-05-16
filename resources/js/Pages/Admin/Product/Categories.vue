@@ -1,11 +1,11 @@
 <script setup>
 
-import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/ProductLayout.vue'
+// import AdminLayout from '@/Layouts/AdminSidebar.vue'
+import ProductLayout from '@/Layouts/ProductLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 
 defineOptions({
-    layout: AdminLayout
+    layout: ProductLayout
 })
 
 const props = defineProps({
@@ -23,7 +23,6 @@ const columns = [
 <template>
     
     <Head title="Categories" />
-    <MilkteaLayout>
         <div class="q-pa-md">
             <q-table
                 class="my-sticky-header-column-table"
@@ -61,5 +60,4 @@ const columns = [
                 
             </q-table>
         </div>
-    </MilkteaLayout>
 </template>

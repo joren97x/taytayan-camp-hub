@@ -2,12 +2,11 @@
 
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/ProductLayout.vue'
+import ProductLayout from '@/Layouts/ProductLayout.vue'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: AdminLayout
+    layout: ProductLayout
 })
 
 const props = defineProps({
@@ -57,92 +56,90 @@ const submitModifierGroupForm = () => {
 <template>
     
     <Head title="New Modifiers Groups" />
-    <MilkteaLayout>
-        <q-form @submit="submitModifierGroupForm">
-            <div class="q-pa-md">
-                {{ props }}
-                <div class="row">
-                    <q-btn icon="arrow_back" flat round></q-btn>
-                    <span class="text-h6 q-mt-xs q-ml-sm">New Modifier Group</span>
-                    <q-space/>
-                    <q-btn 
-                        @click="dialog = !dialog" 
-                        no-caps 
-                        color="primary" 
-                        class="q-mr-sm" 
-                        outline
-                    >
-                        New Modifier Item
-                    </q-btn>
-                    <q-btn 
-                        no-caps 
-                        color="primary" 
-                        class="q-mr-sm"
-                        type="submit"
-                        :loading="modifierGroupForm.processing"
-                        :disable="modifierGroupForm.processing"
-                    >
-                        Save
-                    </q-btn>
-                </div>
-                <q-separator class="q-my-md" />
-                <q-input 
-                    v-model="modifierGroupForm.name"
-                    :error="modifierGroupForm.errors.name ? true : false"
-                    :error-message="modifierGroupForm.errors.name"
-                    label="Name" 
+    <q-form @submit="submitModifierGroupForm">
+        <div class="q-pa-md">
+            {{ props }}
+            <div class="row">
+                <q-btn icon="arrow_back" flat round></q-btn>
+                <span class="text-h6 q-mt-xs q-ml-sm">New Modifier Group</span>
+                <q-space/>
+                <q-btn 
+                    @click="dialog = !dialog" 
+                    no-caps 
+                    color="primary" 
+                    class="q-mr-sm" 
+                    outline
+                >
+                    New Modifier Item
+                </q-btn>
+                <q-btn 
+                    no-caps 
+                    color="primary" 
+                    class="q-mr-sm"
+                    type="submit"
+                    :loading="modifierGroupForm.processing"
+                    :disable="modifierGroupForm.processing"
+                >
+                    Save
+                </q-btn>
+            </div>
+            <q-separator class="q-my-md" />
+            <q-input 
+                v-model="modifierGroupForm.name"
+                :error="modifierGroupForm.errors.name ? true : false"
+                :error-message="modifierGroupForm.errors.name"
+                label="Name" 
+                filled
+            >
+            </q-input>
+            {{ item }}
+            <q-select 
+                filled 
+                emit-value
+                use-chips
+                map-options
+                v-model="modifierGroupForm.items" 
+                label="Items" 
+                multiple
+                option-value="id"
+                option-label="name"
+                class="q-mt-md" 
+                :options="props.modifier_items"
+                :options-html="true"
+                :error="modifierGroupForm.errors.items ? true : false"
+                :error-message="modifierGroupForm.errors.items"
+            >
+            </q-select>
+            
+            <br>
+            <div>
+                <q-input
                     filled
+                    type="number"
+                    label="Whats the maximum amount of items the customer can select?"
+                    v-model="modifierGroupForm.required_quantity"
+                    :error="modifierGroupForm.errors.required_quantity ? true : false"
+                    :error-message="modifierGroupForm.errors.required_quantity"
                 >
                 </q-input>
-                {{ item }}
-                <q-select 
-                    filled 
-                    emit-value
-                    use-chips
-                    map-options
-                    v-model="modifierGroupForm.items" 
-                    label="Items" 
-                    multiple
-                    option-value="id"
-                    option-label="name"
-                    class="q-mt-md" 
-                    :options="props.modifier_items"
-                    :options-html="true"
-                    :error="modifierGroupForm.errors.items ? true : false"
-                    :error-message="modifierGroupForm.errors.items"
+                <q-input
+                    filled
+                    type="number"
+                    label="How many times can customers select any single item?"
+                    v-model="modifierGroupForm.max_quantity"
+                    :error="modifierGroupForm.errors.max_quantity ? true : false"
+                    :error-message="modifierGroupForm.errors.max_quantity"
                 >
-                </q-select>
-                
-                <br>
-                <div>
-                    <q-input
-                        filled
-                        type="number"
-                        label="Whats the maximum amount of items the customer can select?"
-                        v-model="modifierGroupForm.required_quantity"
-                        :error="modifierGroupForm.errors.required_quantity ? true : false"
-                        :error-message="modifierGroupForm.errors.required_quantity"
-                    >
-                    </q-input>
-                    <q-input
-                        filled
-                        type="number"
-                        label="How many times can customers select any single item?"
-                        v-model="modifierGroupForm.max_quantity"
-                        :error="modifierGroupForm.errors.max_quantity ? true : false"
-                        :error-message="modifierGroupForm.errors.max_quantity"
-                    >
-                    </q-input>
-                </div>
-                <q-checkbox 
-                    label="Require customers to select item?" 
-                    v-model="modifierGroupForm.required"
-                    :error="modifierGroupForm.errors.required ? true : false"
-                    :error-message="modifierGroupForm.errors.required"
-                />
+                </q-input>
             </div>
-        </q-form>
-    </MilkteaLayout>
+            <q-checkbox 
+                label="Require customers to select item?" 
+                v-model="modifierGroupForm.required"
+                :error="modifierGroupForm.errors.required ? true : false"
+                :error-message="modifierGroupForm.errors.required"
+            />
+        </div>
+    </q-form>
     <q-dialog v-model="dialog" position="right" full-height>
         <q-card style="width: 500px">
             <q-form @submit="submitModifierItemForm">

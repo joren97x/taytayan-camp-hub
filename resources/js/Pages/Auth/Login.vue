@@ -62,6 +62,7 @@ const submit = () => {
                 
                 <div class="row" justify="between">
                     <q-checkbox v-model="form.remember" label="Remember me" />
+                    <q-space></q-space>
                     <p class="text-right q-mt-md">
                         <Link 
                             :href="route('password.request')" 

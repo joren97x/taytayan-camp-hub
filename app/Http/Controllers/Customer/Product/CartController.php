@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Product;
+namespace App\Http\Controllers\Customer\Product;
 
 use App\Http\Controllers\Controller;
-use App\Models\ModifierItem;
+use App\Models\CartProduct;
 use Illuminate\Http\Request;
 
-class ModifierItemController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,19 +30,24 @@ class ModifierItemController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
         $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required'
+            'product_id' => 'required',
+            'cart_id' => 'required',
+            'quantity' => 'required'
         ]);
 
-        //e update if ge update na nimo ang database kay nalimtan ang description OK
-        // ModifierItem::create($request->all());
-        ModifierItem::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price
+        CartProduct::create([
+            'cart_id' => $request->cart_id,
+            'product_id' => $request->product_id,
+            'modifier_group_ids' => $request->modifier_group_ids,
+            'modifier_item_ids' => $request->modifier_item_ids,
+            'special_instruction' => $request->special_instruction,
+            'quantity' => $request->quantity
         ]);
+
         return back();
+
     }
 
     /**

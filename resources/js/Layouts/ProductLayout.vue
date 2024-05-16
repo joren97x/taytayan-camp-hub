@@ -1,16 +1,12 @@
 <script setup>
 
 import { ref, watch } from 'vue'
-import AdminLayout from './AdminLayout.vue'
+import AdminSidebar from './AdminSidebar.vue'
 import { router } from '@inertiajs/vue3'
-
-defineOptions({
-    layout: AdminLayout
-})
+import { Link } from '@inertiajs/vue3'
 
 const page = ref('Product')
-const txt = ref('')
-const buttonToggles = [
+const navigations = [
     { label: 'Products', value: 'products' },
     { label: 'Categories', value: 'categories' },
     { label: 'Modifier Groups', value: 'modifier-groups' },
@@ -38,18 +34,27 @@ watch(page, () => {
 
 <template>
         
-  
-    <div>
+    <AdminSidebar>
         <q-toolbar class="shadow-2">
-        <q-btn-toggle
-            v-model="page"
-            flat stretch
-            no-caps
-            toggle-color="primary"
-            :options="buttonToggles"
-        />
-    </q-toolbar>
+            <q-btn-group flat>
+                <q-btn icon="menu"></q-btn>
+                <q-btn 
+                    no-caps
+                    v-for="(navigation, index) in navigations" 
+                    :key="index"
+                    @click="page = navigation.value"
+                    :label="navigation.label" 
+                />
+            </q-btn-group>
+            <q-space></q-space>
+            <q-btn-group flat>
+                <q-btn icon="dark_mode" @click="$q.dark.toggle()"></q-btn>
+                <Link :href="route('logout')" method="post">
+                    <q-btn icon="logout" flat></q-btn>
+                </Link>
+            </q-btn-group>
+        </q-toolbar>
         <slot/>
-    </div>
+    </AdminSidebar>
   
   </template>

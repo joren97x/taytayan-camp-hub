@@ -1,12 +1,11 @@
 <script setup>
 
 import { Head, useForm } from '@inertiajs/vue3'
-import AdminLayout from '@/Layouts/AdminLayout.vue'
-import MilkteaLayout from '@/Layouts/ProductLayout.vue'
+import ProductLayout from '@/Layouts/ProductLayout.vue'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: AdminLayout
+    layout: ProductLayout
 })
 
 const $q = useQuasar()
@@ -28,34 +27,32 @@ const submit = () => {
 <template>
     
     <Head title="New Category" />
-    <MilkteaLayout>
-        <div class="q-pa-md">
-            <q-form @submit="submit">
-                <div class="row">
-                    <q-btn icon="arrow_back" flat round></q-btn>
-                    <span class="text-h6 q-mt-xs q-ml-sm">New Category</span>
-                    <q-space/>
-                    <q-btn 
-                        no-caps 
-                        type="submit" 
-                        color="primary" 
-                        class="q-mr-sm"
-                        :loading="form.processing"
-                        :disable="form.processing"
-                    >
-                        Save
-                    </q-btn>
-                </div>
-                <q-separator class="q-my-md" />
-                <q-input 
-                    label="Name" 
-                    :error="form.errors.name ? true : false"  
-                    v-model="form.name" 
-                    filled
-                    :error-message="form.errors.name"
+    <div class="q-pa-md">
+        <q-form @submit="submit">
+            <div class="row">
+                <q-btn icon="arrow_back" flat round></q-btn>
+                <span class="text-h6 q-mt-xs q-ml-sm">New Category</span>
+                <q-space/>
+                <q-btn 
+                    no-caps 
+                    type="submit" 
+                    color="primary" 
+                    class="q-mr-sm"
+                    :loading="form.processing"
+                    :disable="form.processing"
                 >
-                </q-input>
-            </q-form>
-        </div>
-    </MilkteaLayout>
+                    Save
+                </q-btn>
+            </div>
+            <q-separator class="q-my-md" />
+            <q-input 
+                label="Name" 
+                :error="form.errors.name ? true : false"  
+                v-model="form.name" 
+                filled
+                :error-message="form.errors.name"
+            >
+            </q-input>
+        </q-form>
+    </div>
 </template>

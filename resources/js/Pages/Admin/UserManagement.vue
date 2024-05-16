@@ -1,9 +1,9 @@
 <script setup>
 
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminSidebar from '@/Layouts/AdminSidebar.vue';
 
 defineOptions({
-    layout: AdminLayout
+    layout: AdminSidebar
 })
 
 defineProps({

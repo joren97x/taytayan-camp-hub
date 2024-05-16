@@ -115,12 +115,12 @@ function scrollToSection(section) {
                     >
                         <q-carousel-slide :name="1">
                             <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="n in 4" :key="n"/>
+                                <FeaturedProductCard v-for="product in products" :key="product.id"/>
                             </div>
                         </q-carousel-slide>
                         <q-carousel-slide :name="2">
                             <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="n in 4" :key="n"/>
+                                <FeaturedProductCard v-for="product in products" :key="product.id"/>
                             </div>
                         </q-carousel-slide>
                     </q-carousel>

@@ -4,11 +4,11 @@
 </script>
 
 <template>
-    <q-footer class="">
+    <q-footer :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'">
         <div class="row q-ma-xl">
             <div class="col-6">
                 <q-avatar>
-                    <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+                    <img :src="`https://cdn.quasar.dev/logo-v2/svg/logo-mono-${$q.dark.isActive ? 'white' : 'black'}.svg`">
                 </q-avatar>
                 Taytayan Camp Hub
 

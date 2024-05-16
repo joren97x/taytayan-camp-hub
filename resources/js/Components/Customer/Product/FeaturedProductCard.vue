@@ -10,8 +10,8 @@ const dialog = ref(false)
 
 <template>
 
-    <q-card class="col-3" flat>
-        <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />
+    <q-card class="col-3" flat bordered>
+        <q-img :src="`/images/${product.photo}`" height="200px" />
 
         <q-card-section>
             <q-btn
@@ -26,15 +26,15 @@ const dialog = ref(false)
 
             <div class="row no-wrap items-center">
                 <div class="col text-h6 ellipsis">
-                    Cafe Basilico
+                    {{ product.name }}
                 </div>
             </div>
             <div class="text-caption text-grey">
-                Small plates, salads & sandwiches in an intimate setting.
+                {{ product.description }}
             </div>
         </q-card-section>
     </q-card>
 
-    <FoodDescriptionDialog :dialog="dialog" @close="dialog = false" />
+    <FoodDescriptionDialog :dialog="dialog" :product="product" @close="dialog = false" />
 
 </template>

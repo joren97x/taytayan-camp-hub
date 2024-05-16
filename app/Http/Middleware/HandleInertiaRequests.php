@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,10 +30,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+
+        $activeCart = Cart::where('user_id', $request->user()->id)
+                      ->where('status', 1)
+                      ->first();
+
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'cart_id' => $activeCart ? $activeCart->id : null,
             ],
         ];
     }
