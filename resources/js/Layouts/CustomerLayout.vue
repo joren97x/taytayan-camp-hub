@@ -8,6 +8,8 @@ import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 const rightDrawerOpen = ref(false)
 const clearCartDialog = ref(false)
 
+
+
 </script>
 
 <template>
@@ -101,6 +103,14 @@ const clearCartDialog = ref(false)
                                     </q-item-section>
                                     <q-item-section>Orders</q-item-section>
                                 </q-item>
+                                <Link :href="route('customer.cart.index')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="receipt_long" />
+                                        </q-item-section>
+                                        <q-item-section>Cart</q-item-section>
+                                    </q-item>
+                                </Link>
                                 <q-separator />
                                 <Link :href="route('profile.edit')">
                                     <q-item clickable>
@@ -166,9 +176,11 @@ const clearCartDialog = ref(false)
                     Subtotal: P65.00
                 </q-item-section>
             </q-item>
-            <q-list>
-                <FoodCardItem v-for="n in 3" :key="n" />
-            </q-list>
+            <q-scroll-area style="height: 450px;">
+                <q-list>
+                    <FoodCardItem v-for="n in 10" :key="n" />
+                </q-list>
+            </q-scroll-area>
             <div class="q-pa-sm full-width" style="position: absolute; bottom: 0;">
                 <Link :href="route('product-checkout')">
                     <q-btn 

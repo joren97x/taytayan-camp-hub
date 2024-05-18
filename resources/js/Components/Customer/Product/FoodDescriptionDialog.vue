@@ -1,9 +1,8 @@
 <script setup>
 
 import { computed } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
-import { usePage } from '@inertiajs/vue3'
 
 const emit = defineEmits(['close'])
 const page = usePage()
@@ -14,23 +13,32 @@ const form = useForm({
     product_id: props.product.id,
     cart_id: page.props.auth.cart_id,
     special_instructions: '',
-    modifier_group_items: Object.fromEntries(props.product.modifier_groups.map(group => [group.id, []])),
-    quantity: 1
+    quantity: 1,
+    modifiers: []
 })
 
-const handleItemSelection = (groupId, itemId) => {
-    const items = form.modifier_group_items[groupId];
-    if (items.includes(itemId)) {
-        form.modifier_group_items[groupId] = items.filter(id => id !== itemId);
+const handleItemSelection = (modifierGroupId, modifierItemId) => {
+    const index = form.modifiers.findIndex(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
+    if (index === -1) {
+        form.modifiers.push({
+            modifier_group_id: modifierGroupId,
+            modifier_item_id: modifierItemId,
+            quantity: 1 // You can manage quantity if needed
+        });
     } else {
-        form.modifier_group_items[groupId].push(itemId);
+        form.modifiers.splice(index, 1); // Remove the modifier if already selected
     }
-}
+};
+
+const isSelected = (modifierGroupId, modifierItemId) => {
+    return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
+};
 
 const submit = () => {
     form.post(route('customer.cart.store'), {
         onSuccess: () => {
             $q.notify(props.product.name + ' Added To Cart')
+            emit('close')
         }
     })
 }
@@ -91,7 +99,11 @@ const submit = () => {
                                         <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
-                                        <q-checkbox color="secondary"/>
+                                        <q-checkbox 
+                                            color="secondary"
+                                            :model-value="isSelected(modifier_group.id, modifier_item.id)"
+                                            @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id)"
+                                        />
                                     </q-item-section>
                                 </q-item>
                             </q-list>

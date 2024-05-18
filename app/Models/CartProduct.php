@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ModifierItem;
+use App\Models\CartProductModifier;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CartProduct extends Model
 {
@@ -15,5 +17,10 @@ class CartProduct extends Model
         'quantity',
         'special_instruction'
     ];
+
+    public function modifiers()
+    {
+        return $this->hasMany(CartProductModifier::class);
+    }
 
 }
