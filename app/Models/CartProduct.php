@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Product;
 use App\Models\ModifierItem;
 use App\Models\CartProductModifier;
 use Illuminate\Database\Eloquent\Model;
@@ -15,12 +16,18 @@ class CartProduct extends Model
         'cart_id',
         'product_id',
         'quantity',
-        'special_instruction'
+        'special_instruction',
+        'modifiers'
     ];
 
     public function modifiers()
     {
         return $this->hasMany(CartProductModifier::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 
 }

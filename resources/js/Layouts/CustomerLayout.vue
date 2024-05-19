@@ -1,14 +1,28 @@
 <script setup>
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import Footer from '@/Components/Customer/Footer.vue'
 import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
+import { router } from '@inertiajs/vue3'
 
 const rightDrawerOpen = ref(false)
 const clearCartDialog = ref(false)
+const items = ref(null) 
 
-
+watch(rightDrawerOpen, (newVal) => {
+    if (newVal) {
+        try {
+            router.get('/cart/items', {}, {
+            onSuccess: (res) => {
+                items.value = res.props.items.cart_products
+            }
+        })
+        } catch (error) {
+            console.error('Error fetching cart items:', error)
+        }
+    }
+})
 
 </script>
 
@@ -135,7 +149,7 @@ const clearCartDialog = ref(false)
             </q-toolbar>
         </q-header>
 
-        <q-drawer v-model="rightDrawerOpen" side="right" bordered overlay>
+        <q-drawer v-model="rightDrawerOpen" side="right" bordered elevated overlay width="400">
             <!-- drawer content -->
             <q-item>
                 <q-item-section class="text-h6">RJC Cafe</q-item-section>
@@ -168,6 +182,7 @@ const clearCartDialog = ref(false)
                 </q-item-section>
             </q-item>
             <q-separator/>
+            {{items ? items : ''}}
             <q-item>
                 <q-item-section>
                     2 items

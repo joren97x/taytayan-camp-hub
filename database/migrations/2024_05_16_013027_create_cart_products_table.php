@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id');
             $table->foreignId('product_id');
-            $table->json('modifiers')->nullable();
             $table->integer('quantity');
             $table->string('special_instruction')->nullable();
             $table->timestamps();

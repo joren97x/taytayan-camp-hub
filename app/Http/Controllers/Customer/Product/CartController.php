@@ -16,11 +16,35 @@ class CartController extends Controller
     public function index(Request $request)
     {
         //
-        $cartId = $request->user()->id;
-        dd($cartId);
-        $cart = Cart::with('products.modifiers.modifierItem')->find($cartId);
-        dd($cart);
-        return Inertia::render('Customer/Product/Cart', ['products'=> $cart]);
+        $cart = Cart::where('user_id', $request->user()->id)->first();
+        $products = Cart::with('cart_products.modifiers.modifier_item', 'cart_products.modifiers.modifier_group', 'cart_products.product')->find($cart->id);
+        $subtotal = 0.00;
+        foreach ($products->cart_products as $product) {
+            $product->grouped_modifiers = $this->groupModifiersByGroup($product->modifiers);
+            $subtotal += $product->quantity * $product->product->price;
+            foreach($product->modifiers as $modifier) {
+                $subtotal += $modifier->quantity * $modifier->modifier_item->price;
+            }
+        }
+
+        return Inertia::render('Customer/Product/Cart', ['items'=> $products, 'subtotal' => $subtotal]);
+    }
+
+    private function groupModifiersByGroup($modifiers)
+    {
+        $grouped = [];
+        foreach ($modifiers as $modifier) {
+            $groupId = $modifier->modifier_group_id;
+            $grouped[$groupId]['group'] = $modifier->modifier_group;
+            $grouped[$groupId]['price'] = 0;
+            $grouped[$groupId]['items'][] = $modifier->modifier_item;
+            foreach($grouped[$groupId]['items'] as $item) {
+                $item->quantity = $modifier->quantity;
+                $grouped[$groupId]['price'] += $modifier->quantity * $item->price; 
+            }
+        }
+
+        return $grouped;
     }
 
     /**
@@ -77,6 +101,7 @@ class CartController extends Controller
             'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
             'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
         ]);
+        // dd($validatedData);
         // Find or create the cart item
         $cartProduct = CartProduct::updateOrCreate(
             [
@@ -93,7 +118,7 @@ class CartController extends Controller
         $cartProduct->modifiers()->delete();
 
         // Add new modifiers
-        if (!empty($validatedData['modifiers'])) {
+        // if (!empty($validatedData['modifiers'])) {
             foreach ($validatedData['modifiers'] as $modifier) {
                 $cartProduct->modifiers()->create([
                     'modifier_group_id' => $modifier['modifier_group_id'],
@@ -101,7 +126,7 @@ class CartController extends Controller
                     'quantity' => $modifier['quantity'],
                 ]);
             }
-        }
+        // }
 
         return back();
         // return response()->json(['success' => true, 'message' => 'Cart item updated successfully', 'cartItem' => $cartProduct]);

@@ -15,7 +15,8 @@ class Cart extends Model
         'status'
     ];
 
-    public function products()
+    //delete if
+    public function cart_products()
     {
         return $this->hasMany(CartProduct::class);
     }
