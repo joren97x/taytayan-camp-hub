@@ -182,7 +182,6 @@ watch(rightDrawerOpen, (newVal) => {
                 </q-item-section>
             </q-item>
             <q-separator/>
-            {{items ? items : ''}}
             <q-item>
                 <q-item-section>
                     2 items
@@ -192,8 +191,8 @@ watch(rightDrawerOpen, (newVal) => {
                 </q-item-section>
             </q-item>
             <q-scroll-area style="height: 450px;">
-                <q-list>
-                    <FoodCardItem v-for="n in 10" :key="n" />
+                <q-list v-if="items">
+                    <FoodCardItem v-for="item in items" :item="item" :key="item.id" />
                 </q-list>
             </q-scroll-area>
             <div class="q-pa-sm full-width" style="position: absolute; bottom: 0;">

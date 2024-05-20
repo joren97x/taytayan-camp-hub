@@ -17,14 +17,24 @@ class CartController extends Controller
     {
         //
         $cart = Cart::where('user_id', $request->user()->id)->first();
-        $products = Cart::with('cart_products.modifiers.modifier_item', 'cart_products.modifiers.modifier_group', 'cart_products.product')->find($cart->id);
+
+        $products = Cart::with([
+            'cart_products.modifiers.modifier_item',
+            'cart_products.modifiers.modifier_group', 
+            'cart_products.product'
+        ])->find($cart->id);
+
         $subtotal = 0.00;
-        foreach ($products->cart_products as $product) {
-            $product->grouped_modifiers = $this->groupModifiersByGroup($product->modifiers);
-            $subtotal += $product->quantity * $product->product->price;
-            foreach($product->modifiers as $modifier) {
+
+        foreach ($products->cart_products as $cart_product) {
+
+            $cart_product->grouped_modifiers = $this->groupModifiersByGroup($cart_product->modifiers);
+            $subtotal += $cart_product->quantity * $cart_product->product->price;
+
+            foreach($cart_product->modifiers as $modifier) {
                 $subtotal += $modifier->quantity * $modifier->modifier_item->price;
             }
+
         }
 
         return Inertia::render('Customer/Product/Cart', ['items'=> $products, 'subtotal' => $subtotal]);
@@ -33,17 +43,26 @@ class CartController extends Controller
     private function groupModifiersByGroup($modifiers)
     {
         $grouped = [];
-        foreach ($modifiers as $modifier) {
-            $groupId = $modifier->modifier_group_id;
-            $grouped[$groupId]['group'] = $modifier->modifier_group;
-            $grouped[$groupId]['price'] = 0;
-            $grouped[$groupId]['items'][] = $modifier->modifier_item;
-            foreach($grouped[$groupId]['items'] as $item) {
-                $item->quantity = $modifier->quantity;
-                $grouped[$groupId]['price'] += $modifier->quantity * $item->price; 
-            }
-        }
 
+        foreach ($modifiers as $modifier) {
+            $group_id = $modifier->modifier_group_id;
+
+            // Initialize group if not already
+            if (!isset($grouped[$group_id])) {
+                $grouped[$group_id] = [
+                    'group' => $modifier->modifier_group,
+                    'price' => 0.00,
+                    'items' => []
+                ];
+            }
+
+            $item = $modifier->modifier_item;
+            $item->quantity = $modifier->quantity;
+            $grouped[$group_id]['items'][] = $item;
+
+            // Compute price for this modifier item
+            $grouped[$group_id]['price'] += $item->quantity * $item->price;
+        }
         return $grouped;
     }
 

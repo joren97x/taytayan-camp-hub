@@ -1,6 +1,9 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import { ref } from 'vue'
+
+const quantity = ref(1)
 
 defineOptions({
     layout: CustomerLayout
@@ -15,9 +18,24 @@ defineProps({
 
 <template>
     <h1>Cart page</h1>
+    {{ subtotal }}
+
+    <q-list bordered separator>
+      <q-item >
+        <q-item-section avatar top>
+            <q-select v-model="quantity" :options="[1,2,3,4,5,6,7,8,9,10]"></q-select>
+        </q-item-section>
+        <q-item-section>
+            <q-item-label>Food name</q-item-label>
+            <template v-for="n in 2" :key="n">
+                <q-item-label caption>Choose your size</q-item-label>
+                <q-item-label caption>Large(P10.00)</q-item-label>
+            </template>
+        </q-item-section>
+        <q-item-section side top>P60.00</q-item-section>
+      </q-item>
+      </q-list>
     <div class="row">
-        {{ subtotal }}
-        {{ items }}
         <div class="col-12">
             <q-card 
                 v-for="cart_product in items.cart_products" 
@@ -36,12 +54,14 @@ defineProps({
                     :key="modifiers.id"
                 >
                     {{ modifiers }}
-                    <p v-for="item in modifiers.items" :key="item.id">
+                    <p v-for="item in modifiers.items" :key="item.id" class="bg-green">
                         {{ item.name }}
                         <br>
                         {{ item.quantity }} quantity 
                         <br>
                         P {{ item.price }}
+                        <br>
+                        subtotal: {{ item.quantity * item.price }}
                     </p>
                 </q-card-section>
             </q-card>

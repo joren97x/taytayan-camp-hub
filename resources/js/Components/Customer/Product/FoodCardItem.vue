@@ -2,6 +2,9 @@
 
 import { ref } from 'vue'
 import EditFoodCartDialog from './EditFoodCartDialog.vue'
+defineProps({
+    item: Object
+})
 
 const dialog = ref(false)
 
@@ -12,16 +15,29 @@ const dialog = ref(false)
         <q-item-section>
             <span>
                 <q-chip size="sm" :class="$q.dark.isActive ? 'bg-grey-9' : ''">1</q-chip>
-            Milktea
+                {{ item.product.name }}
         </span>
-            <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet
-                , consectetur adipiscit elit.</q-item-label>
+            <q-item-label 
+                class="q-my-md"
+                caption 
+                v-for="modifier in item.grouped_modifiers" 
+                :key="modifier.id"
+            >
+                {{ modifier.name }}
+                <q-item-label 
+                    caption
+                    v-for="item in modifier.items"
+                    :key="item.id"
+                >
+                    {{ item.name }}
+                </q-item-label>
+            </q-item-label>
         </q-item-section>
         
         <q-item-section thumbnail>
-            <img src="https://cdn.quasar.dev/img/chicken-salad.jpg"/>
+            <img :src="`/images/${item.product.photo}`"/>
             <q-item-section side top class="q-mt-sm">
-                <q-item-label>P30.00</q-item-label>
+                <q-item-label>P{{ item.product.price }}</q-item-label>
             </q-item-section>
         </q-item-section>
     </q-item>
