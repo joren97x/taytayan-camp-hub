@@ -64,7 +64,7 @@ const submit = () => {
                     <q-checkbox v-model="form.remember" label="Remember me" />
                     <q-space></q-space>
                     <p class="text-right q-mt-md">
-                        <Link 
+                        <Link
                             :href="route('password.request')" 
                             class="text-primary" 
                             style="text-decoration: none"

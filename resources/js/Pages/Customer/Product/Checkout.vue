@@ -2,6 +2,7 @@
 
     import { ref } from 'vue'
     import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
+    import { Link } from '@inertiajs/vue3'
 
     const mode = ref('Delivery')
     const payment_method = ref('GCash')
@@ -18,13 +19,11 @@
 <template>
     
     <div>
-        <q-item clickable to="/milktea-menu">
-            <q-item-section avatar>
-                <q-btn round flat icon="arrow_back"></q-btn>
-            </q-item-section>
-            <q-item-section class="text-h6">Go back</q-item-section>
-        </q-item>
-        <div class="q-ma-xl">
+        <Link :href="route('customer.cart.index')">
+            <q-btn label="Go back" icon="arrow_back" no-caps unelevated class="q-mx-xl q-my-md" />
+        </Link>
+        
+        <div class="q-mb-xl q-mx-xl">
             <div class="row q-col-gutter-xl">
                 <div class="col-7">
                     <q-card>
@@ -126,7 +125,7 @@
                                 </q-item-section>
                             </q-item>
                             <q-list>
-                                <FoodCardItem v-for="n in 3" :key="n"></FoodCardItem>
+                                <!-- <FoodCardItem v-for="n in 3" :key="n"></FoodCardItem> -->
                             </q-list>
                         </q-card-section>
                     </q-card>

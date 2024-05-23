@@ -5,41 +5,29 @@
 
 <template>
     <q-footer :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'">
-        <div class="row q-ma-xl">
+        <div class="row q-mt-md q-mx-xl">
             <div class="col-6">
-                <q-avatar>
+                <q-avatar class="q-mr-md">
                     <img :src="`https://cdn.quasar.dev/logo-v2/svg/logo-mono-${$q.dark.isActive ? 'white' : 'black'}.svg`">
                 </q-avatar>
-                Taytayan Camp Hub
+                <span class="text-h6">Taytayan Camp Hub</span>
 
-                <p>Unit 3308, High St South Corp Plaza Tower 2 <br>
+                <p class="q-mt-md">Unit 3308, High St South Corp Plaza Tower 2 <br>
                 26th St and 11th Ave, Bonifacio Global City <br>
                 Taguig 1634 Philippines</p>
+       
                 
-                <p>
-                    <q-avatar text-color="white" icon="email" />
-                    support@taytayancamp.com
-                </p>
-
-                <p>Find us online</p>
-                <q-avatar text-color="white" icon="facebook" />
-                <q-avatar text-color="white" icon="email" />
-                <q-avatar text-color="white" icon="facebook" />
-                <q-avatar text-color="white" icon="email" />
             </div>
             <div class="col-6">
-                <div class="row q-col-gutter-y-lg">
-                    <div class="col-6">Home</div>
-                    <div class="col-6">About Us</div>
-                    <div class="col-6">Event Tickets</div>
-                    <div class="col-6">Privacy Policy</div>
-                    <div class="col-6">Campsite Reservation</div>
-                    <div class="col-6">Terms of Service</div>
-                    <div class="col-6">Milktea Menu</div>
-                </div>
+                <p>Find us online</p>
+                <q-btn-group flat>
+                    <q-btn icon="facebook"/>
+                    <q-btn icon="facebook"/>
+                    <q-btn icon="facebook"/>
+                    <q-btn icon="facebook"/>
+                </q-btn-group>
             </div>
         </div>
         <p class="text-center">© 2024 Taytayan Camp Hub. All rights reserved.</p>
     </q-footer>
-    e
 </template>
