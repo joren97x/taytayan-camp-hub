@@ -54,14 +54,13 @@ class CartController extends Controller
 
             // Add to subtotal
             $subtotal += $totalProductPrice;
-
             return [
                 'product_id' => $cartProduct->product_id,
                 'product_name' => $product->name,
                 'product_photo' => $product->photo,
                 'product_price' => $product->price,
                 'quantity' => $cartProduct->quantity,
-                'special_instructions' => $cartProduct->special_instructions,
+                'special_instruction' => $cartProduct->special_instruction,
                 'modifier_groups' => $modifiersGroupedByGroup->values(),
                 'total_product_price' => $totalProductPrice,
             ];
@@ -117,26 +116,34 @@ class CartController extends Controller
             'product_id' => 'required|exists:products,id',
             'cart_id' => 'required|exists:carts,id',
             'quantity' => 'required|integer|min:1',
-            'special_instructions' => 'nullable|string',
+            'special_instruction' => 'nullable|string',
             'modifiers' => 'nullable|array',
             'modifiers.*.modifier_group_id' => 'required_with:modifiers|exists:modifier_groups,id',
             'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
             'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
         ]);
         // Find or create the cart item
-        $cartProduct = CartProduct::updateOrCreate(
+        // $cartProduct = CartProduct::updateOrCreate(
+        //     [
+        //         'cart_id' => $validatedData['cart_id'],
+        //         'product_id' => $validatedData['product_id'],
+        //     ],
+        //     [
+        //         'quantity' => $validatedData['quantity'],
+        //         'special_instructions' => $request->input('special_instructions', ''),
+        //     ]
+        // );
+
+        $cartProduct = CartProduct::create(
             [
                 'cart_id' => $validatedData['cart_id'],
                 'product_id' => $validatedData['product_id'],
-            ],
-            [
                 'quantity' => $validatedData['quantity'],
-                'special_instructions' => $request->input('special_instructions', ''),
+                'special_instruction' => $validatedData['special_instruction']
             ]
         );
-
         // Clear existing modifiers
-        $cartProduct->modifiers()->delete();
+        // $cartProduct->modifiers()->delete();
 
         // Add new modifiers
         // if (!empty($validatedData['modifiers'])) {

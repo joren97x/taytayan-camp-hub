@@ -12,7 +12,7 @@ defineOptions({
 
 const props = defineProps({
     categories: Object,
-    // products: Object
+    products: Object
 })
 
 const slide = ref(1)
@@ -103,7 +103,7 @@ function scrollToSection(section) {
                         </div>
                     </q-item-section>
                 </q-item>
-                <div class="row">
+                <!-- <div class="row">
                     <q-carousel
                         v-model="slide"
                         transition-prev="slide-right"
@@ -124,7 +124,7 @@ function scrollToSection(section) {
                             </div>
                         </q-carousel-slide>
                     </q-carousel>
-                </div>
+                </div> -->
                 <div v-for="(category, i) in props.categories" :key="i" class="q-mt-md category" :id="category.id">
                     <q-item class="text-h6">{{ category.name }}</q-item>
                     <div class="row q-col-gutter-md">

@@ -12,7 +12,7 @@ const show = computed(() => props.dialog)
 const form = useForm({
     product_id: props.product.id,
     cart_id: page.props.auth.cart_id,
-    special_instructions: '',
+    special_instruction: '',
     quantity: 1,
     modifiers: []
 })
@@ -117,7 +117,7 @@ const submit = () => {
                                 <q-chip :class="$q.dark.isActive ? 'bg-grey-8' : ''">Optional</q-chip>
                             </q-item-section>
                         </q-item>
-                        <q-input type="textarea" v-model="form.special_instructions" filled placeholder="Add a note"></q-input>
+                        <q-input type="textarea" v-model="form.special_instruction" filled placeholder="Add a note"></q-input>
                         <q-item>
                             <q-item-section class="text-h6">
                                 Quantity
@@ -128,7 +128,16 @@ const submit = () => {
                             <span style="margin: 0;">{{ form.quantity }}</span>
                             <q-btn round icon="add" @click="form.quantity++" />
                         </q-btn-group>
-                        <q-btn class="full-width q-my-lg" type="submit" no-caps color="blue">Add to cart</q-btn>
+                        <q-btn 
+                            class="full-width q-my-lg" 
+                            type="submit" 
+                            no-caps 
+                            color="blue"
+                            :loading="form.processing"
+                            :disable="form.processing"
+                        >
+                            Add to cart
+                        </q-btn>
                     </div>
                 </div>
             </q-form>

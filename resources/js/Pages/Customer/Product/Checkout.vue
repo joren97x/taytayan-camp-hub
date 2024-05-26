@@ -2,7 +2,7 @@
 
     import { ref } from 'vue'
     import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
-    import { Link } from '@inertiajs/vue3'
+    import { Link, Head } from '@inertiajs/vue3'
 
     const mode = ref('Delivery')
     const payment_method = ref('GCash')
@@ -14,19 +14,25 @@
         'Maya'
     ]
 
+    defineProps({
+        items: Object,
+        subtotal: Number
+    })
+
 </script>
 
 <template>
     
+    <Head title="Checkout" />
     <div>
         <Link :href="route('customer.cart.index')">
-            <q-btn label="Go back" icon="arrow_back" no-caps unelevated class="q-mx-xl q-my-md" />
+            <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
         </Link>
         
         <div class="q-mb-xl q-mx-xl">
             <div class="row q-col-gutter-xl">
                 <div class="col-7">
-                    <q-card>
+                    <q-card flat bordered>
                         <q-card-section>
                             <q-item>
                                 <q-item-section class="text-h6">{{ mode }} Details</q-item-section>
@@ -121,11 +127,11 @@
                             <q-item>
                                 <q-item-section class="text-h6">Order Summary</q-item-section>
                                 <q-item-section side>
-                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">3 items</q-chip>
+                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ items.length }} items</q-chip>
                                 </q-item-section>
                             </q-item>
                             <q-list>
-                                <!-- <FoodCardItem v-for="n in 3" :key="n"></FoodCardItem> -->
+                                <FoodCardItem :item="item" v-for="(item, index) in items" :key="index" />
                             </q-list>
                         </q-card-section>
                     </q-card>
@@ -135,12 +141,12 @@
                         <q-card>
                             <q-card-section>
                                 <q-item>
-                                    <q-item-section class="text-h6">Order Total</q-item-section>
+                                    <q-item-section class="text-h6">Order Summary</q-item-section>
                                 </q-item>
                                 <q-item>
                                     <q-item-section>Subtotal</q-item-section>
                                     <q-item-section side>
-                                        P90.00
+                                        {{ subtotal }}
                                     </q-item-section>
                                 </q-item>
                                 <q-item>

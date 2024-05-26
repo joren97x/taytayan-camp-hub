@@ -32,13 +32,17 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" elevated>
-            <q-toolbar >
-                <q-toolbar-title>
-                    Taytayan Camp Hub
+            <q-toolbar class="q-my-sm">
+                <q-toolbar-title >
+                    <q-avatar size="50px">
+                        <q-img src="logo.jpg"></q-img>
+                    </q-avatar>
+                    <span class="text-primary text-weight-medium q-ml-sm">Taytayan Camp Hub</span>
                 </q-toolbar-title>
                 <!-- <Link :href="route('products')">
                     <q-btn flat no-caps>Product Menu</q-btn>
                 </Link> -->
+                <q-space/>
                 <q-btn-dropdown no-caps label="Foods" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 200px" class="text-center q-pa-sm">
                         <Link :href="route('products')">
@@ -69,7 +73,6 @@ watch(rightDrawerOpen, (newVal) => {
                         <q-item clickable v-close-popup>
                             <q-item-section>Recent tabs</q-item-section>
                         </q-item>
-                        
                     </q-list>
                 </q-btn-dropdown>
                 <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">
