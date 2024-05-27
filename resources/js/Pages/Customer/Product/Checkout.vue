@@ -19,6 +19,8 @@
         subtotal: Number
     })
 
+    
+
 </script>
 
 <template>

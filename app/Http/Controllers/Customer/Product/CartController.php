@@ -67,36 +67,7 @@ class CartController extends Controller
         });
 
         return Inertia::render('Customer/Product/Cart', ['items'=> $cartItems, 'subtotal' => $subtotal]);
-        // return response()->json([
-        //     'items' => $cartItems,
-        //     'subtotal' => $subtotal,
-        // ]);
-    }
-
-    private function groupModifiersByGroup($modifiers)
-    {
-        $grouped = [];
-
-        foreach ($modifiers as $modifier) {
-            $group_id = $modifier->modifier_group_id;
-
-            // Initialize group if not already
-            if (!isset($grouped[$group_id])) {
-                $grouped[$group_id] = [
-                    'group' => $modifier->modifier_group,
-                    'price' => 0.00,
-                    'items' => []
-                ];
-            }
-
-            $item = $modifier->modifier_item;
-            $item->quantity = $modifier->quantity;
-            $grouped[$group_id]['items'][] = $item;
-
-            // Compute price for this modifier item
-            $grouped[$group_id]['price'] += $item->quantity * $item->price;
-        }
-        return $grouped;
+        
     }
 
     /**

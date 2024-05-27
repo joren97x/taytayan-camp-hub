@@ -1,9 +1,11 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-// import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 import { Link, Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({
     layout: CustomerLayout
@@ -13,6 +15,18 @@ defineProps({
     items: Object,
     subtotal: Number
 })
+
+const showNewAddressDialog = ref(false)
+const page = usePage()
+const submit = () => {
+    console.log(page.props.auth)
+    if(page.props.auth.user.address == null) {
+        showNewAddressDialog.value = true
+    }
+    else {
+        router.visit(route('product-checkout'))
+    }
+}
 
 const card = ref(false)
 const columns = [
@@ -111,9 +125,9 @@ const columns = [
                 
                 <q-card-section vertical>
                     <q-separator class="q-mb-sm"></q-separator>
-                    <Link :href="route('product-checkout')">
-                        <q-btn color="primary" class="full-width" no-caps>Go To Checkout</q-btn>
-                    </Link>
+                    <!-- <Link :href="route('product-checkout')"> -->
+                        <q-btn color="primary" @click="submit" class="full-width" no-caps>Go To Checkout</q-btn>
+                    <!-- </Link> -->
                 </q-card-section>
             </q-card>
         </div>
@@ -140,11 +154,12 @@ const columns = [
                 <q-separator />
 
                 <q-card-actions align="right">
-                <q-btn v-close-popup flat color="primary" label="Reserve" />
-                <q-btn v-close-popup flat color="primary" round icon="event" />
+                    <q-btn v-close-popup flat color="primary" label="Reserve" />
+                    <q-btn v-close-popup flat color="primary" round icon="event" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
+        <NewAddressDialog @close="showNewAddressDialog = false" :dialog="showNewAddressDialog" />
     </div>
 
 </template>

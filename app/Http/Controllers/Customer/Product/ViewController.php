@@ -53,7 +53,7 @@ class ViewController extends Controller
                             'total_modifier_price' => $modifierItem->price * $modifier->quantity,
                         ];
                     }),
-                ];
+                ];  
             });
 
             // Calculate the total price for the cart product including modifiers

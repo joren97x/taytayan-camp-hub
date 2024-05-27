@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Customer\Product\CartController;
+use App\Http\Controllers\Customer\Product\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\Product\ViewController;
 
@@ -13,6 +14,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'index' => 'customer.cart.index',
         'store' => 'customer.cart.store',
     ]);
+    Route::get('/success-checkout', [PaymentController::class, 'sucess']);
+    Route::post('/product-pay', [PaymentController::class, 'pay']);
 });
 
 Route::get('/products', [ViewController::class, 'index'])->name('products');

@@ -46,7 +46,11 @@ const dialog = ref(false)
                 >
                     {{ `${modifier_item.quantity} - ${modifier_item.modifier_item_name} (P${modifier_item.total_modifier_price})` }}
                 </q-item-label>
+                
             </template>
+            <q-item-label caption v-if="item.special_instruction">
+                Note: {{ item.special_instruction }}
+            </q-item-label>
         </q-item-section>
         <q-item-section side>
             P{{ item.total_product_price }}

@@ -33,12 +33,14 @@ watch(rightDrawerOpen, (newVal) => {
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" elevated>
             <q-toolbar class="q-my-sm">
-                <q-toolbar-title >
-                    <q-avatar size="50px">
-                        <q-img src="logo.jpg"></q-img>
-                    </q-avatar>
-                    <span class="text-primary text-weight-medium q-ml-sm">Taytayan Camp Hub</span>
-                </q-toolbar-title>
+                <Link :href="route('homepage')" style="text-decoration: none;">
+                    <q-toolbar-title>
+                        <q-avatar size="50px">
+                            <q-img src="logo.jpg"></q-img>
+                        </q-avatar>
+                        <span class="text-primary text-weight-medium q-ml-sm">Taytayan Camp Hub</span>
+                    </q-toolbar-title>
+                </Link>
                 <!-- <Link :href="route('products')">
                     <q-btn flat no-caps>Product Menu</q-btn>
                 </Link> -->
