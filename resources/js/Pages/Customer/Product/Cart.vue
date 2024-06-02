@@ -24,7 +24,7 @@ const submit = () => {
         showNewAddressDialog.value = true
     }
     else {
-        router.visit(route('product-checkout'))
+        router.visit(route('product.checkout'))
     }
 }
 

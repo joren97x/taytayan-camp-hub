@@ -1,25 +1,32 @@
 <script setup>
 
-    import { ref } from 'vue'
-    import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
-    import { Link, Head } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
+import { Link, Head } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
-    const mode = ref('Delivery')
-    const payment_method = ref('GCash')
+const props = defineProps({
+    items: Object,
+    subtotal: Number
+})
 
-    const payment_methods = [
-        'GCash',
-        'Credit/Debit Card',
-        'GrabPay',
-        'Maya'
-    ]
 
-    defineProps({
-        items: Object,
-        subtotal: Number
-    })
+const payment_methods = [
+    'GCash',
+    'Credit/Debit Card',
+    'GrabPay',
+    'Maya'
+]
 
-    
+const form = useForm({
+    items: props.items,
+    payment_method: 'GCash',
+    mode: 'Delivery'
+})
+
+const submit = () => {
+    form.post(route('product.pay'))
+}
 
 </script>
 
@@ -40,7 +47,7 @@
                                 <q-item-section class="text-h6">{{ mode }} Details</q-item-section>
                                 <q-item-section side>
                                     <q-btn-toggle
-                                        v-model="mode"
+                                        v-model="form.mode"
                                         no-caps
                                         rounded
                                         unelevated
@@ -87,7 +94,7 @@
                             <q-list>
                                 <q-item tag="label" v-ripple v-for="(pm, i) in payment_methods" :key="i">
                                     <q-item-section side top>
-                                        <q-radio v-model="payment_method" :val="pm"/>
+                                        <q-radio v-model="form.payment_method" :val="pm"/>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>{{ pm }}</q-item-label>
@@ -100,7 +107,7 @@
                                 </q-item>
                                 <q-item tag="label" v-ripple v-if="mode == 'Delivery'">
                                     <q-item-section side top>
-                                        <q-radio v-model="payment_method" val="Cash On Delivery"/>
+                                        <q-radio v-model="form.payment_method" val="Cash On Delivery"/>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>Cash On Delivery</q-item-label>
@@ -113,7 +120,7 @@
                                 </q-item>
                                 <q-item tag="label" v-ripple v-else>
                                     <q-item-section side top>
-                                        <q-radio v-model="payment_method" val="Walk In"/>
+                                        <q-radio v-model="form.payment_method" val="Walk In"/>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>Walk In</q-item-label>
@@ -166,7 +173,7 @@
                                 </q-item>
                             </q-card-section>
                         </q-card>
-                        <q-btn class="full-width q-mt-xl" label="Continue to payment" no-caps color="blue" size="lg"></q-btn>
+                        <q-btn class="full-width q-mt-xl" @click="submit" label="Continue to payment" no-caps color="blue" size="lg"></q-btn>
                     </div>
                 </div>
             </div>

@@ -23,6 +23,7 @@ Route::get('/', function () {
 })->name('homepage');
 
 Route::get('/home', [ViewController::class, 'home'])->name('home');
+
 Route::get('/events', function() {
     return Inertia::render('Customer/Event/Index');
 })->name('events');
