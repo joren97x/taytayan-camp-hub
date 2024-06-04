@@ -19,12 +19,16 @@ const props = defineProps({
 const addModifierGroupDialog = ref(false)
 const $q = useQuasar()
 const selected = ref([])
+const currentProductPhoto = props.product.photo
 const form = useForm({
     name: props.product.name,
     description: props.product.description,
-    photo: props.product.photo,
     price: props.product.price,
     categories: props.product.categories
+})
+
+const photoForm = useForm({
+    photo: null
 })
 
 const addModifierGroupForm = useForm({
@@ -37,10 +41,19 @@ const columns = [
 ]
 
 const submit = () => {
-    form.post(route('admin.product.store'), {
-        onFinish: () => form.reset('name', 'description', 'photo', 'price'),
+    
+    form.put(route('admin.product.update', props.product.id), {
         onSuccess: () => {
-            $q.notify('Product Successfully Added')
+            $q.notify('Product Successfully Updated')
+        }
+    })
+}
+
+const submitphotoForm = () => {
+    
+    photoForm.post(route('admin.product.update_photo', props.product.id), {
+        onSuccess: () => {
+            $q.notify('Product Photo Successfully Updated')
         }
     })
 }
@@ -59,6 +72,7 @@ onMounted(() => {
     selected.value = props.modifier_groups.filter(group => 
         addModifierGroupForm.modifier_group_ids.includes(group.id)
     )
+    form.categories = props.product.categories.map(row => row.id)
 })
 
 watch(selected, (modifier_group) => {
@@ -73,14 +87,8 @@ watch(selected, (modifier_group) => {
     
     <Head title="Edit Product" />
     <div class="q-pa-md q-mb-xl">
-        <!-- <p class="text-weight-bold">Product: </p>
-        {{ props.product }}
-        <q-separator></q-separator>
-        <p class="text-weight-bold">Modifier Groups: </p>
-        {{ props.modifier_groups }}
-        <q-separator></q-separator>
-        <p class="text-weight-bold">Categories: </p>
-        {{ props.product.categories }} -->
+        {{form}}
+        {{ currentProductPhoto }}
         <q-form @submit="submit">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
@@ -104,28 +112,8 @@ watch(selected, (modifier_group) => {
                 filled
                 :error="form.errors.name ? true : false"
                 :error-message="form.errors.name"
-            >
-            </q-input>
-            <q-item class="q-my-md">
-                <q-item-section avatar>
-                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
-                </q-item-section>
-                <q-item-section>
-                    <q-input 
-                        type="file" 
-                        filled 
-                        v-model="form.photo"
-                        :error="form.errors.photo ? true : false"
-                        :error-message="form.errors.photo"
-                    >
-                    </q-input>
-                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
-                    <q-item-label>
-                        <q-btn no-caps color="primary">Upload photo</q-btn>
-                    </q-item-label>
-                </q-item-section>
-            </q-item>
+            />
+            
             <q-input 
                 label="Description" 
                 v-model="form.description" 
@@ -164,6 +152,38 @@ watch(selected, (modifier_group) => {
                     <q-icon name="attach_money" />
                 </template>
             </q-input>
+            <p class="text-weight-bold text-h6">Product photo</p>
+            {{photoForm}}
+
+            <q-item class="q-my-md">
+                <q-item-section avatar>
+                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
+                </q-item-section>
+                <q-item-section>
+                    <q-input 
+                        type="file" 
+                        filled 
+                        v-model="photoForm.photo"
+                        :error="photoForm.errors.photo ? true : false"
+                        :error-message="photoForm.errors.photo"
+                    >
+                    </q-input>
+                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
+                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                    <q-item-label>
+                        <q-btn 
+                            no-caps color="primary" 
+                            v-if="photoForm.photo" 
+                            @click="submitphotoForm()"
+                            :loading="photoForm.processing"
+                            :disable="photoForm.processing"
+                        >
+                            Save
+                        </q-btn>
+                        <q-btn no-caps color="primary" v-else>Change photo</q-btn>
+                    </q-item-label>
+                </q-item-section>
+            </q-item>
             <p class="text-weight-bold text-h6">Modifier Groups</p>
             <p class="text-weight-light">
                 Modifier groups allow customers to customize items

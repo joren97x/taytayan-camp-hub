@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/UserManagement', ['users' => User::all()]);
+        return Inertia::render('Admin/UserManagement', ['users' => User::where('role', '!=', 'admin')->get()]);
     }
 
     /**

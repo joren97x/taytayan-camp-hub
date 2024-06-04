@@ -44,7 +44,7 @@ const submit = () => {
                     <q-card flat bordered>
                         <q-card-section>
                             <q-item>
-                                <q-item-section class="text-h6">{{ mode }} Details</q-item-section>
+                                <q-item-section class="text-h6">{{ form.mode }} Details</q-item-section>
                                 <q-item-section side>
                                     <q-btn-toggle
                                         v-model="form.mode"
@@ -61,13 +61,15 @@ const submit = () => {
                                     />
                                 </q-item-section>
                             </q-item>
-                            <q-item v-if="mode == 'Delivery'">
+                            <q-item v-if="form.mode == 'Delivery'">
                                 <q-item-section avatar>
                                     <q-icon name="location_on"></q-icon>
                                 </q-item-section>
                                 <q-item-section>
-                                    09123456789
-                                    <q-item-label>Purok Sacred heart, Buagsong, Cordova, Cebu</q-item-label>
+                                    <!-- 09123456789 -->
+                                    {{ $page.props.auth.user.phone_number }}
+                                    <q-item-label>{{ $page.props.auth.user.address }}</q-item-label>
+                                    <!-- <q-item-label>Purok Sacred heart, Buagsong, Cordova, Cebu</q-item-label> -->
                                 </q-item-section>
                             </q-item>
                             <div v-else>
@@ -158,8 +160,8 @@ const submit = () => {
                                         {{ subtotal }}
                                     </q-item-section>
                                 </q-item>
-                                <q-item>
-                                    <q-item-section>Tax or somn</q-item-section>
+                                <q-item v-if="form.mode == 'Delivery'">
+                                    <q-item-section>Delivery fee</q-item-section>
                                     <q-item-section side>
                                         P5.00
                                     </q-item-section>
@@ -168,7 +170,7 @@ const submit = () => {
                                 <q-item class="text-h6">
                                     <q-item-section>Total</q-item-section>
                                     <q-item-section side>
-                                        P95.00
+                                        {{  subtotal  }}
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>

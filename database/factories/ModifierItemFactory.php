@@ -16,11 +16,27 @@ class ModifierItemFactory extends Factory
      */
     public function definition(): array
     {
+
+        $dummy_modifier_items = [
+            'cookies',
+            'strawberry',
+            'mango',
+            'sauce',
+            'chocolate syrup',
+            'magic sarap',
+            'asin',
+            'cream',
+            'butter',
+            'avocado',
+            'hot sauce',
+            'milk'
+        ];  
+
         return [
             //
-            'name' => fake()->word(),
+            'name' => fake()->randomElement($dummy_modifier_items),
             'description' => fake()->sentence(),
-            'price' => fake()->numberBetween(0, 20)
+            'price' => fake()->numberBetween(0, 10)
         ];
     }
 }

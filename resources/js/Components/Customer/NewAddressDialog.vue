@@ -56,7 +56,7 @@ const submit = () => {
                         label="Region, Province, City, Barangay"
                     />
 
-                    <q-input filled label="Street name, Building, House No"></q-input>
+                    <q-input filled label="Street name, Building, House No" hint="Pwede ra ug wala" />
                 </q-card-section>
                 <q-card-actions>
                     <q-space/>

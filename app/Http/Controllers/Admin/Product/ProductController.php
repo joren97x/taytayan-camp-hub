@@ -41,6 +41,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
@@ -99,6 +100,31 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'categories' => 'nullable',
+        ]);
+
+        $product = Product::find($id);
+        CategoryProduct::where('product_id', $id)->delete();
+
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        
+        foreach($request->categories as $category) {
+            CategoryProduct::create([
+                'product_id' => $product->id,
+                'category_id' => $category,
+            ]);
+        }
+
+        $product->save();
+
+        return back();
+
     }
 
     /**
@@ -121,6 +147,24 @@ class ProductController extends Controller
             ]);
         }
         return back();
+    }
+
+    public function update_photo(Request $request, string $id) {
+
+        $request->validate([
+            'photo' => 'required'
+        ]);
+
+        $photo = $request->photo[0]->getClientOriginalName();
+        $request->photo[0]->move(public_path('/images'), $photo);
+
+        $product = Product::find($id);
+
+        $product->photo = $photo;
+        $product->save();
+
+        return back();
+
     }
 
 }

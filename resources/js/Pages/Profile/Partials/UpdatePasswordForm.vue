@@ -2,9 +2,11 @@
 
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
+const $q = useQuasar()
 
 const form = useForm({
     current_password: '',
@@ -15,7 +17,10 @@ const form = useForm({
 const updatePassword = () => {
     form.put(route('password.update'), {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset()
+            $q.notify('Password Updated')
+        },
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation');
@@ -101,6 +106,7 @@ const updatePassword = () => {
     </section> -->
     <q-form @submit="updatePassword">
         <q-card class="q-mt-xl">
+            {{ form }}
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Update Password</div>
                 <div class="q-mb-lg">Ensure your account is using a long, random password to stay secure.</div>

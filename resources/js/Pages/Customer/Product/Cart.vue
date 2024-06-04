@@ -59,22 +59,24 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-item="props">
                     <q-td :props="props" class="text-left">
-                        {{ props.row.product_name }} ({{ props.row.product_price }})
+                        {{ props.row.product.name }} ({{ props.row.product.price }})
                         <template 
-                            v-for="(modifier_group, index) in props.row.modifier_groups" 
+                            v-for="(modifier, index) in props.row.grouped_modifiers" 
                             :key="index"
                         >
-                            <q-item-label caption>{{ modifier_group.modifier_group_name }}</q-item-label>
+                            <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
                             <q-item-label 
                                 caption 
-                                v-for="(modifier_item, index) in modifier_group.modifiers" 
+                                v-for="(modifier_item, index) in modifier.modifier_items" 
                                 :key="index"
-                                
                             >
-                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item_name} (P${modifier_item.total_modifier_price})` }}
+                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
                             </q-item-label>
                             
                         </template>
+                        <!-- <q-item-label caption>
+                            {{ props.row.grouped_modifiers }}
+                        </q-item-label> -->
                         <q-item-label caption v-if="props.row.special_instruction">
                             Note: {{ props.row.special_instruction }}
                         </q-item-label>
@@ -89,7 +91,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-total="props">
                     <q-td :props="props">
-                        P{{ props.row.total_product_price }}
+                        P{{ props.row.total }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

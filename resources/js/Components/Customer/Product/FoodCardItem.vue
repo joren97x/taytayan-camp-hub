@@ -24,7 +24,7 @@ const dialog = ref(false)
             :options="[1,2,3,4,5,6,7,8,9,10]"
         />
         <q-img 
-            :src="`images/${item.product_photo}`"
+            :src="`images/${item.product.photo}`"
             height="70px"
             width="70px"
             class="q-mx-md"
@@ -32,19 +32,19 @@ const dialog = ref(false)
         
         <q-item-section>
             <q-item-label>
-                {{ item.product_name }}
+                {{ item.product.name }} ({{ item.product.price }})
             </q-item-label>
             <template 
-                v-for="(modifier_group, index) in item.modifier_groups" 
+                v-for="(modifier, index) in item.grouped_modifiers" 
                 :key="index"
             >
-                <q-item-label caption>{{ modifier_group.modifier_group_name }}</q-item-label>
+                <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
                 <q-item-label 
                     caption 
-                    v-for="(modifier_item, index) in modifier_group.modifiers" 
+                    v-for="(modifier_item, index) in modifier.modifier_items" 
                     :key="index"
                 >
-                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item_name} (P${modifier_item.total_modifier_price})` }}
+                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
                 </q-item-label>
                 
             </template>
@@ -53,7 +53,7 @@ const dialog = ref(false)
             </q-item-label>
         </q-item-section>
         <q-item-section side>
-            P{{ item.total_product_price }}
+            P{{ item.total }}
         </q-item-section>
     </q-item>
 
