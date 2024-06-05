@@ -1,6 +1,6 @@
 <script setup>
 
-defineProps({ status: String })
+defineProps({ order: Object })
 
 </script>
 
@@ -11,10 +11,13 @@ defineProps({ status: String })
         </q-item-section>
         <q-item-section>
             <q-item-label>
-                Food name 
+                <!-- Food name  -->
+                {{ order }}
             </q-item-label>
             <q-item-label caption>
                 3 items - P95.00
+                {{ order.cart.cart_products.length }}
+                {{ order }}
             </q-item-label>
             <q-item-label caption>
                 {{ status }} - Order ABC123

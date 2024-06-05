@@ -12,20 +12,24 @@ const props = defineProps({
 
 
 const payment_methods = [
-    'GCash',
-    'Credit/Debit Card',
-    'GrabPay',
-    'Maya'
+    'gcash',
+    'card',
+    'grab_pay',
+    'paymaya'
 ]
 
 const form = useForm({
     items: props.items,
-    payment_method: 'GCash',
-    mode: 'Delivery'
+    payment_method: 'gcash',
+    mode: 'delivery'
 })
 
 const submit = () => {
-    form.post(route('product.pay'))
+    form.post(route('product.pay'), {
+        onSuccess: (response) => {
+            console.log(response)
+        }
+    })
 }
 
 </script>
@@ -55,13 +59,13 @@ const submit = () => {
                                         color="white"
                                         text-color="primary"
                                         :options="[
-                                            { label: 'Delivery', value: 'Delivery' },
+                                            { label: 'delivery', value: 'delivery' },
                                             { label: 'Pickup', value: 'Pickup' }
                                         ]"
                                     />
                                 </q-item-section>
                             </q-item>
-                            <q-item v-if="form.mode == 'Delivery'">
+                            <q-item v-if="form.mode == 'delivery'">
                                 <q-item-section avatar>
                                     <q-icon name="location_on"></q-icon>
                                 </q-item-section>
@@ -107,12 +111,12 @@ const submit = () => {
                                         </q-avatar>
                                     </q-item-section>
                                 </q-item>
-                                <q-item tag="label" v-ripple v-if="mode == 'Delivery'">
+                                <q-item tag="label" v-ripple v-if="mode == 'delivery'">
                                     <q-item-section side top>
-                                        <q-radio v-model="form.payment_method" val="Cash On Delivery"/>
+                                        <q-radio v-model="form.payment_method" val="cash_on_delivery"/>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label>Cash On Delivery</q-item-label>
+                                        <q-item-label>Cash On delivery</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-avatar square>
@@ -122,7 +126,7 @@ const submit = () => {
                                 </q-item>
                                 <q-item tag="label" v-ripple v-else>
                                     <q-item-section side top>
-                                        <q-radio v-model="form.payment_method" val="Walk In"/>
+                                        <q-radio v-model="form.payment_method" val="walk_in"/>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>Walk In</q-item-label>
@@ -160,8 +164,8 @@ const submit = () => {
                                         {{ subtotal }}
                                     </q-item-section>
                                 </q-item>
-                                <q-item v-if="form.mode == 'Delivery'">
-                                    <q-item-section>Delivery fee</q-item-section>
+                                <q-item v-if="form.mode == 'delivery'">
+                                    <q-item-section>delivery fee</q-item-section>
                                     <q-item-section side>
                                         P5.00
                                     </q-item-section>

@@ -3,7 +3,7 @@
 import OrderItem from './OrderItem.vue'
 import { ref } from 'vue'
 
-defineProps({ status: String, mode: String })
+defineProps({ order: Object })
 
 const step = ref(1)
 const dialog = ref(false)
@@ -12,7 +12,7 @@ const trackOrderDialog = ref(false)
 </script>
 
 <template>
-    <OrderItem :status="status">
+    <OrderItem :order="order">
         <q-item-label>Apr 18, 2024</q-item-label>
         <div class="text-grey-8 q-gutter-xs">
             <q-btn 

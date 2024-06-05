@@ -1,23 +1,36 @@
 <script setup>
 
-    import { ref } from 'vue'
+    import { ref, watch, onMounted } from 'vue'
     import CustomerLayout from '@/Layouts/CustomerLayout.vue'
     import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
     import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
     import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
-    import { Head } from '@inertiajs/vue3'
+    import { Head, router } from '@inertiajs/vue3'
 
     defineOptions({
         layout: CustomerLayout
     })
 
+    defineProps({
+        orders: Object
+    })
+
     const tab = ref('On Progress')
+
+    watch(tab, () => {
+        router.get(route('orders.on_progress'), [], {
+            onSuccess: (res) => {
+                console.log(res)
+            }
+        })
+    })
 
 </script>
 
 <template>
     <Head title="Orders" />
     <div>
+        {{ orders }}
         <div class="row q-col-gutter-xl">
             <div class="col-3">
                 <q-card>
@@ -59,8 +72,11 @@
                         </q-item>
                         <q-list>
                             <div v-if="tab == 'On Progress'">
-                                <PendingOrderItem :status="'Pending'" :mode="'Delivery'" />
-                                <PendingOrderItem :status="'Pending'" :mode="'Pickup'" />
+                                <PendingOrderItem 
+                                    v-for="order in orders" 
+                                    :order="order"
+                                />
+                                <!-- <PendingOrderItem :status="'Pending'" :mode="'Pickup'" /> -->
                             </div>
                             <div v-if="tab == 'Completed'">
                                 <CompletedOrderItem v-for="n in 3" :key="n" :status="'Completed'" />

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\ModifierGroupProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -18,12 +19,13 @@ class Product extends Model
         'price'
     ];
 
-    public function categories()
+    //i added these hints if something went wrong delete it
+    public function categories() : BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_products');
     }
 
-    public function modifier_groups()
+    public function modifier_groups() : BelongsToMany
     {
         return $this->belongsToMany(ModifierGroup::class, 'modifier_group_products');
     }

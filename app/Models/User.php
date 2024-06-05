@@ -18,6 +18,12 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_DRIVER = 'driver';
+    const ROLE_CUSTOMER = 'customer';
+    const ROLE_CASHIER = 'cashier';
+
     protected $fillable = [
         'first_name',
         'last_name',
