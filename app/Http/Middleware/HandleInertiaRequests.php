@@ -31,10 +31,10 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
 
-        $activeCart = null;
+        $active_cart = null;
 
         if($request->user()) {
-            $activeCart = Cart::where('user_id', $request->user()->id)
+            $active_cart = Cart::where('user_id', $request->user()->id)
                       ->where('status', 1)
                       ->first();
         }
@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-                'cart_id' => $activeCart ? $activeCart->id : null,
+                'cart_id' => $active_cart ? $active_cart->id : null,
             ],
         ];
     }

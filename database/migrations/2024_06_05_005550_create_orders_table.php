@@ -19,14 +19,15 @@ return new class extends Migration
             $table->enum('status', [
                 Order::STATUS_PENDING,
                 Order::STATUS_PREPARING,
-                Order::STATUS_FOR_DELIVERY,
-                Order::STATUS_TO_BE_DELIVERED,
+                Order::STATUS_READY_FOR_DELIVERY,
+                Order::STATUS_READY_FOR_PICKUP,
+                Order::STATUS_DELIVERING,
                 Order::STATUS_CANCELLED,
                 Order::STATUS_COMPLETED
             ]);
             $table->enum('payment_method', [
                 Order::PAYMENT_METHOD_GCASH,
-                Order::PAYMENT_METHOD_CREDIT,
+                Order::PAYMENT_METHOD_CARD,
                 Order::PAYMENT_METHOD_PAYMAYA,
                 Order::PAYMENT_METHOD_GRAB_PAY,
                 Order::PAYMENT_METHOD_WALK_IN,

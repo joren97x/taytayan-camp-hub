@@ -52,7 +52,7 @@ watch(rightDrawerOpen, (newVal) => {
                                 <q-item-section>Foods</q-item-section>
                             </q-item>
                         </Link>
-                        <Link :href="route('orders')">
+                        <Link :href="route('orders', 'on-progress')">
                             <q-item clickable v-close-popup>
                                 <q-item-section>Orders</q-item-section>
                             </q-item>
@@ -162,6 +162,6 @@ watch(rightDrawerOpen, (newVal) => {
                 <slot/>
             </div>
         </q-page-container>
-        <Footer/>
+        <!-- <Footer/> -->
     </q-layout>
 </template>

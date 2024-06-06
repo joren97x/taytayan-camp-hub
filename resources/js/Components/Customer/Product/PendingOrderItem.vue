@@ -42,7 +42,8 @@ const trackOrderDialog = ref(false)
                 <q-item>
                     <q-item-section>
                         <q-item-label class="text-h6">Track Order</q-item-label>
-                        <q-item-label caption> April 18, 2024</q-item-label>
+                        <q-item-label caption> April 18, 2024
+                        </q-item-label>
                     </q-item-section>
                     <q-item-section side>
                         <q-btn round icon="close" unelevated v-close-popup></q-btn>
@@ -148,7 +149,8 @@ const trackOrderDialog = ref(false)
                 <q-item>
                     <q-item-section>
                         <q-item-label class="text-h6">Order Details</q-item-label>
-                        <q-item-label caption> April 18, 2024</q-item-label>
+                        <q-item-label caption> {{ order.created_at }}
+                        </q-item-label>
                     </q-item-section>
                     <q-item-section side>
                         <q-btn round icon="close" unelevated v-close-popup></q-btn>
@@ -159,27 +161,40 @@ const trackOrderDialog = ref(false)
                         <q-item>
                             <q-item-section>
                                 <q-item-label class="text-h6">
-                                    3 items
-                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">Delivery</q-chip>
+                                    {{ order.cart_products.length }} items
+                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
+                                        {{ order.mode }}
+                                    </q-chip>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
                         <q-list>
-                            <q-item v-for="n in 3" :key="n">
+                            <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
+                                <q-item-section thumbnail>
+                                    <img :src="`/images/${cart_product.product.photo}`" style="object-fit: cover;" />
+                                    
+                                </q-item-section>
                                 <q-item-section>
                                     <span>
-                                        <q-chip size="sm" :class="$q.dark.isActive ? 'bg-grey-9' : ''">1</q-chip>
-                                            Milktea
+                                        <q-chip size="sm" :class="$q.dark.isActive ? 'bg-grey-9' : ''">
+                                            {{ cart_product.quantity }}
+                                        </q-chip>
+                                            {{ cart_product.product.name }}
                                     </span>
-                                    <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet
-                                        consectetur adipiscit elit.
+                                    <q-item-label v-for="(grouped_modifier, index) in cart_product.grouped_modifiers" :key="index">
+                                        {{ grouped_modifier.modifier_group.name }}
+                                        <q-item-label caption v-for="modifier in grouped_modifier.modifier_items" :key="modifier.id">
+                                            {{ modifier.quantity }} - {{ modifier.modifier_item.name }} etc or should i display the price or total price
+                                        </q-item-label>
+                                    </q-item-label>
+                                    <q-item-label v-if="cart_product.special_instruction">
+                                        Note: {{ cart_product.special_instruction }}
                                     </q-item-label>
                                 </q-item-section>
-                                <q-item-section thumbnail>
-                                    <img src="https://cdn.quasar.dev/img/chicken-salad.jpg"/>
-                                    <q-item-section side top class="q-mt-sm">
-                                        <q-item-label>P30.00</q-item-label>
-                                    </q-item-section>
+                                <q-item-section side top class="q-mt-sm">
+                                    <q-item-label>
+                                        {{ cart_product.total }}
+                                    </q-item-label>
                                 </q-item-section>
                             </q-item>
                         </q-list>
@@ -191,11 +206,11 @@ const trackOrderDialog = ref(false)
                         <q-item>
                             <q-item-section>Subtotal</q-item-section>
                             <q-item-section side>
-                                P90.00
+                                {{ order.subtotal }}
                             </q-item-section>
                         </q-item>
                         <q-item>
-                            <q-item-section>Tax or somn</q-item-section>
+                            <q-item-section>Delivery fee if kung delivery? or naa ba na?</q-item-section>
                             <q-item-section side>
                                 P5.00
                             </q-item-section>
@@ -204,7 +219,7 @@ const trackOrderDialog = ref(false)
                         <q-item class="text-h6">
                             <q-item-section>Total</q-item-section>
                             <q-item-section side>
-                                P95.00
+                                {{ order.subtotal }}
                             </q-item-section>
                         </q-item>
                     </div>

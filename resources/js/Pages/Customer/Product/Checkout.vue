@@ -6,17 +6,10 @@ import { Link, Head } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
+    order_constants: Object,
     items: Object,
     subtotal: Number
 })
-
-
-const payment_methods = [
-    'gcash',
-    'card',
-    'grab_pay',
-    'paymaya'
-]
 
 const form = useForm({
     items: props.items,
@@ -41,7 +34,6 @@ const submit = () => {
         <Link :href="route('customer.cart.index')">
             <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
         </Link>
-        
         <div class="q-mb-xl q-mx-xl">
             <div class="row q-col-gutter-xl">
                 <div class="col-7">
@@ -60,7 +52,7 @@ const submit = () => {
                                         text-color="primary"
                                         :options="[
                                             { label: 'delivery', value: 'delivery' },
-                                            { label: 'Pickup', value: 'Pickup' }
+                                            { label: 'Pickup', value: 'pickup' }
                                         ]"
                                     />
                                 </q-item-section>
@@ -98,12 +90,16 @@ const submit = () => {
                                     </q-item-section>
                                 </q-item>
                             <q-list>
-                                <q-item tag="label" v-ripple v-for="(pm, i) in payment_methods" :key="i">
+                                <q-item 
+                                    tag="label" v-ripple 
+                                    v-for="(payment_method, index) in order_constants.payment_methods" 
+                                    :key="index"
+                                >
                                     <q-item-section side top>
-                                        <q-radio v-model="form.payment_method" :val="pm"/>
+                                        <q-radio v-model="form.payment_method" :val="payment_method"/>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label>{{ pm }}</q-item-label>
+                                        <q-item-label>{{ payment_method }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-avatar square>
@@ -111,7 +107,7 @@ const submit = () => {
                                         </q-avatar>
                                     </q-item-section>
                                 </q-item>
-                                <q-item tag="label" v-ripple v-if="mode == 'delivery'">
+                                <!-- <q-item tag="label" v-ripple v-if="mode == 'delivery'">
                                     <q-item-section side top>
                                         <q-radio v-model="form.payment_method" val="cash_on_delivery"/>
                                     </q-item-section>
@@ -136,7 +132,7 @@ const submit = () => {
                                             <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                                         </q-avatar>
                                     </q-item-section>
-                                </q-item>
+                                </q-item> -->
                             </q-list>
                             <q-separator class="q-my-md" />
                             <q-item>

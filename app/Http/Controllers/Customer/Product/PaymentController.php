@@ -33,7 +33,7 @@ class PaymentController extends Controller
 
 
 
-        return redirect('/orders');
+        return redirect('/orders/on-progress');
     }
 
     public function pay(Request $request) {

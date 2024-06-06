@@ -18,7 +18,7 @@
     const tab = ref('On Progress')
 
     watch(tab, () => {
-        router.get(route('orders.on_progress'), [], {
+        router.get(route('orders', tab.value), [], {
             onSuccess: (res) => {
                 console.log(res)
             }
@@ -30,13 +30,12 @@
 <template>
     <Head title="Orders" />
     <div>
-        {{ orders }}
         <div class="row q-col-gutter-xl">
             <div class="col-3">
                 <q-card>
                     <q-card-section>
                         <q-list>
-                            <q-item clickable @click="tab = 'On Progress'">
+                            <q-item clickable @click="tab = 'on-progress'">
                                 <q-item-section avatar>
                                     <q-icon name="schedule"></q-icon>
                                 </q-item-section>
@@ -44,7 +43,7 @@
                                     On Progress
                                 </q-item-section>
                             </q-item>
-                            <q-item clickable @click="tab = 'Completed'">
+                            <q-item clickable @click="tab = 'completed'">
                                 <q-item-section avatar>
                                     <q-icon name="check"></q-icon>
                                 </q-item-section>
@@ -52,7 +51,7 @@
                                     Completed
                                 </q-item-section>
                             </q-item>
-                            <q-item clickable @click="tab = 'Cancelled'">
+                            <q-item clickable @click="tab = 'cancelled'">
                                 <q-item-section avatar>
                                     <q-icon name="cancel"></q-icon>
                                 </q-item-section>
@@ -65,7 +64,7 @@
                 </q-card>
             </div>
             <div class="col-9">
-                <q-card>
+                <q-card class="q-mb-xl">
                     <q-card-section>
                         <q-item>
                             <q-item-section class="text-h6">{{ tab }}</q-item-section>
@@ -76,7 +75,6 @@
                                     v-for="order in orders" 
                                     :order="order"
                                 />
-                                <!-- <PendingOrderItem :status="'Pending'" :mode="'Pickup'" /> -->
                             </div>
                             <div v-if="tab == 'Completed'">
                                 <CompletedOrderItem v-for="n in 3" :key="n" :status="'Completed'" />

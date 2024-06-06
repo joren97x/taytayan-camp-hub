@@ -11,16 +11,13 @@ defineProps({ order: Object })
         </q-item-section>
         <q-item-section>
             <q-item-label>
-                <!-- Food name  -->
-                {{ order }}
+                IDK unsay Order title 
             </q-item-label>
             <q-item-label caption>
-                3 items - P95.00
-                {{ order.cart.cart_products.length }}
-                {{ order }}
+                {{ order.cart_products.length }} items - P{{ order.subtotal }}
             </q-item-label>
             <q-item-label caption>
-                {{ status }} - Order ABC123
+                {{ order.status }} - Order ABC123
             </q-item-label>
         </q-item-section>
         <q-item-section side top>
