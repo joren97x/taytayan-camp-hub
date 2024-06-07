@@ -51,7 +51,7 @@ const submit = () => {
                                         color="white"
                                         text-color="primary"
                                         :options="[
-                                            { label: 'delivery', value: 'delivery' },
+                                            { label: 'Delivery', value: 'delivery' },
                                             { label: 'Pickup', value: 'pickup' }
                                         ]"
                                     />

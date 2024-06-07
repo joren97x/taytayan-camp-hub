@@ -30,7 +30,7 @@ class OrderController extends Controller
     public function index(string $status, CartService $cartService) {
         
         if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {
-            $orders = Order::where('status', [$status])->get();
+            $orders = Order::where('status', [$status])->where('user_id', auth()->user()->id)->get();
         }
         else {
             $orders = Order::whereIn('status', [
@@ -39,7 +39,9 @@ class OrderController extends Controller
                 Order::STATUS_READY_FOR_PICKUP,
                 Order::STATUS_DELIVERING,
                 Order::STATUS_PREPARING,
-            ])->get();
+            ])
+            ->where('user_id', auth()->user()->id)
+            ->get();
         }
 
         foreach($orders as $order) {

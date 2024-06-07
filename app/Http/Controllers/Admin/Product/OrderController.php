@@ -28,13 +28,18 @@ class OrderController extends Controller
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }
-        return Inertia::render('Admin/Product/Orders', ['orders' => $orders]);
+        return Inertia::render('Admin/Product/Orders', [
+            'orders' => $orders,
+            'order_constants' => Order::getConstants()
+        ]);
     }
 
     public function update_status(Request $request, string $id) {
+
         $request->validate([
             'status' => 'required'
         ]);
+        
         $order = Order::find($id);
         switch($request->status) {
             case Order::STATUS_PREPARING:
@@ -54,7 +59,7 @@ class OrderController extends Controller
                 $order->update();
                 break;
             case Order::STATUS_READY_FOR_PICKUP:
-                $order->status = Order::STATUS_READY_FOR_DELIVERY;
+                $order->status = Order::STATUS_READY_FOR_PICKUP;
                 $order->update();
                 break;
         }

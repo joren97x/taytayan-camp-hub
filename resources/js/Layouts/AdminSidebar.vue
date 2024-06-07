@@ -1,13 +1,25 @@
 <script setup>
 
 import { Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import { router } from '@inertiajs/vue3'
 
 const leftDrawerOpen = ref(false)
+const user_roles = ref([])
 
-function hello() {
-    console.log('hello')
-}
+onMounted(() => {
+    axios.get(route('admin.get_user_roles'))
+    .then((res) => {
+        res.data.user_roles.forEach(element => {
+            user_roles.value.push(element)
+        });
+        console.log(res)
+    })
+    .catch((err) => {
+        console.error(err)
+    })
+})
 
 </script>
 
@@ -20,7 +32,6 @@ function hello() {
                         <q-item-section top avatar>
                             <q-avatar color="primary" text-color="white" icon="bluetooth" />
                         </q-item-section>
-
                         <q-item-section>
                             <q-item-label>Joren Hyeung Nim</q-item-label>
                             <q-item-label caption lines="2" class="text-white">Administrator</q-item-label>
@@ -78,16 +89,32 @@ function hello() {
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('admin.user.index')">
-                        <q-item clickable v-ripple>
-                            <q-item-section avatar>
-                                <q-icon name="send" />
-                            </q-item-section>
-                            <q-item-section>
-                                User Management
-                            </q-item-section>
-                        </q-item>
-                    </Link>
+                    <q-expansion-item icon="event" label="User Management">
+                        <q-card class="q-mx-md">
+                            <Link :href="route(`admin.user.index`, user_role)" v-for="(user_role, index) in user_roles" :key="index">
+                                <q-item clickable v-ripple >
+                                    <q-item-section avatar>
+                                        <q-icon name="star" />
+                                    </q-item-section>
+                                    <q-item-section class="text-capitalize">
+                                        {{ user_role }}
+                                    </q-item-section>
+                                </q-item>
+                            </Link>
+                        </q-card>
+                    </q-expansion-item>
+                    <!-- <Link :href="route('admin.user.index')">
+                        <q-expansion-item caption="User Management">
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="send" />
+                                </q-item-section>
+                                <q-item-section>
+                                    User Management
+                                </q-item-section>
+                            </q-item>
+                        </q-expansion-item>
+                    </Link> -->
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
                             <q-icon name="drafts" />

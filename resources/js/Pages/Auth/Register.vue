@@ -1,11 +1,15 @@
 <script setup>
 
 import AuthLayout from '@/Layouts/AuthLayout.vue'
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
 defineOptions({
     layout: AuthLayout
 })
+
+const showPassword = ref(false)
+const showPassword2 = ref(false)
 
 const form = useForm({
     first_name: '',

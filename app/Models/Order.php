@@ -35,6 +35,7 @@ class Order extends Model
     {
         return [
             'statuses' => [
+                // DO NOT CHANGE THE ORDER WALLAHI IT WILL RUIN THE SYSTEM
                 self::STATUS_PENDING,
                 self::STATUS_PREPARING,
                 self::STATUS_READY_FOR_DELIVERY,

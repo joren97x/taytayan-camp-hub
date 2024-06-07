@@ -55,4 +55,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public static function getUserRoles()
+    {
+        return [
+            self::ROLE_ADMIN,
+            self::ROLE_CASHIER,
+            self::ROLE_CUSTOMER,
+            self::ROLE_DRIVER
+        ];
+    }
+
 }

@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\Product\ModifierGroupController;
 use App\Http\Controllers\Admin\Product\ModifierItemController;
 use App\Http\Controllers\Admin\Product\OrderController;
 use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/admin/user-roles', [UserController::class, 'user_roles'])->name('admin.get_user_roles');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders');
 Route::patch('/admin/update-order-status/{order}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
 Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.product.reviews');

@@ -12,10 +12,10 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $role)
     {
         //
-        return Inertia::render('Admin/UserManagement', ['users' => User::where('role', '!=', 'admin')->get()]);
+        return Inertia::render('Admin/UserManagement', ['users' => User::where('role', $role)->get()]);
     }
 
     /**
@@ -67,4 +67,10 @@ class UserController extends Controller
     {
         //
     }
+
+    public function user_roles()
+    {
+        return response()->json(['user_roles' => User::getUserRoles()]);
+    }
+
 }

@@ -25,7 +25,13 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
 <template>
     <Head title="Email Verification" />
-        <q-card class="q-pa-xl q-mt-xl">
+        <q-card class="q-pa-xl q-mt-xl" flat>
+            <Link :href="route('homepage')">
+                <q-btn no-caps flat color="primary">
+                    <q-icon name="arrow_back" class="q-mr-sm"></q-icon>
+                    Go back
+                </q-btn>
+            </Link>
             <q-card-section>
                 <p class="text-h6 q-mb-lg">Email Verification</p>
                 <p>
@@ -37,16 +43,23 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                 </q-banner>
             </q-card-section>
             
-            <q-card-actions align="between">
-                <q-form class="q-pa-xl" @submit="submit">
-                    <q-btn no-caps color="primary" type="submit" :loading="form.processing" :disabled="form.processing">Resend Verification Email</q-btn>
+                <q-form @submit="submit">
+                    <q-btn 
+                        no-caps color="primary" 
+                        type="submit" 
+                        :loading="form.processing" 
+                        :disabled="form.processing"
+                        class="full-width q-mb-md"
+                    >
+                        Resend Verification Email
+                    </q-btn>
                 </q-form>
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                >
-                    <q-btn no-caps outline color="negative">Logout</q-btn>
-                </Link>
-            </q-card-actions>
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                    >
+                        <q-btn no-caps class="full-width" outline color="negative">Logout</q-btn>
+                    </Link>
+
         </q-card>
 </template>
