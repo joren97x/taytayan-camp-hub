@@ -28,7 +28,7 @@ const columns = [
 
 <template>
     
-    <Head title="Milkteas" />
+    <Head title="Products" />
     <div class="q-pa-md">
         <q-table
             class="my-sticky-header-column-table"
@@ -64,7 +64,7 @@ const columns = [
                 </q-td>
             </template>
             <template v-slot:top>
-                <p class="text-h6 q-pt-md">Milkteas</p>
+                <p class="text-h6 q-pt-md">Products</p>
                 <q-space />
                 <q-select
                     style="width: 200px"
@@ -80,7 +80,7 @@ const columns = [
                     </template>
                 </q-input>
                 <Link :href="route('admin.product.create')">
-                    <q-btn no-caps color="primary">Add new item</q-btn>
+                    <q-btn no-caps color="primary">New Product</q-btn>
                 </Link>
             </template>
         </q-table>

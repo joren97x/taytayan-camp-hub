@@ -1,29 +1,29 @@
 <script setup>
 
-    import { ref, watch, onMounted } from 'vue'
-    import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-    import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
-    import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
-    import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
-    import { Head, router } from '@inertiajs/vue3'
+import { ref, watch, onMounted } from 'vue'
+import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
+import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
+import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
+import { Head, router, usePage } from '@inertiajs/vue3'
 
-    defineOptions({
-        layout: CustomerLayout
+defineOptions({
+    layout: CustomerLayout
+})
+
+defineProps({
+    orders: Object
+})
+
+const tab = ref('on-progress')
+
+watch(tab, () => {
+    router.get(route('orders', tab.value), [], {
+        onSuccess: (res) => {
+            console.log(res)
+        }
     })
-
-    defineProps({
-        orders: Object
-    })
-
-    const tab = ref('On Progress')
-
-    watch(tab, () => {
-        router.get(route('orders', tab.value), [], {
-            onSuccess: (res) => {
-                console.log(res)
-            }
-        })
-    })
+})
 
 </script>
 
@@ -70,16 +70,16 @@
                             <q-item-section class="text-h6">{{ tab }}</q-item-section>
                         </q-item>
                         <q-list>
-                            <div v-if="tab == 'On Progress'">
+                            <div v-if="tab == 'on-progress'">
                                 <PendingOrderItem 
                                     v-for="order in orders" 
                                     :order="order"
                                 />
                             </div>
-                            <div v-if="tab == 'Completed'">
+                            <div v-if="tab == 'completed'">
                                 <CompletedOrderItem v-for="n in 3" :key="n" :status="'Completed'" />
                             </div>
-                            <div v-if="tab == 'Cancelled'">
+                            <div v-if="tab == 'cancelled'">
                                 <CancelledOrderItem v-for="n in 3" :key="n" :status="'Cancelled'" />
                             </div>
                         </q-list>

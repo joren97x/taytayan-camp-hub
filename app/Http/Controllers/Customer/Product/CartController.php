@@ -18,7 +18,10 @@ class CartController extends Controller
     {
         $cart_id = $cartService->getUserActiveCartId(auth()->user()->id);
         $result = $cartService->getCartLineItemsAndSubtotal(true, $cart_id);
-        return Inertia::render('Customer/Product/Cart', ['items'=> $result['cart_products'], 'subtotal' => $result['subtotal']]);
+        return Inertia::render('Customer/Product/Cart', [
+            'items'=> $result['cart_products'], 
+            'subtotal' => $result['subtotal']
+        ]);
         
     }
 

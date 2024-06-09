@@ -18,9 +18,20 @@ const acceptOrderForm = useForm({
     status: props.order_statuses.preparing
 })
 
+
+
 const readyOrderForm = useForm({
     status: props.order.mode == 'pickup' ? props.order_statuses.ready_for_pickup : props.order_statuses.ready_for_delivery
 })
+
+function acceptOrder() {
+    acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {
+        onSuccess: () => {
+            dialog.value = false
+            $q.notify('Order Accepted')
+        }
+    })
+}
 
 function acceptOrder() {
     acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {

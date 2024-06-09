@@ -3,7 +3,6 @@
 import { Link } from '@inertiajs/vue3'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { router } from '@inertiajs/vue3'
 
 const leftDrawerOpen = ref(false)
 const user_roles = ref([])

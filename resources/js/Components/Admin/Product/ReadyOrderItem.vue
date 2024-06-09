@@ -11,12 +11,24 @@ const props = defineProps({
 })
 
 const dialog = ref(false)
+const isOrderCompleteDialog = ref(false)
 const $q = useQuasar()
 const step = ref(1)
 
 const steppers = []
 
+const form = useForm({
+    status: props.order_statuses.completed
+})
 
+function completeOrder() {
+    form.patch(route('admin.order.update_status', props.order.id), {
+        onSuccess: () => {
+            isOrderCompleteDialog.value = false
+            $q.notify('Order marked as completed')
+        }
+    })
+}
 
 </script>
 
@@ -25,7 +37,7 @@ const steppers = []
         <q-item-section v-if="order_statuses.ready_for_pickup == order.status" top side>
             {{ order.created_at }}
             {{ order.status }}
-            <q-btn no-caps color="primary">Complete</q-btn>
+            <q-btn no-caps color="primary" @click.stop="isOrderCompleteDialog = true">Complete</q-btn>
         </q-item-section>
         <q-item-section side top v-else>
             {{ order.created_at }}
@@ -162,6 +174,25 @@ const steppers = []
                 </div>
             </q-card-section>
            
+        </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="isOrderCompleteDialog">
+        <q-card>
+            <q-card-section>
+                Is the order complete?
+            </q-card-section>
+            <q-card-actions>
+                <q-btn no-caps v-close-popup>No</q-btn>
+                <q-btn 
+                    no-caps
+                    :loading="form.processing"
+                    :disable="form.processing"
+                    @click="completeOrder()"
+                >
+                    Yes
+                </q-btn>
+            </q-card-actions>
         </q-card>
     </q-dialog>
     

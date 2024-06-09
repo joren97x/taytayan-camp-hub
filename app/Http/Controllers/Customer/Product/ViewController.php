@@ -33,7 +33,8 @@ class ViewController extends Controller
         return Inertia::render('Customer/Product/Checkout', [
             'order_constants' => Order::getConstants(),
             'items'=> $result['cart_products'], 
-            'subtotal' => $result['subtotal']
+            'subtotal' => $result['subtotal'],
+            'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY')
         ]);
 
     }

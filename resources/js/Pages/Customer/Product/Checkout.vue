@@ -8,7 +8,8 @@ import { useForm } from '@inertiajs/vue3'
 const props = defineProps({
     order_constants: Object,
     items: Object,
-    subtotal: Number
+    subtotal: Number,
+    google_maps_api_key: Object,
 })
 
 const form = useForm({
@@ -69,8 +70,9 @@ const submit = () => {
                                 </q-item-section>
                             </q-item>
                             <div v-else>
-                                <div class="full-width rounded-borders bg-grey q-mt-sm" style="height: 180px">
-                                    map
+                                <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.0373439137084!2d124.03639717545175!3d10.258571868531218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1717932087938!5m2!1sen!2sph" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
                                 </div>
                                 <q-item>
                                     <q-item-section avatar>
