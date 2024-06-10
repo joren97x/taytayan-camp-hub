@@ -13,13 +13,13 @@ defineOptions({
 
 defineProps({
     items: Object,
-    subtotal: Number
+    subtotal: Number,
+    google_maps_api_key: String
 })
 
 const showNewAddressDialog = ref(false)
 const page = usePage()
 const submit = () => {
-    console.log(page.props.auth)
     if(page.props.auth.user.address == null) {
         showNewAddressDialog.value = true
     }
@@ -161,7 +161,7 @@ const columns = [
                 </q-card-actions>
             </q-card>
         </q-dialog>
-        <NewAddressDialog @close="showNewAddressDialog = false" :dialog="showNewAddressDialog" />
+        <NewAddressDialog @close="showNewAddressDialog = false" :dialog="showNewAddressDialog" :google_maps_api_key="google_maps_api_key" />
     </div>
 
 </template>

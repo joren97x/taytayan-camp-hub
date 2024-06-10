@@ -38,7 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::get('/map', function() {
+    return Inertia::render('Map', [
+        'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY')
+    ]);
+});
 require __DIR__.'/admin.php';
 require __DIR__.'/customer.php';
 require __DIR__.'/driver.php';

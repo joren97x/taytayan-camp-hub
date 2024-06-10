@@ -20,7 +20,9 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@googlemaps/js-api-loader": "^1.16.6",
         "@quasar/extras": "^1.16.11",
-        "quasar": "^2.15.4"
+        "quasar": "^2.15.4",
+        "vue3-google-map": "^0.20.0"
     }
 }

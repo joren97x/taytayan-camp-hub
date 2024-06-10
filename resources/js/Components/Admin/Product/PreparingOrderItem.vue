@@ -42,14 +42,14 @@ function acceptOrder() {
     })
 }
 
-function readyOrder() {
-    readyOrderForm.patch(route('admin.order.update_status', props.order.id), {
-        onSuccess: () => {
-            isOrderReadyDialog.value = false
-            $q.notify('Order Accepted')
-        }
-    })
-}
+// function readyOrder() {
+//     readyOrderForm.patch(route('admin.order.update_status', props.order.id), {
+//         onSuccess: () => {
+//             isOrderReadyDialog.value = false
+//             $q.notify('Order Accepted')
+//         }
+//     })
+// }
 
 </script>
 

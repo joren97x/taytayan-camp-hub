@@ -1,12 +1,14 @@
 <script setup>
 
 import { useForm, usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { computed, onMounted, ref, nextTick, watch } from 'vue'
 import { useQuasar } from 'quasar'
+import { Loader } from "@googlemaps/js-api-loader"
 
 const emit = defineEmits(['close'])
 const props = defineProps({
-    dialog: Boolean
+    dialog: Boolean,
+    google_maps_api_key: String
 })
 
 const $q = useQuasar()
@@ -26,11 +28,90 @@ const submit = () => {
         }
     })
 }
+
+const placeInput = ref(null)
+const coords = ref({
+    lat: null,
+    lng: null
+})
+
+const loader = new Loader({
+    apiKey: props.google_maps_api_key,
+    version: 'weekly',
+    libraries: ['maps', 'marker']
+})
+
+watch(() => props.dialog, async (newValue) => {
+    console.log('dialog prop changed:', newValue)
+    if(newValue) {
+        console.log('annyeong')
+        const Places = await loader.importLibrary('places')
+
+        await nextTick()
+
+        const inputElement = placeInput.value.$el.querySelector('input')
+        const autocomplete = new google.maps.places.Autocomplete(inputElement)
+        console.log(autocomplete)
+        autocomplete.addListener('place_changed', () => {
+            console.log('place', place)
+            const place = autocomplete.getPlace() //this callback is inherent you will see it if you logged autocomplete
+            console.log('place', place.geometry.location)
+            console.log('place', place.geometry.location.lat())
+            coords.value.lat = place.geometry.location.lat()
+            coords.value.lng = place.geometry.location.lng()
+            map()
+        })
+        console.log('annyeong')
+
+    }
+})
+
+onMounted(async () => {
+
+    
+   
+
+})
+
+async function map() {
+    const { Map, InfoWindow } = await loader.importLibrary('maps')
+    const { AdvancedMarkerElement } = await loader.importLibrary('marker')
+
+    const map = new Map(document.getElementById('map'), {
+        center: coords.value,
+        zoom: 14,
+        mapId: '4504f8b37365c3d0',
+    })
+
+    const infoWindow = new InfoWindow()
+    const draggableMarker = new AdvancedMarkerElement({
+        map,
+        position: coords.value,
+        gmpDraggable: true,
+        title: 'This marker is draggable.',
+    })
+
+    draggableMarker.addListener('dragend', (event) => {
+        const position = draggableMarker.position
+        console.log(event)
+        console.log(position.lat)
+        const content = `
+            <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
+            <div class="text-subtitle2">Please check your map location is correct</div>
+        `
+        // infoWindow.close()
+        infoWindow.setContent(content)
+        // infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`)
+        infoWindow.open(map, draggableMarker)
+    })
+}
+
+
 </script>
 
 <template>
-    <q-dialog v-model="show">
-        <q-card style="width: 50vw">
+    <q-dialog v-model="show" class="full-width">
+        <q-card>
             <q-form @submit="submit">
                 <q-card-section>
                     <div class="text-h6">New Address</div>
@@ -51,16 +132,25 @@ const submit = () => {
                         filled 
                         v-model="form.address" 
                         class="q-my-md" 
+                        ref="placeInput"
+                        id="place"
                         :error="form.errors.address ? true : false"
                         :error-message="form.errors.address"
-                        label="Region, Province, City, Barangay"
+                        label="Barangay, City, Province"
                     />
-
-                    <q-input filled label="Street name, Building, House No" hint="Pwede ra ug wala" />
+                    <!-- <q-input
+                        id="place"
+                        v-model="location"
+                        ref="placeInput"
+                        filled
+                        placeholder="Enter a location"
+                        @change="handlePlaceChanged"
+                    /> -->
+                    <div id="map" style="width: 100%; height: 500px"></div>
                 </q-card-section>
                 <q-card-actions>
                     <q-space/>
-                    <q-btn v-close-popup no-caps flat>Cancel</q-btn>
+                    <q-btn v-close-popup no-caps flat @click="emit('close')">Cancel</q-btn>
                     <q-btn 
                         v-close-popup 
                         color="primary"
