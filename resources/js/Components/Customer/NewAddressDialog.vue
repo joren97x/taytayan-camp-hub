@@ -1,7 +1,7 @@
 <script setup>
 
 import { useForm, usePage } from '@inertiajs/vue3'
-import { computed, onMounted, ref, nextTick, watch } from 'vue'
+import { computed, onMounted, ref, nextTick, watch, onActivated } from 'vue'
 import { useQuasar } from 'quasar'
 import { Loader } from "@googlemaps/js-api-loader"
 
@@ -41,37 +41,32 @@ const loader = new Loader({
     libraries: ['maps', 'marker']
 })
 
-watch(() => props.dialog, async (newValue) => {
-    console.log('dialog prop changed:', newValue)
-    if(newValue) {
-        console.log('annyeong')
-        const Places = await loader.importLibrary('places')
-
-        await nextTick()
-
-        const inputElement = placeInput.value.$el.querySelector('input')
-        const autocomplete = new google.maps.places.Autocomplete(inputElement)
-        console.log(autocomplete)
-        autocomplete.addListener('place_changed', () => {
-            console.log('place', place)
-            const place = autocomplete.getPlace() //this callback is inherent you will see it if you logged autocomplete
-            console.log('place', place.geometry.location)
-            console.log('place', place.geometry.location.lat())
-            coords.value.lat = place.geometry.location.lat()
-            coords.value.lng = place.geometry.location.lng()
-            map()
-        })
-        console.log('annyeong')
-
-    }
+onActivated(() => {
+    console.log("activated")
 })
 
-onMounted(async () => {
+    // onMounted(async () => {
 
-    
-   
+    //     const Places = await loader.importLibrary('places')
 
-})
+    //     await nextTick()
+
+    //     // Access the input element from the q-input component reference
+    //     const inputElement = placeInput.value.$el.querySelector('input')
+    //     const autocomplete = new Places.Autocomplete(inputElement)
+
+    //     autocomplete.addListener('place_changed', () => {
+    //         const place = autocomplete.getPlace() //this callback is inherent you will see it if you logged autocomplete
+    //         console.log('place', place)
+    //         console.log('place', place.geometry.location)
+    //         console.log('place', place.geometry.location.lat())
+    //         coords.value.lat = place.geometry.location.lat()
+    //         coords.value.lng = place.geometry.location.lng()
+    //         map()
+    //     })
+
+
+    // })
 
 async function map() {
     const { Map, InfoWindow } = await loader.importLibrary('maps')

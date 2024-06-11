@@ -28,7 +28,7 @@ onMounted(async () => {
     await nextTick()
 
 // Access the input element from the q-input component reference
-const inputElement = placeInput.value.$el.querySelector('input')
+    const inputElement = placeInput.value.$el.querySelector('input')
     const autocomplete = new Places.Autocomplete(inputElement)
 
     autocomplete.addListener('place_changed', () => {
