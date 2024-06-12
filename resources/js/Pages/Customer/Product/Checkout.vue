@@ -1,9 +1,11 @@
 <script setup>
 
-import { ref } from 'vue'
 import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 import { Link, Head } from '@inertiajs/vue3'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
+import { Loader } from '@googlemaps/js-api-loader'
+import { ref, onMounted } from 'vue'
+import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 
 const props = defineProps({
     order_constants: Object,
@@ -12,10 +14,51 @@ const props = defineProps({
     google_maps_api_key: Object,
 })
 
+const page = usePage()
+const map = ref(null)
+const directionsService = ref(null)
+const directionsRenderer = ref(null)
+
+const initMap = () => {
+    console.log(JSON.parse(page.props.auth.user.address_coordinates))
+    directionsService.value = new google.maps.DirectionsService()
+    directionsRenderer.value = new google.maps.DirectionsRenderer()
+    map.value = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: JSON.parse(page.props.auth.user.address_coordinates)
+    })
+
+    directionsRenderer.value.setMap(map.value)
+    calculateAndDisplayRoute()
+}
+
+const calculateAndDisplayRoute = () => {
+    directionsService.value
+        .route({
+            origin: JSON.parse(page.props.auth.user.address_coordinates),
+            destination: { lat: 10.258812370722216, lng: 124.03867488692084 },
+            travelMode: google.maps.TravelMode.DRIVING,
+        })
+        .then((response) => {
+            directionsRenderer.value.setDirections(response)
+        })
+        .catch((e) => 
+            window.alert("Directions request failed due to " + e)
+        )
+}
+
+onMounted(() => {
+    const loader = initializeLoader(props.google_maps_api_key)
+
+    loader.load().then(() => {
+        initMap()
+    })
+})
+
 const form = useForm({
     items: props.items,
     payment_method: 'gcash',
-    mode: 'delivery'
+    mode: 'pickup'
 })
 
 const submit = () => {
@@ -58,7 +101,7 @@ const submit = () => {
                                     />
                                 </q-item-section>
                             </q-item>
-                            <q-item v-if="form.mode == 'delivery'">
+                            <q-item v-show="form.mode == 'delivery'">
                                 <q-item-section avatar>
                                     <q-icon name="location_on"></q-icon>
                                 </q-item-section>
@@ -69,9 +112,9 @@ const submit = () => {
                                     <!-- <q-item-label>Purok Sacred heart, Buagsong, Cordova, Cebu</q-item-label> -->
                                 </q-item-section>
                             </q-item>
-                            <div v-else>
+                            <div v-show="form.mode == 'pickup'">
                                 <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.0373439137084!2d124.03639717545175!3d10.258571868531218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1717932087938!5m2!1sen!2sph" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    <div id="map" style="height: 450px; width: 100%;"></div>
                                     <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
                                 </div>
                                 <q-item>

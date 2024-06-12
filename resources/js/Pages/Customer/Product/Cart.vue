@@ -2,11 +2,12 @@
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Link, Head } from '@inertiajs/vue3'
-import { computed, onMounted, ref, nextTick, watch } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { Loader } from "@googlemaps/js-api-loader"
+import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 
 defineOptions({
     layout: CustomerLayout
@@ -43,38 +44,59 @@ const form = useForm({
 const submit = () => {
     form.put(route('add-address'), {
         onSuccess: () => {
-            emit('close')
             $q.notify('Address Successfully Set')
         }
     })
 }
 
 const placeInput = ref(null)
-const loader = new Loader({
-    apiKey: props.google_maps_api_key,
-    version: 'weekly',
-    libraries: ['maps', 'marker']
-})
+// const loader = new Loader({
+//     apiKey: props.google_maps_api_key,
+//     version: 'weekly',
+//     libraries: ['maps', 'marker']
+// })
+
+const loader = initializeLoader(props.google_maps_api_key)
+
+let olangoBounds = ref(null)
 
 
 const initializeAutocomplete = async () => {
     console.log("annyeong")
     const Places = await loader.importLibrary('places')
-
+    olangoBounds.value = new google.maps.LatLngBounds(
+        new google.maps.LatLng(10.2150, 124.0100),  // South-west corner
+        new google.maps.LatLng(10.2700, 124.0600)   // North-east corner
+    )
     await nextTick()
 
-    // Access the input element from the q-input component reference
     const inputElement = placeInput.value.$el.querySelector('input')
-    const autocomplete = new Places.Autocomplete(inputElement)
-    console.log(autocomplete)
-    autocomplete.addListener('place_changed', (e) => {
-        const place = autocomplete.getPlace() //this callback is inherent you will see it if you logged autocomplete
-        form.address = place.formatted_address
-        form.address_coordinates.lat = place.geometry.location.lat()
-        form.address_coordinates.lng = place.geometry.location.lng()
-        map()
+    const autocomplete = new Places.Autocomplete(inputElement, {
+        bounds: olangoBounds.value,
+        componentRestrictions: { country: 'ph' }
     })
 
+    console.log(autocomplete)
+    autocomplete.addListener('place_changed', (e) => {
+        const place = autocomplete.getPlace()
+        if (isPlaceInOlango(place)) {
+            form.address = place.formatted_address;
+            form.address_coordinates.lat = place.geometry.location.lat();
+            form.address_coordinates.lng = place.geometry.location.lng();
+            map();
+        } else {
+            alert('Please select a location within Olango Island, Lapu-Lapu, Philippines.');
+        } 
+        // form.address = place.formatted_address
+        // form.address_coordinates.lat = place.geometry.location.lat()
+        // form.address_coordinates.lng = place.geometry.location.lng()
+        // map()
+    })
+
+}
+
+const isPlaceInOlango = (place) => {
+  return olangoBounds.value.contains(place.geometry.location);
 }
 
 async function map() {
@@ -105,16 +127,32 @@ async function map() {
 
     draggableMarker.addListener('dragend', (event) => {
         const position = draggableMarker.position
-        console.log(event)
-        console.log(position.lat)
-        const content = `
-            <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
-            <div class="text-subtitle2">Please check your map location is correct</div>
-        `
-        // infoWindow.close()
-        infoWindow.setContent(content)
-        // infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`)
-        infoWindow.open(map, draggableMarker)
+
+
+        if (!olangoBounds.value.contains(position)) {
+            alert('The marker must be within Olango Island, Lapu-Lapu, Philippines.');
+            draggableMarker.position = new google.maps.LatLng(form.address_coordinates.lat, form.address_coordinates.lng)
+        } else {
+            form.address_coordinates.lat = position.lat
+            form.address_coordinates.lng = position.lng
+            const content = `
+                <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
+                <div class="text-subtitle2">Please check your map location is correct</div>
+            `;
+            infoWindow.setContent(content);
+            infoWindow.open(map, draggableMarker);
+        }
+
+
+        // console.log(event)
+        // console.log(position.lat)
+        // const content = `
+        //     <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
+        //     <div class="text-subtitle2">Please check your map location is correct</div>
+        // `
+        // infoWindow.setContent(content)
+        // // infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`)
+        // infoWindow.open(map, draggableMarker)
     })
 }
 
@@ -131,23 +169,13 @@ const columns = [
 
 <template>
     
-    <Head title="My Cart" />
-    <!-- <q-input 
-        filled 
-        v-model="form.address" 
-        class="q-my-md" 
-        ref="placeInput"
-        id="place"
-        :error="form.errors.address ? true : false"
-        :error-message="form.errors.address"
-        label="Barangay, City, Province"
-    /> -->
+    <Head title="Cart" />
     <div class="row q-mb-xl q-col-gutter-md">
         <div class="col-8">
             <q-table
-                class="my-sticky-header-column-table"
+                class="my-sticky-header-column-table q-mb-xl"
                 flat
-                title="My Cart"
+                title="Cart"
                 :rows="items"
                 :columns="columns"
                 row-key="name"
@@ -263,9 +291,9 @@ const columns = [
         </q-dialog>
         <!-- <NewAddressDialog @close="showNewAddressDialog = false" :dialog="showNewAddressDialog" :google_maps_api_key="google_maps_api_key" /> -->
     </div>
-    <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" full-width @show="initializeAutocomplete">
-        <div style="width: 20vw">
-            <q-card class="full-width" style=" margin-top: 100px">
+    <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" @show="initializeAutocomplete">
+        <div>
+            <q-card style=" margin-top: 100px;">
                 <q-form @submit="submit">
                     <q-card-section>
                         <div class="text-h6">New Address</div>
@@ -292,24 +320,16 @@ const columns = [
                             :error-message="form.errors.address"
                             label="Barangay, City, Province"
                         />
-                        <!-- <q-input
-                            id="place"
-                            v-model="location"
-                            ref="placeInput"
-                            filled
-                            placeholder="Enter a location"
-                            @change="handlePlaceChanged"
-                        /> -->
-                            <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
-                                <template v-slot:avatar>
-                                    <q-icon name="alert" color="primary" />
-                                </template>
-                                <p class="text-weight-bold text-primary text-h6">Place an accurate pin</p>
-                                <p class="text-subtitle-1">
-                                    We will deliver to your map location. 
-                                    Please check it is correct, else click the map to adjust.
-                                </p>
-                            </q-banner>
+                        <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
+                            <template v-slot:avatar>
+                                <q-icon name="alert" color="primary" />
+                            </template>
+                            <p class="text-weight-bold text-primary text-h6">Place an accurate pin</p>
+                            <p class="text-subtitle-1">
+                                We will deliver to your map location. 
+                                Please check it is correct, else click the map to adjust.
+                            </p>
+                        </q-banner>
                         <div id="map" style="width: 100%; height: 600px"  v-if="form.address"></div>
                     </q-card-section>
                     <q-card-actions>
