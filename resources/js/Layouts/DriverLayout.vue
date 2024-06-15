@@ -77,6 +77,17 @@ function toggleLeftDrawer () {
                         </q-item-section>
                     </q-item>
                 </Link>
+                <Link :href="route('driver.map')">
+                    <q-item clickable>
+                        <q-item-section avatar>
+                            <q-icon name="school" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>Map</q-item-label>
+                            <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
+                        </q-item-section>
+                    </q-item>
+                </Link>
                 <Link :href="route('driver.account')">
                     <q-item clickable>
                         <q-item-section avatar>

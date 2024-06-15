@@ -13,8 +13,5 @@ class ViewController extends Controller
         return Inertia::render('Admin/Product/Reviews');
     }
 
-    public function orders() {
-        return Inertia::render('Admin/Product/Orders');
-    }
 
 }

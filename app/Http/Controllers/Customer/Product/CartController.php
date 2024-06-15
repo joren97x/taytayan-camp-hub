@@ -116,5 +116,25 @@ class CartController extends Controller
     public function destroy(string $id)
     {
         //
+        CartProduct::destroy($id);
+        return back();
     }
+
+    public function update_cart_item_quantity(Request $request, $id) {
+
+        $cart_item = CartProduct::find($id);
+
+        if($request->operation == '+') {
+            $cart_item->quantity++;
+        }
+        else {
+            $cart_item->quantity--;
+        }
+
+        $cart_item->update();
+
+        return back();
+
+    }
+
 }

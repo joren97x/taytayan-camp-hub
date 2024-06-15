@@ -6,8 +6,8 @@ import { ref, nextTick, onMounted } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
-import { Loader } from "@googlemaps/js-api-loader"
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
+import EditCartItemDialog from '@/Components/Customer/Product/EditCartItemDialog.vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -20,6 +20,8 @@ const props = defineProps({
 })
 
 const showNewAddressDialog = ref(false)
+const showFoodCartItemDialog = ref(false)
+const selectedCartItem = ref(null)
 const page = usePage()
 const $q = useQuasar()
 
@@ -50,16 +52,8 @@ const submit = () => {
 }
 
 const placeInput = ref(null)
-// const loader = new Loader({
-//     apiKey: props.google_maps_api_key,
-//     version: 'weekly',
-//     libraries: ['maps', 'marker']
-// })
-
 const loader = initializeLoader(props.google_maps_api_key)
-
 let olangoBounds = ref(null)
-
 
 const initializeAutocomplete = async () => {
     console.log("annyeong")
@@ -143,20 +137,37 @@ async function map() {
             infoWindow.open(map, draggableMarker);
         }
 
-
-        // console.log(event)
-        // console.log(position.lat)
-        // const content = `
-        //     <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
-        //     <div class="text-subtitle2">Please check your map location is correct</div>
-        // `
-        // infoWindow.setContent(content)
-        // // infoWindow.setContent(`Pin dropped at: ${position.lat}, ${position.lng}`)
-        // infoWindow.open(map, draggableMarker)
     })
 }
 
-const card = ref(false)
+const deleteCartItemForm = useForm({})
+const updateCartItemQuantityForm = useForm({
+    operation: ''
+})
+
+function deleteCartItem(id) {
+    deleteCartItemForm.delete(route('customer.cart.destroy', id), {
+        onSuccess: () => {
+            $q.notify('Cart Item Removed From Cart')
+        }
+    })
+}
+
+function updateCartItemQuantity(id, operation) {
+    updateCartItemQuantityForm.operation = operation
+    updateCartItemQuantityForm.put(route('customer.cart.update_cart_item_quantity', id), {
+        onSuccess: () => {
+            $q.notify('basta gi addan nimo shag quantity')
+        }
+    })
+}
+
+function showEditCartItemDialog(cartItem) {
+    selectedCartItem.value = cartItem
+    showFoodCartItemDialog.value = true
+    console.log(cartItem)
+}
+
 const columns = [
     { name: 'photo', label: '', align: 'center', field: 'photo', sortable: true },
     { name: 'item', label: 'Item', align: 'center', field: 'item', sortable: true },
@@ -202,9 +213,6 @@ const columns = [
                             </q-item-label>
                             
                         </template>
-                        <!-- <q-item-label caption>
-                            {{ props.row.grouped_modifiers }}
-                        </q-item-label> -->
                         <q-item-label caption v-if="props.row.special_instruction">
                             Note: {{ props.row.special_instruction }}
                         </q-item-label>
@@ -212,9 +220,9 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-quantity="props">
                     <q-td :props="props">
-                            <q-btn flat size="xs" icon="remove" />
+                            <q-btn flat size="xs" icon="remove" @click="updateCartItemQuantity(props.row.id, '-')" v-show="props.row.quantity > 1" />
                             <span class="q-mt-xs q-mx-sm">{{ props.row.quantity }} </span>
-                            <q-btn flat size="xs" icon="add" />
+                            <q-btn flat size="xs" icon="add" @click="updateCartItemQuantity(props.row.id, '+')" />
                     </q-td>
                 </template>
                 <template v-slot:body-cell-total="props">
@@ -224,8 +232,15 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated>Edit</q-btn>
-                        <q-btn no-caps unelevated color="red" flat @click="card = true">Remove</q-btn>
+                        <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)">Edit</q-btn>
+                        <q-btn no-caps 
+                            unelevated color="red" flat 
+                            :loading="deleteCartItemForm.processing"
+                            :disable="deleteCartItemForm.processing"
+                            @click="deleteCartItem(props.row.id)"
+                        >
+                            Remove
+                        </q-btn>
                     </q-td>
                 </template>
             </q-table>
@@ -261,35 +276,6 @@ const columns = [
                 </q-card-section>
             </q-card>
         </div>
-        <q-dialog v-model="card">
-            <q-card class="my-card">
-                <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />
-                <q-card-section>
-                    <div class="row no-wrap items-center">
-                        <p class="col text-h6 ellipsis">
-                            Cafe Basilico
-                        </p>
-                    </div>
-                </q-card-section>
-
-                <q-card-section class="q-pt-none">
-                    <div class="text-subtitle1">
-                        $・Italian, Cafe
-                    </div>
-                    <div class="text-caption text-grey">
-                        Small plates, salads & sandwiches in an intimate setting.
-                    </div>
-                </q-card-section>
-
-                <q-separator />
-
-                <q-card-actions align="right">
-                    <q-btn v-close-popup flat color="primary" label="Reserve" />
-                    <q-btn v-close-popup flat color="primary" round icon="event" />
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-        <!-- <NewAddressDialog @close="showNewAddressDialog = false" :dialog="showNewAddressDialog" :google_maps_api_key="google_maps_api_key" /> -->
     </div>
     <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" @show="initializeAutocomplete">
         <div>
@@ -351,6 +337,8 @@ const columns = [
             </q-card>
         </div>
     </q-dialog>
+
+    <EditCartItemDialog :dialog="showFoodCartItemDialog" :cart_item="selectedCartItem" @close="showFoodCartItemDialog = false" />
 
 </template>
 

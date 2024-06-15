@@ -18,9 +18,11 @@ const page = usePage()
 const map = ref(null)
 const directionsService = ref(null)
 const directionsRenderer = ref(null)
+const infoWindow = ref(null)
+const travelMode = ref(null)
 
 const initMap = () => {
-    console.log(JSON.parse(page.props.auth.user.address_coordinates))
+    
     directionsService.value = new google.maps.DirectionsService()
     directionsRenderer.value = new google.maps.DirectionsRenderer()
     map.value = new google.maps.Map(document.getElementById("map"), {
@@ -29,6 +31,7 @@ const initMap = () => {
     })
 
     directionsRenderer.value.setMap(map.value)
+    travelMode.value = google.maps.TravelMode.WALKING
     calculateAndDisplayRoute()
 }
 
@@ -37,15 +40,52 @@ const calculateAndDisplayRoute = () => {
         .route({
             origin: JSON.parse(page.props.auth.user.address_coordinates),
             destination: { lat: 10.258812370722216, lng: 124.03867488692084 },
-            travelMode: google.maps.TravelMode.DRIVING,
+            travelMode: travelMode.value,
         })
         .then((response) => {
+            console.log("please get the fkn time")
+            console.log(response)
+
+            const duration = response.routes[0].legs[0].duration.text
+            const distance = response.routes[0].legs[0].distance.text
+
+            const path = response.routes[0].overview_path;
+            const midpointIndex = Math.floor(path.length / 2)
+
+            if (!infoWindow.value) {
+                infoWindow.value = new google.maps.InfoWindow();
+            }
+            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p>`);
+            infoWindow.value.setPosition(path[midpointIndex]);
+            infoWindow.value.open(map.value)
+
             directionsRenderer.value.setDirections(response)
         })
         .catch((e) => 
             window.alert("Directions request failed due to " + e)
         )
 }
+
+const changeTravelMode = (mode) => {
+    switch (mode) {
+        case 'DRIVING':
+            travelMode.value = google.maps.TravelMode.DRIVING;
+            break;
+        case 'BICYCLING':
+            travelMode.value = google.maps.TravelMode.BICYCLING;
+            break;
+        case 'WALKING':
+            travelMode.value = google.maps.TravelMode.WALKING;
+            break;
+        case 'TWO_WHEELER':
+            travelMode.value = google.maps.TravelMode.TWO_WHEELER;
+            break;
+        case 'TRANSIT':
+            travelMode.value = google.maps.TravelMode.TWO_WHEELER;
+            break;
+    }
+    calculateAndDisplayRoute();
+};
 
 onMounted(() => {
     const loader = initializeLoader(props.google_maps_api_key)
@@ -84,7 +124,7 @@ const submit = () => {
                     <q-card flat bordered>
                         <q-card-section>
                             <q-item>
-                                <q-item-section class="text-h6">{{ form.mode }} Details</q-item-section>
+                                <q-item-section class="text-h6 text-capitalize">{{ form.mode }} Details</q-item-section>
                                 <q-item-section side>
                                     <q-btn-toggle
                                         v-model="form.mode"
@@ -125,11 +165,20 @@ const submit = () => {
                                         Store Location
                                         <q-item-label caption>Barangay San Vicente, Olango Island</q-item-label>
                                     </q-item-section>
+                                    <q-item-section side>
+                                        <q-btn-group push>
+                                            <q-btn push label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
+                                            <q-btn push label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
+                                            <q-btn push label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
+                                            <q-btn push label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
+                                            <q-btn push label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
+                                        </q-btn-group>
+                                    </q-item-section>
                                 </q-item>
                             </div>
                                 <q-separator class="q-my-md" />
                                 <q-item>
-                                    <q-item-section class="text-h6">Pay with</q-item-section>
+                                    <q-item-section class="text-h6">Pay With</q-item-section>
                                     <q-item-section side>
                                         <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">Required</q-chip>
                                     </q-item-section>
@@ -144,7 +193,7 @@ const submit = () => {
                                         <q-radio v-model="form.payment_method" :val="payment_method"/>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label>{{ payment_method }}</q-item-label>
+                                        <q-item-label class="text-capitalize">{{ payment_method }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-avatar square>
@@ -228,3 +277,25 @@ const submit = () => {
     </div>
 
 </template>
+
+<style scoped>
+
+#map-container {
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 500px; /* or any desired height */
+}
+
+#map-buttons {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+</style>

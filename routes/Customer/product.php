@@ -15,7 +15,9 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::resource('/cart', CartController::class)->names([
         'index' => 'customer.cart.index',
         'store' => 'customer.cart.store',
+        'destroy' => 'customer.cart.destroy'
     ]);
+    Route::put('/cart/update-cart-quantity/{id}', [CartController::class, 'update_cart_item_quantity'])->name('customer.cart.update_cart_item_quantity');
     Route::get('/product-checkout-success/{mode}/{payment_method}', [PaymentController::class, 'success'])->name('product.checkout.success');
     Route::post('/product-pay', [PaymentController::class, 'pay'])->name('product.pay');
 });

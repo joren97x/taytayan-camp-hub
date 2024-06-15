@@ -33,23 +33,23 @@ function acceptOrder() {
     })
 }
 
-function acceptOrder() {
-    acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {
-        onSuccess: () => {
-            dialog.value = false
-            $q.notify('Order Accepted')
-        }
-    })
-}
-
-// function readyOrder() {
-//     readyOrderForm.patch(route('admin.order.update_status', props.order.id), {
+// function acceptOrder() {
+//     acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {
 //         onSuccess: () => {
-//             isOrderReadyDialog.value = false
+//             dialog.value = false
 //             $q.notify('Order Accepted')
 //         }
 //     })
 // }
+
+function readyOrder() {
+    readyOrderForm.patch(route('admin.order.update_status', props.order.id), {
+        onSuccess: () => {
+            isOrderReadyDialog.value = false
+            $q.notify('Order Accepted')
+        }
+    })
+}
 
 </script>
 
