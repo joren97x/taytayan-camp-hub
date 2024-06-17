@@ -1,15 +1,19 @@
 <script setup>
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import axios from 'axios'
 
 const emit = defineEmits(['close'])
 const page = usePage()
 const $q = useQuasar()
 const props = defineProps({ dialog: Boolean, cart_item: Object })
 const show = computed(() => props.dialog)
+
+console.log(props)
 const form = useForm({
+    product_id: null,
     cart_id: page.props.auth.cart_id,
     special_instruction: '',
     quantity: 1,
@@ -27,27 +31,67 @@ const handleItemSelection = (modifierGroupId, modifierItemId) => {
     } else {
         form.modifiers.splice(index, 1); // Remove the modifier if already selected
     }
-};
+}
+
+
+
 
 const isSelected = (modifierGroupId, modifierItemId) => {
     return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
 };
 
 const submit = () => {
-    form.post(route('customer.cart.store'), {
+    form.put(route('customer.cart.update', props.cart_item.id), {
         onSuccess: () => {
-            $q.notify(props.product.name + ' Added To Cart')
             emit('close')
+            $q.notify(props.product.name + ' Added To Cart')
         }
     })
+}
+
+const modifierGroups = ref(null)
+
+function onDialogShow() {
+
+    form.product_id = props.cart_item.product.id
+    form.special_instruction = props.cart_item.special_instruction
+    form.quantity = props.cart_item.quantity
+    const groupedModifiers = props.cart_item.grouped_modifiers
+
+// Loop through each modifier group in the groupedModifiers
+    for (const key in groupedModifiers) {
+        if (groupedModifiers.hasOwnProperty(key)) {
+            const group = groupedModifiers[key];
+            const modifierGroupId = group.modifier_group.id;
+
+            // Loop through each modifier item in the current group
+            group.modifier_items.forEach(item => {
+                form.modifiers.push({
+                    modifier_group_id: modifierGroupId,
+                    modifier_item_id: item.modifier_item.id,
+                    quantity: item.quantity // Use the quantity from the item if needed
+                });
+            });
+        }
+    }
+
+    axios.get(route('product.show', props.cart_item.product.id))
+    .then((res) => {
+        modifierGroups.value = res.data.modifier_groups
+        console.log(res)
+    })
+    .catch((err) => {
+        console.error(err)
+    })
+
+   
 }
 
 </script>
 
 <template>
-    <q-dialog full-width v-model="show">
+    <q-dialog full-width v-model="show" @show="onDialogShow()">
         <q-card class="q-px-md">
-            {{ form }}
             <q-form @submit="submit">
                 <q-item>
                     <q-item-section class="text-h6">
@@ -75,7 +119,7 @@ const submit = () => {
                             {{ cart_item.product.description }}
                         </p>
                         <q-separator/>
-                        <div v-for="(modifier_group, index) in cart_item.product.modifier_groups" :key="index">
+                        <div v-for="(modifier_group, index) in modifierGroups" :key="index">
                             <q-item>
                                 <q-item-section class="text-h6">
                                     {{ modifier_group.name }}
@@ -86,19 +130,20 @@ const submit = () => {
                                 </q-item-section>
                             </q-item>
                             <q-list>
-                                <q-item 
-                                    clickable 
-                                    v-ripple 
-                                    v-for="modifier_item in modifier_group.modifier_items" 
+                                <q-item
+                                    clickable
+                                    v-ripple
+                                    v-for="modifier_item in modifier_group.modifier_items"
                                     :key="modifier_item.id"
                                     @click="handleItemSelection(modifier_group.id, modifier_item.id)"
+
                                 >
                                     <q-item-section>
                                         <q-item-label>{{ modifier_item.name }}</q-item-label>
                                         <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
-                                        <q-checkbox 
+                                        <q-checkbox
                                             color="secondary"
                                             :model-value="isSelected(modifier_group.id, modifier_item.id)"
                                             @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id)"
@@ -127,10 +172,10 @@ const submit = () => {
                             <span style="margin: 0;">{{ form.quantity }}</span>
                             <q-btn round icon="add" @click="form.quantity++" />
                         </q-btn-group>
-                        <q-btn 
-                            class="full-width q-my-lg" 
-                            type="submit" 
-                            no-caps 
+                        <q-btn
+                            class="full-width q-my-lg"
+                            type="submit"
+                            no-caps
                             color="blue"
                             :loading="form.processing"
                             :disable="form.processing"

@@ -108,6 +108,40 @@ class CartController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validated_data = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'cart_id' => 'required|exists:carts,id',
+            'quantity' => 'required|integer|min:1',
+            'special_instruction' => 'nullable|string',
+            'modifiers' => 'nullable|array',
+            'modifiers.*.modifier_group_id' => 'required_with:modifiers|exists:modifier_groups,id',
+            'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
+            'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
+        ]);
+
+        $cart_product = CartProduct::find($id);
+
+        $cart_product->special_instruction = $validated_data['special_instruction'];
+        $cart_product->quantity = $validated_data['quantity'];
+        $cart_product->update();
+
+        // Clear existing modifiers
+        $cart_product->modifiers()->delete();
+
+        // Add new modifiers
+        if (!empty($validated_data['modifiers'])) {
+            foreach ($validated_data['modifiers'] as $modifier) {
+                $cart_product->modifiers()->create([
+                    'modifier_group_id' => $modifier['modifier_group_id'],
+                    'modifier_item_id' => $modifier['modifier_item_id'],
+                    'quantity' => $modifier['quantity'],
+                ]);
+            }
+        }
+
+        return back();
+
+        dd($request);
     }
 
     /**

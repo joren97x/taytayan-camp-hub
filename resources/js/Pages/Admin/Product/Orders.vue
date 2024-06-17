@@ -52,6 +52,9 @@ const order_statuses = computed(() => {
                     :order="order" 
                     :order_statuses="order_statuses"
                 />
+                <p v-if="preparingOrders.length == 0">
+                    No orders yet...
+                </p>
             </q-list>
         </div>
         <div class="col-6 q-pa-md">
