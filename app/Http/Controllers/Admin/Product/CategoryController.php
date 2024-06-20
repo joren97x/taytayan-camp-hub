@@ -74,5 +74,7 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
+        Category::destroy($id);
+        return back();
     }
 }

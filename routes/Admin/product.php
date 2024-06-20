@@ -24,6 +24,7 @@ Route::resource('/admin/products', ProductController::class)->names([
 ]);
 
 Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.product.update_modifier_group');
+Route::delete('/admin/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.product.clear_modifier_group');
 Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.product.update_photo');
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_group.index',
@@ -34,7 +35,8 @@ Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names
 Route::resource('/admin/categories', CategoryController::class)->names([
     'index' => 'admin.category.index',
     'create' => 'admin.category.create',
-    'store' => 'admin.category.store'
+    'store' => 'admin.category.store',
+    'destroy' => 'admin.category.destroy'
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([

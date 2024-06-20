@@ -149,6 +149,12 @@ class ProductController extends Controller
         return back();
     }
 
+    public function clear_modifier_group(Request $request, string $id)
+    {
+        ModifierGroupProduct::where('product_id', $id)->delete();
+        return back();
+    }
+
     public function update_photo(Request $request, string $id) {
 
         $request->validate([

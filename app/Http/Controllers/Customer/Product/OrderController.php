@@ -50,7 +50,10 @@ class OrderController extends Controller
             $order->subtotal = $result['subtotal'];
         }
 
-        return Inertia::render('Customer/Product/Orders', ['orders' => $orders]);
+        return Inertia::render('Customer/Product/Orders', [
+            'orders' => $orders,
+            'order_constants' => Order::getConstants()
+        ]);
 
     }
 

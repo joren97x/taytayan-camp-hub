@@ -68,6 +68,17 @@ const updateProductModifierGroup = () => {
     })
 }
 
+const clearModifierGroupForm = useForm({})
+const clearModifierGroupDialog = ref(false)
+const submitClearModifierGroup = () => {
+    clearModifierGroupForm.delete(route('admin.product.clear_modifier_group', props.product.id), {
+        onSuccess: () => {
+            clearModifierGroupDialog.value = false
+            $q.notify('Modifier Groups Cleared')
+        }
+    })
+}
+
 onMounted(() => {
     selected.value = props.modifier_groups.filter(group => 
         addModifierGroupForm.modifier_group_ids.includes(group.id)
@@ -238,6 +249,7 @@ watch(selected, (modifier_group) => {
                     color="primary" 
                     text-color="white" 
                     size="lg" 
+                    @click="clearModifierGroupDialog = true"
                 >
                     <span class="text-subtitle2">Clear</span>
                 </q-chip>
@@ -286,6 +298,22 @@ watch(selected, (modifier_group) => {
                     </q-btn>
                 </q-card-actions>
             </q-form>
+        </q-card>
+    </q-dialog>
+    <q-dialog v-model="clearModifierGroupDialog">
+        <q-card>
+            <q-card-section>
+                Clear modifier groups?
+            </q-card-section>
+            <q-card-actions>
+                <q-space/>
+                <q-btn v-close-popup>Cancel</q-btn>
+                <q-btn
+                    @click="submitClearModifierGroup"
+                    :loading="clearModifierGroupForm.processing"
+                    :disable="clearModifierGroupForm.processing"
+                >Clear</q-btn>
+            </q-card-actions>
         </q-card>
     </q-dialog>
 </template>

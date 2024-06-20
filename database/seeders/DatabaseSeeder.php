@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $this->call(CategorySeeder::class);
+        // DO NOT CHANGE THE ORDER, WILL RUIN SOMETHING IF CHANGED
         $this->call(ModifierItemSeeder::class);
         $this->call(ModifierGroupSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(CategorySeeder::class);
 
         User::factory()->create([
             'email' => 'sumagangjoren@gmail.com',
