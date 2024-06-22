@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -15,7 +19,11 @@ class UserController extends Controller
     public function index(string $role)
     {
         //
-        return Inertia::render('Admin/UserManagement', ['users' => User::where('role', $role)->get()]);
+        return Inertia::render('Admin/UserManagement', [
+            'users' => User::where('role', $role)->get(),
+            'role' => $role,
+            'user_roles' => User::getUserRoles()
+        ]);
     }
 
     /**
@@ -32,6 +40,32 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'role' => 'required',
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make($request->password)
+        ]);
+
+        if($user->role == User::ROLE_CUSTOMER) {
+            Cart::create([
+                'user_id' => $user->id
+            ]);
+        }
+
+        event(new Registered($user));
+
+        return back();
     }
 
     /**

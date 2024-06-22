@@ -88,9 +88,9 @@ onMounted(() => {
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <q-expansion-item icon="event" label="User Management">
+                    <q-expansion-item icon="supervisor_account" label="User Management">
                         <q-card class="q-mx-md">
-                            <Link :href="route(`admin.user-management`, user_role)" v-for="(user_role, index) in user_roles" :key="index">
+                            <Link :href="route(`admin.user_management`, user_role)" v-for="(user_role, index) in user_roles" :key="index">
                                 <q-item clickable v-ripple >
                                     <q-item-section avatar>
                                         <q-icon name="star" />
