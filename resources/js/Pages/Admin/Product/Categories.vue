@@ -35,6 +35,24 @@ const deleteCategory = () => {
     })
 }
 
+const editCategoryNameForm = useForm({
+    id: null,
+    name: ''
+})
+
+function showEditCategoryNameMenu(category) {
+    editCategoryNameForm.name = category.name
+    editCategoryNameForm.id = category.id
+}
+
+const updateCategoryName = () => {
+    editCategoryNameForm.put(route('admin.category.update', editCategoryNameForm.id), {
+        onSuccess: () => {
+            $q.notify('Category Name Updated')
+        }
+    })
+}
+
 const columns = [
     { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
     { name: 'items', align: 'center', label: 'Items', field: 'items', sortable: true },
@@ -47,6 +65,7 @@ const columns = [
     
     <Head title="Categories" />
         <div class="q-pa-md">
+            
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -55,6 +74,32 @@ const columns = [
                 :columns="columns"
                 row-key="name"
             >
+            <template v-slot:body-cell-name="props">
+                    <q-td :props="props">
+                        {{ props.row.name }}
+                        <q-btn color="primary" size="sm" flat icon="edit" @click="showEditCategoryNameMenu(props.row)">
+                            <q-menu persistent>
+                                <q-card bordered>
+                                    <q-card-section>
+                                        <div class="q-mb-sm">Edit Category Name</div>
+                                        <q-input filled v-model="editCategoryNameForm.name"/>
+                                    </q-card-section>
+                                    <q-card-actions>
+                                        <q-btn no-caps>Cancel</q-btn>
+                                        <q-btn 
+                                            no-caps color="blue" 
+                                            :disable="editCategoryNameForm.processing"
+                                            :loading="editCategoryNameForm.processing"
+                                            @click="updateCategoryName"
+                                        >
+                                            Save
+                                        </q-btn>
+                                    </q-card-actions>
+                                </q-card>
+                            </q-menu>
+                            </q-btn>
+                    </q-td>
+                </template>
                 <template v-slot:body-cell-items="props">
                     <q-td :props="props">
                         <span v-for="product in props.row.products" :key="product.id">
@@ -64,7 +109,6 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated>Edit</q-btn>
                         <q-btn no-caps unelevated @click="showDeleteCategoryDialog(props.row)">Delete</q-btn>
                     </q-td>
                 </template>

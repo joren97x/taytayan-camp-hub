@@ -72,6 +72,10 @@ class ModifierGroupController extends Controller
     public function edit(string $id)
     {
         //
+        return Inertia::render('Admin/Product/EditModifierGroup', [
+            'modifier_items' => ModifierItem::all(),
+            'modifier_group' => ModifierGroup::with('modifier_items')->find($id)
+        ]);
     }
 
     /**
@@ -80,6 +84,29 @@ class ModifierGroupController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'modifier_items' => 'required',
+        ]);
+
+        $modifier_group = ModifierGroup::find($id);
+        $modifier_group->name = $request->name;
+        $modifier_group->required = $request->required;
+        $modifier_group->required_quantity = $request->required_quantity;
+        $modifier_group->max_quantity = $request->required_quantity;
+
+        $modifier_group->update();
+        ModifierGroupItem::where('modifier_group_id', $modifier_group->id)->delete();
+        // $modifier_group->modifier_items()->delete();
+
+        foreach ($request->modifier_items as $item) {
+            ModifierGroupItem::create([
+                'modifier_group_id' => $modifier_group->id,
+                'modifier_item_id' => $item
+            ]);
+        }
+
+        return redirect(route('admin.modifier_group.index', absolute: false));
     }
 
     /**
@@ -88,5 +115,7 @@ class ModifierGroupController extends Controller
     public function destroy(string $id)
     {
         //
+        ModifierGroup::destroy($id);
+        return back();
     }
 }

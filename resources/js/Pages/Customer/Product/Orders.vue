@@ -32,14 +32,6 @@ watch(tab, () => {
 <template>
     <div>
     <Head title="Orders" />
-    {{ order_constants }}
-        <!-- ding';
-    const STATUS_PREPARING = 'preparing';
-    const STATUS_READY_FOR_DELIVERY = 'ready_for_delivery';
-    const STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
-    const STATUS_DELIVERING = 'delivering';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_CANCELLED = 'cancelled'; -->
         <q-btn-group spread class="bg-white q-mb-md">
             <q-btn class="q-pa-md" no-caps label="All" />
             <q-btn class="q-pa-md" v-for="(order_constant, index) in order_constants.statuses" :key="index" no-caps :label="order_constant" />

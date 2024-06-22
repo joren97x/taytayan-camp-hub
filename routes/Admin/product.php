@@ -29,14 +29,18 @@ Route::post('/admin/products/{product}/update-photo', [ProductController::class,
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_group.index',
     'create' => 'admin.modifier_group.create',
-    'store' => 'admin.modifier_group.store'
+    'store' => 'admin.modifier_group.store',
+    'edit' => 'admin.modifier_group.edit',
+    'update' => 'admin.modifier_group.update',
+    'destroy' => 'admin.modifier_group.destroy',
 ]);
 
 Route::resource('/admin/categories', CategoryController::class)->names([
     'index' => 'admin.category.index',
     'create' => 'admin.category.create',
     'store' => 'admin.category.store',
-    'destroy' => 'admin.category.destroy'
+    'destroy' => 'admin.category.destroy',
+    'update' => 'admin.category.update'
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([
