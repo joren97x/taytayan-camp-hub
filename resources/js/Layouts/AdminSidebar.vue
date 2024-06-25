@@ -68,7 +68,7 @@ onMounted(() => {
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('admin.product.index')">
+                    <Link :href="route('admin.events.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
                                 <q-icon name="star" />

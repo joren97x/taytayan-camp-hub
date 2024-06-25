@@ -29,6 +29,7 @@ return new class extends Migration
             ])->default(User::ROLE_CUSTOMER);
             $table->string('password');
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 

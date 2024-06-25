@@ -17,9 +17,15 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role != User::ROLE_CUSTOMER) {
+        if(Auth::check() && Auth::user()->role != User::ROLE_CUSTOMER) {
             if(Auth::user()->role == User::ROLE_ADMIN) {
                 return redirect(route('admin.dashboard'));
+            }
+            if(Auth::user()->role == User::ROLE_CASHIER) {
+                return redirect(route('cashier.dashboard'));
+            }
+            if(Auth::user()->role == User::ROLE_DRIVER) {
+                return redirect(route('driver.dashboard'));
             }
             return redirect()->back();
         }

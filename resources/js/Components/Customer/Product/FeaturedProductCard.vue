@@ -10,8 +10,8 @@ const dialog = ref(false)
 
 <template>
 
-    <q-card class="col-3" flat bordered>
-        <q-img :src="`/images/${product.photo}`" height="200px" />
+    <q-card class="col-3 bg-white" flat >
+        <q-img :src="`/images/${product.photo}`" height="180px" />
 
         <q-card-section>
             <q-btn

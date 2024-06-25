@@ -1,11 +1,11 @@
 <script setup>
 
-import DriverLayout from '@/Layouts/DriverLayout.vue'
+import CashierLayout from '@/Layouts/CashierLayout.vue'
 import UpdateProfileInformationForm from '../Profile/Partials/UpdateProfileInformationForm.vue'
 import UpdatePasswordForm from '../Profile/Partials/UpdatePasswordForm.vue';
 
 defineOptions({
-    layout: DriverLayout
+    layout: CashierLayout
 })
 
 

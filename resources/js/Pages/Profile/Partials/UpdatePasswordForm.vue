@@ -106,7 +106,6 @@ const updatePassword = () => {
     </section> -->
     <q-form @submit="updatePassword">
         <q-card class="q-mt-xl">
-            {{ form }}
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Update Password</div>
                 <div class="q-mb-lg">Ensure your account is using a long, random password to stay secure.</div>

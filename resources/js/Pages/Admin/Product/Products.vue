@@ -2,7 +2,8 @@
 
 import ProductLayout from '@/Layouts/ProductLayout.vue'
 import { ref } from 'vue'
-import { Link, Head } from '@inertiajs/vue3';
+import { Link, Head, useForm } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 
 defineOptions({
     layout: ProductLayout
@@ -13,8 +14,28 @@ const props = defineProps({
     products: Object
 })
 
+const $q = useQuasar()
 const categoryOptions = props.categories.map(category => category.name)
 const category = ref('')
+const deleteProductDialog = ref(false)
+const deleteProductForm = useForm({
+    product: null
+})
+
+function showDeleteProductDialog(product) {
+    deleteProductForm.product = product
+    deleteProductDialog.value = true
+}
+
+const deleteProduct = () => {
+    deleteProductForm.delete(route('admin.product.destroy', deleteProductForm.product.id), {
+        onSuccess: () => {
+            deleteProductDialog.value = false
+            deleteProductForm.reset()
+            $q.notify('Product Deleted')
+        }
+    })
+}
 
 const columns = [
   { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
@@ -60,7 +81,7 @@ const columns = [
                     <Link :href="route(`admin.product.edit`, props.row.id)">
                         <q-btn no-caps unelevated>Edit</q-btn>
                     </Link>
-                    <q-btn no-caps unelevated>Delete</q-btn>
+                    <q-btn no-caps unelevated @click="showDeleteProductDialog(props.row)">Delete</q-btn>
                 </q-td>
             </template>
             <template v-slot:top>
@@ -84,5 +105,24 @@ const columns = [
                 </Link>
             </template>
         </q-table>
+        <q-dialog v-model="deleteProductDialog">
+            <q-card>
+                <q-card-section>
+                    <p>Delete product</p>
+                </q-card-section>
+                <q-card-actions>
+                    <q-space/>
+                    <q-btn no-caps v-close-popup>Cancel</q-btn>
+                    <q-btn 
+                        no-caps
+                        :loading="deleteProductForm.processing"
+                        :disable="deleteProductForm.processing"
+                        @click="deleteProduct"
+                    >
+                        Delete
+                    </q-btn>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </div>
 </template>

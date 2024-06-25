@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Product;
+namespace App\Http\Controllers\Customer\Event;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class CategoryController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,8 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Product/Categories', 
-        [
-            'categories' => Category::with('products')->get()
+        return Inertia::render('Customer/Event/Index', [
+            'events' => 'hello'
         ]);
     }
 
@@ -27,7 +25,6 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/CreateCategory');
     }
 
     /**
@@ -36,12 +33,6 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'name' => 'required|string|max:255'
-        ]);
-        Category::create($request->all());
-        return redirect(route('admin.category.index', absolute: false));
-
     }
 
     /**
@@ -50,6 +41,9 @@ class CategoryController extends Controller
     public function show(string $id)
     {
         //
+        return Inertia::render('Customer/Event/Show', [
+            'events' => 'hello'
+        ]);
     }
 
     /**
@@ -66,15 +60,6 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $request->validate([
-            'name' => 'required'
-        ]);
-            
-        $category = Category::find($id);
-        $category->name = $request->name;
-        $category->update();
-
-        return back();
     }
 
     /**
@@ -83,7 +68,5 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
-        Category::destroy($id);
-        return back();
     }
 }

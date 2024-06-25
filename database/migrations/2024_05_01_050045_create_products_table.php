@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('photo');
             $table->decimal('price', 10, 2);
+            $table->boolean('is_featured')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

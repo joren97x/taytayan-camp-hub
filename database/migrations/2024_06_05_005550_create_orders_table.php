@@ -38,6 +38,7 @@ return new class extends Migration
                 Order::MODE_PICKUP
             ]);
             $table->timestamp('completed_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

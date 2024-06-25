@@ -30,7 +30,7 @@ class ModifierGroupController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/NewModifierGroup', ['modifier_items' => ModifierItem::all()]);
+        return Inertia::render('Admin/Product/CreateModifierGroup', ['modifier_items' => ModifierItem::all()]);
     }
 
     /**

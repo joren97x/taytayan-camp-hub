@@ -32,7 +32,7 @@ class ProductController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Admin/Product/NewProduct', ['categories' => Category::all()]);
+        return Inertia::render('Admin/Product/CreateProduct', ['categories' => Category::all()]);
     }
 
     /**
@@ -104,6 +104,7 @@ class ProductController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
+            'is_featured' => 'required',
             'categories' => 'nullable',
         ]);
 
@@ -113,6 +114,7 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
+        $product->is_featured = $request->is_featured;
         
         foreach($request->categories as $category) {
             CategoryProduct::create([
@@ -133,6 +135,8 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+        Product::destroy($id);
+        return back();
     }
 
     public function update_modifier_group(Request $request, string $id)

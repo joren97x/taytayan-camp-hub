@@ -18,6 +18,7 @@ class Product extends Model
         'name',
         'description',
         'photo',
+        'is_featured',
         'price'
     ];
 

@@ -1,7 +1,7 @@
+
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { Link } from '@inertiajs/vue3'
 
 defineOptions({
     layout: CustomerLayout
@@ -49,9 +49,7 @@ const tents = [
             <q-card class="my-card">
           <q-img :src="tent.img" :alt="`Image of ${tent.title}`" class="my-img">
             <template v-slot:after>
-                <Link :href="route('customer.events.show', 1)">
-                    <q-btn flat dense round icon="chevron_right" class="absolute-bottom-right" />
-                </Link>
+              <q-btn flat dense round icon="chevron_right" class="absolute-bottom-right" />
             </template>
           </q-img>
           <q-card-section>
@@ -68,9 +66,7 @@ const tents = [
               <q-icon name="pets" /> Pets allowed
             </div>
             <div>{{ tent.price }}</div>
-            <Link :href="route('customer.events.show', 1)">
-                <q-btn color="primary" label="Button" class="q-mt-md" />
-            </Link>
+            <q-btn color="primary" label="Button" class="q-mt-md" />
           </q-card-section>
         </q-card>
         </div>

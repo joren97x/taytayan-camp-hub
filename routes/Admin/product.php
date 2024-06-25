@@ -12,20 +12,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders');
 Route::patch('/admin/update-order-status/{order}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
 Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.product.reviews');
-// Route::get('/admin/modifier-groups', [ViewController::class, 'modifier_groups'])->name('admin.modifier_groups');
-// Route::get('/admin/new-modifier-group', [ViewController::class, 'new_modifier_group'])->name('admin.new_modifier_group');
-// Route::get('/admin/new-product', [ViewController::class, 'new_product'])->name('admin.new_product');
+
 Route::resource('/admin/products', ProductController::class)->names([
     'index' => 'admin.product.index',
     'create' => 'admin.product.create',
     'store' => 'admin.product.store',
     'edit' => 'admin.product.edit',
-    'update' => 'admin.product.update'
+    'update' => 'admin.product.update',
+    'destroy' => 'admin.product.destroy'
 ]);
 
 Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.product.update_modifier_group');
 Route::delete('/admin/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.product.clear_modifier_group');
 Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.product.update_photo');
+
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_group.index',
     'create' => 'admin.modifier_group.create',

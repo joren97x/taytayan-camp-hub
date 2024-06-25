@@ -79,16 +79,16 @@ watch(rightDrawerOpen, (newVal) => {
                 </q-btn-dropdown>
                 <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 100px" class="text-center q-pa-sm">
-                        <q-item clickable v-close-popup>
-                            <q-item-section>Search Events</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup>
-                            <q-item-section>New Tab</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup>
-                            <q-item-section>Tickets</q-item-section>
-                        </q-item>
-                        
+                        <Link :href="route('customer.events.index')">
+                            <q-item clickable v-close-popup>
+                                <q-item-section>Events</q-item-section>
+                            </q-item>
+                        </Link>
+                        <Link :href="route('tickets')">
+                            <q-item clickable v-close-popup>
+                                <q-item-section>Tickets</q-item-section>
+                            </q-item>
+                        </Link>
                     </q-list>
                 </q-btn-dropdown>
                 <q-space />

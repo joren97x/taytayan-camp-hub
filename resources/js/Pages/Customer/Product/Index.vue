@@ -12,23 +12,15 @@ defineOptions({
 
 const props = defineProps({
     categories: Object,
-    products: Object
+    products: Object,
+    featured_products: Object
 })
 
 const slide = ref(1)
-const categories = [
-    'Milktea',
-    'Lorem upsum',
-    'Mango',
-    'Shake',
-    'Or other things',
-]
-
 const currentCategory = ref(null)
 
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-        console.log(entry)
         if (entry.isIntersecting) {
             currentCategory.value = entry.target.id
         }
@@ -76,7 +68,7 @@ function scrollToSection(section) {
                         </q-item>
                         <q-item
                             active-class="bg-secondary text-white" 
-                            :active="currentCategory == category" 
+                            :active="currentCategory == category.id" 
                             clickable 
                             @click="scrollToSection(category.id)" 
                             v-ripple 
@@ -103,7 +95,8 @@ function scrollToSection(section) {
                         </div>
                     </q-item-section>
                 </q-item>
-                <!-- <div class="row">
+
+                <div class="row">
                     <q-carousel
                         v-model="slide"
                         transition-prev="slide-right"
@@ -111,21 +104,26 @@ function scrollToSection(section) {
                         swipeable
                         animated
                         height="300px"
-                        class="full-width"
+                        class="full-width  bg-transparent"
                     >
                         <q-carousel-slide :name="1">
                             <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="product in products" :key="product.id"/>
+                                <FeaturedProductCard v-for="product in featured_products" :product="product" :key="product.id"/>
                             </div>
                         </q-carousel-slide>
                         <q-carousel-slide :name="2">
                             <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="product in products" :key="product.id"/>
+                                <FeaturedProductCard v-for="product in featured_products" :product="product" :key="product.id"/>
                             </div>
                         </q-carousel-slide>
                     </q-carousel>
-                </div> -->
-                <div v-for="(category, i) in props.categories" :key="i" class="q-mt-md category" :id="category.id">
+                </div>
+                <div 
+                    v-for="(category, i) in props.categories" 
+                    :key="i" 
+                    class="q-mt-md category" 
+                    :id="category.id"
+                >
                     <q-item class="text-h6">{{ category.name }}</q-item>
                     <div class="row q-col-gutter-md">
                         <div class="col-6" v-for="product in category.products" :key="product.id">

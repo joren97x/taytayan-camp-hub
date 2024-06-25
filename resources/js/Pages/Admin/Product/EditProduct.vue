@@ -24,7 +24,8 @@ const form = useForm({
     name: props.product.name,
     description: props.product.description,
     price: props.product.price,
-    categories: props.product.categories
+    categories: props.product.categories,
+    is_featured: props.product.is_featured ? true : false
 })
 
 const photoForm = useForm({
@@ -163,12 +164,12 @@ watch(selected, (modifier_group) => {
                     <q-icon name="attach_money" />
                 </template>
             </q-input>
+            <q-checkbox v-model="form.is_featured" label="Feature Product" />
+            <q-separator class="q-my-lg" />
             <p class="text-weight-bold text-h6">Product photo</p>
-            {{photoForm}}
-
             <q-item class="q-my-md">
                 <q-item-section avatar>
-                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
+                    <q-img :src="`/images/${product.photo}`" style="width: 100px; height: 100px;" />
                 </q-item-section>
                 <q-item-section>
                     <q-input 
