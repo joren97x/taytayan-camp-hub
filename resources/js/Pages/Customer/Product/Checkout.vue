@@ -201,32 +201,6 @@ const submit = () => {
                                         </q-avatar>
                                     </q-item-section>
                                 </q-item>
-                                <!-- <q-item tag="label" v-ripple v-if="mode == 'delivery'">
-                                    <q-item-section side top>
-                                        <q-radio v-model="form.payment_method" val="cash_on_delivery"/>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label>Cash On delivery</q-item-label>
-                                    </q-item-section>
-                                    <q-item-section side>
-                                        <q-avatar square>
-                                            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                                        </q-avatar>
-                                    </q-item-section>
-                                </q-item>
-                                <q-item tag="label" v-ripple v-else>
-                                    <q-item-section side top>
-                                        <q-radio v-model="form.payment_method" val="walk_in"/>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label>Walk In</q-item-label>
-                                    </q-item-section>
-                                    <q-item-section side>
-                                        <q-avatar square>
-                                            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                                        </q-avatar>
-                                    </q-item-section>
-                                </q-item> -->
                             </q-list>
                             <q-separator class="q-my-md" />
                             <q-item>

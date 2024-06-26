@@ -10,6 +10,7 @@ class TicketController extends Controller
 {
     //
     public function index() {
+        
         return Inertia::render('Customer/Event/Tickets', [
             'tickets' => 'hello'
         ]);
