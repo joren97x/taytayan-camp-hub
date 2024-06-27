@@ -23,7 +23,7 @@ return new class extends Migration
                 Ticket::STATUS_SOLD,
                 Ticket::STATUS_USED
             ])->default(Ticket::STATUS_AVAILABLE);
-            $table->decimal('price', 8, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

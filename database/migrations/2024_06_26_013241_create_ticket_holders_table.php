@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('ticket_id');
             $table->string('name');
             $table->string('email')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

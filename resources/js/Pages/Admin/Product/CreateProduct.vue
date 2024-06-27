@@ -36,7 +36,6 @@ const submit = () => {
     
     <Head title="New Milktea" />
     <div class="q-pa-md q-mb-xl">
-        {{ form }}
         <q-form @submit="submit">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
@@ -54,72 +53,82 @@ const submit = () => {
                 </q-btn>
             </div>
             <q-separator class="q-my-lg" />
-            <q-input 
-                label="Name" 
-                v-model="form.name" 
-                filled
-                :error="form.errors.name ? true : false"
-                :error-message="form.errors.name"
-            >
-            </q-input>
-            <q-item class="q-my-md">
-                <q-item-section avatar>
-                    <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
-                </q-item-section>
-                <q-item-section>
-                    <q-input 
-                        type="file" 
-                        filled 
-                        v-model="form.photo"
-                        :error="form.errors.photo ? true : false"
-                        :error-message="form.errors.photo"
-                    >
-                    </q-input>
-                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
-                    <q-item-label>
-                        <q-btn no-caps color="primary">Upload photo</q-btn>
-                    </q-item-label>
-                </q-item-section>
-            </q-item>
-            <q-input 
-                label="Description" 
-                v-model="form.description" 
-                filled 
-                type="textarea"
-                :error="form.errors.description ? true : false"
-                :error-message="form.errors.description"
-            >
-            </q-input>
-            <q-select 
-                filled 
-                class="q-mt-lg"
-                label="Categories" 
-                multiple
-                v-model="form.categories"
-                option-label="name"
-                option-value="id"
-                emit-value
-                use-chips
-                map-options
-                :options="props.categories"
-                :error="form.errors.categories ? true : false"
-                :error-message="form.errors.categories"
-            >
-            </q-select>
-            <q-input 
-                filled 
-                label="Default Price" 
-                v-model="form.price" 
-                placeholder="None" 
-                class="q-mt-md"
-                :error="form.errors.price ? true : false"
-                :error-message="form.errors.price"
-            >
-                <template v-slot:prepend>
-                    <q-icon name="attach_money" />
-                </template>
-            </q-input>
+            <div>Build Your Event Page</div>
+            <div>Add all of your event details and let attendees know what to expect</div>
+            <div class="q-mx-xl q-mt-md">
+                <div>Add product photo</div>    
+                <div>Photos can help customers decide what to order and can increase sale.</div>
+                <q-item class="q-my-md">
+                    <q-item-section avatar>
+                        <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" style="width: 100px; height: 100px;" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-input 
+                            type="file" 
+                            filled 
+                            v-model="form.photo"
+                            :error="form.errors.photo ? true : false"
+                            :error-message="form.errors.photo"
+                        />
+                        <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                        <q-item-label>
+                            <q-btn no-caps color="primary">Upload photo</q-btn>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+                <div>Event Overview</div>    
+                <div>Add cover photo</div>    
+                <div>Add photos to show what your event will be about. See examples</div>
+                <q-input 
+                    label="Name" 
+                    v-model="form.name" 
+                    filled
+                    :error="form.errors.name ? true : false"
+                    :error-message="form.errors.name"
+                />
+                <div>Add cover photo</div>    
+                <div>Add photos to show what your event will be about. See examples</div>
+                <q-input 
+                    label="Description" 
+                    v-model="form.description" 
+                    filled 
+                    type="textarea"
+                    :error="form.errors.description ? true : false"
+                    :error-message="form.errors.description"
+                />
+                <div>Add cover photo</div>    
+                <div>Add photos to show what your event will be about. See examples</div>
+                <q-select 
+                    filled 
+                    class="q-mt-lg"
+                    label="Categories" 
+                    multiple
+                    v-model="form.categories"
+                    option-label="name"
+                    option-value="id"
+                    emit-value
+                    use-chips
+                    map-options
+                    :options="props.categories"
+                    :error="form.errors.categories ? true : false"
+                    :error-message="form.errors.categories"
+                />
+                <div>Tickets</div>
+                <div>How much do you want to charge for tickets?</div>
+                <q-input 
+                    filled 
+                    label="Default Price" 
+                    v-model="form.price" 
+                    placeholder="None" 
+                    class="q-mt-md"
+                    :error="form.errors.price ? true : false"
+                    :error-message="form.errors.price"
+                >
+                    <template v-slot:prepend>
+                        <q-icon name="attach_money" />
+                    </template>
+                </q-input>
+            </div>
         </q-form>
     </div>
 </template>

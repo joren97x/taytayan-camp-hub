@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin\Event;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
@@ -14,7 +17,9 @@ class EventController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Event/Events');
+        return Inertia::render('Admin/Event/Events', [
+            'events' => Event::all()
+        ]);
     }
 
     /**
@@ -32,6 +37,44 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'cover_photo' => 'required',
+            'date' => ['required', 'date'],
+            'capacity' => 'required',
+            'start_time' => 'required',
+            'location' => 'required',
+            'admission_fee' => 'required',
+            'min_ticket' => 'required',
+            'max_ticket' => 'required'
+        ]);
+
+        $cover_photo = $request->cover_photo[0]->getClientOriginalName();
+        $request->cover_photo[0]->move(public_path('/images'), $cover_photo);
+
+        $event = Event::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'cover_photo' => $cover_photo,
+            'date' => $request->date,
+            'capacity' => $request->capacity,
+            'start_time' => $request->start_time,
+            'location' => $request->location,
+            'admission_fee' => $request->admission_fee,
+            'min_ticket' => $request->min_ticket,
+            'max_ticket' => $request->max_ticket
+        ]); 
+
+        for($i = 0; $i < $request->capacity; $i++) {
+            Ticket::create([
+                'event_id' => $event->id,
+                'ticket_code' => Str::random(15)
+            ]);
+        }
+
+        return back();
+
     }
 
     /**
@@ -40,7 +83,9 @@ class EventController extends Controller
     public function show(string $id)
     {
         //
-        return Inertia::render('Admin/Event/ShowEvent');
+        return Inertia::render('Admin/Event/ShowEvent', [
+            'event' => Event::find($id)
+        ]);
     }
 
     /**

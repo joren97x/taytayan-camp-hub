@@ -8,6 +8,10 @@ defineOptions({
     layout: CustomerLayout
 })
 
+defineProps({
+    event: Object
+})
+
 </script>
 
 <template>
@@ -17,25 +21,22 @@ defineOptions({
         </div>
         <div class="row">
             <div class="col-8">
-                <div>Wednesday, March 20</div>
-                <div>Sabado Night</div>
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, rem.</div>
+                <div>{{ event.date }}, {{ event.start_time }}</div>
+                <div>{{ event.title }}</div>
+                <div>{{ event.description }}</div>
                 <div>Date And Time</div>
-                <div>Wednesday, March 20</div>
+                <div>{{ event.date }}, {{ event.start_time }}</div>
                 <div>Frequently Asked Questions</div>
                 <q-list bordered class="rounded-borders">
                     <q-expansion-item
                         expand-separator
                         icon="perm_identity"
-                        label="Account settings"
-                        caption="John Doe"
+                        label="Some uhh questions"
                         v-for="n in 3"
                     >
                         <q-card>
                         <q-card-section>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-                            commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-                            eveniet doloribus ullam aliquid.
+                            some uhh answers
                         </q-card-section>
                         </q-card>
                     </q-expansion-item>
@@ -50,13 +51,13 @@ defineOptions({
                                     Admission
                                 </div>
                                 <div>
-                                    P100.00
+                                    {{ event.admission_fee }}
                                 </div>
                             </q-item-section>
-                            <q-item-section side>
+                            <!-- <q-item-section side>
                                 <q-btn icon="remove"></q-btn>
                                 <q-btn icon="add"></q-btn>
-                            </q-item-section>
+                            </q-item-section> -->
                         </q-item>
                         <Link :href="route('event.checkout')">
                             <q-btn class="full-width" color="primary" no-caps>Check Out</q-btn>

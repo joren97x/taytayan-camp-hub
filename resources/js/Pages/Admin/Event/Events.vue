@@ -7,23 +7,15 @@ defineOptions({
     layout: EventLayout
 })
 
-// defineProps({
-//     events: Object
-// })
-
-const events = [
-    {
-        name: 'hello',
-        sold: 2,
-        gross: 20.00,
-        status: 'Upcoming Event'
-    }
-]
+defineProps({
+    events: Object
+})
 
 const columns = [
-    { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
-    { name: 'sold', align: 'center', label: 'sold', field: 'sold', sortable: true },
-    { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
+    { name: 'cover_photo', label: 'cover_photo', align: 'center', field: 'cover_photo', sortable: true },
+    { name: 'title', label: 'title', align: 'center', field: 'title', sortable: true },
+    { name: 'tickets_sold', align: 'center', label: 'tickets_sold', field: 'tickets_sold', sortable: true },
+    // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
     { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
@@ -41,10 +33,15 @@ const columns = [
             :columns="columns"
             row-key="name"
         >
+            <template v-slot:body-cell-cover_photo="props">
+                <q-td :props="props">
+                    <q-img :src="`/images/${props.row.cover_photo}`" style="width: 50px; height: 50px;" />
+                </q-td>
+            </template>
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                     <q-btn no-caps unelevated>Delete</q-btn>
-                    <Link :href="route('admin.events.show', 1)">
+                    <Link :href="route('admin.events.show', props.row.id)">
                         <q-btn class="q-ml-sm" no-caps color="primary">View Event</q-btn>
                     </Link>
                 </q-td>

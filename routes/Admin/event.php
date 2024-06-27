@@ -12,5 +12,6 @@ Route::resource('/admin/events', EventController::class)->names([
     'index' => 'admin.events.index',
     'create' => 'admin.events.create',
     'show' => 'admin.events.show',
+    'store' => 'admin.events.store',
     'edit' => 'admin.events.edit'
 ]);

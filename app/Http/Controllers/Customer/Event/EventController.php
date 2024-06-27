@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer\Event;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class EventController extends Controller
     {
         //
         return Inertia::render('Customer/Event/Index', [
-            'events' => 'hello'
+            'events' => Event::all()
         ]);
     }
 
@@ -42,7 +43,7 @@ class EventController extends Controller
     {
         //
         return Inertia::render('Customer/Event/Show', [
-            'events' => 'hello'
+            'event' => Event::find($id)
         ]);
     }
 
