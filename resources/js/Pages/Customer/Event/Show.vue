@@ -3,6 +3,7 @@
 
 import { Link } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import { ref } from 'vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -11,6 +12,8 @@ defineOptions({
 defineProps({
     event: Object
 })
+
+const attendees = ref(1)
 
 </script>
 
@@ -54,12 +57,13 @@ defineProps({
                                     {{ event.admission_fee }}
                                 </div>
                             </q-item-section>
-                            <!-- <q-item-section side>
-                                <q-btn icon="remove"></q-btn>
-                                <q-btn icon="add"></q-btn>
-                            </q-item-section> -->
+                            <q-item-section side>
+                                <q-btn icon="remove" @click="attendees--"></q-btn>
+                                {{ attendees }}
+                                <q-btn icon="add" @click="attendees++"></q-btn>
+                            </q-item-section>
                         </q-item>
-                        <Link :href="route('event.checkout')">
+                        <Link :href="route('event.checkout')" :data="{ event_id: event.id, attendees }">
                             <q-btn class="full-width" color="primary" no-caps>Check Out</q-btn>
                         </Link>
                     </div>
