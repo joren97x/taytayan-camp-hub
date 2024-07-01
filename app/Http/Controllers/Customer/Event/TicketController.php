@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer\Event;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
+use App\Models\TicketOrder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +14,13 @@ class TicketController extends Controller
     public function index() {
         
         return Inertia::render('Customer/Event/Tickets', [
-            'tickets' => 'hello'
+            'ticket_orders' =>  TicketOrder::with([
+                'event', 
+                'ticket_order_items', 
+                'ticket_order_items.ticket.ticket_holder',
+            ])
+            ->where('user_id', auth()->user()->id)
+            ->get()
         ]);
     }
 }

@@ -20,6 +20,15 @@ class TicketOrder extends Model
     const PAYMENT_METHOD_GRAB_PAY = 'grab_pay';
     const PAYMENT_METHOD_WALK_IN = 'walk_in';
 
+
+    protected $fillable = [
+        'user_id',
+        'event_id',
+        'amount',
+        'payment_method',
+        'status'
+    ];
+
     public static function getConstants()
     {
         return [
@@ -37,6 +46,21 @@ class TicketOrder extends Model
                 self::PAYMENT_METHOD_WALK_IN,
             ],
         ];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    public function ticket_order_items()
+    {
+        return $this->hasMany(TicketOrderItem::class);
     }
 
 }

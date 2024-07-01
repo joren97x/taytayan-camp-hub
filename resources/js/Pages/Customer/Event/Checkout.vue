@@ -3,24 +3,44 @@
 import { Link, Head } from '@inertiajs/vue3'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 
 const props = defineProps({
     order_constants: Object,
     event: Object,
+    attendees: Number
 })
 
+const $q = useQuasar()
 const page = usePage()
-
+console.log(props.event.admission_fee)
+console.log(props.attendees)
 const form = useForm({
-    items: props.items,
+    attendees: props.attendees,
+    event_id: props.event.id,
+    user_id: page.props.auth.user.id,
     payment_method: 'gcash',
-    mode: 'pickup'
+    amount: props.event.admission_fee * props.attendees,
+    ticket_holders: [
+        
+    ]
 })
+
+    for(var i = 0; i < props.attendees; i++) {
+        form.ticket_holders.push({
+            name: '',
+            email: ''
+        })
+    }
 
 const submit = () => {
-    form.post(route('product.pay'), {
+    form.post(route('event.pay'), {
         onSuccess: (response) => {
             console.log(response)
+        },
+        onError: (err) => {
+            console.log(err)
+            $q.notify(err.error)
         }
     })
 }
@@ -35,7 +55,7 @@ const submit = () => {
             <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
         </Link>
         <div class="q-mb-xl q-mx-xl">
-            {{ $page.props }}
+            {{ attendees }}
             <div class="row q-col-gutter-xl">
                 <div class="col-7">
                     <q-card flat bordered>
@@ -52,9 +72,11 @@ const submit = () => {
                                     <q-item-label>{{ $page.props.auth.user.address }}</q-item-label>
                                 </q-item-section>
                             </q-item>
-                            <div v-show="form.mode == 'pickup'">
+                            <div>
                                 <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
-                                    <div id="map" style="height: 450px; width: 100%;"></div>
+                                    <div id="map" style="height: 250px; width: 100%;">
+                                        {{ event }}
+                                    </div>
                                     <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
                                 </div>
                                 <q-item>
@@ -65,24 +87,32 @@ const submit = () => {
                                         Event Location
                                         <q-item-label caption>{{ event.location }}</q-item-label>
                                     </q-item-section>
-                                    <!-- <q-item-section side>
-                                        <q-btn-group push>
-                                            <q-btn push label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
-                                            <q-btn push label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
-                                            <q-btn push label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
-                                            <q-btn push label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
-                                            <q-btn push label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
-                                        </q-btn-group>
-                                    </q-item-section> -->
                                 </q-item>
                             </div>
-                                <q-separator class="q-my-md" />
-                                <q-item>
-                                    <q-item-section class="text-h6">Pay With</q-item-section>
-                                    <q-item-section side>
-                                        <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">Required</q-chip>
-                                    </q-item-section>
-                                </q-item>
+                            <q-separator class="q-my-md" />
+                            <q-list>
+                                <div class="text-h6">
+                                    Attendees
+                                </div>
+                                <q-list-item v-for="(attendee, index) in Number(attendees)">
+                                    Attendee {{ attendee }}
+                                    <div class="row q-col-gutter-md">
+                                        <div class="col-6">
+                                            <q-input label="Name" v-model="form.ticket_holders[index].name" filled/>
+                                        </div>
+                                        <div class="col-6">
+                                            <q-input label="Email Address" v-model="form.ticket_holders[index].email" filled/>
+                                        </div>
+                                    </div>
+                                </q-list-item>
+                            </q-list>
+                            <q-separator class="q-my-md" />
+                            <q-item>
+                                <q-item-section class="text-h6">Pay With</q-item-section>
+                                <q-item-section side>
+                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">Required</q-chip>
+                                </q-item-section>
+                            </q-item>
                             <q-list>
                                 <q-item 
                                     tag="label" v-ripple 
@@ -116,6 +146,7 @@ const submit = () => {
                     </q-card>
                 </div>
                 <div class="col-5"  style="position: relative;">
+                    {{ form }}
                     <div style="position: sticky; top: 50px">
                         <q-card>
                             <q-card-section>
@@ -125,7 +156,7 @@ const submit = () => {
                                 <q-item>
                                     <q-item-section>Subtotal</q-item-section>
                                     <q-item-section side>
-                                        {{ subtotal }}
+                                        {{ form.amount }}
                                     </q-item-section>
                                 </q-item>
                                 <q-item v-if="form.mode == 'delivery'">
@@ -138,7 +169,7 @@ const submit = () => {
                                 <q-item class="text-h6">
                                     <q-item-section>Total</q-item-section>
                                     <q-item-section side>
-                                        {{  subtotal  }}
+                                        {{  form.amount  }}
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>

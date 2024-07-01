@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('ticket_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('event_id');
             $table->decimal('amount', 8, 2);
             $table->enum('payment_method', [
                 TicketOrder::PAYMENT_METHOD_CARD,

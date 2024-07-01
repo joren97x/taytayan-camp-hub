@@ -22,4 +22,29 @@ class Ticket extends Model
         'status',
     ];
 
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function ticket_holders()
+    {
+        return $this->hasMany(TicketHolder::class);
+    }
+
+    public function ticket_holder()
+    {
+        return $this->hasOne(TicketHolder::class);
+    }
+
+    public function ticket_order_items()
+    {
+        return $this->hasMany(TicketOrderItem::class);
+    }
+
 }

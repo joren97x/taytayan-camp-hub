@@ -73,7 +73,7 @@ class EventController extends Controller
             ]);
         }
 
-        return back();
+        return redirect(route('admin.events.index'));
 
     }
 

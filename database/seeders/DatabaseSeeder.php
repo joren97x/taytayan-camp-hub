@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ModifierGroupSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(CategorySeeder::class);
+        $this->call(EventSeeder::class);
 
         User::factory()->create([
             'email' => 'sumagangjoren@gmail.com',

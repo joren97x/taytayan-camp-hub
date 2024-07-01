@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\Ticket;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class EventSeeder extends Seeder
 {
@@ -26,7 +28,7 @@ class EventSeeder extends Seeder
             return $file->getFilename();
         }, $imageFiles);
 
-        Event::create([
+        $event = Event::create([
             'title' => fake()->sentence(3),
             'description' => fake()->sentence(10),
             'location' => fake()->word(),
@@ -36,6 +38,14 @@ class EventSeeder extends Seeder
             'admission_fee' => fake()->numberBetween(10, 50),
             'cover_photo' => fake()->randomElement($imageFilenames)
         ]);
+
+        for($i = 0; $i < $event->capacity; $i++) {
+            Ticket::create([
+                'event_id' => $event->id,
+                'ticket_code' => Str::random(15)
+            ]);
+        }
+
     }
 
     

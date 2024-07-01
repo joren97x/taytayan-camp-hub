@@ -46,6 +46,9 @@ const attendees = ref(1)
                     </q-list>
             </div>
             <div class="col-4">
+                {{ event.tickets_sold }}
+                {{ event.capacity }}
+                hello
                 <div>
                     <div>
                         <q-item>
