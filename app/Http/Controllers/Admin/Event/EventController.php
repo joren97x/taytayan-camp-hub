@@ -49,14 +49,16 @@ class EventController extends Controller
             'min_ticket' => 'required',
             'max_ticket' => 'required'
         ]);
-
-        $cover_photo = $request->cover_photo[0]->getClientOriginalName();
-        $request->cover_photo[0]->move(public_path('/images'), $cover_photo);
+        // dd($request->file('cover_photo')[0]);
+        $path = $request->file('cover_photo')[0]->store('events', 'public');
+        // dd($path);
+        // $cover_photo = $request->cover_photo[0]->getClientOriginalName();
+        // $request->cover_photo[0]->move(public_path('/images'), $cover_photo);
 
         $event = Event::create([
             'title' => $request->title,
             'description' => $request->description,
-            'cover_photo' => $cover_photo,
+            'cover_photo' => $path,
             'date' => $request->date,
             'capacity' => $request->capacity,
             'start_time' => $request->start_time,
@@ -69,7 +71,7 @@ class EventController extends Controller
         for($i = 0; $i < $request->capacity; $i++) {
             Ticket::create([
                 'event_id' => $event->id,
-                'ticket_code' => Str::random(15)
+                // 'ticket_code' => Str::random(15)
             ]);
         }
 

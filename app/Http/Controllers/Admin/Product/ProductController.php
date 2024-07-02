@@ -49,13 +49,15 @@ class ProductController extends Controller
             'categories' => 'required'
         ]);
 
-        $photo = $request->photo[0]->getClientOriginalName();
-        $request->photo[0]->move(public_path('/images'), $photo);
+        $path = $request->file('photo')[0]->store('products', 'public');
+        // dd($path);
+        // $photo = $request->photo[0]->getClientOriginalName();
+        // $request->photo[0]->move(public_path('/images'), $photo);
 
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
-            'photo' => $photo,
+            'photo' => $path,
             'price' => $request->price
         ]);
 

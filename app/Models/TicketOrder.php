@@ -26,7 +26,8 @@ class TicketOrder extends Model
         'event_id',
         'amount',
         'payment_method',
-        'status'
+        'status',
+        'qr_code_path'
     ];
 
     public static function getConstants()

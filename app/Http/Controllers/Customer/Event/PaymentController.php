@@ -16,7 +16,7 @@ class PaymentController extends Controller
 {
     //
     public function success(Request $request) {
-        
+        dd($request);
         $event = Event::find($request->input('event_id'));
 
         $ticket_order = TicketOrder::create([

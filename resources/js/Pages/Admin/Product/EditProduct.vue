@@ -169,7 +169,7 @@ watch(selected, (modifier_group) => {
             <p class="text-weight-bold text-h6">Product photo</p>
             <q-item class="q-my-md">
                 <q-item-section avatar>
-                    <q-img :src="`/images/${product.photo}`" style="width: 100px; height: 100px;" />
+                    <q-img :src="`/storage/${product.photo}`" style="width: 100px; height: 100px;" />
                 </q-item-section>
                 <q-item-section>
                     <q-input 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id');
             $table->foreignId('user_id')->nullable();
-            $table->string('ticket_code')->unique();
+            // $table->string('ticket_code')->unique();
             $table->enum('status', [
                 Ticket::STATUS_AVAILABLE,
                 Ticket::STATUS_RESERVED,

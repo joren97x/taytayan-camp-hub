@@ -17,7 +17,7 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         //
-        $imageFiles = File::files(public_path('images'));
+        $imageFiles = File::files(public_path('storage/events'));
 
         // Filter out only image files (optional, if your directory may contain non-image files)
         $imageFiles = array_filter($imageFiles, function ($file) {
@@ -25,7 +25,7 @@ class EventSeeder extends Seeder
         });
 
         $imageFilenames = array_map(function ($file) {
-            return $file->getFilename();
+            return 'events/'.$file->getFilename();
         }, $imageFiles);
 
         $event = Event::create([
@@ -42,7 +42,7 @@ class EventSeeder extends Seeder
         for($i = 0; $i < $event->capacity; $i++) {
             Ticket::create([
                 'event_id' => $event->id,
-                'ticket_code' => Str::random(15)
+                // 'ticket_code' => Str::random(15)
             ]);
         }
 

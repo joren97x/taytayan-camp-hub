@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
     {
         //
 
-        $imageFiles = File::files(public_path('images'));
+        $imageFiles = File::files(public_path('storage/products'));
 
         // Filter out only image files (optional, if your directory may contain non-image files)
         $imageFiles = array_filter($imageFiles, function ($file) {
@@ -25,7 +25,7 @@ class ProductSeeder extends Seeder
         });
 
         $imageFilenames = array_map(function ($file) {
-            return $file->getFilename();
+            return 'products/'.$file->getFilename();
         }, $imageFiles);
 
         $dummy_products = [
