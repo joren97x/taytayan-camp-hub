@@ -19,6 +19,7 @@ defineProps({
             <q-card v-for="ticket_order in ticket_orders" class="q-my-md">
                 {{ ticket_order }}
                 <div>Event</div>
+                <q-img height="200px" width="200px" :src="`/storage/${ticket_order.qr_code_path}`"></q-img>
                 {{ ticket_order.event.title }}
                 <p>{{ ticket_order.ticket_order_items.length }}x admission</p>
                 <p>Total: {{ ticket_order.amount }}</p>

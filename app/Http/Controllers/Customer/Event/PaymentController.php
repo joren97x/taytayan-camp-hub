@@ -8,15 +8,19 @@ use App\Models\Ticket;
 use App\Models\TicketHolder;
 use App\Models\TicketOrder;
 use App\Models\TicketOrderItem;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Luigel\Paymongo\Facades\Paymongo;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
     //
     public function success(Request $request) {
-        dd($request);
+        // dd($request);
         $event = Event::find($request->input('event_id'));
 
         $ticket_order = TicketOrder::create([
@@ -54,6 +58,16 @@ class PaymentController extends Controller
             }
 
         }
+
+        $url = route('cashier.ticket_order.verify', ['ticket_order_id' => $ticket_order->id]);
+        $qr_code = new QrCode($url);
+        $writer = new PngWriter();
+        $qr_code_path = 'qrcodes/' . $ticket_order->id . '.png';
+        $qr_code_content = $writer->write($qr_code)->getString();
+        Storage::disk('public')->put($qr_code_path, $qr_code_content);
+
+        $ticket_order->qr_code_path = $qr_code_path;
+        $ticket_order->save();
 
         return redirect(route('tickets'));
     }

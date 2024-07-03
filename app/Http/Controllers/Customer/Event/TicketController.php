@@ -23,4 +23,5 @@ class TicketController extends Controller
             ->get()
         ]);
     }
+
 }
