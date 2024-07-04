@@ -8,27 +8,27 @@ its located in .env or in .env.example
 ```bash
 https://pusher.com/docs/channels/getting_started/javascript/
 ```
-PUSHER_APP_ID=""
-PUSHER_APP_KEY=""
-PUSHER_APP_SECRET=""
+PUSHER_APP_ID=""  
+PUSHER_APP_KEY=""  
+PUSHER_APP_SECRET=""  
 
 ```bash
 https://www.paymongo.com/
 ```
-PAYMONGO_PUBLIC_KEY=
-PAYMONGO_SECRET_KEY=
+PAYMONGO_PUBLIC_KEY=  
+PAYMONGO_SECRET_KEY=  
 
 ```bash
 basta e search google maps api sa google
 ```
-GOOGLE_MAPS_API_KEY=
+GOOGLE_MAPS_API_KEY=  
 
 ```bash
 https://mailtrap.io/
 ```
-MAIL_MAILER=
-MAIL_HOST=
-MAIL_PORT=
-MAIL_USERNAME=
-MAIL_PASSWORD=
-MAIL_ENCRYPTION=
+MAIL_MAILER=  
+MAIL_HOST=  
+MAIL_PORT=  
+MAIL_USERNAME=  
+MAIL_PASSWORD=  
+MAIL_ENCRYPTION=  
