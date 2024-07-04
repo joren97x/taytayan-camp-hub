@@ -69,5 +69,6 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
+        return back();
     }
 }

@@ -1,7 +1,9 @@
 <script setup>
 
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link, useForm } from '@inertiajs/vue3'
 import EventLayout from '@/Layouts/EventLayout.vue'
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 defineOptions({
     layout: EventLayout
@@ -11,9 +13,27 @@ defineProps({
     events: Object
 })
 
+const $q = useQuasar()
+const deleteEventForm = useForm({
+    event: null
+})
+
+const deleteEventDialog = ref(false)
+const deleteEvent = () => {
+    deleteEventForm.delete(route('admin.events.destroy', deleteEventForm.event.id), {
+        onSuccess: () => {
+            $q.notify('Event Deleted')
+        }
+    })
+}
+
+function showDeleteEventDialog(event) {
+    deleteEventForm.event = event
+    deleteEventDialog.value = true
+}
+
 const columns = [
-    { name: 'cover_photo', label: 'cover_photo', align: 'center', field: 'cover_photo', sortable: true },
-    { name: 'title', label: 'title', align: 'center', field: 'title', sortable: true },
+    { name: 'event', label: 'Event', align: 'center', field: 'event', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'tickets_sold', field: 'tickets_sold', sortable: true },
     // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
     { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
@@ -33,14 +53,27 @@ const columns = [
             :columns="columns"
             row-key="name"
         >
-            <template v-slot:body-cell-cover_photo="props">
+            <template v-slot:body-cell-event="props">
                 <q-td :props="props">
                     <q-img :src="`/storage/${props.row.cover_photo}`" style="width: 50px; height: 50px;" />
+                    {{ props.row.title }}
+                    <div>
+                        {{ props.row.date }}
+                    </div>
                 </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
-                    <q-btn no-caps unelevated>Delete</q-btn>
+                    <q-btn 
+                        no-caps 
+                        unelevated
+                        @click="showDeleteEventDialog(props.row)"
+                    >
+                        Delete
+                    </q-btn>
+                    <Link :href="route('admin.events.edit', props.row.id)">
+                        <q-btn class="q-ml-sm" no-caps color="primary">Edit</q-btn>
+                    </Link>
                     <Link :href="route('admin.events.show', props.row.id)">
                         <q-btn class="q-ml-sm" no-caps color="primary">View Event</q-btn>
                     </Link>
@@ -59,5 +92,24 @@ const columns = [
                 </Link>
             </template>
         </q-table>
+        <q-dialog v-model="deleteEventDialog">
+            <q-card>
+                <q-card-section>
+                    <p>Delete event</p>
+                </q-card-section>
+                <q-card-actions>
+                    <q-space/>
+                    <q-btn no-caps v-close-popup>Cancel</q-btn>
+                    <q-btn 
+                        no-caps
+                        :loading="deleteEventForm.processing"
+                        :disable="deleteEventForm.processing"
+                        @click="deleteEvent"
+                    >
+                        Delete
+                    </q-btn>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </div>
 </template>

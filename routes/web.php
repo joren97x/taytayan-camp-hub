@@ -44,3 +44,8 @@ require __DIR__.'/customer.php';
 require __DIR__.'/driver.php';
 require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
+
+
+Route::get('/test', function() {
+    return Inertia::render('Test');
+});

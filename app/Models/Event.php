@@ -30,4 +30,9 @@ class Event extends Model
         'status'
     ];
 
+    public function ticket_orders()
+    {
+        return $this->hasMany(TicketOrder::class);
+    }
+
 }

@@ -23,17 +23,34 @@ defineOptions({
     layout: CustomerLayout
 })
 
-function handleImageError() {
-    document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-}
+
+
+
+Echo.channel('hello-channel')
+    .listen('.hello.event', (data) => {
+        console.log(data)
+    }
+).error((err) => {
+    console.error(err)
+})
+
+// import Pusher from 'pusher-js';
+
+// var pusher = new Pusher('bcdca3d38dbd8b4b566c', {
+//   cluster: 'ap1'
+// });
+
+// var channel = pusher.subscribe('hello-channel');
+// channel.bind('say-hello', function(data) {
+//     console.log(data)
+// });
+
 </script>
 
 <template>
     <Head title="Welcome" />
     <div>
+        <h1>THIS THE HOMEPAGE BRUH</h1>
         {{ $page }}
         Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
     </div>
