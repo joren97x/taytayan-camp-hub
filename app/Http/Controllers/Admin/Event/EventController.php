@@ -49,11 +49,8 @@ class EventController extends Controller
             'min_ticket' => 'required',
             'max_ticket' => 'required'
         ]);
-        // dd($request->file('cover_photo')[0]);
+
         $path = $request->file('cover_photo')[0]->store('events', 'public');
-        // dd($path);
-        // $cover_photo = $request->cover_photo[0]->getClientOriginalName();
-        // $request->cover_photo[0]->move(public_path('/images'), $cover_photo);
 
         $event = Event::create([
             'title' => $request->title,
@@ -120,6 +117,33 @@ class EventController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'date' => ['required', 'date'],
+            'capacity' => 'required',
+            'start_time' => 'required',
+            'location' => 'required',
+            'admission_fee' => 'required',
+            'min_ticket' => 'required',
+            'max_ticket' => 'required'
+        ]);
+
+        $event = Event::find($id);
+
+        $event->title = $request->title;
+        $event->description = $request->description;
+        $event->date = $request->date;
+        $event->capacity = $request->capacity;
+        $event->start_time = $request->start_time;
+        $event->location = $request->location;
+        $event->admission_fee = $request->admission_fee;
+        $event->min_ticket = $request->min_ticket;
+        $event->max_ticket = $request->max_ticket;
+
+        $event->update();
+
+        return back();
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Product;
 
+use App\Events\HelloEvent;
+use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
@@ -63,6 +65,9 @@ class OrderController extends Controller
                 $order->update();
                 break;
         }
+
+        event(new OrderStatusUpdated($order));
+
         return back();
     }
 

@@ -15,5 +15,6 @@ Route::resource('/admin/events', EventController::class)->names([
     'show' => 'admin.events.show',
     'store' => 'admin.events.store',
     'edit' => 'admin.events.edit',
-    'destroy' => 'admin.events.destroy'
+    'destroy' => 'admin.events.destroy',
+    'update' => 'admin.events.update'
 ]);

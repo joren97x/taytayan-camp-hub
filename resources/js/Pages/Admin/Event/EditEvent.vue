@@ -33,9 +33,9 @@ const coverPhotoForm = useForm({
 })
 
 const submit = () => {
-    form.post(route('admin.events.store'), {
+    form.put(route('admin.events.update', props.event.id), {
         onSuccess: () => {
-            $q.notify('Event Successfully Added')
+            $q.notify('Event Successfully Updated')
         }
     })
 }

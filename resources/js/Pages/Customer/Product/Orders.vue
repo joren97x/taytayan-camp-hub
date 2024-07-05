@@ -5,7 +5,7 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
 import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
 import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
-import { Head, router, usePage } from '@inertiajs/vue3'
+import { Head, router, Link } from '@inertiajs/vue3'
 
 defineOptions({
     layout: CustomerLayout
@@ -27,10 +27,12 @@ watch(tab, () => {
     })
 })
 
+
 </script>
 
 <template>
     <div>
+        {{ orders }}
     <Head title="Orders" />
         <q-btn-group spread class="bg-white q-mb-md">
             <q-btn class="q-pa-md" no-caps label="All" />
@@ -78,9 +80,11 @@ watch(tab, () => {
                         <q-btn no-caps padding="md" color="primary">
                             Buy Again
                         </q-btn>
-                        <q-btn no-caps padding="md" outline>
-                            View Order
-                        </q-btn>
+                        <Link :href="route('orders.show', 1)">
+                            <q-btn no-caps padding="md" outline>
+                                View Order
+                            </q-btn>
+                        </Link>
                     </q-card-actions>
                 </q-card>
             </q-list-item>

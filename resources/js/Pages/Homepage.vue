@@ -1,6 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import { useQuasar } from 'quasar'
 
 defineProps({
     canLogin: {
@@ -23,27 +24,11 @@ defineOptions({
     layout: CustomerLayout
 })
 
-
-
-
+const $q = useQuasar()
 Echo.channel('hello-channel')
-    .listen('.hello.event', (data) => {
-        console.log(data)
-    }
-).error((err) => {
-    console.error(err)
-})
-
-// import Pusher from 'pusher-js';
-
-// var pusher = new Pusher('bcdca3d38dbd8b4b566c', {
-//   cluster: 'ap1'
-// });
-
-// var channel = pusher.subscribe('hello-channel');
-// channel.bind('say-hello', function(data) {
-//     console.log(data)
-// });
+    .listen('.hello.event', (e) => {
+        $q.notify(e)
+    })
 
 </script>
 
@@ -51,6 +36,7 @@ Echo.channel('hello-channel')
     <Head title="Welcome" />
     <div>
         <h1>THIS THE HOMEPAGE BRUH</h1>
+        <h2>Ako pang ge una ang backend ok</h2>
         {{ $page }}
         Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
     </div>

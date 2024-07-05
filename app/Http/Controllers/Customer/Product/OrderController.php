@@ -27,6 +27,13 @@ class OrderController extends Controller
 
     }
 
+    public function show(string $id)
+    {
+        return Inertia::render('Customer/Product/ShowOrder', [
+            'order' => Order::find($id)
+        ]);
+    }
+
     public function index(string $status, CartService $cartService) {
         
         if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {

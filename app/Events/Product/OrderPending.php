@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Product;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -9,22 +9,17 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class HelloEvent implements ShouldBroadcast
+class OrderPending
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($message)
+    public function __construct()
     {
         //
-        $this->message = $message;
-        Log::info('UHHH SHOULD WORK RIGHTT'.$message);
     }
 
     /**
@@ -32,9 +27,10 @@ class HelloEvent implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new Channel('notify');
+        return [
+            new PrivateChannel('channel-name'),
+        ];
     }
-
 }
