@@ -37,12 +37,14 @@ class OrderController extends Controller
     }
 
     public function update_status(Request $request, string $id) {
+        $order = Order::find($id);
 
+        event(new OrderStatusUpdated($order));
+        dd('boyy');
         $request->validate([
             'status' => 'required'
         ]);
         
-        $order = Order::find($id);
         switch($request->status) {
             case Order::STATUS_PREPARING:
                 $order->status = Order::STATUS_PREPARING;

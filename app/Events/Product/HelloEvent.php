@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Product;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -34,7 +34,9 @@ class HelloEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('notify');
+        return [
+            new Channel('notify'),
+        ];
     }
 
 }

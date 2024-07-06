@@ -12,3 +12,8 @@ Broadcast::channel('orders.{id}', function(User $user, int $order_id) {
     // return $user->id == Order::find($order_id)->user_id;
     return true;
 });
+
+// Broadcast::channel('message.{id}', function(User $user, int $order_id) {
+//     // return $user->id == Order::find($order_id)->user_id;
+//     return true;
+// });
