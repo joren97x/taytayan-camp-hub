@@ -9,11 +9,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('orders.{id}', function(User $user, int $order_id) {
-    // return $user->id == Order::find($order_id)->user_id;
-    return true;
+    return $user->id == Order::find($order_id)->user_id;
 });
 
-// Broadcast::channel('message.{id}', function(User $user, int $order_id) {
-//     // return $user->id == Order::find($order_id)->user_id;
-//     return true;
-// });
+Broadcast::channel('orders', function(User $user) {
+    return $user;
+});

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Config;
 
 class ViewController extends Controller
 {
@@ -27,7 +28,6 @@ class ViewController extends Controller
     }
 
     public function checkout(CartService $cartService) {
-
         $cart_id = $cartService->getUserActiveCartId(auth()->user()->id);
         $result = $cartService->getCartLineItemsAndSubtotal(true, $cart_id);
         
@@ -35,7 +35,7 @@ class ViewController extends Controller
             'order_constants' => Order::getConstants(),
             'items'=> $result['cart_products'], 
             'subtotal' => $result['subtotal'],
-            'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY')
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
 
     }

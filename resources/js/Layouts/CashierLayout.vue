@@ -2,12 +2,20 @@
 
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-  
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 
 function toggleLeftDrawer () {
     leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+Echo.private(`orders`)
+    .listen('Product\\OrderPending', (data) => {
+        console.log(data)
+        $q.notify('Someone just ordered frr')
+    })
 
 </script>
 
