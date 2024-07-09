@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import Footer from '@/Components/Customer/Footer.vue'
 import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
@@ -9,8 +9,27 @@ import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 const rightDrawerOpen = ref(false)
-const clearCartDialog = ref(false)
 const items = ref(null) 
+const notifications = ref([])
+const notification_badge = ref(0)
+
+import axios from 'axios'
+
+onMounted(() => {
+    axios.get(route('customer.notifications'))
+    .then((res) => {
+        console.log(res)
+        res.data.notifications.forEach(el => {
+            notifications.value.push(el)
+            if(!el.is_read) {
+                notification_badge.value++
+            }
+        })
+    })
+    .catch((err) => {
+        console.error(err)
+    })
+})
 
 watch(rightDrawerOpen, (newVal) => {
     if (newVal) {
@@ -103,14 +122,12 @@ watch(rightDrawerOpen, (newVal) => {
                 <div v-else>
                     <!-- <q-btn flat icon="search" round></q-btn> -->
                     <q-btn flat dense icon="notifications" class="q-mr-sm">
-                        <q-badge color="red" floating>4</q-badge>
+                        <q-badge color="red" floating>{{ notification_badge }}</q-badge>
                         <q-menu fit>
                             <q-list style="min-width: 400px">
-                                <q-item clickable>
-                                    <q-item-section>New tab</q-item-section>
-                                </q-item>
-                                <q-item clickable>
-                                    <q-item-section>New incognito tab</q-item-section>
+                                <q-item class="text-h6">Notifications</q-item>
+                                <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
+                                    <q-item-section>{{ notification }}</q-item-section>
                                 </q-item>
                             </q-list>
                         </q-menu>

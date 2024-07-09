@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Storage;
 class PaymentController extends Controller
 {
     //
-    public function success(Request $request) {
+    public function success(Request $request) 
+    {
         // dd($request);
         $event = Event::find($request->input('event_id'));
 
@@ -27,35 +28,32 @@ class PaymentController extends Controller
             'user_id' => $request->query('user_id'),
             'event_id' => $event->id,
             'amount' => $request->query('amount'),
-            'status' => TicketOrder::STATUS_COMPLETED
+            'payment_method' => $request->query('payment_method'),
+            'status' => $request->payment_method == TicketOrder::PAYMENT_METHOD_WALK_IN ? TicketOrder::STATUS_PENDING :TicketOrder::STATUS_COMPLETED
         ]);
-
+        
         foreach($request->query('ticket_holders') as $ticket_holder) {
-            $ticket = Ticket::where('event_id', $request->query('event_id'))
-                            ->where('status', 'AVAILABLE')
-                            ->first();
 
-            if ($ticket) {
-                $ticket->update([
-                    'user_id' => $request->query('user_id'),
-                    'status' => Ticket::STATUS_SOLD,
-                ]);
+            $ticket = Ticket::with('event')->where('status', 'AVAILABLE')->first();
 
-                TicketHolder::create([
-                    'ticket_id' => $ticket->id,
-                    'name' => $ticket_holder['name'],
-                    'email' => $ticket_holder['email']
-                ]);
-    
-    
-                TicketOrderItem::create([
-                    'ticket_id' => $ticket->id,
-                    'ticket_order_id' => $ticket_order->id,
-                ]);
+            $ticket->update([
+                'user_id' => $request->query('user_id'),
+                'status' => Ticket::STATUS_SOLD,
+            ]);
 
-                $event->increment('tickets_sold');
+            TicketHolder::create([
+                'ticket_id' => $ticket->id,
+                'name' => $ticket_holder['name'],
+                'email' => $ticket_holder['email']
+            ]);
 
-            }
+
+            TicketOrderItem::create([
+                'ticket_id' => $ticket->id,
+                'ticket_order_id' => $ticket_order->id,
+            ]);
+
+            $event->increment('tickets_sold');
 
         }
 
@@ -72,12 +70,19 @@ class PaymentController extends Controller
         return redirect(route('tickets'));
     }
 
-    public function pay(Request $request) {
+    public function pay(Request $request) 
+    {
 
         $event = Event::find($request->event_id);
         if (!($event->tickets_sold + $request->attendees <= $event->capacity)) {
             return back()->withErrors(['error' => 'Event is full or not found']);
         }
+
+
+        if($request->payment_method == TicketOrder::PAYMENT_METHOD_WALK_IN) {
+            return redirect(route('event.checkout.success') . '?' . http_build_query($request->all()));
+        }
+        dd($request->all());
         
         // $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
         // $line_items = [];

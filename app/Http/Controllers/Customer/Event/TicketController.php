@@ -11,8 +11,9 @@ use Inertia\Inertia;
 class TicketController extends Controller
 {
     //
-    public function index() {
-        
+    public function index(Request $request) 
+    {
+
         return Inertia::render('Customer/Event/Tickets', [
             'ticket_orders' =>  TicketOrder::with([
                 'event', 
@@ -22,6 +23,7 @@ class TicketController extends Controller
             ->where('user_id', auth()->user()->id)
             ->get()
         ]);
+        
     }
 
 }

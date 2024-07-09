@@ -13,9 +13,10 @@ const props = defineProps({
 
 const columns = [
     { name: 'customer', label: 'customer', align: 'center', field: 'customer', sortable: true },
-    { name: 'tickets_sold', align: 'center', label: 'tickets_sold', field: 'tickets_sold', sortable: true },
-    // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
+    { name: 'qr_code_path', align: 'center', label: 'qr_code_path', field: 'qr_code_path', sortable: true },
+    { name: 'payment_method', align: 'center', label: 'payment_method', field: 'payment_method', sortable: true },
     { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
+    { name: 'tickets_sold', align: 'center', label: 'tickets_sold', field: 'tickets_sold', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -49,6 +50,11 @@ const columns = [
         <template v-slot:body-cell-customer="props">
             <q-td :props="props">
                 {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
+            </q-td>
+        </template>
+        <template v-slot:body-cell-qr_code_path="props">
+            <q-td :props="props">
+                <q-img :src="`/storage/${props.row.qr_code_path}`"/>
             </q-td>
         </template>
         <template v-slot:body-cell-tickets_sold="props">

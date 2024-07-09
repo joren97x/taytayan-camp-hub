@@ -199,6 +199,9 @@ const submitCoverPhotoForm = () => {
                     :error-message="form.errors.location"
                 />
                 <div>Capacity</div>
+                <p class="text-red text-h4">!!!</p>
+                <p class="text-red h6">inig ka edit ani kay kung greater than the current capacity ang bag o nga capacity mag create ug bag - o ticket or what</p>
+                <p class="text-red h6">unya what if less than ang bag-o nga capacity epang delete ang ticket,,, no??</p>
                 <div>capacity = amount of tickets u want to sell</div>
                 <q-input 
                     filled 
@@ -209,6 +212,9 @@ const submitCoverPhotoForm = () => {
                     :error-message="form.errors.capacity"
                 />
                 <div>Tickets</div>
+                <p class="text-red">unya kung e adjust pod ang price unya naa nay ni purchase nga ticket ma change pod ang total price naa sa dashboard</p>
+                <p class="text-red">like kung naay ni purchase tickets worth of 100 x 3 = 300</p>
+                <p class="text-red">unya kung e update ni ang price dire (ilisag 200) ma ilisan pod to ang price to 200 x 3 = 600</p>
                 <div>How much do you want to charge for tickets?</div>
                 <q-input 
                     filled 
