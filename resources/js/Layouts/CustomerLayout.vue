@@ -151,6 +151,14 @@ watch(rightDrawerOpen, (newVal) => {
                                     </q-item-section>
                                 </q-item>
                                 <q-separator />
+                                <Link :href="route('customer.inbox')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="inbox" />
+                                        </q-item-section>
+                                        <q-item-section>Inbox</q-item-section>
+                                    </q-item>
+                                </Link>
                                 <Link :href="route('profile.edit')">
                                     <q-item clickable>
                                         <q-item-section avatar>

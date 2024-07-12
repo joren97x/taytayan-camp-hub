@@ -15,3 +15,7 @@ Broadcast::channel('orders.{id}', function(User $user, int $order_id) {
 Broadcast::channel('orders', function(User $user) {
     return $user;
 });
+
+Broadcast::channel('conversation.{id}', function() {
+    return true;
+});

@@ -1,31 +1,40 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { Head, useForm } from '@inertiajs/vue3'
+import ChatBox from '@/Components/Customer/ChatBox.vue'
+import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import axios from 'axios'
-import { useQuasar } from 'quasar'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({
     layout: AdminLayout
 })
 
-defineProps({
-    users: Object
+const props = defineProps({
+    users: Object,
+    conversations: Object
 })
 
-const $q = useQuasar()
-const tab = ref('people')
-const currentConversation = ref({
-    user: null,
-    conversation: null
-})
+const tab = ref('chats')
+const currentConversation = ref(null)
 
-function getChat(user) {
-    currentConversation.value.user = user
-    axios.get(route('conversation.show', user.id))
+// function getChat(user) {
+//     currentConversation.value.user = user
+//     axios.get(route('conversation.show', user.id))
+//     .then((res) => {
+//         currentConversation.value.conversation = res.data.conversation
+//         console.log(res)
+//     })
+//     .catch((err) => {
+//         console.error(err)
+//     })
+// }
+
+function getConversation(conversation) {
+    axios.get(route('conversation.show', conversation.id))
     .then((res) => {
-        currentConversation.value.conversation = res.data.conversation
+        currentConversation.value = res.data.conversation
         console.log(res)
     })
     .catch((err) => {
@@ -33,37 +42,14 @@ function getChat(user) {
     })
 }
 
-const form = useForm({
-    message: ''
-})
 
-function sendMessage() {
-    console.log('goo??')
-    if(currentConversation.value.conversation) {
-        console.log('SEND A MESASGE')
-        form.post(route(`message.store`, currentConversation.value.conversation.id), {
-            onSuccess: () => {
-                getChat(currentConversation.value.user)
-                $q.notify('annyeong')
-            }
-        })
-    }
-    else {
-        console.log('GO CREATE A CONVERSATION AND SEND A MESASGE')
-        form.post(route(`conversation.store`, currentConversation.value.user.id), {
-            onSuccess: () => {
-                getChat(currentConversation.value.user)
-                $q.notify('annyeong')
-            }
-        })
-    }
-}
+
 
 </script>
 
 <template>
     <Head title="Chat" />
-    
+    {{ props }}
     <div class="row">
         <div class="col-4">
             <q-card>
@@ -83,7 +69,21 @@ function sendMessage() {
                 <q-tab-panels v-model="tab" animated>
                     <q-tab-panel name="chats">
                         <div class="text-h6">chats</div>
-                        get all the conversations
+                        <q-list>
+                            <q-item v-for="conversation in conversations" clickable @click="router.get(route(`admin.conversation.show`, conversation.id))">
+                                <!-- <q-item v-for="conversation in conversations" clickable @click="getConversation(conversation)"> -->
+                                <q-item-section avatar>
+                                    <q-avatar color="primary" class="text-capitalize" text-color="white">
+                                        <!-- {{ conversation.user.first_name[0] }} -->
+                                          J
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <!-- {{ conversation.user.first_name + ' ' + conversation.user.last_name }} -->
+                                      Name
+                                </q-item-section>
+                            </q-item> 
+                        </q-list>
                     </q-tab-panel>
                     <q-tab-panel name="people">
                         <div class="text-h6">people</div>
@@ -105,47 +105,7 @@ function sendMessage() {
 
         </div>
         <div class="col-8 q-pb-md">
-            <q-toolbar class="bg-primary text-white">
-                <q-avatar>
-                    <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-                </q-avatar>
-                hello
-            </q-toolbar>
-
-            <div class="q-pa-md bg-grey-4">
-                {{ currentConversation }}
-                <q-chat-message
-                    v-for="message in currentConversation.conversation.messages"
-                    name="me"
-                    avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-                    :text="[message.message]"
-                    sent
-                    bg-color="primary"
-                    text-color="white"
-                />
-                <q-chat-message
-                    name="Jane"
-                    avatar="https://cdn.quasar.dev/img/avatar2.jpg"
-                    :text="['doing fine, how r you?']"
-                />
-                <p class="text-center" v-if="currentConversation.conversation == null">To start a conversation send them a message.</p>
-                <q-form @submit="sendMessage()">
-                    <q-input label="Send a message..." filled v-model="form.message">
-                        <template v-slot:append>
-                            <q-btn 
-                                icon="send" 
-                                type="submit" 
-                                unelevated 
-                                color="primary" 
-                                round
-                                @click="sendMessage()"
-                                :loading="form.processing"
-                                :disable="form.processing"
-                            />
-                        </template>
-                    </q-input>
-                </q-form>
-            </div>
+            <ChatBox v-if="currentConversation" :conversation="currentConversation"/>
         </div>
     </div>
 

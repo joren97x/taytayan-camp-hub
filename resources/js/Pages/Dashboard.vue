@@ -1,14 +1,14 @@
 <script setup>
-    import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-    import { Head, Link } from '@inertiajs/vue3'
+import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import { Head, Link } from '@inertiajs/vue3'
 
-    defineOptions({
-        layout: CustomerLayout
-    })
+defineOptions({
+    layout: CustomerLayout
+})
 
-    import { useQuasar } from 'quasar';
+import { useQuasar } from 'quasar';
 
-    const $q = useQuasar()
+const $q = useQuasar()
 
 </script>
 

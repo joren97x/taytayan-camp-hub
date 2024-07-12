@@ -51,7 +51,7 @@ require __DIR__.'/auth.php';
 Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
 Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('message.store');
 Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversation.store');
-Route::get('/conversations/{user_id}', [ConversationController::class, 'show'])->name('conversation.show');
+Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversation.show');
 
 Route::get('/test', function() {
     return Inertia::render('Test');

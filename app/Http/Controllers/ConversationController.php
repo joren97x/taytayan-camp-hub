@@ -62,17 +62,17 @@ class ConversationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $user_id)
+    public function show(string $id)
     {
         //
-        $authUserId = Auth::id();
+        // $authUserId = Auth::id();
         // $userId = 3;
-        $conversation = Conversation::with('messages')->whereHas('participant', function ($query) {
-            $query->where('user_id', auth()->user()->id);
-            })->whereHas('participant', function ($query) use ($user_id) {
-                $query->where('user_id', $user_id);
-            })->first();
-
+        // $conversation = Conversation::with('messages')->whereHas('participant', function ($query) {
+        //     $query->where('user_id', auth()->user()->id);
+        //     })->whereHas('participant', function ($query) use ($user_id) {
+        //         $query->where('user_id', $user_id);
+        //     })->first();
+        $conversation = Conversation::with(['messages.user', 'participants'])->find($id);
         return response()->json(['conversation' => $conversation]);
     }
 

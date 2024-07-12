@@ -122,13 +122,13 @@ onMounted(() => {
                             Etc etc
                         </q-item-section>
                     </q-item>
-                    <Link :href="route('admin.chat')">
+                    <Link :href="route('admin.conversation.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
                                 <q-icon name="drafts" />
                             </q-item-section>
                             <q-item-section>
-                                Chat Page
+                                Inbox
                             </q-item-section>
                         </q-item>
                     </Link>
