@@ -16,7 +16,7 @@ class ConversationController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Admin/Chat', [
+        return Inertia::render('Admin/Conversations', [
             'users' => User::where('role', '!=', User::ROLE_ADMIN)->get(),
             'conversations' => Conversation::with('messages')->whereHas('participants', function ($query) {
                 $query->where('user_id', auth()->user()->id);

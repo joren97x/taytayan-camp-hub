@@ -16,6 +16,12 @@ class ConversationController extends Controller
     public function index()
     {
         //
+        return response()->json([
+            'conversations' => Conversation::with('messages')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })->get()
+        ]);
+
     }
 
     /**

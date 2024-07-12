@@ -52,6 +52,7 @@ Route::get('/conversations/{conversation}/messages', [MessageController::class, 
 Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('message.store');
 Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversation.store');
 Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversation.show');
+Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
 
 Route::get('/test', function() {
     return Inertia::render('Test');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cashier\ConversationController;
 use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Cashier\TicketOrderController;
 use App\Http\Controllers\Cashier\ViewController;
@@ -10,6 +11,8 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::get('/cashier/orders', [OrderController::class, 'index'])->name('cashier.orders.index');
     Route::get('/cashier/tickets', [TicketOrderController::class, 'index'])->name('cashier.tickets.index');
     Route::get('/cashier/account', [ViewController::class, 'account'])->name('cashier.account');
+    Route::get('/cashier/inbox', [ViewController::class, 'inbox'])->name('cashier.inbox');
+    Route::get('/cashier/inbox/{conversation}', [ConversationController::class, 'show'])->name('cashier.conversation.show');
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');
 });
 

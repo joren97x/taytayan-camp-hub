@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cashier;
 
-use App\Events\MessageSent;
+use App\Http\Controllers\Controller;
 use App\Models\Conversation;
-use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
-class MessageController extends Controller
+class ConversationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,27 +28,9 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
-    public function get_messages(Conversation $conversation)
+    public function store(Request $request)
     {
-        return response()->json($conversation->messages()->with('user')->get());
-    }
-
-    public function store(Request $request, Conversation $conversation)
-    {
-        $request->validate([
-            'message' => 'required'
-        ]);
-
-        $message = Message::create([
-            'user_id' => $request->user()->id,
-            'conversation_id' => $conversation->id,
-            'message' => $request->message
-        ]);
-
-        event(new MessageSent($conversation, $message));
-
-        return back();
+        //
     }
 
     /**
@@ -58,6 +39,11 @@ class MessageController extends Controller
     public function show(string $id)
     {
         //
+        $conversation = Conversation::with(['messages.user', 'participants'])->find($id);
+
+        return Inertia::render('Cashier/ShowConversation', [
+            'conversation' => $conversation
+        ]);
     }
 
     /**

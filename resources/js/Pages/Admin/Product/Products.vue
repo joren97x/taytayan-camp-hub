@@ -78,10 +78,10 @@ const columns = [
             </template>
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
-                    <Link :href="route(`admin.product.edit`, props.row.id)">
+                    <Link :href="route(`admin.products.edit`, props.row.id)">
                         <q-btn no-caps unelevated>Edit</q-btn>
                     </Link>
-                    <q-btn no-caps unelevated @click="showDeleteProductDialog(props.row)">Delete</q-btn>
+                    <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
                 </q-td>
             </template>
             <template v-slot:top>
@@ -100,7 +100,7 @@ const columns = [
                         <q-icon name="search" />
                     </template>
                 </q-input>
-                <Link :href="route('admin.product.create')">
+                <Link :href="route('admin.products.create')">
                     <q-btn no-caps color="primary">New Product</q-btn>
                 </Link>
             </template>

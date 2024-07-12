@@ -18,4 +18,8 @@ class ViewController extends Controller
         return Inertia::render('Cashier/Account');
     }
 
+    public function inbox() {
+        return Inertia::render('Cashier/Conversations');
+    }
+
 }
