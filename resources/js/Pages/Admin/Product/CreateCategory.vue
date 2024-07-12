@@ -14,7 +14,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.post(route('admin.category.store'), {
+    form.post(route('admin.categories.store'), {
         onFinish: () => form.reset('name'),
         onSuccess: () => {
             $q.notify('Category Successfully Added')

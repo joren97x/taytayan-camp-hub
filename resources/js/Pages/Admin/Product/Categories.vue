@@ -26,7 +26,7 @@ function showDeleteCategoryDialog(category) {
 }
 
 const deleteCategory = () => {
-    deleteCategoryForm.delete(route('admin.category.destroy', deleteCategoryForm.category.id), {
+    deleteCategoryForm.delete(route('admin.categories.destroy', deleteCategoryForm.category.id), {
         onSuccess: () => {
             deleteCategoryDialog.value = false
             deleteCategoryForm.category = null
@@ -46,7 +46,7 @@ function showEditCategoryNameMenu(category) {
 }
 
 const updateCategoryName = () => {
-    editCategoryNameForm.put(route('admin.category.update', editCategoryNameForm.id), {
+    editCategoryNameForm.put(route('admin.categories.update', editCategoryNameForm.id), {
         onSuccess: () => {
             $q.notify('Category Name Updated')
         }
@@ -65,7 +65,6 @@ const columns = [
     
     <Head title="Categories" />
         <div class="q-pa-md">
-            
             <q-table
                 class="my-sticky-header-column-table"
                 flat

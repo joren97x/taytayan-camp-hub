@@ -28,7 +28,7 @@ function showDeleteProductDialog(product) {
 }
 
 const deleteProduct = () => {
-    deleteProductForm.delete(route('admin.product.destroy', deleteProductForm.product.id), {
+    deleteProductForm.delete(route('admin.products.destroy', deleteProductForm.product.id), {
         onSuccess: () => {
             deleteProductDialog.value = false
             deleteProductForm.reset()

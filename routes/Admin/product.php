@@ -14,17 +14,17 @@ Route::patch('/admin/update-order-status/{order}', [OrderController::class, 'upd
 Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.product.reviews');
 
 Route::resource('/admin/products', ProductController::class)->names([
-    'index' => 'admin.product.index',
-    'create' => 'admin.product.create',
-    'store' => 'admin.product.store',
-    'edit' => 'admin.product.edit',
-    'update' => 'admin.product.update',
-    'destroy' => 'admin.product.destroy'
+    'index' => 'admin.products.index',
+    'create' => 'admin.products.create',
+    'store' => 'admin.products.store',
+    'edit' => 'admin.products.edit',
+    'update' => 'admin.products.update',
+    'destroy' => 'admin.products.destroy'
 ]);
 
-Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.product.update_modifier_group');
-Route::delete('/admin/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.product.clear_modifier_group');
-Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.product.update_photo');
+Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.products.update_modifier_group');
+Route::delete('/admin/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.products.clear_modifier_group');
+Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.products.update_photo');
 
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_group.index',
@@ -36,11 +36,11 @@ Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names
 ]);
 
 Route::resource('/admin/categories', CategoryController::class)->names([
-    'index' => 'admin.category.index',
-    'create' => 'admin.category.create',
-    'store' => 'admin.category.store',
-    'destroy' => 'admin.category.destroy',
-    'update' => 'admin.category.update'
+    'index' => 'admin.categories.index',
+    'create' => 'admin.categories.create',
+    'store' => 'admin.categories.store',
+    'destroy' => 'admin.categories.destroy',
+    'update' => 'admin.categories.update'
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([

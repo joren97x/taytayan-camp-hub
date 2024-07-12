@@ -43,7 +43,7 @@ const columns = [
 
 const submit = () => {
     
-    form.put(route('admin.product.update', props.product.id), {
+    form.put(route('admin.products.update', props.product.id), {
         onSuccess: () => {
             $q.notify('Product Successfully Updated')
         }
@@ -52,7 +52,7 @@ const submit = () => {
 
 const submitphotoForm = () => {
     
-    photoForm.post(route('admin.product.update_photo', props.product.id), {
+    photoForm.post(route('admin.products.update_photo', props.product.id), {
         onSuccess: () => {
             $q.notify('Product Photo Successfully Updated')
         }
@@ -61,7 +61,7 @@ const submitphotoForm = () => {
 
 const updateProductModifierGroup = () => {
     console.log(props.product.id)
-    addModifierGroupForm.put(route('admin.product.update_modifier_group', props.product.id), {
+    addModifierGroupForm.put(route('admin.products.update_modifier_group', props.product.id), {
         onSuccess: () => {
             addModifierGroupDialog.value = false
             $q.notify('Product Modifier Groups Updated')
@@ -72,7 +72,7 @@ const updateProductModifierGroup = () => {
 const clearModifierGroupForm = useForm({})
 const clearModifierGroupDialog = ref(false)
 const submitClearModifierGroup = () => {
-    clearModifierGroupForm.delete(route('admin.product.clear_modifier_group', props.product.id), {
+    clearModifierGroupForm.delete(route('admin.products.clear_modifier_group', props.product.id), {
         onSuccess: () => {
             clearModifierGroupDialog.value = false
             $q.notify('Modifier Groups Cleared')

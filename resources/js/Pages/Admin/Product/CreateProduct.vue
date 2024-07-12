@@ -22,7 +22,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.post(route('admin.product.store'), {
+    form.post(route('admin.products.store'), {
         onFinish: () => form.reset('name', 'description', 'photo', 'price'),
         onSuccess: () => {
             $q.notify('Product Successfully Added')

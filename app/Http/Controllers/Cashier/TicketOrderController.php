@@ -10,8 +10,14 @@ use Inertia\Inertia;
 class TicketOrderController extends Controller
 {
     //
-    public function verify($ticket_order_id) {
+    public function index()
+    {
+        return Inertia::render('Cashier/Tickets');
+    }
 
+
+    public function verify($ticket_order_id) 
+    {
         $ticket_order = TicketOrder::with([
             'event', 
             'ticket_order_items', 
@@ -22,6 +28,5 @@ class TicketOrderController extends Controller
         return Inertia::render('Cashier/VerifyTicketOrder', [
             'ticket_order' => $ticket_order
         ]);
-
     }
 }

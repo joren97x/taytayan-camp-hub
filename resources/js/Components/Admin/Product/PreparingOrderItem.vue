@@ -15,6 +15,7 @@ const isOrderReadyDialog = ref(false)
 const $q = useQuasar()
 
 const acceptOrderForm = useForm({
+    waiting_time: '15 mins',
     status: props.order_statuses.preparing
 })
 
@@ -124,12 +125,32 @@ function readyOrder() {
                                 </q-item-section>
                             </q-item>
                         </q-list>
+                        <q-separator/>
+                        <div class="row">
+                            <q-space/>
+                            Subtotal - {{ order.subtotal }}
+                        </div>
                     </div>
                     <div class="col-4">
-                        <q-item>
-                            <q-item-section class="text-h6">Order Total</q-item-section>
-                        </q-item>
-                        <q-item>
+                        <div class="text-center text-h6">Waiting Time</div>
+                        <div class="text-center text-h6">15 min</div>
+                        <q-input
+                            filled
+                            v-model="acceptOrderForm.waiting_time"
+                            label="Waiting Time"
+                            mask="###/mins"
+                            unmasked-value
+                            hint="Mask: ###/##"
+                        />
+                        <div class="text-center  text-subtitle-1 text-green">
+                            Suggested
+                        </div>
+                        <div class="text-center">
+                            <q-btn rounded no-caps>
+                                Edit
+                            </q-btn>
+                        </div>
+                        <!-- <q-item>
                             <q-item-section>Subtotal</q-item-section>
                             <q-item-section side>
                                 {{ order.subtotal }}
@@ -140,14 +161,14 @@ function readyOrder() {
                             <q-item-section side>
                                 P5.00
                             </q-item-section>
-                        </q-item>
+                        </q-item> -->
                         <q-separator/>
-                        <q-item class="text-h6">
+                        <!-- <q-item class="text-h6">
                             <q-item-section>Total</q-item-section>
                             <q-item-section side>
                                 {{ order.subtotal }}
                             </q-item-section>
-                        </q-item>
+                        </q-item> -->
                         <div class="q-mt-md">
                             <q-btn 
                                 class="full-width" 

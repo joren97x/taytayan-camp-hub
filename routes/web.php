@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ConversationController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Luigel\Paymongo\Facades\Paymongo;
@@ -8,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\MilkteaViewController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -45,6 +48,10 @@ require __DIR__.'/driver.php';
 require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
 
+Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
+Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('message.store');
+Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversation.store');
+Route::get('/conversations/{user_id}', [ConversationController::class, 'show'])->name('conversation.show');
 
 Route::get('/test', function() {
     return Inertia::render('Test');

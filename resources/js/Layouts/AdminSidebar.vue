@@ -58,7 +58,7 @@ onMounted(() => {
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('admin.product.index')">
+                    <Link :href="route('admin.products.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
                                 <q-icon name="star" />
@@ -78,13 +78,13 @@ onMounted(() => {
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('admin.product.index')">
+                    <Link :href="route('admin.facilities.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
                                 <q-icon name="star" />
                             </q-item-section>
                             <q-item-section>
-                                Camp
+                                Facilities
                             </q-item-section>
                         </q-item>
                     </Link>
@@ -122,14 +122,16 @@ onMounted(() => {
                             Etc etc
                         </q-item-section>
                     </q-item>
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="drafts" />
-                        </q-item-section>
-                        <q-item-section>
-                            Etc etc
-                        </q-item-section>
-                    </q-item>
+                    <Link :href="route('admin.chat')">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon name="drafts" />
+                            </q-item-section>
+                            <q-item-section>
+                                Chat Page
+                            </q-item-section>
+                        </q-item>
+                    </Link>
                 </q-list>
             </q-scroll-area>
         </q-drawer>

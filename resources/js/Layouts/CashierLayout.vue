@@ -74,6 +74,17 @@ Echo.private(`orders`)
                         </q-item-section>
                     </q-item>
                 </Link>
+                <Link :href="route('cashier.tickets.index')">
+                    <q-item clickable>
+                        <q-item-section avatar>
+                            <q-icon name="school" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>Tickets</q-item-label>
+                            <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
+                        </q-item-section>
+                    </q-item>
+                </Link>
                 <Link :href="route('cashier.orders.index')">
                     <q-item clickable>
                         <q-item-section avatar>
@@ -85,17 +96,7 @@ Echo.private(`orders`)
                         </q-item-section>
                     </q-item>
                 </Link>
-                <Link :href="route('cashier.orders.index')">
-                    <q-item clickable>
-                        <q-item-section avatar>
-                            <q-icon name="school" />
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label>Tickets</q-item-label>
-                            <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
-                        </q-item-section>
-                    </q-item>
-                </Link>
+                
                 <Link :href="route('cashier.account')">
                     <q-item clickable>
                         <q-item-section avatar>
