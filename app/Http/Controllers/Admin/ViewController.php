@@ -17,7 +17,7 @@ class ViewController extends Controller
 
     public function inbox()
     {
-        return Inertia::render('Admin/Conversations', [
+        return Inertia::render('Admin/Inbox', [
             'users' => User::where('role', '!=', User::ROLE_ADMIN)->get(),
             'conversations' => Conversation::with('messages')->whereHas('participants', function ($query) {
                 $query->where('user_id', auth()->user()->id);

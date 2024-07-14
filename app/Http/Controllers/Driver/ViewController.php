@@ -17,6 +17,10 @@ class ViewController extends Controller
         return Inertia::render('Driver/Account');
     }
 
+    public function inbox() {
+        return Inertia::render('Driver/Inbox');
+    }
+
     public function map() {
 
         return Inertia::render('Driver/Map', [

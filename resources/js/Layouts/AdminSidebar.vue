@@ -13,7 +13,6 @@ onMounted(() => {
         res.data.user_roles.forEach(element => {
             user_roles.value.push(element)
         });
-        console.log(res)
     })
     .catch((err) => {
         console.error(err)

@@ -1,8 +1,9 @@
 <script setup>
+
 import { useQuasar } from 'quasar'
 import { useForm, usePage } from '@inertiajs/vue3'
 import ChatLayout from '@/Layouts/ChatLayout.vue'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 defineOptions({
     layout: ChatLayout
@@ -12,7 +13,27 @@ const props = defineProps({
     conversation: Object
 })
 
-const messages = ref(props.conversation.messages)
+const currentConversation = ref(null)
+const isListening = ref(false)
+const scrollArea = ref(null)
+// const messages = currentConversation.value.messages
+
+// Watch for changes in props.conversation.messages and update messages accordingly
+watch(() => props.conversation,
+  (conversation) => {
+    console.log('listen')
+    if(isListening.value) {
+        console.log('leave from watch')
+        Echo.leave(`conversation.${currentConversation.value.id}`)
+    }
+    currentConversation.value = conversation;
+    subscribeChannel()
+    isListening.value = true
+    scrollToBottom()
+  },
+  { immediate: true } // This ensures that the watch runs immediately with the initial value
+);
+
 const $q = useQuasar()
 const $page = usePage()
 const form = useForm({
@@ -22,7 +43,7 @@ const form = useForm({
 function sendMessage() {
     // if(currentConversation.value.conversation) {
         // console.log('SEND A MESASGE')
-        form.post(route(`message.store`, props.conversation.id), {
+        form.post(route(`message.store`, currentConversation.value.id), {
             onSuccess: () => {
                 form.reset()
                 $q.notify('annyeong')
@@ -41,27 +62,39 @@ function sendMessage() {
 }
 
 function addMessage(message) {
-    messages.value.push(message)
+    console.log('helo?')
+    console.log(currentConversation.value)
+    currentConversation.value.messages.push(message)
     scrollToBottom()
 }
+
+function scrollToBottom() {
+    if (scrollArea.value) {
+        // scrollArea.value.setScrollPosition('end');
+        const contentHeight = scrollArea.value.$el.scrollHeight;
+        // Scroll to the bottom
+        scrollArea.value.setScrollPosition('vertical', contentHeight, 500);
+    }
+};
 
 const receiver = computed(() => {
     return props.conversation.participants.find((participant) => participant.id != $page.props.auth.user.id)
 })
 
-const conversationId = computed(() => {
-    return props.conversation.id
+onMounted(() => {
+    console.log('listen from onmounted')
+    subscribeChannel()
+    scrollToBottom()
 })
 
-onMounted(() => {
-    console.log('listen')
-    Echo.private(`conversation.${props.conversation.id}`)
+function subscribeChannel() {
+    Echo.private(`conversation.${currentConversation.value.id}`)
     .listen('MessageSent', (data) => {
         $q.notify('someone sent a message')
         console.log(data)
         addMessage(data.message)
     })
-})
+}
 
 onUnmounted(() => {
     console.log('leave')
@@ -78,16 +111,18 @@ onUnmounted(() => {
         </q-avatar>
         {{ receiver.first_name + ' ' + receiver.last_name }}
     </q-toolbar>
-
+    <!-- {{ currentConversation }} -->
     <div class="q-pa-md bg-blue-2">
-        <div v-if="messages.length > 0">
-            <q-chat-message
-                v-for="message in messages"
-                name="me"
-                avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-                :text="[message.message]"
-                :sent="$page.props.auth.user.id == message.user_id"
-            />
+        <div v-if="currentConversation.messages.length > 0">
+            <q-scroll-area ref="scrollArea" style="height: 75vh; max-width: 100%;" class="q-pa-lg">
+                <q-chat-message
+                    v-for="message in currentConversation.messages"
+                    name="me"
+                    avatar="https://cdn.quasar.dev/img/avatar1.jpg"
+                    :text="[message.message]"
+                    :sent="$page.props.auth.user.id == message.user_id"
+                />
+            </q-scroll-area>
         </div>
         <!-- <p class="text-center" v-if="conversation == null">To start a conversation send them a message.</p> -->
         <q-form @submit="sendMessage()">

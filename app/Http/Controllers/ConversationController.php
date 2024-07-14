@@ -17,7 +17,7 @@ class ConversationController extends Controller
     {
         //
         return response()->json([
-            'conversations' => Conversation::with('messages')->whereHas('participants', function ($query) {
+            'conversations' => Conversation::with('messages', 'participants')->whereHas('participants', function ($query) {
                 $query->where('user_id', auth()->user()->id);
             })->get()
         ]);

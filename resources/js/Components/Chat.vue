@@ -1,11 +1,46 @@
 <script setup>
-console.log('chatlayout . vue')
 
-import { onMounted, ref, watch } from 'vue'
-// import AdminSidebar from './AdminSidebar.vue'
-import { router } from '@inertiajs/vue3'
-import { Link } from '@inertiajs/vue3'
+// import ChatLayout from '@/Layouts/ChatLayout.vue'
+import { Head } from '@inertiajs/vue3'
+import ShowChat from './ShowChat.vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { router } from '@inertiajs/vue3'
+
+// defineOptions({
+//     layout: ChatLayout
+// })
+
+const props = defineProps({
+    users: Object,
+    conversations: Object
+})
+
+const currentConversation = ref(null)
+console.log('chat . vue')
+// function getChat(user) {
+//     currentConversation.value.user = user
+//     axios.get(route('conversation.show', user.id))
+//     .then((res) => {
+//         currentConversation.value.conversation = res.data.conversation
+//         console.log(res)
+//     })
+//     .catch((err) => {
+//         console.error(err)
+//     })
+// }
+
+function getConversation(conversation) {
+    axios.get(route('conversation.show', conversation.id))
+    .then((res) => {
+        console.log(res)
+        currentConversation.value = res.data.conversation
+        console.log(res)
+    })
+    .catch((err) => {
+        console.error(err)
+    })
+}
 
 const conversations = ref([])
 const tab = ref('chats')
@@ -26,11 +61,8 @@ onMounted(() => {
 </script>
 
 <template>
-        
-    <!-- <AdminSidebar> -->
-        {{ conversations }}
-        <!-- <slot/> -->
-        <div class="row">
+ 
+    <div class="row">
             <div class="col-4">
                 <q-card>
                     <q-tabs
@@ -50,17 +82,30 @@ onMounted(() => {
                         <q-tab-panel name="chats">
                             <div class="text-h6">chats</div>
                             <q-list>
-                                <q-item v-for="conversation in conversations" clickable @click="router.get(route(`${$page.props.auth.user.role}.conversation.show`, conversation.id))">
+                                <q-item 
+                                    v-for="conversation in conversations" 
+                                    clickable 
+                                    @click="getConversation(conversation)"
+                                    >
+                                    <!-- @click="router.get(route(`${$page.props.auth.user.role}.conversation.show`, conversation.id))" -->
                                     <!-- <q-item v-for="conversation in conversations" clickable @click="getConversation(conversation)"> -->
                                     <q-item-section avatar>
                                         <q-avatar color="primary" class="text-capitalize" text-color="white">
                                             <!-- {{ conversation.user.first_name[0] }} -->
-                                            J
+                                            <div v-for="participant in conversation.participants">
+                                                <div v-if="participant.id != $page.props.auth.user.id">
+                                                    {{ participant.first_name[0] }}
+                                                </div>
+                                            </div>
                                         </q-avatar>
                                     </q-item-section>
                                     <q-item-section>
                                         <!-- {{ conversation.user.first_name + ' ' + conversation.user.last_name }} -->
-                                        Name
+                                        <div v-for="participant in conversation.participants">
+                                            <div v-if="participant.id != $page.props.auth.user.id">
+                                                {{ participant.first_name + ' ' + participant.last_name }}
+                                            </div>
+                                        </div>
                                     </q-item-section>
                                 </q-item> 
                             </q-list>
@@ -85,10 +130,13 @@ onMounted(() => {
 
             </div>
             <div class="col-8 q-pb-md">
-                <slot/>
+                <div class="text-center q-mt-xl" v-if="currentConversation == null">
+                    You havent selected a chat...
+                    <p>this shit should have the chat layout</p>
+                </div>
+                <ShowChat v-else :conversation="currentConversation" />
                 <!-- <ChatBox v-if="currentConversation" :conversation="currentConversation"/> -->
             </div>
         </div>
-    <!-- </AdminSidebar> -->
-  
-  </template>
+    
+</template>
