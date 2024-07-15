@@ -172,6 +172,9 @@ const submit = () => {
                     v-model="form.admission_fee" 
                     :error="form.errors.admission_fee ? true : false"
                     :error-message="form.errors.admission_fee"
+                    mask="#.##"
+                    fill-mask="0"
+                    reverse-fill-mask
                 />
                 <div>TIckets per order</div>
                 <div class="row q-col-gutter-md">

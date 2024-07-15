@@ -159,6 +159,9 @@ watch(selected, (modifier_group) => {
                 class="q-mt-md"
                 :error="form.errors.price ? true : false"
                 :error-message="form.errors.price"
+                mask="#.##"
+                fill-mask="0"
+                reverse-fill-mask
             >
                 <template v-slot:prepend>
                     <q-icon name="attach_money" />

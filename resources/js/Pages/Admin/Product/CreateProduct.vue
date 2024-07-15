@@ -39,7 +39,7 @@ const submit = () => {
         <q-form @submit="submit">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">New Product</span>
+                <span class="text-h6 q-mt-xs q-ml-sm">Create Product</span>
                 <q-space/>
                 <q-btn 
                     type="submit" 
@@ -123,6 +123,9 @@ const submit = () => {
                     class="q-mt-md"
                     :error="form.errors.price ? true : false"
                     :error-message="form.errors.price"
+                    mask="#.##"
+                    fill-mask="0"
+                    reverse-fill-mask
                 >
                     <template v-slot:prepend>
                         <q-icon name="attach_money" />

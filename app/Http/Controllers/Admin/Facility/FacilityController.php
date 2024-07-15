@@ -35,6 +35,9 @@ class FacilityController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request);
+        // $path = $request->file('cover_photo')[0]->store('events', 'public');
+
     }
 
     /**

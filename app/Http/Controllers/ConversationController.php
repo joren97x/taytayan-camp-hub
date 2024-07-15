@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -105,4 +106,22 @@ class ConversationController extends Controller
     {
         //
     }
+
+    public function get_users_with_convo(string $id)
+    {
+        $conversation = Conversation::with('messages')->whereHas('participant', function ($query) use ($id) {
+                $query->where('user_id', $id);
+            })->first();
+        return response()->json([
+            'conversation' => $conversation
+        ]);
+    }
+
+    public function get_users()
+    {
+        return response()->json([
+            'users' => User::where('id', '!=', auth()->user()->id)->get()
+        ]);
+    }
+
 }

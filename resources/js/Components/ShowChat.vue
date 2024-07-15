@@ -24,7 +24,7 @@ watch(() => props.conversation,
     console.log('listen')
     if(isListening.value) {
         console.log('leave from watch')
-        Echo.leave(`conversation.${currentConversation.value.id}`)
+        Echo.leave(`conversations.${currentConversation.value.id}`)
     }
     currentConversation.value = conversation;
     subscribeChannel()
@@ -43,7 +43,7 @@ const form = useForm({
 function sendMessage() {
     // if(currentConversation.value.conversation) {
         // console.log('SEND A MESASGE')
-        form.post(route(`message.store`, currentConversation.value.id), {
+        form.post(route(`messages.store`, currentConversation.value.id), {
             onSuccess: () => {
                 form.reset()
                 $q.notify('annyeong')
@@ -98,7 +98,7 @@ function subscribeChannel() {
 
 onUnmounted(() => {
     console.log('leave')
-    Echo.leave(`conversation.${props.conversation.id}`)
+    Echo.leave(`conversations.${props.conversation.id}`)
 })
 
 

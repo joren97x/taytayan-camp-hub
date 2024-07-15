@@ -1,11 +1,9 @@
 <script setup>
 
-// import ChatLayout from '@/Layouts/ChatLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import ShowChat from './ShowChat.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { router } from '@inertiajs/vue3'
 
 // defineOptions({
 //     layout: ChatLayout
@@ -31,7 +29,7 @@ console.log('chat . vue')
 // }
 
 function getConversation(conversation) {
-    axios.get(route('conversation.show', conversation.id))
+    axios.get(route('conversations.show', conversation.id))
     .then((res) => {
         console.log(res)
         currentConversation.value = res.data.conversation
@@ -65,7 +63,7 @@ onMounted(() => {
     <div class="row">
             <div class="col-4">
                 <q-card>
-                    <q-tabs
+                    <!-- <q-tabs
                         v-model="tab"
                         dense
                         class="text-grey"
@@ -77,18 +75,16 @@ onMounted(() => {
                         <q-tab name="chats" label="chats" />
                         <q-tab name="people" label="people" />
                     </q-tabs>
-                    <q-separator />
-                    <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="chats">
+                    <q-separator /> -->
+                    <!-- <q-tab-panels v-model="tab" animated>
+                        <q-tab-panel name="chats"> -->
                             <div class="text-h6">chats</div>
                             <q-list>
                                 <q-item 
                                     v-for="conversation in conversations" 
                                     clickable 
                                     @click="getConversation(conversation)"
-                                    >
-                                    <!-- @click="router.get(route(`${$page.props.auth.user.role}.conversation.show`, conversation.id))" -->
-                                    <!-- <q-item v-for="conversation in conversations" clickable @click="getConversation(conversation)"> -->
+                                >
                                     <q-item-section avatar>
                                         <q-avatar color="primary" class="text-capitalize" text-color="white">
                                             <!-- {{ conversation.user.first_name[0] }} -->
@@ -109,7 +105,7 @@ onMounted(() => {
                                     </q-item-section>
                                 </q-item> 
                             </q-list>
-                        </q-tab-panel>
+                        <!-- </q-tab-panel>
                         <q-tab-panel name="people">
                             <div class="text-h6">people</div>
                             <q-list>
@@ -125,7 +121,7 @@ onMounted(() => {
                                 </q-item> 
                             </q-list>
                         </q-tab-panel>
-                    </q-tab-panels>
+                    </q-tab-panels> -->
                 </q-card>
 
             </div>

@@ -183,6 +183,9 @@ const submitModifierGroupForm = () => {
                         v-model="modifierItemForm.price"
                         :error="modifierItemForm.errors.price ? true : false"
                         :error-message="modifierItemForm.errors.price"
+                        mask="#.##"
+                        fill-mask="0"
+                        reverse-fill-mask
                     >
                         <template v-slot:prepend>
                             <q-icon name="attach_money" />

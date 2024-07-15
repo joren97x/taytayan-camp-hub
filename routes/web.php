@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/conversations/get-users', [ConversationController::class, 'get_users'])->name('conversations.get_users');
 
 require __DIR__.'/admin.php';
 require __DIR__.'/customer.php';
@@ -47,11 +48,17 @@ require __DIR__.'/driver.php';
 require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
 
-Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
-Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('message.store');
-Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversation.store');
-Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversation.show');
-Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
+Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
+Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
+// Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
+// Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversations.show');
+// Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversations.store');
+// Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
+Route::resource('conversations', ConversationController::class)->names([
+    'show' => 'conversations.show',
+    'store' => 'conversations.store',
+    'index' => 'conversations.index'
+]);
 
 Route::get('/test', function() {
     return Inertia::render('Test');

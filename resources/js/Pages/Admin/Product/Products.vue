@@ -101,7 +101,7 @@ const columns = [
                     </template>
                 </q-input>
                 <Link :href="route('admin.products.create')">
-                    <q-btn no-caps color="primary">New Product</q-btn>
+                    <q-btn no-caps color="primary">Create Product</q-btn>
                 </Link>
             </template>
         </q-table>
