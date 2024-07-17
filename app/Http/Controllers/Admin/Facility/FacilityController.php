@@ -35,8 +35,30 @@ class FacilityController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request);
-        // $path = $request->file('cover_photo')[0]->store('events', 'public');
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'images' => 'required',
+            'amenities' => 'required',
+            'price' => 'required'
+        ]);
+
+        $image_paths = [];
+        for($i = 0; $i < count($request->images); $i++) {
+            $path = $request->file('images')[$i]->store('facilities', 'public');
+            array_push($image_paths, $path);
+        }
+
+        Facility::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'images' => json_encode($image_paths),
+            'amenities' => json_encode($request->amenities),
+            'price' => $request->price
+        ]);
+
+        return back();
 
     }
 

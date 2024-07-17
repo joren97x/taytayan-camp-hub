@@ -49,7 +49,6 @@ require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
 
 Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
-Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
 // Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
 // Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversations.show');
 // Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversations.store');
@@ -59,6 +58,7 @@ Route::resource('conversations', ConversationController::class)->names([
     'store' => 'conversations.store',
     'index' => 'conversations.index'
 ]);
+Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
 
 Route::get('/test', function() {
     return Inertia::render('Test');

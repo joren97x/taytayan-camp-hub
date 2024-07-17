@@ -123,7 +123,7 @@ onMounted(() => {
                         </q-tab-panel>
                     </q-tab-panels> -->
                 </q-card>
-
+                dili makita dire kung wala pay conversation
             </div>
             <div class="col-8 q-pb-md">
                 <div class="text-center q-mt-xl" v-if="currentConversation == null">

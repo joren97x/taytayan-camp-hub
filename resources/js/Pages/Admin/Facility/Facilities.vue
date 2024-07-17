@@ -16,7 +16,6 @@ defineProps({
 <template>
     
     <Head title="Reviews" />
-    <h1>Facilities</h1>
     <div class="q-pa-md">
         <q-table
             class="my-sticky-header-column-table"
@@ -28,7 +27,13 @@ defineProps({
         >
             <template v-slot:body-cell-images="props">
                 <q-td :props="props">
-                    {{ props.row.images }}
+                    {{ JSON.parse(props.row.images).length }} images
+                    <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
+                </q-td>
+            </template>
+            <template v-slot:body-cell-amenities="props">
+                <q-td :props="props">
+                    {{ JSON.parse(props.row.amenities).length }} amenities
                     <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
                 </q-td>
             </template>
