@@ -85,15 +85,16 @@ watch(rightDrawerOpen, (newVal) => {
                 </q-btn-dropdown>
                 <q-btn-dropdown no-caps label="Accommodations" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 100px" class="text-center q-pa-sm">
-                        <q-item clickable v-close-popup>
-                            <q-item-section>New tab</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup>
-                            <q-item-section>Trips</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup>
-                            <q-item-section>Recent tabs</q-item-section>
-                        </q-item>
+                        <Link :href="route('customer.facilities.index')">
+                            <q-item clickable v-close-popup>
+                                <q-item-section>Events</q-item-section>
+                            </q-item>
+                        </Link>
+                        <Link :href="route('reservations')">
+                            <q-item clickable v-close-popup>
+                                <q-item-section>reservations</q-item-section>
+                            </q-item>
+                        </Link>
                     </q-list>
                 </q-btn-dropdown>
                 <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">

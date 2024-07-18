@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->decimal('price', 8, 2);
+            $table->integer('max_guests');
             $table->json('images');
-            $table->json('amenities');
+            $table->json('amenities')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

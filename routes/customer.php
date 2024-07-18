@@ -15,3 +15,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__.'/Customer/product.php';
 require __DIR__.'/Customer/event.php';
+require __DIR__.'/Customer/facility.php';

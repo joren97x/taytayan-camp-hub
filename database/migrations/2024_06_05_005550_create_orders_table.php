@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('cart_id');
+            $table->timestamp('waiting_time');
             $table->enum('status', [
                 Order::STATUS_PENDING,
                 Order::STATUS_PREPARING,
