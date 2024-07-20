@@ -8,9 +8,10 @@ defineOptions({
     layout: AdminLayout
 })
 
+
 </script>
 
 <template>
     <Head title="Dashboard" />
-    <Chat></Chat>
+    <Chat/>
 </template>

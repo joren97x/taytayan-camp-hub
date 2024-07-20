@@ -114,7 +114,7 @@ Echo.private(`orders`)
                             <q-icon name="school" />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>Inobx</q-item-label>
+                            <q-item-label>Inbox</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                         </q-item-section>
                     </q-item>

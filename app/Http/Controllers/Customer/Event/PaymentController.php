@@ -72,7 +72,6 @@ class PaymentController extends Controller
 
     public function pay(Request $request) 
     {
-
         $event = Event::find($request->event_id);
         if (!($event->tickets_sold + $request->attendees <= $event->capacity)) {
             return back()->withErrors(['error' => 'Event is full or not found']);
