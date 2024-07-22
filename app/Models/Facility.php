@@ -15,7 +15,8 @@ class Facility extends Model
         'description',
         'price',
         'images',
-        'amenities'
+        'amenities',
+        'guests'
     ];
 
 }

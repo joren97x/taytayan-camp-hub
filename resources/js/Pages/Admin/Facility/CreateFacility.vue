@@ -18,6 +18,7 @@ const form = useForm({
     name: '',
     description: '',
     images: null,
+    guests: 1,
     price: '',
     amenities: []
 })
@@ -121,24 +122,46 @@ function deleteAmenity(amenity) {
                     :error-message="form.errors.description"
                 />
                {{ form }}
-                <div>Price</div>
-                <div>How much do you want to charge for tickets?</div>
-                <q-input 
-                    filled 
-                    label="Price" 
-                    v-model="form.price" 
-                    placeholder="None" 
-                    class="q-mt-md"
-                    :error="form.errors.price ? true : false"
-                    :error-message="form.errors.price"
-                    mask="#.##"
-                    fill-mask="0"
-                    reverse-fill-mask
-                >
-                    <template v-slot:prepend>
-                        <q-icon name="attach_money" />
-                    </template>
-                </q-input>
+                <div class="row q-col-gutter-lg">
+                    <div class="col">
+                        <div>Price</div>
+                        <div>How much do you want to charge for tickets?</div>
+                        <q-input 
+                            filled 
+                            label="Price" 
+                            v-model="form.price" 
+                            placeholder="None" 
+                            class="q-mt-md"
+                            :error="form.errors.price ? true : false"
+                            :error-message="form.errors.price"
+                            mask="#.##"
+                            fill-mask="0"
+                            reverse-fill-mask
+                        >
+                            <template v-slot:prepend>
+                                <q-icon name="attach_money" />
+                            </template>
+                        </q-input>
+                    </div>
+                    <div class="col">
+                        <div>Guests</div>
+                        <div>How much do you want to charge for tickets?</div>
+                        <q-input 
+                            filled 
+                            label="Guests" 
+                            v-model="form.guests" 
+                            placeholder="None" 
+                            class="q-mt-md"
+                            :error="form.errors.guests ? true : false"
+                            :error-message="form.errors.guests"
+                        >
+                            <template v-slot:prepend>
+                                <q-icon name="attach_money" />
+                            </template>
+                        </q-input>
+                    </div>
+                </div>
+
                 <div>Amenities</div>    
                 <div>Add photos to show what your event will be about. See examples</div>
                 <div class="row q-col-gutter-md">

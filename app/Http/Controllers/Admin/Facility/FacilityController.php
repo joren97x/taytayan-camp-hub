@@ -40,6 +40,7 @@ class FacilityController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'images' => 'required',
+            'guests' => 'required',
             'amenities' => 'required',
             'price' => 'required'
         ]);
@@ -53,6 +54,7 @@ class FacilityController extends Controller
         Facility::create([
             'name' => $request->name,
             'description' => $request->description,
+            'guests' => $request->guests,
             'images' => json_encode($image_paths),
             'amenities' => json_encode($request->amenities),
             'price' => $request->price

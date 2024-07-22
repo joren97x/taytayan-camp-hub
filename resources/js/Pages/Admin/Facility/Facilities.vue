@@ -7,9 +7,11 @@ defineOptions({
     layout: FacilityLayout
 })
 
-defineProps({
+const props = defineProps({
     facilities: Object
 })
+
+console.log(props)
 
 </script>
 
@@ -32,10 +34,9 @@ defineProps({
                 </q-td>
             </template>
             <template v-slot:body-cell-amenities="props">
-                <q-td :props="props">
+                <!-- <q-td :props="props">
                     {{ JSON.parse(props.row.amenities).length }} amenities
-                    <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
-                </q-td>
+                </q-td> -->
             </template>
             <template v-slot:body-cell-price="props">
                 <q-td :props="props">
