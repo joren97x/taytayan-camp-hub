@@ -22,7 +22,7 @@ const dialog = ref(false)
                 </q-card-section>
             </div>
             <div class="col-6">
-                <q-img height="170px" :src="`/images/${product.photo}`"/>
+                <q-img height="170px" :src="`/storage/${product.photo}`"/>
             </div>
         </div>
         <q-btn round icon="add" size="md" @click="dialog = true" color="blue" class="absolute" style="bottom: 5px; right: 5px;"></q-btn>

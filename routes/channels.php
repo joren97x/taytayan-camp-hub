@@ -13,7 +13,8 @@ Broadcast::channel('orders.{id}', function(User $user, int $order_id) {
 });
 
 Broadcast::channel('orders', function(User $user) {
-    return $user;
+    // ang maka listen ra ani kay ang cashier ug driver
+    return true;
 });
 
 Broadcast::channel('conversation.{id}', function() {

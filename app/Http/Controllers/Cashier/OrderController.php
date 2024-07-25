@@ -11,8 +11,8 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     //
-    public function index(CartService $cartService) {
-
+    public function index(CartService $cartService) 
+    {
         $orders = Order::whereIn('status', [
             Order::STATUS_PENDING,
             Order::STATUS_READY_FOR_DELIVERY,
@@ -20,7 +20,9 @@ class OrderController extends Controller
             Order::STATUS_DELIVERING,
             Order::STATUS_PREPARING
         ])->with('user')->get();
-
+        
+        // dd($orders);
+        
         foreach($orders as $order) {
             $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
             $order->cart_products = $result['cart_products'];
@@ -33,6 +35,16 @@ class OrderController extends Controller
         ]);
     }
 
+    public function show(string $id, CartService $cartService)
+    {
+        $order = Order::with('user')->find($id);
+        // dd($order);
+        $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+        $order->cart_products = $result['cart_products'];
+        $order->subtotal = $result['subtotal'];
+
+        return response()->json($order);
+    }
 
 
 }

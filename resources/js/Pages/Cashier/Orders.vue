@@ -1,29 +1,37 @@
 <script setup>
 
 import { Head } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 // import OrderItem from '@/Components/Admin/Product/OrderItem.vue'
 import PreparingOrderItem from '@/Components/Admin/Product/PreparingOrderItem.vue'
 import ReadyOrderItem from '@/Components/Admin/Product/ReadyOrderItem.vue'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
 
 defineOptions({
     layout: CashierLayout
 })
 
+const $q = useQuasar()
 const props = defineProps({
     orders: Object,
     order_constants: Object
 })
 
+const orders = ref([])
+
+props.orders.forEach(order => {
+    orders.value.push(order)
+});
+
 const preparingOrders = computed(() => {
-    return props.orders.filter(order => ['pending', 'preparing'].includes(order.status))
+    return orders.value.filter(order => ['pending', 'preparing'].includes(order.status))
 })
 
 const readyOrders = computed(() => {
-    return props.orders.filter(order => !['pending', 'preparing'].includes(order.status))
+    return orders.value.filter(order => !['pending', 'preparing'].includes(order.status))
 })
-
 
 const order_statuses = computed(() => {
     return props.order_constants.statuses.reduce((obj, status) => {
@@ -31,6 +39,31 @@ const order_statuses = computed(() => {
         return obj
     }, {})
 })
+
+Echo.private('orders')
+    .listen('Product\\OrderPending', (data) => {
+        $q.notify('new order arrived')
+        console.log(data)
+        axios.get(route('cashier.orders.show', data.order.id))
+        .then((orderData) => {
+            $q.notify('fetched and ykwis bruh')
+            console.log(orderData)
+            orders.value.push(orderData.data)
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    })
+
+    axios.get(route('cashier.orders.show', 12))
+        .then((orderData) => {
+            $q.notify('fetched and ykwis bruh')
+            console.log(orderData.data)
+            orders.value.push(orderData.data)
+        })
+        .catch((err) => {
+            console.error(err)
+        })
 
 </script>
 
@@ -42,6 +75,7 @@ const order_statuses = computed(() => {
             Orders
         </div>
     </div>
+    <hr>
     <div class="row q-mx-md">
         <div class="col-6 q-pa-md">
             <p class="text-h6">Preparing</p>

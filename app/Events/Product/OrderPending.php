@@ -9,17 +9,21 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class OrderPending implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $order;
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($order)
     {
         //
+        // Log::info($order);
+        $this->order = $order;
     }
 
     /**
@@ -33,4 +37,5 @@ class OrderPending implements ShouldBroadcast
             new PrivateChannel('orders'),
         ];
     }
+
 }

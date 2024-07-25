@@ -20,18 +20,18 @@ const scrollArea = ref(null)
 
 // Watch for changes in props.conversation.messages and update messages accordingly
 watch(() => props.conversation,
-  (conversation) => {
-    console.log('listen')
-    if(isListening.value) {
-        console.log('leave from watch')
-        Echo.leave(`conversations.${currentConversation.value.id}`)
-    }
-    currentConversation.value = conversation;
-    subscribeChannel()
-    isListening.value = true
-    scrollToBottom()
-  },
-  { immediate: true } // This ensures that the watch runs immediately with the initial value
+    (conversation) => {
+        console.log('listen')
+        if(isListening.value) {
+            console.log('leave from watch')
+            Echo.leave(`conversation.${currentConversation.value.id}`)
+        }
+        currentConversation.value = conversation;
+        subscribeChannel()
+        isListening.value = true
+        scrollToBottom()
+    },
+    { immediate: true } // This ensures that the watch runs immediately with the initial value
 );
 
 const $q = useQuasar()
@@ -83,7 +83,7 @@ const receiver = computed(() => {
 
 onMounted(() => {
     console.log('listen from onmounted')
-    subscribeChannel()
+    // subscribeChannel()
     scrollToBottom()
 })
 
@@ -98,7 +98,7 @@ function subscribeChannel() {
 
 onUnmounted(() => {
     console.log('leave')
-    Echo.leave(`conversations.${props.conversation.id}`)
+    Echo.leave(`conversation.${props.conversation.id}`)
 })
 
 

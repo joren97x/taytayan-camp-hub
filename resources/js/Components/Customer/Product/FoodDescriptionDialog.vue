@@ -60,7 +60,7 @@ const submit = () => {
                 </q-item>
                 <div class="row q-col-gutter-md">
                     <div class="col-5" style="position: relative;">
-                        <q-img :src="`/images/${product.photo}`" style="position: sticky; top: 50px;" />
+                        <q-img :src="`/storage/${product.photo}`" style="position: sticky; top: 50px;" />
                     </div>
                     <div class="col-7">
                         <p>

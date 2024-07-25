@@ -24,7 +24,7 @@ const dialog = ref(false)
             :options="[1,2,3,4,5,6,7,8,9,10]"
         />
         <q-img 
-            :src="`images/${item.product.photo}`"
+            :src="`/storage/${item.product.photo}`"
             height="70px"
             width="70px"
             class="q-mx-md"

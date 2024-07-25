@@ -11,8 +11,7 @@ const dialog = ref(false)
 <template>
 
     <q-card class="col-3 bg-white" flat >
-        <q-img :src="`/images/${product.photo}`" height="180px" />
-
+        <q-img :src="`/storage/${product.photo}`" height="180px" />
         <q-card-section>
             <q-btn
                 round

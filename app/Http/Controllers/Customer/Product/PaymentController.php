@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers\Customer\Product;
 
+use App\Events\Product\OrderPending;
 use App\Models\Cart;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\CartService;
+use Illuminate\Support\Facades\Log;
 use Luigel\Paymongo\Facades\Paymongo;
 
 class PaymentController extends Controller
 {
     //
-    public function success(Request $request, $mode, $payment_method) {
-
+    public function success(Request $request, $mode, $payment_method, CartService $cartService) 
+    {
         $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
 
-        Order::create([
+        $order = Order::create([
             'user_id' => auth()->user()->id,
             'cart_id' => $cart->id,
             'status' => Order::STATUS_PENDING,
@@ -24,20 +27,25 @@ class PaymentController extends Controller
             'mode' => $mode
         ]);
 
+        $result = $cartService->getCartLineItemsAndSubtotal(true, $order->cart_id);
+        $order->cart_products = $result['cart_products'];
+        $order->subtotal = $result['subtotal'];
+
+        Log::info($order);
+        event(new OrderPending($order));
+
         $cart->status = false;
         $cart->save();
 
         Cart::create([
             'user_id' => auth()->user()->id
         ]);
-
-
-
+        dd($order);
         return redirect('/orders/on-progress');
     }
 
-    public function pay(Request $request) {
-
+    public function pay(Request $request) 
+    {
         $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
         $line_items = [];
         $subtotal = 0;

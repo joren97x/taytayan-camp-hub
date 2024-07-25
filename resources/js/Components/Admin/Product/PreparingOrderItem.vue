@@ -98,8 +98,7 @@ function readyOrder() {
                         <q-list>
                             <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                                 <q-item-section thumbnail>
-                                    <img :src="`/images/${cart_product.product.photo}`" style="object-fit: cover;" />
-                                    
+                                    <img :src="`/storage/${cart_product.product.photo}`" style="object-fit: cover;" />
                                 </q-item-section>
                                 <q-item-section>
                                     <span>

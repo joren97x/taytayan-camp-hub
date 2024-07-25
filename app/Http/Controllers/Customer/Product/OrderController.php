@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer\Product;
 
+use App\Events\Product\OrderPending;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
@@ -11,8 +12,8 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     //
-    public function store(Request $request) {
-
+    public function store(Request $request) 
+    {
         $request->validate([
             'user_id' => 'required',
             'cart_id' => 'required',
@@ -21,7 +22,8 @@ class OrderController extends Controller
             'mode' => 'required'
         ]);
 
-        Order::create($request->all());
+        $order = Order::create($request->all());
+        event(new OrderPending($order));
 
         return back();
 
@@ -34,8 +36,8 @@ class OrderController extends Controller
         ]);
     }
 
-    public function index(string $status, CartService $cartService) {
-        
+    public function index(string $status, CartService $cartService) 
+    {
         if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {
             $orders = Order::where('status', [$status])->where('user_id', auth()->user()->id)->get();
         }

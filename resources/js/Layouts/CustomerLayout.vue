@@ -83,11 +83,11 @@ watch(rightDrawerOpen, (newVal) => {
                         </Link>
                     </q-list>
                 </q-btn-dropdown>
-                <q-btn-dropdown no-caps label="Accommodations" flat dropdown-icon="keyboard_arrow_down">
+                <q-btn-dropdown no-caps label="Facilities" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 100px" class="text-center q-pa-sm">
                         <Link :href="route('customer.facilities.index')">
                             <q-item clickable v-close-popup>
-                                <q-item-section>Events</q-item-section>
+                                <q-item-section>Facilities</q-item-section>
                             </q-item>
                         </Link>
                         <Link :href="route('reservations')">

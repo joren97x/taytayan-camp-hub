@@ -21,4 +21,26 @@ class Reservation extends Model
     const STATUS_CHECKED_IN = 'checked_in';
     const STATUS_CHECKED_OUT = 'checked_out';
     const STATUS_CANCELLED = 'cancelled';
+
+    public static function getConstants()
+    {
+        return [
+            'statuses' => [
+                // DO NOT CHANGE THE ORDER WALLAHI IT WILL RUIN THE SYSTEM
+                self::STATUS_PENDING,
+                self::STATUS_CANCELLED,
+                self::STATUS_CHECKED_IN,
+                self::STATUS_CHECKED_OUT,
+                self::STATUS_CONFIRMED
+            ],
+            'payment_methods' => [
+                self::PAYMENT_METHOD_GCASH,
+                self::PAYMENT_METHOD_CARD,
+                self::PAYMENT_METHOD_PAYMAYA,
+                self::PAYMENT_METHOD_GRAB_PAY,
+                self::PAYMENT_METHOD_WALK_IN
+            ],
+        ];
+    }
+
 }

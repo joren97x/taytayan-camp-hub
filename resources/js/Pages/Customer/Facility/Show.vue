@@ -14,8 +14,8 @@ const props = defineProps({
 const form = useForm({
     facility_id: props.facility.id,
     date: {
-        check_in: '2024/07/01',
-        check_out: '2024/07/20'
+        from: '2024/07/01',
+        to: '2024/07/20'
     }
 })
 
@@ -36,12 +36,26 @@ function options(date) {
     <div>
         {{ facility }}
     </div>
-    <div class="q-pa-md">
-    <q-date
-      v-model="form.date"
-      landscape
-      range
-      :options="options"
-    />
-  </div>
+    <div class="row">
+        <div class="col-8">
+            {{ form }}
+            <hr>
+            {{ form.data() }}
+        </div>
+        <div class="col-4">
+            <div class="q-pa-md">
+                <q-date
+                    v-model="form.date"
+                    landscape
+                    range
+                    :options="options"
+                />
+            </div>
+            <Link :href="route('facility.checkout')" :data="form.data()">
+                <q-btn unelevated color="primary">
+                    Reserve
+                </q-btn>
+            </Link>
+        </div>
+    </div>
 </template>
