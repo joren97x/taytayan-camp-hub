@@ -22,6 +22,17 @@ class Reservation extends Model
     const STATUS_CHECKED_OUT = 'checked_out';
     const STATUS_CANCELLED = 'cancelled';
 
+    protected $fillable = [
+        'facility_id',
+        'user_id',
+        'total',
+        'status',
+        'payment_Method',
+        'check_in',
+        'check_out',
+        'guests'
+    ];
+
     public static function getConstants()
     {
         return [

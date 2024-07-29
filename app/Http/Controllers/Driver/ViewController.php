@@ -36,7 +36,7 @@ class ViewController extends Controller
                 'lat' => 10.24915105319012, 
                 'lng' => 124.02561227312167
             ],
-            'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY')
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 

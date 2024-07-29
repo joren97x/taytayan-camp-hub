@@ -9,8 +9,11 @@ use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
+Route::patch('/admin/orders/update-order-status/{id}', function() {
+    dd('boang');
+})->name('admin.orders.update_status');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders');
-Route::patch('/admin/update-order-status/{order}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
+// Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
 Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.product.reviews');
 
 Route::resource('/admin/products', ProductController::class)->names([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\Facility;
 
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -42,8 +43,16 @@ class FacilityController extends Controller
     public function show(string $id)
     {
         //
+        $facility = Facility::find($id);
+
+        $reserved_dates = Reservation::where('facility_id', $facility->id)
+        ->where('status', '!=', Reservation::STATUS_CANCELLED)  
+        ->select('check_in', 'check_out')
+        ->get();
+
         return Inertia::render('Customer/Facility/Show', [
-            'facility' => Facility::find($id)
+            'facility' => Facility::find($id),
+            'reserved_dates' => $reserved_dates
         ]);
     }
 

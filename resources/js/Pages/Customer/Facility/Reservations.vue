@@ -8,7 +8,7 @@ defineOptions({
 })
 
 defineProps({
-    facilities: Object
+    reservations: Object,
 })
 
 </script>
@@ -16,5 +16,7 @@ defineProps({
 <template>
     <div>
         <h1>Reservations</h1>
+        {{ reservations }}
+        <hr>
     </div>
 </template>

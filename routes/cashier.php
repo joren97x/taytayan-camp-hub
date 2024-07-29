@@ -18,5 +18,6 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::get('/cashier/inbox', [ViewController::class, 'inbox'])->name('cashier.inbox');
     Route::get('/cashier/inbox/{conversation}', [ConversationController::class, 'show'])->name('cashier.conversation.show');
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');
+    Route::patch('/cashier/orders/update-order-status/{id}', [OrderController::class, 'update_status'])->name('cashier.orders.update_status');
 });
 

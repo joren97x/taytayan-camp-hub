@@ -1,7 +1,9 @@
 <script setup>
 
 import { Link, useForm } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
 
+const page = usePage()
 const props = defineProps({
     facility: Object,
     date: Array,
@@ -9,13 +11,26 @@ const props = defineProps({
 })
 
 const form = useForm({
-    payment_method: null
+    payment_method: null,
+    total: props.facility.price,
+    guests: 1,
+    check_in: props.date.from,
+    check_out: props.date.to,
+    facility_id: props.facility.id
 })
+
+const submit = () => {
+    form.post(route('facility.pay'), {
+        onSuccess: () => {
+            console.log('ok')
+        }
+    })
+}
 
 </script>
 
 <template>
-    <div class="row">
+    <div class="row q-col-gutter-md q-ma-lg">
         <div class="col-8">
             <q-list>
                 <q-item 
@@ -36,11 +51,21 @@ const form = useForm({
                     </q-item-section>
                 </q-item>
             </q-list>
+            <p>
+                Check in: {{ date.from }}
+            </p>
+            <p>
+                Check out: {{ date.to }}
+            </p>
         </div>
         <div class="col-4">
             <div>
                 {{ props }}
             </div>
+            <q-btn class="full-width" color="primary" @click="submit">
+                Check Out
+            </q-btn>
         </div>
+        {{ form }}
     </div>
 </template>

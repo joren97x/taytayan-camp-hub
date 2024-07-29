@@ -15,14 +15,12 @@ const isOrderCompleteDialog = ref(false)
 const $q = useQuasar()
 const step = ref(1)
 
-const steppers = []
-
 const form = useForm({
     status: props.order_statuses.completed
 })
 
 function completeOrder() {
-    form.patch(route('admin.order.update_status', props.order.id), {
+    form.patch(route('admin.orders.update_status', props.order.id), {
         onSuccess: () => {
             isOrderCompleteDialog.value = false
             $q.notify('Order marked as completed')
@@ -33,6 +31,7 @@ function completeOrder() {
 </script>
 
 <template>
+    {{ form }}
     <OrderItem :order="order" @click="dialog = true">
         <q-item-section v-if="order_statuses.ready_for_pickup == order.status" top side>
             {{ order.created_at }}

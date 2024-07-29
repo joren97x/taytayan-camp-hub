@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cashier;
 
+use App\Events\Product\OrderReadyForDelivery;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
@@ -46,5 +47,41 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
+    public function update_status(string $id, Request $request) 
+    {
+        $order = Order::find($id);
+
+        // event(new OrderStatusUpdated($order));
+        $request->validate([
+            'status' => 'required'
+        ]);
+        
+        switch($request->status) {
+            case Order::STATUS_PREPARING:
+                $order->status = Order::STATUS_PREPARING;
+                $order->update();
+                break;
+            case Order::STATUS_DELIVERING:
+                $order->status = Order::STATUS_DELIVERING;
+                $order->update();
+                break;
+            case Order::STATUS_COMPLETED:
+                $order->status = Order::STATUS_COMPLETED;
+                $order->update();
+                break;
+            case Order::STATUS_READY_FOR_DELIVERY:
+                $order->status = Order::STATUS_READY_FOR_DELIVERY;
+                event(new OrderReadyForDelivery($order));
+                $order->update();
+                break;
+            case Order::STATUS_READY_FOR_PICKUP:
+                $order->status = Order::STATUS_READY_FOR_PICKUP;
+                $order->update();
+                break;
+        }
+        // event(new OrderStatusUpdated($order));
+
+        return back();
+    }
 
 }

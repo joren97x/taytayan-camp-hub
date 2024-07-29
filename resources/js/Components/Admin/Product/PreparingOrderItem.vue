@@ -19,15 +19,14 @@ const acceptOrderForm = useForm({
     status: props.order_statuses.preparing
 })
 
-
-
 const readyOrderForm = useForm({
     status: props.order.mode == 'pickup' ? props.order_statuses.ready_for_pickup : props.order_statuses.ready_for_delivery
 })
 
 function acceptOrder() {
-    acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {
-        onSuccess: () => {
+    acceptOrderForm.patch(route('cashier.orders.update_status', props.order.id), {
+        onSuccess: (e) => {
+            console.log(e)
             dialog.value = false
             $q.notify('Order Accepted')
         }
@@ -35,7 +34,7 @@ function acceptOrder() {
 }
 
 // function acceptOrder() {
-//     acceptOrderForm.patch(route('admin.order.update_status', props.order.id), {
+//     acceptOrderForm.patch(route('cashier.order.update_status', props.order.id), {
 //         onSuccess: () => {
 //             dialog.value = false
 //             $q.notify('Order Accepted')
@@ -44,8 +43,9 @@ function acceptOrder() {
 // }
 
 function readyOrder() {
-    readyOrderForm.patch(route('admin.order.update_status', props.order.id), {
-        onSuccess: () => {
+    readyOrderForm.patch(route('cashier.orders.update_status', props.order.id), {
+        onSuccess: (e) => {
+            console.log(e)
             isOrderReadyDialog.value = false
             $q.notify('Order Accepted')
         }

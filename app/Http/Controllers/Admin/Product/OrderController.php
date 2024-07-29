@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Events\HelloEvent;
+use App\Events\Product\OrderReadyForDelivery;
 use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -16,7 +17,7 @@ class OrderController extends Controller
     //
     
     public function index(CartService $cartService) {
-        
+        dd('bruh');
         $orders = Order::whereIn('status', [
             Order::STATUS_PENDING,
             Order::STATUS_READY_FOR_DELIVERY,
@@ -36,11 +37,12 @@ class OrderController extends Controller
         ]);
     }
 
-    public function update_status(Request $request, string $id) {
+    public function update_status(string $id, Request $request) 
+    {
+        dd('boyy wath he lhell');
         $order = Order::find($id);
 
-        event(new OrderStatusUpdated($order));
-        dd('boyy');
+        // event(new OrderStatusUpdated($order));
         $request->validate([
             'status' => 'required'
         ]);
@@ -60,6 +62,7 @@ class OrderController extends Controller
                 break;
             case Order::STATUS_READY_FOR_DELIVERY:
                 $order->status = Order::STATUS_READY_FOR_DELIVERY;
+                event(new OrderReadyForDelivery($order));
                 $order->update();
                 break;
             case Order::STATUS_READY_FOR_PICKUP:

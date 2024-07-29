@@ -63,6 +63,7 @@ class Order extends Model
         'payment_method',
         'mode',
         'completed_at',
+        'waiting_time'
     ];
 
     public function user() : BelongsTo

@@ -23,7 +23,7 @@ return new class extends Migration
                 Reservation::STATUS_CHECKED_OUT,
                 Reservation::STATUS_PENDING,
                 Reservation::STATUS_CONFIRMED
-            ]);
+            ])->default(Reservation::STATUS_PENDING);
             $table->enum('payment_method', [
                 Reservation::PAYMENT_METHOD_CARD,
                 Reservation::PAYMENT_METHOD_GCASH,

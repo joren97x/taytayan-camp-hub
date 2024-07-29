@@ -35,4 +35,16 @@ class OrderController extends Controller
         return redirect(route('driver.map'));
     }
 
+    //might turn this into a service in the future cus its used to different controllers
+    public function show(string $id, CartService $cartService)
+    {
+        $order = Order::with('user')->find($id);
+
+        $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+        $order->cart_products = $result['cart_products'];
+        $order->subtotal = $result['subtotal'];
+
+        return response()->json($order);
+    }
+
 }

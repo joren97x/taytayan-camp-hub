@@ -2,13 +2,22 @@
 
 import DriverLayout from '@/Layouts/DriverLayout.vue'
 import ViewOrderDialog from '@/Components/Driver/ViewOrderDialog.vue'
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
+import axios from 'axios'
 
 defineOptions({
     layout: DriverLayout
 })
 
-defineProps({
+const props = defineProps({
     orders: Object
+})
+
+const $q = useQuasar()
+const orders = ref([])
+props.orders.forEach(order => {
+    orders.value.push(order)
 })
 
 const columns = [
@@ -17,6 +26,19 @@ const columns = [
     { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
+
+Echo.private('orders')
+    .listen('Product\\OrderReadyForDelivery', (data) => {
+        console.log(data)
+        $q.notify('yuhh new order arrived')
+        axios.get(route('driver.orders.show', data.order.id))
+        .then((orderData) => {
+            orders.value.push(orderData.data)
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    })
 
 </script>
 
