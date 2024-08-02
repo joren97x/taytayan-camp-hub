@@ -3,7 +3,7 @@
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import { date as qdate } from 'quasar'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -17,8 +17,8 @@ const props = defineProps({
 const form = useForm({
     facility_id: props.facility.id,
     date: {
-        from: '2024/07/01',
-        to: '2024/07/20'
+        from: '',
+        to: ''
     }
 })
 
@@ -26,78 +26,80 @@ onMounted(() => {
     processReservedDates()
 })
 
+const date = ref(null)
 let disabled_dates = ref([])
 
-// if(prop.reserved_dates) {
-//         for(let i = 0; i < prop.reserved_dates.length; i++) {
-//             for(let date = new Date(prop.reserved_dates[i].checkin); date <= new Date(prop.reserved_dates[i].checkout); date.setDate(date.getDate() + 1)) {
-//                 const year = date.getFullYear();
-//                 const month = String(date.getMonth() + 1).padStart(2, '0');
-//                 const day = String(date.getDate()).padStart(2, '0');
-//                 disabled_dates.push(`${year}-${month}-${day}`);
-//             }
-//         }
-//     }
-//     console.log(prop.reserved_dates)
-//     // E DISABLE ANG DATES SA MGA NE-AGING ADLAW
-//     for (let date = new Date('2023-01-01'); date < today; date.setDate(date.getDate() + 1)) {
-//         const year = date.getFullYear();
-//         const month = String(date.getMonth() + 1).padStart(2, '0');
-//         const day = String(date.getDate()).padStart(2, '0');
-//         disabled_dates.push(`${year}-${month}-${day}`);
-//     }
-// const today = qdate.formatDate(new Date(), 'YYYY-MM-DD')
-    function processReservedDates() {
-        if (props.reserved_dates) {
-            for (let i = 0; i < props.reserved_dates.length; i++) {
-                let checkInDate = props.reserved_dates[i].check_in
-                const checkOutDate = props.reserved_dates[i].check_out
+watch(date, () => {
+    if(date.value == null) {
+        return
+    }
+    let checkInDate = date.value.from
+    const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
+    console.log(diff)
+    let pwede = true
+    for(let i = 0; i < diff; i++) {
+        if(!options(checkInDate)) {
+            pwede = false
+            date.value = null
+            alert('Please choose a date that doesnt overlap')
+            break;
+            console.log('dili pwede')
+        }
+            checkInDate = qdate.addToDate(checkInDate, { days: 1})
+    }
+    if(pwede) {
+        form.date = date.value
+    }
 
-                disabled_dates.value.push(checkInDate)
-                const diff = qdate.getDateDiff(checkOutDate, checkInDate, 'days')
-                for(let j = 0; j < diff; j++) {
-                    checkInDate = qdate.addToDate(checkInDate, { days: 1})
-                    disabled_dates.value.push(checkInDate)
-                }
+})
+
+function processReservedDates() {
+    if (props.reserved_dates) {
+        for (let i = 0; i < props.reserved_dates.length; i++) {
+            let checkInDate = props.reserved_dates[i].check_in
+            const checkOutDate = props.reserved_dates[i].check_out
+
+            disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
+            const diff = qdate.getDateDiff(checkOutDate, checkInDate, 'days')
+            for(let j = 0; j < diff; j++) {
+                checkInDate = qdate.addToDate(checkInDate, { days: 1})
+                disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
             }
         }
     }
+}
 
 function options(date) {
-    const date2 = qdate.extractDate(date)
-    // const formattedDate = `${date.year}/${String(date.month).padStart(2, '0')}/${String(date.day).padStart(2, '0')}`
-    console.log('from options')
-    console.log(date2)
-    return !disabled_dates.value.includes(date2)
+    const formattedIncomingDate = qdate.formatDate(new Date(date), 'YYYY-MM-DD');
+    return !disabled_dates.value.includes(formattedIncomingDate);
 }
+
+
 
 </script>
 
 <template>
     <div>
-        {{ facility }}
     </div>
     <div class="row">
         <div class="col-8">
+            {{ facility }}
+            <hr>
             {{ form }}
             <hr>
-            {{ form.data() }}
-            <hr>
-            Reserved Dates
-        {{ reserved_dates }}
-        <hr>
-        Dates that should be disabled
-        {{ disabled_dates }}
         </div>
         <div class="col-4">
             <div class="q-pa-md">
+                <p class="text-red">// what if one day ra... </p>
                 <q-date
-                    v-model="form.date"
+                    v-model="date"
                     landscape
                     range
                     :options="options"
-                />
+                >
+                </q-date>
             </div>
+            {{ date }}
             <Link :href="route('facility.checkout')" :data="form.data()">
                 <q-btn unelevated color="primary">
                     Reserve

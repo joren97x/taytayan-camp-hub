@@ -70,7 +70,9 @@ class FacilityController extends Controller
     public function show(string $id)
     {
         //
-        return Inertia::render('Admin/Facility/ShowFacility');
+        return Inertia::render('Admin/Facility/ShowFacility', [
+            'facility' => Facility::find($id)
+        ]);
     }
 
     /**
@@ -79,7 +81,9 @@ class FacilityController extends Controller
     public function edit(string $id)
     {
         //
-        return Inertia::render('Admin/Facility/EditFacility');
+        return Inertia::render('Admin/Facility/EditFacility', [
+            'facility' => Facility::find($id)
+        ]);
     }
 
     /**

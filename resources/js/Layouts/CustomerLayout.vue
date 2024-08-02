@@ -18,7 +18,7 @@ import axios from 'axios'
 onMounted(() => {
     axios.get(route('customer.notifications'))
     .then((res) => {
-        console.log(res)
+        // console.log(res)
         res.data.notifications.forEach(el => {
             notifications.value.push(el)
             if(!el.is_read) {
@@ -55,7 +55,7 @@ watch(rightDrawerOpen, (newVal) => {
                 <Link :href="route('homepage')" style="text-decoration: none;">
                     <q-toolbar-title>
                         <q-avatar size="50px">
-                            <q-img src="logo.jpg"></q-img>
+                            <q-img src="../logo.jpg"></q-img>
                         </q-avatar>
                         <span class="text-primary text-weight-medium q-ml-sm">Taytayan Camp Hub</span>
                     </q-toolbar-title>

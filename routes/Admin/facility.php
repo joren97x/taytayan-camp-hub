@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\Facility\FacilityController;
+use App\Http\Controllers\Admin\Facility\ReservationController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/admin/facilities/reservations', [ReservationController::class, 'index'])->name('facilities.reservations');
 
 Route::resource('/admin/facilities', FacilityController::class)->names([
     'index' => 'admin.facilities.index',
@@ -13,3 +15,4 @@ Route::resource('/admin/facilities', FacilityController::class)->names([
     'destroy' => 'admin.facilities.destroy',
     'update' => 'admin.facilities.update'
 ]);
+

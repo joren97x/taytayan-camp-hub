@@ -14,12 +14,12 @@ const navigations = [
 
 watch(page, () => {
     if(page.value === 'reviews') {
-        router.visit(`/admin/events/${page.value}`, {
+        router.visit(`/admin/facilities/${page.value}`, {
             preserveState: true
         })
     }
     else {
-        router.visit(`/admin/${page.value}`, {
+        router.visit(`/admin/facilities/${page.value}`, {
             preserveState: true,
             onFinish: (err) => {
                 console.log(err)

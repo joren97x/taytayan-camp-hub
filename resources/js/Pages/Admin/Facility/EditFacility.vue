@@ -7,10 +7,14 @@ defineOptions({
     layout: FacilityLayout
 })
 
+const props = defineProps({
+    facility: Object
+})
+
 </script>
 
 <template>
     
     <Head title="Reviews" />
-    <h1>Events Calendar</h1>
+    {{ facility }}
 </template>

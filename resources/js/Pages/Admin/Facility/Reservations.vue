@@ -9,19 +9,19 @@ defineOptions({
 })
 
 const props = defineProps({
-    facilities: Object
+    reservations: Object
 })
 
 const filter = ref('')
 
-const columns = [
-    { name: 'facility', label: 'Facility', align: 'center', field: 'name', sortable: true },
-    { name: 'description', align: 'center', label: 'description', field: 'description', sortable: true },
-    { name: 'price', align: 'center', label: 'price', field: 'price', sortable: true },
-    { name: 'images', align: 'center', label: 'images', field: 'images', sortable: true },
-    { name: 'amenities', align: 'center', label: 'amenities', field: 'amenities', sortable: true },
-    { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
-]
+// const columns = [
+//     { name: 'facility', label: 'Facility', align: 'center', field: 'name', sortable: true },
+//     { name: 'description', align: 'center', label: 'description', field: 'description', sortable: true },
+//     { name: 'price', align: 'center', label: 'price', field: 'price', sortable: true },
+//     { name: 'images', align: 'center', label: 'images', field: 'images', sortable: true },
+//     { name: 'amenities', align: 'center', label: 'amenities', field: 'amenities', sortable: true },
+//     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
+// ]
 
 </script>
 
@@ -33,36 +33,11 @@ const columns = [
             class="my-sticky-header-column-table"
             flat
             title="Treats"
-            :rows="facilities"
+            :rows="reservations"
             :columns="columns"
             row-key="name"
             :filter="filter"
         >
-            <template v-slot:body-cell-images="props">
-                <q-td :props="props">
-                    {{ JSON.parse(props.row.images).length }} images
-                    <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
-                </q-td>
-            </template>
-            <template v-slot:body-cell-amenities="props">
-                <q-td :props="props">
-                    <!-- {{ JSON.parse(props.row.amenities).length }} amenities -->
-                </q-td>
-            </template>
-            <template v-slot:body-cell-price="props">
-                <q-td :props="props">
-                    P{{ props.row.price }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                    <Link :href="route(`admin.facilities.edit`, props.row.id)">
-                        {{ props.row.id }}
-                        <q-btn no-caps unelevated>Edit</q-btn>
-                    </Link>
-                    <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
-                </q-td>
-            </template>
             <template v-slot:top>
                 <p class="text-h6 q-pt-md">Facilities</p>
                 <q-space />

@@ -17,6 +17,7 @@ const props = defineProps({
 const $q = useQuasar()
 const categoryOptions = props.categories.map(category => category.name)
 const category = ref('')
+const filter = ref('')
 const deleteProductDialog = ref(false)
 const deleteProductForm = useForm({
     product: null
@@ -58,6 +59,7 @@ const columns = [
             :rows="props.products"
             :columns="columns"
             row-key="name"
+            :filter="filter"
         >
             <template v-slot:body-cell-photo="props">
                 <q-td :props="props">
@@ -87,14 +89,15 @@ const columns = [
             <template v-slot:top>
                 <p class="text-h6 q-pt-md">Products</p>
                 <q-space />
-                <q-select
+                <!-- <q-select
                     style="width: 200px"
                     label="Category"
                     filled
                     dense
                     v-model="category"
                     :options="categoryOptions"
-                />
+                  
+                /> -->
                 <q-input filled dense label="Search..." class="q-mx-md" debounce="300" color="primary" v-model="filter">
                     <template v-slot:append>
                         <q-icon name="search" />

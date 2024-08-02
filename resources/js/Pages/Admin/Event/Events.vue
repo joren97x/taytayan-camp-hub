@@ -14,6 +14,7 @@ defineProps({
 })
 
 const $q = useQuasar()
+const filter = ref('')
 const deleteEventForm = useForm({
     event: null
 })
@@ -52,6 +53,7 @@ const columns = [
             :rows="events"
             :columns="columns"
             row-key="name"
+            :filter="filter"
         >
             <template v-slot:body-cell-event="props">
                 <q-td :props="props">
