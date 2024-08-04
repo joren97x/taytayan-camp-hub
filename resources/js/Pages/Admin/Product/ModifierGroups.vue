@@ -1,13 +1,13 @@
 <script setup>
 
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({
@@ -26,7 +26,7 @@ function showDeleteModifierGroupDialog(modifier_group) {
 }
 
 const deleteModifierGroup = () => {
-    deleteModifierGroupForm.delete(route('admin.modifier_group.destroy', deleteModifierGroupForm.modifier_group.id), {
+    deleteModifierGroupForm.delete(route('admin.modifier_groups.destroy', deleteModifierGroupForm.modifier_group.id), {
         onSuccess: () => {
             deleteModifierGroupDialog.value = false
             $q.notify('Modifier Group Deleted')
@@ -63,7 +63,7 @@ const columns = [
                         <q-icon name="search" />
                     </template>
                 </q-input>
-                <Link :href="route('admin.modifier_group.create')">
+                <Link :href="route('admin.modifier_groups.create')">
                     <q-btn class="q-ml-sm" color="primary" no-caps label="New Group" />
                 </Link>
             </template>
@@ -83,7 +83,7 @@ const columns = [
             </template>
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
-                    <Link :href="route('admin.modifier_group.edit', props.row.id)">
+                    <Link :href="route('admin.modifier_groups.edit', props.row.id)">
                         <q-btn no-caps unelevated>Edit</q-btn>
                     </Link>
                     <q-btn no-caps unelevated @click="showDeleteModifierGroupDialog(props.row)">Delete</q-btn>

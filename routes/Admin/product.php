@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Route;
 Route::patch('/admin/orders/update-order-status/{id}', function() {
     dd('boang');
 })->name('admin.orders.update_status');
-Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders');
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 // Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
-Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.product.reviews');
+Route::get('/admin/product/reviews', [ViewController::class, 'reviews'])->name('admin.products.reviews');
 
 Route::resource('/admin/products', ProductController::class)->names([
     'index' => 'admin.products.index',
@@ -30,12 +30,12 @@ Route::delete('/admin/products/{product}/clear-modifier-group', [ProductControll
 Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.products.update_photo');
 
 Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
-    'index' => 'admin.modifier_group.index',
-    'create' => 'admin.modifier_group.create',
-    'store' => 'admin.modifier_group.store',
-    'edit' => 'admin.modifier_group.edit',
-    'update' => 'admin.modifier_group.update',
-    'destroy' => 'admin.modifier_group.destroy',
+    'index' => 'admin.modifier_groups.index',
+    'create' => 'admin.modifier_groups.create',
+    'store' => 'admin.modifier_groups.store',
+    'edit' => 'admin.modifier_groups.edit',
+    'update' => 'admin.modifier_groups.update',
+    'destroy' => 'admin.modifier_groups.destroy',
 ]);
 
 Route::resource('/admin/categories', CategoryController::class)->names([
@@ -47,5 +47,5 @@ Route::resource('/admin/categories', CategoryController::class)->names([
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([
-    'store' => 'admin.modifier_item.store'
+    'store' => 'admin.modifier_items.store'
 ]);

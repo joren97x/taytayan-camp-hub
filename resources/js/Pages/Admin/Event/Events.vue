@@ -1,12 +1,12 @@
 <script setup>
 
 import { Head, Link, useForm } from '@inertiajs/vue3'
-import EventLayout from '@/Layouts/EventLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: EventLayout
+    layout: AdminLayout
 })
 
 defineProps({

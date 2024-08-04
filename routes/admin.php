@@ -15,7 +15,7 @@ Route::middleware(['auth', 'admin'])->group(function() {
         'edit' => 'admin.user.edit'
     ]);
 
-    Route::get('/admin/user-management/{role}', [UserController::class, 'index'])->name('admin.user_management');
+    Route::get('/admin/user-management', [UserController::class, 'index'])->name('admin.user_management');
     Route::post('/admin/user-management', [UserController::class, 'store'])->name('admin.user_management.store');
 
     Route::get('/admin/user-roles', [UserController::class, 'user_roles'])->name('admin.get_user_roles');

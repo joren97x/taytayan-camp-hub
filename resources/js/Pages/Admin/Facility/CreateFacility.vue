@@ -1,12 +1,12 @@
 <script setup>
 
 import { Head, useForm } from '@inertiajs/vue3'
-import FacilityLayout from '@/Layouts/FacilityLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
 defineOptions({
-    layout: FacilityLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({

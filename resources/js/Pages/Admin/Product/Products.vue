@@ -1,12 +1,12 @@
 <script setup>
 
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
 import { Link, Head, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({

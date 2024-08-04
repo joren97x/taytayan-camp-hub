@@ -2,13 +2,13 @@
 
 import { Head } from '@inertiajs/vue3'
 import { computed } from 'vue'
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 // import OrderItem from '@/Components/Admin/Product/OrderItem.vue'
 import PreparingOrderItem from '@/Components/Admin/Product/PreparingOrderItem.vue'
 import ReadyOrderItem from '@/Components/Admin/Product/ReadyOrderItem.vue'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({

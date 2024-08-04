@@ -2,12 +2,12 @@
 
 import { Head, useForm } from '@inertiajs/vue3'
 // import AdminLayout from '@/Layouts/AdminSidebar.vue'
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import { ref, watch, onMounted } from 'vue'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({

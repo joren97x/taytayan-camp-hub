@@ -2,11 +2,11 @@
 
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const props = defineProps({
@@ -33,7 +33,7 @@ const item = ref(null)
 const dialog = ref(false)
 
 const submitModifierItemForm = () => {
-    modifierItemForm.post(route('admin.modifier_item.store'), {
+    modifierItemForm.post(route('admin.modifier_items.store'), {
         onFinish: () => modifierItemForm.reset('name', 'price'),
         onSuccess: () => {
             $q.notify('Modifier Item Successfully Added')
@@ -43,7 +43,7 @@ const submitModifierItemForm = () => {
 }
 
 const submitModifierGroupForm = () => {
-    modifierGroupForm.post(route('admin.modifier_group.store'), {
+    modifierGroupForm.post(route('admin.modifier_groups.store'), {
         onFinish: () => modifierGroupForm.reset('name', 'required', 'required_quantity', 'max_quantity', 'items'),
         onSuccess: () => {
             $q.notify('Modifier Group Successfully Added')

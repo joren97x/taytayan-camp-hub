@@ -1,13 +1,13 @@
 <script setup>
 
-import AdminSidebar from '@/Layouts/AdminSidebar.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: AdminSidebar
+    layout: AdminLayout
 })
 
 defineProps({

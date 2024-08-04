@@ -1,13 +1,13 @@
 <script setup>
 
-import ProductLayout from '@/Layouts/ProductLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
 defineOptions({
-    layout: ProductLayout
+    layout: AdminLayout
 })
 
 const $q = useQuasar()
@@ -119,7 +119,7 @@ const columns = [
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <Link :href="route('admin.category.create')">
+                    <Link :href="route('admin.categories.create')">
                         <q-btn class="q-ml-sm" color="primary" no-caps label="New Category" />
                     </Link>
                 </template>

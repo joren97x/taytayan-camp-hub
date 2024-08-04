@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, watch } from 'vue'
-import AdminSidebar from './AdminSidebar.vue'
+import AdminSidebar from './AdminLayout.vue'
 import { router } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
 
