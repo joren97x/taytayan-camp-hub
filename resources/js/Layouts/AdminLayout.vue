@@ -132,6 +132,7 @@ const navigation_list = [
 
                          <q-item-section side top>
                             <q-btn 
+                            
                                 round
                                 :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'" 
                                 color="white" 
