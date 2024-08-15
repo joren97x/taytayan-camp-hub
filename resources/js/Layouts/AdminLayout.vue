@@ -132,7 +132,6 @@ const navigation_list = [
 
                          <q-item-section side top>
                             <q-btn 
-                            
                                 round
                                 :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'" 
                                 color="white" 
@@ -203,20 +202,6 @@ const navigation_list = [
                                     </q-item-section>
                                 </q-item>
                             </Link>
-                        <!-- </q-card>
-                    </q-expansion-item> -->
-                    <!-- <Link :href="route('admin.user.index')">
-                        <q-expansion-item caption="User Management">
-                            <q-item>
-                                <q-item-section avatar>
-                                    <q-icon name="send" />
-                                </q-item-section>
-                                <q-item-section>
-                                    User Management
-                                </q-item-section>
-                            </q-item>
-                        </q-expansion-item>
-                    </Link> -->
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
                             <q-icon name="drafts" />
@@ -245,6 +230,54 @@ const navigation_list = [
                     </Link>
                 </q-list>
             </q-scroll-area>
+            <q-item  class="absolute-bottom">
+                <q-item-section top avatar>
+                    <q-avatar color="primary" text-color="white" icon="bluetooth" />
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label>Joren Hyeung Nim</q-item-label>
+                    <q-item-label caption lines="2">Administrator</q-item-label>
+                </q-item-section>
+
+                    <q-item-section side top>
+                    <q-btn 
+                        round
+                        icon="unfold_more"
+                        color="white" 
+                        class="text-black" 
+                    >
+                        <q-menu>
+                            <q-list>
+                                <q-item
+                                    round
+                                    color="white" 
+                                    class="text-black" 
+                                    clickable
+                                    @click="$q.dark.toggle"
+                                >
+                                    <q-item-section>
+                                        Dark Mode
+                                    </q-item-section>
+                                    <q-item-section avatar>
+                                        <q-icon color="primary" :name="$q.dark.isActive ? 'dark_mode' : 'light_mode'" />
+                                    </q-item-section>
+                                </q-item>
+                                <Link :href="route('logout')" method="post">
+                                    <q-item clickable>
+                                        <q-item-section>
+                                            Logout
+                                        </q-item-section>
+                                        <q-item-section avatar>
+                                            <q-icon color="primary" name="logout" />
+                                        </q-item-section>
+                                    </q-item>
+                                </Link>
+                            </q-list>
+                        </q-menu>
+                    </q-btn>
+                </q-item-section> 
+            </q-item>
+            
         </q-drawer>
     
         <q-page-container>
@@ -255,8 +288,8 @@ const navigation_list = [
 
 <style scoped>
 
-    a {
-        text-decoration: none;
-    }
+a {
+    text-decoration: none;
+}
 
 </style>
