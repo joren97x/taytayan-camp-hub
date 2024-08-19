@@ -51,7 +51,7 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" elevated>
-            <q-toolbar class="q-my-sm">
+            <q-toolbar>
                 <Link :href="route('homepage')" style="text-decoration: none;">
                     <q-toolbar-title>
                         <q-avatar size="50px">
@@ -64,7 +64,7 @@ watch(rightDrawerOpen, (newVal) => {
                     <q-btn flat no-caps>Product Menu</q-btn>
                 </Link> -->
                 <q-space/>
-                <q-btn-dropdown no-caps label="Foods" flat dropdown-icon="keyboard_arrow_down">
+                <!-- <q-btn-dropdown no-caps label="Foods" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 200px" class="text-center q-pa-sm">
                         <Link :href="route('products')">
                             <q-item clickable v-close-popup>
@@ -96,8 +96,8 @@ watch(rightDrawerOpen, (newVal) => {
                             </q-item>
                         </Link>
                     </q-list>
-                </q-btn-dropdown>
-                <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">
+                </q-btn-dropdown> -->
+                <!-- <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">
                     <q-list style="min-width: 100px" class="text-center q-pa-sm">
                         <Link :href="route('customer.events.index')">
                             <q-item clickable v-close-popup>
@@ -110,7 +110,21 @@ watch(rightDrawerOpen, (newVal) => {
                             </q-item>
                         </Link>
                     </q-list>
-                </q-btn-dropdown>
+                </q-btn-dropdown> -->
+                <q-btn-group unelevated>
+                    <q-btn align="around" class="q-py-md" color="primary" flat style="border-bottom: 1px solid blue;">
+                        <q-icon left size="sm" class="q-mr-md" name="map" />
+                        Products
+                    </q-btn>
+                    <q-btn align="around" class="q-py-md" color="primary" flat >
+                        <q-icon left size="sm" class="q-mr-md" name="map" />
+                        Products
+                    </q-btn>
+                    <q-btn align="around" class="q-py-md" color="primary" flat >
+                        <q-icon left size="sm" class="q-mr-md" name="map" />
+                        Products
+                    </q-btn>
+                </q-btn-group>
                 <q-space />
                 <div v-if="!$page.props.auth.user">
                     <Link :href="route('register')">
