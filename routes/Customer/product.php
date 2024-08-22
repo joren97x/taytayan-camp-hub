@@ -26,4 +26,8 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::post('/product-pay', [PaymentController::class, 'pay'])->name('product.pay');
 });
 
-Route::get('/products', [ViewController::class, 'index'])->name('products')->middleware('customer');
+// Route::get('/products', [ViewController::class, 'index'])->name('products')->middleware('customer');
+Route::resource('products', ProductController::class)->names([
+    'index' => 'customer.products.index',
+    'show' => 'customer.products.show'
+]);

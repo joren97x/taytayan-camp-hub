@@ -73,15 +73,26 @@ class PaymentController extends Controller
     public function pay(Request $request) 
     {
         $event = Event::find($request->event_id);
-        if (!($event->tickets_sold + $request->attendees <= $event->capacity)) {
+        if (!($event->tickets_sold + count($request->ticket_holders) <= $event->capacity)) {
             return back()->withErrors(['error' => 'Event is full or not found']);
         }
 
+        $request->validate([
+            'attendees' => 'required|integer|min:1',
+            'event_id' => 'required|integer|exists:events,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'payment_method' => 'required|string',
+            'amount' => 'required|numeric|min:1',
+            'ticket_holders' => 'required|array|min:1',
+            'ticket_holders.*.name' => 'required|string|max:255',
+            'ticket_holders.*.email' => 'required|email|max:255',
+        ]);
+
+        // dd($request->all());
 
         if($request->payment_method == TicketOrder::PAYMENT_METHOD_WALK_IN) {
             return redirect(route('event.checkout.success') . '?' . http_build_query($request->all()));
         }
-        dd($request->all());
         
         // $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
         // $line_items = [];

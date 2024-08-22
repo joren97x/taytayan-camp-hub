@@ -84,6 +84,8 @@ function options(date) {
     <div class="row">
         <div class="col-8">
             {{ facility }}
+            <q-img v-for="image in JSON.parse(facility.images)" :src="`../storage/${image}`" style="width: 150px; height: 150px">
+            </q-img>
             <hr>
             {{ form }}
             <hr>

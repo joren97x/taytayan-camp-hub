@@ -23,6 +23,7 @@ return new class extends Migration
                 TicketOrder::PAYMENT_METHOD_GCASH,
                 TicketOrder::PAYMENT_METHOD_GRAB_PAY,
                 TicketOrder::PAYMENT_METHOD_WALK_IN,
+                TicketOrder::PAYMENT_METHOD_PAYMAYA
             ]);
             $table->enum('status', [
                 TicketOrder::STATUS_COMPLETED,

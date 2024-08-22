@@ -112,18 +112,24 @@ watch(rightDrawerOpen, (newVal) => {
                     </q-list>
                 </q-btn-dropdown> -->
                 <q-btn-group unelevated>
-                    <q-btn align="around" class="q-py-md" color="primary" flat style="border-bottom: 1px solid blue;">
-                        <q-icon left size="sm" class="q-mr-md" name="map" />
-                        Products
-                    </q-btn>
-                    <q-btn align="around" class="q-py-md" color="primary" flat >
-                        <q-icon left size="sm" class="q-mr-md" name="map" />
-                        Products
-                    </q-btn>
-                    <q-btn align="around" class="q-py-md" color="primary" flat >
-                        <q-icon left size="sm" class="q-mr-md" name="map" />
-                        Products
-                    </q-btn>
+                    <Link :href="route('customer.products.index')">
+                        <q-btn align="around" class="q-py-md" color="primary" flat>
+                            <q-icon left size="sm" class="q-mr-md" name="map" />
+                            Products
+                        </q-btn>
+                    </Link>
+                    <Link :href="route('customer.events.index')">
+                        <q-btn align="around" class="q-py-md" color="primary" flat >
+                            <q-icon left size="sm" class="q-mr-md" name="map" />
+                            Events
+                        </q-btn>
+                    </Link>
+                    <Link :href="route('customer.facilities.index')">
+                        <q-btn align="around" class="q-py-md" color="primary" flat >
+                            <q-icon left size="sm" class="q-mr-md" name="map" />
+                            Facilities
+                        </q-btn>
+                    </Link>
                 </q-btn-group>
                 <q-space />
                 <div v-if="!$page.props.auth.user">
@@ -165,6 +171,39 @@ watch(rightDrawerOpen, (newVal) => {
                                         <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
                                     </q-item-section>
                                 </q-item>
+                                <q-separator />
+                                <Link :href="route('customer.inbox')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="inbox" />
+                                        </q-item-section>
+                                        <q-item-section>Cart</q-item-section>
+                                    </q-item>
+                                </Link>
+                                <Link :href="route('customer.inbox')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="inbox" />
+                                        </q-item-section>
+                                        <q-item-section>Orders</q-item-section>
+                                    </q-item>
+                                </Link>
+                                <Link :href="route('profile.edit')">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="manage_accounts" />
+                                        </q-item-section>
+                                        <q-item-section>Reservations</q-item-section>
+                                    </q-item>
+                                </Link>
+                                <Link :href="route('logout')" method="post">
+                                    <q-item clickable>
+                                        <q-item-section avatar>
+                                            <q-icon name="logout" />
+                                        </q-item-section>
+                                        <q-item-section>Tickets</q-item-section>
+                                    </q-item>
+                                </Link>
                                 <q-separator />
                                 <Link :href="route('customer.inbox')">
                                     <q-item clickable>

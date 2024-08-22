@@ -21,9 +21,7 @@ const form = useForm({
     user_id: page.props.auth.user.id,
     payment_method: 'gcash',
     amount: props.event.admission_fee * props.attendees,
-    ticket_holders: [
-        
-    ]
+    ticket_holders: []
 })
 
     for(var i = 0; i < props.attendees; i++) {
@@ -42,6 +40,18 @@ const submit = () => {
             console.log(err)
             $q.notify(err.error)
         }
+    })
+}
+
+const removeAttendee = (index) => {
+    console.log('should be removed')
+    form.ticket_holders.splice(index, 1)
+}
+
+const addAttendee = () => {
+    form.ticket_holders.push({
+        name: '',
+        email: ''
     })
 }
 
@@ -94,17 +104,35 @@ const submit = () => {
                                 <div class="text-h6">
                                     Attendees
                                 </div>
-                                <q-list-item v-for="(attendee, index) in Number(attendees)">
-                                    Attendee {{ attendee }}
+                                <!-- :error="form.errors.email ? true : false"
+                                :error-message="form.errors.email" -->
+                                <!-- {{ form.errors.ticket_holders.0.name }} -->
+                                <p class="text-green">need to have some error handling here!!!</p>
+                                <q-list-item v-for="(attendee, index) in form.ticket_holders">
+                                    Attendee {{ index }}
+                                    <q-btn color="red" @click="removeAttendee(index)">Remove</q-btn>
                                     <div class="row q-col-gutter-md">
                                         <div class="col-6">
-                                            <q-input label="Name" v-model="form.ticket_holders[index].name" filled/>
+                                            <q-input 
+                                                label="Name" 
+                                                v-model="form.ticket_holders[index].name" 
+                                                filled
+                                                :error="!!form.errors[`ticket_holders.${index}.name`]"
+                                                :error-message="form.errors[`ticket_holders.${index}.name`]"
+                                            />
                                         </div>
                                         <div class="col-6">
-                                            <q-input label="Email Address" v-model="form.ticket_holders[index].email" filled/>
+                                            <q-input 
+                                                label="Email Address" 
+                                                v-model="form.ticket_holders[index].email" 
+                                                filled
+                                                :error="!!form.errors[`ticket_holders.${index}.email`]"
+                                                :error-message="form.errors[`ticket_holders.${index}.email`]"
+                                            />
                                         </div>
                                     </div>
                                 </q-list-item>
+                                <q-btn class="full-width" color="primary" @click="addAttendee()">Add attendee</q-btn>
                             </q-list>
                             <q-separator class="q-my-md" />
                             <q-item>
