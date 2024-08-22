@@ -48,3 +48,8 @@ MAIL_USERNAME=
 MAIL_PASSWORD=  
 MAIL_ENCRYPTION=  
 
+enable gd extension in php.ini  
+xampp/php/php.ini  
+search for ;extension=gd    
+and remove the semicolon ; and then save  
+
