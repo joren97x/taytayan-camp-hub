@@ -50,94 +50,34 @@ watch(rightDrawerOpen, (newVal) => {
 <template>
     <q-layout view="hHh lpR lfr">
 
-        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" elevated>
-            <q-toolbar>
+        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
+            <q-toolbar class="q-pa-lg">
                 <Link :href="route('homepage')" style="text-decoration: none;">
                     <q-toolbar-title>
-                        <q-avatar size="50px">
+                        <q-avatar size="70px">
                             <q-img src="../logo.jpg"></q-img>
                         </q-avatar>
-                        <span class="text-primary text-weight-medium q-ml-sm">Taytayan Camp Hub</span>
+                        <span class="text-primary text-h5 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
                     </q-toolbar-title>
                 </Link>
-                <!-- <Link :href="route('products')">
-                    <q-btn flat no-caps>Product Menu</q-btn>
-                </Link> -->
                 <q-space/>
-                <!-- <q-btn-dropdown no-caps label="Foods" flat dropdown-icon="keyboard_arrow_down">
-                    <q-list style="min-width: 200px" class="text-center q-pa-sm">
-                        <Link :href="route('products')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Foods</q-item-section>
-                            </q-item>
-                        </Link>
-                        <Link :href="route('orders', 'on-progress')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Orders</q-item-section>
-                            </q-item>
-                        </Link>
-                        <Link :href="route('customer.cart.index')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Cart</q-item-section>
-                            </q-item>
-                        </Link>
-                    </q-list>
-                </q-btn-dropdown>
-                <q-btn-dropdown no-caps label="Facilities" flat dropdown-icon="keyboard_arrow_down">
-                    <q-list style="min-width: 100px" class="text-center q-pa-sm">
-                        <Link :href="route('customer.facilities.index')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Facilities</q-item-section>
-                            </q-item>
-                        </Link>
-                        <Link :href="route('reservations')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>reservations</q-item-section>
-                            </q-item>
-                        </Link>
-                    </q-list>
-                </q-btn-dropdown> -->
-                <!-- <q-btn-dropdown no-caps label="Events" flat dropdown-icon="keyboard_arrow_down">
-                    <q-list style="min-width: 100px" class="text-center q-pa-sm">
-                        <Link :href="route('customer.events.index')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Events</q-item-section>
-                            </q-item>
-                        </Link>
-                        <Link :href="route('tickets')">
-                            <q-item clickable v-close-popup>
-                                <q-item-section>Tickets</q-item-section>
-                            </q-item>
-                        </Link>
-                    </q-list>
-                </q-btn-dropdown> -->
-                <q-btn-group unelevated>
-                    <Link :href="route('customer.products.index')">
-                        <q-btn align="around" class="q-py-md" color="primary" flat>
-                            <q-icon left size="sm" class="q-mr-md" name="map" />
-                            Products
-                        </q-btn>
+                    <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle1 navlink">
+                        Products
                     </Link>
-                    <Link :href="route('customer.events.index')">
-                        <q-btn align="around" class="q-py-md" color="primary" flat >
-                            <q-icon left size="sm" class="q-mr-md" name="map" />
-                            Events
-                        </q-btn>
+                    <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle1 navlink">
+                        Events
                     </Link>
-                    <Link :href="route('customer.facilities.index')">
-                        <q-btn align="around" class="q-py-md" color="primary" flat >
-                            <q-icon left size="sm" class="q-mr-md" name="map" />
-                            Facilities
-                        </q-btn>
+                    <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle1 navlink">
+                        Facilities
                     </Link>
-                </q-btn-group>
                 <q-space />
                 <div v-if="!$page.props.auth.user">
-                    <Link :href="route('register')">
-                        <q-btn flat no-caps to="/register">Register</q-btn>
+                    <Link :href="route('register')" class="text-subtitle1 q-mr-md navlink text-primary">
+                        Sign up for free
+                        <!-- <q-btn flat no-caps to="/register" class="text-subtitle1 text-primary text-weight-regular">Sign up for free</q-btn> -->
                     </Link>
                     <Link :href="route('login')">
-                        <q-btn no-caps color="secondary" unelevated to="/login">Login</q-btn>
+                        <q-btn no-caps color="primary" unelevated to="/login" class="text-subtitle1 text-weight-regular q-px-xl">Login</q-btn>
                     </Link>
                 </div>
                 <div v-else>
@@ -235,12 +175,25 @@ watch(rightDrawerOpen, (newVal) => {
                 </div>
             </q-toolbar>
         </q-header>
-
-        <q-page-container class="bg-grey-3">
-            <div class="q-mx-xl q-mt-lg">
+        <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
+        <q-page-container>
+            <div>
                 <slot/>
             </div>
         </q-page-container>
         <!-- <Footer/> -->
     </q-layout>
 </template>
+
+<style scoped>
+
+.navlink {
+    text-decoration: none;
+    color: black;
+}
+
+.navlink:hover {
+    color: #1976D2;
+}
+
+</style>
