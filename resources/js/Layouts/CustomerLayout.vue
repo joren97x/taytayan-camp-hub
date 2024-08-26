@@ -51,128 +51,136 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
-            <q-toolbar class="q-pa-lg">
-                <Link :href="route('homepage')" style="text-decoration: none;">
-                    <q-toolbar-title>
-                        <q-avatar size="70px">
-                            <q-img src="../logo.jpg"></q-img>
-                        </q-avatar>
-                        <span class="text-primary text-h5 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
-                    </q-toolbar-title>
-                </Link>
-                <q-space/>
-                    <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle1 navlink">
-                        Products
-                    </Link>
-                    <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle1 navlink">
-                        Events
-                    </Link>
-                    <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle1 navlink">
-                        Facilities
-                    </Link>
-                <q-space />
-                <div v-if="!$page.props.auth.user">
-                    <Link :href="route('register')" class="text-subtitle1 q-mr-md navlink text-primary">
-                        Sign up for free
-                        <!-- <q-btn flat no-caps to="/register" class="text-subtitle1 text-primary text-weight-regular">Sign up for free</q-btn> -->
-                    </Link>
-                    <Link :href="route('login')">
-                        <q-btn no-caps color="primary" unelevated to="/login" class="text-subtitle1 text-weight-regular q-px-xl">Login</q-btn>
-                    </Link>
-                </div>
-                <div v-else>
-                    <!-- <q-btn flat icon="search" round></q-btn> -->
-                    <q-btn flat dense icon="notifications" class="q-mr-sm">
-                        <q-badge color="red" floating>{{ notification_badge }}</q-badge>
-                        <q-menu fit>
-                            <q-list style="min-width: 400px">
-                                <q-item class="text-h6">Notifications</q-item>
-                                <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
-                                    <q-item-section>{{ notification }}</q-item-section>
-                                </q-item>
-                            </q-list>
-                        </q-menu>
-                    </q-btn>
-                    <q-btn flat no-caps>
-                        <q-avatar size="30px" class="q-mr-sm">
-                            <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                        </q-avatar>
-                        Joren
-                        <q-menu class="q-pa-sm" style="width: 250px">
-                            <q-list>
-                                <q-item>
-                                    <q-item-section top avatar>
-                                        <q-avatar color="primary" text-color="white">
-                                            <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                        </q-avatar>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
-                                        <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                                <q-separator />
-                                <Link :href="route('customer.inbox')">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="inbox" />
-                                        </q-item-section>
-                                        <q-item-section>Cart</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <Link :href="route('customer.inbox')">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="inbox" />
-                                        </q-item-section>
-                                        <q-item-section>Orders</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <Link :href="route('profile.edit')">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="manage_accounts" />
-                                        </q-item-section>
-                                        <q-item-section>Reservations</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <Link :href="route('logout')" method="post">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="logout" />
-                                        </q-item-section>
-                                        <q-item-section>Tickets</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <q-separator />
-                                <Link :href="route('customer.inbox')">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="inbox" />
-                                        </q-item-section>
-                                        <q-item-section>Inbox</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <Link :href="route('profile.edit')">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="manage_accounts" />
-                                        </q-item-section>
-                                        <q-item-section>Profile</q-item-section>
-                                    </q-item>
-                                </Link>
-                                <Link :href="route('logout')" method="post">
-                                    <q-item clickable>
-                                        <q-item-section avatar>
-                                            <q-icon name="logout" />
-                                        </q-item-section>
-                                        <q-item-section>Logout</q-item-section>
-                                    </q-item>
-                                </Link>
-                            </q-list>
-                        </q-menu>
-                    </q-btn>
-                </div>
+            <q-toolbar class="row q-pa-lg">
+                <!-- <div class="row bg-red"> -->
+                    <div class="col-3 flex items-start justify-start">
+                        <Link :href="route('homepage')" style="text-decoration: none;">
+                            <q-toolbar-title>
+                                <q-avatar size="70px">
+                                    <q-img src="../logo.jpg"></q-img>
+                                </q-avatar>
+                                <span class="text-primary text-h5 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
+                            </q-toolbar-title>
+                        </Link>
+                    </div>
+                    <div class="col-6 flex items-center justify-center">
+                        <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle1 navlink">
+                            Products
+                        </Link>
+                        <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle1 navlink">
+                            Events
+                        </Link>
+                        <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle1 navlink">
+                            Facilities
+                        </Link>
+                    </div>
+                    <div class="col-3 flex items-end justify-end">
+                        <div v-if="!$page.props.auth.user">
+                            <Link :href="route('register')" class="text-subtitle1 q-mr-md navlink text-primary">
+                                Sign up for free
+                                <!-- <q-btn flat no-caps to="/register" class="text-subtitle1 text-primary text-weight-regular">Sign up for free</q-btn> -->
+                            </Link>
+                            <Link :href="route('login')">
+                                <q-btn no-caps color="primary" unelevated to="/login" class="text-subtitle1 text-weight-regular q-px-xl">Login</q-btn>
+                            </Link>
+                        </div>
+                        <div v-else>
+                            <!-- <q-btn flat icon="search" round></q-btn> -->
+                            <q-btn flat dense round class="q-mr-md">
+                                <q-icon size="2em" name="notifications" />
+                                <!-- uncomment soon -->
+                                <!-- <q-badge color="red" floating>{{ notification_badge }}</q-badge> -->
+                                <q-menu fit>
+                                    <q-list style="min-width: 400px">
+                                        <q-item class="text-h6">Notifications</q-item>
+                                        <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
+                                            <q-item-section>{{ notification }}</q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                </q-menu>
+                            </q-btn>
+                            <q-btn flat round no-caps>
+                                <q-avatar size="3em">
+                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                </q-avatar>
+                                <!-- Joren -->
+                                <q-menu class="q-pa-sm" style="width: 300px">
+                                    <q-list>
+                                        <q-item>
+                                            <q-item-section top avatar>
+                                                <q-avatar color="primary" text-color="white">
+                                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                                </q-avatar>
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
+                                                <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
+                                            </q-item-section>
+                                        </q-item>
+                                        <q-separator />
+                                        <Link :href="route('customer.inbox')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="inbox" />
+                                                </q-item-section>
+                                                <q-item-section>Cart</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <Link :href="route('customer.inbox')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="inbox" />
+                                                </q-item-section>
+                                                <q-item-section>Orders</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <Link :href="route('profile.edit')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="manage_accounts" />
+                                                </q-item-section>
+                                                <q-item-section>Reservations</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <Link :href="route('tickets')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="logout" />
+                                                </q-item-section>
+                                                <q-item-section>Tickets</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <q-separator />
+                                        <Link :href="route('customer.inbox')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="inbox" />
+                                                </q-item-section>
+                                                <q-item-section>Inbox</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <Link :href="route('profile.edit')" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="manage_accounts" />
+                                                </q-item-section>
+                                                <q-item-section>Profile</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                        <Link :href="route('logout')" method="post" class="user-menu-link">
+                                            <q-item clickable>
+                                                <q-item-section avatar>
+                                                    <q-icon name="logout" />
+                                                </q-item-section>
+                                                <q-item-section>Logout</q-item-section>
+                                            </q-item>
+                                        </Link>
+                                    </q-list>
+                                </q-menu>
+                            </q-btn>
+                        </div>
+                    </div>
+                <!-- </div> -->
             </q-toolbar>
         </q-header>
         <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
@@ -194,6 +202,11 @@ watch(rightDrawerOpen, (newVal) => {
 
 .navlink:hover {
     color: #1976D2;
+}
+
+.user-menu-link {
+    text-decoration: none;
+    color: inherit;
 }
 
 </style>
