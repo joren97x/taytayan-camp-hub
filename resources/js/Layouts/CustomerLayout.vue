@@ -51,7 +51,7 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
-            <q-toolbar class="row q-pa-lg">
+            <q-toolbar class="row q-py-sm q-px-lg">
                 <!-- <div class="row bg-red"> -->
                     <div class="col-3 flex items-start justify-start">
                         <Link :href="route('homepage')" style="text-decoration: none;">
@@ -65,12 +65,21 @@ watch(rightDrawerOpen, (newVal) => {
                     </div>
                     <div class="col-6 flex items-center justify-center">
                         <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle1 navlink">
+                            <q-avatar size="lg">
+                                <q-img fit="cover" src="images/product_logo.png"/>
+                            </q-avatar>
                             Products
                         </Link>
                         <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle1 navlink">
+                            <q-avatar size="lg">
+                                <q-img fit="cover" src="images/event_logo.png"/>
+                            </q-avatar>
                             Events
                         </Link>
                         <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle1 navlink">
+                            <q-avatar size="lg">
+                                <q-img fit="cover" src="images/facility_logo.png"/>
+                            </q-avatar>
                             Facilities
                         </Link>
                     </div>
@@ -185,7 +194,7 @@ watch(rightDrawerOpen, (newVal) => {
         </q-header>
         <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
         <q-page-container>
-            <div>
+            <div class="content-wrapper">
                 <slot/>
             </div>
         </q-page-container>
@@ -195,6 +204,12 @@ watch(rightDrawerOpen, (newVal) => {
 
 <style scoped>
 
+/* .content-wrapper {
+    max-width: 1300px; 
+    margin: 0 auto;
+    padding: 0 16px; 
+} */
+  
 .navlink {
     text-decoration: none;
     color: black;

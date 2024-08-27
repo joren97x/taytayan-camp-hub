@@ -12,6 +12,7 @@ const slide = ref(1)
             <slot/>
         </div>
         <div class="col-6" style="margin-top: 5%;">
+            <q-img src="images/logo.jpg"></q-img>
             <p class="text-center text-h3 text-primary text-weight-bold">Taytayan Camp Hub</p>
             <q-carousel
                 animated
@@ -21,7 +22,8 @@ const slide = ref(1)
                 infinite
                 class="text-center"
             >
-                <q-carousel-slide :name="1" img-src="https://htmlcolorcodes.com/assets/images/colors/light-gray-color-solid-background-1920x1080.png">
+                <q-carousel-slide :name="1" class="bg-red">
+                    <q-img src="https://dashboard.paymongo.com/static/media/plugins-login-signup.ecd38b3b.png"></q-img>
                     <div class="absolute-bottom custom-caption">
                         <div class="text-h4">Milk Tea Delights</div>
                         <div class="text-subtitle1">Explore our wide range of refreshing milk tea flavors and customizable options</div>

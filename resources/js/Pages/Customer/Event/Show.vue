@@ -18,9 +18,10 @@ const attendees = ref(1)
 </script>
 
 <template>
-    <div>
-        <div class="full-width bg-grey rounded-borders" style="height: 350px;">
-
+    <div class="q-px-xl">
+        <div class="full-width bg-grey rounded-borders" style="height: 50vh;">
+            <!-- <q-img :src="`storage/${event.image}`"></q-img> -->
+             {{event.cover_photo}}
         </div>
         <div class="row">
             <div class="col-8">
@@ -71,6 +72,7 @@ const attendees = ref(1)
                         </Link>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
