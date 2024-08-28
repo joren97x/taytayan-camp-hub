@@ -204,11 +204,12 @@ watch(rightDrawerOpen, (newVal) => {
 
 <style scoped>
 
-/* .content-wrapper {
-    max-width: 1300px; 
+.content-wrapper {
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 16px; 
-} */
+    /* padding: 0 16px;  */
+}
   
 .navlink {
     text-decoration: none;

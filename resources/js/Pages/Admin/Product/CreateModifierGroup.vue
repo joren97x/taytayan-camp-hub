@@ -58,7 +58,6 @@ const submitModifierGroupForm = () => {
     <Head title="New Modifiers Groups" />
     <q-form @submit="submitModifierGroupForm">
         <div class="q-pa-md">
-            {{ props }}
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
                 <span class="text-h6 q-mt-xs q-ml-sm">New Modifier Group</span>
