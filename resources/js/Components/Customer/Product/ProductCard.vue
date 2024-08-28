@@ -14,7 +14,7 @@ const dialog = ref(false)
         <div class="row">
             <div class="col-6">
                 <q-card-section>
-                    <div class="text-h5"> {{ product.name }} </div>
+                    <div class="text-subtitle1"> {{ product.name }} </div>
                     <div class="text-regular">P{{ product.price }} </div>
                     <div class="text-caption text-grey">
                         {{ product.description }}
