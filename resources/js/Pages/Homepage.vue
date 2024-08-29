@@ -41,8 +41,8 @@ Echo.channel('hello-channel')
 
 <template>
     <Head title="Welcome" />
-    <div style="background: linear-gradient(to bottom, #FFFFFF, #EEEEEE)" class="q-pa-xl">
-        <div class="row q-col-gutter-xl q-ma-xl">
+    <div style="background: linear-gradient(to bottom, #FFFFFF, #EEEEEE)">
+        <div class="row q-col-gutter-xl">
             <div class="col-6">
                 <div class="q-ma-lg">
                     <p class="text-start text-h3 q-mt-xl text-weight-medium">Lorem ipsum dolor emit ambatukam</p>
@@ -58,7 +58,7 @@ Echo.channel('hello-channel')
 
         <p class="text-center text-h3 text-weight-medium">Our Services Lorem ipsum dolor emit ambatukam</p>
         <!-- <p class="text-red text-center">Do the relationships of the models tommorow</p> -->
-        <div class="q-ma-xl">
+        <div>
             <div class="row q-col-gutter-xl q-mt-xl justify-center">
                 <div class="col-5">
                     <div class="q-ma-lg">
@@ -112,7 +112,7 @@ Echo.channel('hello-channel')
         arrows
         :control-color="$q.dark.isActive ? 'white' : 'black'"
         height="300px"
-        class="rounded-borders q-ma-xl"
+        class="rounded-borders"
     >
         <template v-slot:navigation-icon="{ active, onClick }">
             <q-btn v-if="active" size="lg" icon="minimize" color="blue" flat round dense @click="onClick" />

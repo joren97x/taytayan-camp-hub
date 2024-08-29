@@ -53,7 +53,7 @@ function scrollToSection(section) {
         <p class="q-mt-md">
             <span class="text-h3">RJC Cafe</span>
             <br>
-            <span>4.6 <q-icon name="star"></q-icon> (310+)</span>
+            <span><q-icon name="star"></q-icon>4.6 • (6)</span>
             <br>
             <span>San Vicente, Olango Island</span>
         </p>
@@ -63,11 +63,11 @@ function scrollToSection(section) {
                 <q-card bordered>
                     <q-card-section horizontal>
                         <q-card-section class="text-center q-pa-md">
-                            <span class="text-h4">4.6</span>
+                            <span class="text-h4">4.8</span>
                             <br>
                             <q-rating size="sm" />
                             <br>
-                            <span>310+ Ratings</span>
+                            <span>6 Ratings</span>
                         </q-card-section>
                         <q-card-section>
                             <q-card-section v-for="n in 2">
@@ -115,7 +115,7 @@ function scrollToSection(section) {
                 </q-input>
             </div>
         </div>
-        <div>
+        <div class="row" style="border: 1px solid black;">
             ari dire kay mga categories unya na kay di ko kamao mobuhat
         </div>
         <div 
@@ -207,5 +207,26 @@ function scrollToSection(section) {
                 </div>
             </div>
         </div> -->
+    </div>
+    <div class="q-my-md">
+        <div class="text-h6">Rating and Reviews</div>
+        <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
+    </div>
+    <div class="row q-col-gutter-md">
+        <div class="col-6" v-for="n in 5">
+            <q-card bordered>
+                <q-card-section>
+                    <span class="text-subtitle1">John Doe</span>
+                    <br>
+                    <q-rating></q-rating> • 02/06/24
+                    <br>
+                    Ive tried different varieties of boba drink from numerous places and Little Sweet became an instant one of my favorite boba drinks due 
+                    to its deliciousness and exactly what I ordered 😊
+                </q-card-section>
+            </q-card>
+        </div>
+    </div>
+    <div style="height: 200px;" class="bg-grey q-mt-md">
+        ang footer ayaw kalimti
     </div>
 </template>
