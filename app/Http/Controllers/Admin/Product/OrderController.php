@@ -17,7 +17,7 @@ class OrderController extends Controller
     //
     
     public function index(CartService $cartService) {
-        dd('bruh');
+        // dd('bruh');
         $orders = Order::whereIn('status', [
             Order::STATUS_PENDING,
             Order::STATUS_READY_FOR_DELIVERY,

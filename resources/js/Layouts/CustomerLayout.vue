@@ -51,46 +51,54 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
-            <q-toolbar class="row q-py-sm q-px-lg">
+            <q-toolbar class="row q-py-xs q-px-lg">
                 <!-- <div class="row bg-red"> -->
-                    <div class="col-3 flex items-start justify-start">
+                    <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
                         <Link :href="route('homepage')" style="text-decoration: none;">
                             <q-toolbar-title>
-                                <q-avatar size="70px">
-                                    <q-img src="../logo.jpg"></q-img>
+                                <q-avatar size="50px">
+                                    <q-img src="../logo.jpg" fill="cover" />
                                 </q-avatar>
-                                <span class="text-primary text-h5 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
+                                <span class="text-primary text-h6 text-weight-bolder gt-sm q-ml-md">Taytayan Camp Hub</span>
                             </q-toolbar-title>
                         </Link>
                     </div>
-                    <div class="col-6 flex items-center justify-center">
-                        <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle1 navlink">
-                            <q-avatar size="lg">
+                    <div class="col-10 flex items-center justify-center col-md-6 col-lg-6 col-xl-6 col-sm-10 col-xs-10">
+                        <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle2 navlink">
+                            <q-avatar size="md">
                                 <q-img fit="cover" src="images/product_logo.png"/>
                             </q-avatar>
                             Products
                         </Link>
-                        <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle1 navlink">
-                            <q-avatar size="lg">
+                        <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle2 navlink">
+                            <q-avatar size="md">
                                 <q-img fit="cover" src="images/event_logo.png"/>
                             </q-avatar>
                             Events
                         </Link>
-                        <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle1 navlink">
-                            <q-avatar size="lg">
+                        <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle2 navlink">
+                            <q-avatar size="md">
                                 <q-img fit="cover" src="images/facility_logo.png"/>
                             </q-avatar>
                             Facilities
                         </Link>
                     </div>
-                    <div class="col-3 flex items-end justify-end">
+                    <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
                         <div v-if="!$page.props.auth.user">
-                            <Link :href="route('register')" class="text-subtitle1 q-mr-md navlink text-primary">
+                            <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-sm">
                                 Sign up for free
-                                <!-- <q-btn flat no-caps to="/register" class="text-subtitle1 text-primary text-weight-regular">Sign up for free</q-btn> -->
+                                <!-- <q-btn flat no-caps to="/register" class="text-subtitle2 text-primary text-weight-regular">Sign up for free</q-btn> -->
                             </Link>
                             <Link :href="route('login')">
-                                <q-btn no-caps color="primary" unelevated to="/login" class="text-subtitle1 text-weight-regular q-px-xl">Login</q-btn>
+                                <q-btn 
+                                    no-caps 
+                                    color="primary" 
+                                    unelevated 
+                                    class="text-subtitle2 text-weight-regular q-px-xl"
+                                >
+                                    <q-icon left name="login" />
+                                    Login
+                                </q-btn>
                             </Link>
                         </div>
                         <div v-else>

@@ -16,5 +16,4 @@ class CategoryProduct extends Model
         'product_id',
         'category_id'
     ];
-
 }

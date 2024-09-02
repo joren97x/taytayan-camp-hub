@@ -1,5 +1,5 @@
 <script setup>
-
+import { Link } from '@inertiajs/vue3'
 defineProps({ event: Object })
 
 </script>
@@ -19,8 +19,11 @@ defineProps({ event: Object })
                             <q-item-label caption>Wednesday, August 28, 2024</q-item-label>
                         </q-item-section>
                     </q-item>
-                    <p class="q-mt-md">Let's GssO DISCO sa OLANGO this Wednesday  🍻🍾💃🕺</p>
-                <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
+                    <p class="q-mt-md">Let's GO DISCO sa OLANGO this Wednesday  🍻🍾💃🕺</p>
+                    {{ event }}
+                <Link :href="route('customer.events.show', event.id)">
+                    <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
+                </Link>
             </q-card-section> 
         </q-card-section>
     </q-card>

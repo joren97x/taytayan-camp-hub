@@ -23,7 +23,6 @@ class CartProductModifier extends Model
         return $this->belongsTo(CartProduct::class);
     }
 
-    //delete if
     public function modifier_item()
     {
         return $this->belongsTo(ModifierItem::class);

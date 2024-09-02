@@ -33,7 +33,7 @@ defineProps({
         <div class="row q-col-gutter-md">
             <div class="col-8">
                 <p class="text-h6">Closest Upcoming Event</p>
-                <EventCard />
+                <EventCard :event="events[0]" />
             </div>
             <div class="col-4">
                 <q-card bordered>
@@ -70,22 +70,22 @@ defineProps({
                 </q-input>
             </div>
         </div>
-        <div class="row bordered border" style="border: 1px solid black;">
+        <div class="row" style="border: 1px solid black;">
             ari dire kay mga categories unya na kay di ko kamao mobuhat
         </div>
         <div  class="q-mt-md category">
             <p class="text-h6">Upcoming Events</p>
             <div class="row q-col-gutter-md">
-                <div class="col-6" v-for="event in 2">
-                    <EventCard/>
+                <div class="col-6" v-for="event in events">
+                    <EventCard :event="event" />
                 </div>
             </div>
         </div>
         <div  class="q-mt-md category">
             <p class="text-h6">Past Events</p>
             <div class="row q-col-gutter-md">
-                <div class="col-6" v-for="event in 2">
-                    <EventCard/>
+                <div class="col-6" v-for="event in events">
+                    <EventCard :event="event" />
                 </div>
             </div>
         </div>

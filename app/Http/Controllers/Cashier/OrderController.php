@@ -36,6 +36,7 @@ class OrderController extends Controller
         ]);
     }
 
+    //might turn this into a service in the future cus its used to different controllers
     public function show(string $id, CartService $cartService)
     {
         $order = Order::with('user')->find($id);

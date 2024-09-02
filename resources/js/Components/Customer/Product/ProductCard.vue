@@ -11,6 +11,7 @@ const dialog = ref(false)
 <template>
 
     <q-card class="my-card" flat bordered>
+
         <div class="row">
             <div class="col-6">
                 <q-card-section>

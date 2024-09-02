@@ -38,6 +38,41 @@ function scrollToSection(section) {
     document.getElementById(section).scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+const category = ref('Saucy Nuggs');
+const categories = [
+  'Saucy Nuggs',
+  'Meal Deals',
+  'Combos',
+  'Hamburgers',
+  'Chicken, Nuggets & More',
+  'Milkteas',
+  'Bubble Teas',
+  'Fresh-Made Salads',
+  'Fries & Sides',
+  'Beverages',
+  'Frosty'
+];
+
+const categoriesWrapper = ref(null);
+
+const scrollLeft = () => {
+  if (categoriesWrapper.value) {
+    categoriesWrapper.value.scrollBy({
+      left: -200,
+      behavior: 'smooth'
+    });
+  }
+};
+
+const scrollRight = () => {
+  if (categoriesWrapper.value) {
+    categoriesWrapper.value.scrollBy({
+      left: 200,
+      behavior: 'smooth'
+    });
+  }
+};
+
 </script>
 
 <template>
@@ -101,36 +136,60 @@ function scrollToSection(section) {
             </div>
         </div>
         <!-- <q-separator/> -->
-        <div class="row q-my-lg">
-            <div class="col-8">
-                <span class="text-h6">Menu</span>
-                <br>
-                <span>Open till 8AM to 5PM or ambot</span>
+        <div class="menu-header bg-white">
+            <div class="row q-my-md">
+                <div class="col-8">
+                    <span class="text-h6">Menu</span>
+                    <br>
+                    <span>Open till 8AM to 5PM or ambot</span>
+                </div>
+                <div class="col-4">
+                    <q-input placeholder="Search..." filled>
+                        <template v-slot:prepend>
+                            <q-icon name="search"></q-icon>
+                        </template>
+                    </q-input>
+                </div>
             </div>
-            <div class="col-4">
-                <q-input placeholder="Search..." filled>
-                    <template v-slot:prepend>
-                        <q-icon name="search"></q-icon>
-                    </template>
-                </q-input>
+            <div class="category-container q-pb-xs">
+                <q-btn icon="menu" flat>
+                    <q-menu>
+                        <q-list>
+                            <q-item v-for="cat in categories">
+                                <q-item-section>{{ cat }}</q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-menu>
+                </q-btn>
+                <div class="categories-wrapper" ref="categoriesWrapper">
+                    <q-tabs
+                        v-model="category"
+                        class="text-grey"
+                        active-color="black"
+                        align="left"
+                        dense
+                        inline-label
+                    >
+                        <q-tab no-caps v-for="cat in categories" :key="cat" :name="cat" :label="cat" />
+                    </q-tabs>
+                </div>
+                <q-btn icon="arrow_back" flat @click="scrollLeft" />
+                <q-btn icon="arrow_forward" flat @click="scrollRight" />
             </div>
-        </div>
-        <div class="row" style="border: 1px solid black;">
-            ari dire kay mga categories unya na kay di ko kamao mobuhat
         </div>
         <div 
-                    v-for="(category, i) in props.categories" 
-                    :key="i" 
-                    class="q-mt-md category" 
-                    :id="category.id"
-                >
-                    <q-item class="text-h6">{{ category.name }}</q-item>
-                    <div class="row q-col-gutter-md">
-                        <div class="col-6" v-for="product in category.products" :key="product.id">
-                            <ProductCard :product="product" />
-                        </div>
-                    </div>
+            v-for="(category, i) in props.categories" 
+            :key="i" 
+            class="q-mt-md category" 
+            :id="category.id"
+        >
+            <q-item class="text-h6">{{ category.name }}</q-item>
+            <div class="row q-col-gutter-md">
+                <div class="col-12 col-md-6 cold-lg-6 col-sm-12 col-xs-12" v-for="product in category.products" :key="product.id">
+                    <ProductCard :product="product" />
                 </div>
+            </div>
+        </div>
         <!-- <div class="row">
             <div class="col-3 sidebar" style="position: relative;">
                 <div style="position: sticky; top: 100px;">
@@ -230,3 +289,63 @@ function scrollToSection(section) {
         ang footer ayaw kalimti
     </div>
 </template>
+
+<style scoped>
+.category-container {
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.categories-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  flex-grow: 1;
+  padding: 0 8px; /* Adjusts padding to match the design */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.q-tab {
+  white-space: nowrap;
+  padding: 0 12px; /* Adjusts spacing between tabs */
+  font-weight: normal;
+}
+
+.q-tabs__content {
+  display: flex;
+  align-items: center; /* Vertically centers the tabs */
+  border-bottom: 2px solid black; /* Adds a bottom border to the active tab */
+}
+
+.q-btn {
+  min-width: 0;
+  width: auto;
+}
+
+::-webkit-scrollbar {
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.menu-header {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 55px; /* Adjust this value to control the sticky position */
+    z-index: 100;
+}
+
+</style>

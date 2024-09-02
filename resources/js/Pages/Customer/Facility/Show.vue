@@ -74,13 +74,47 @@ function options(date) {
     return !disabled_dates.value.includes(formattedIncomingDate);
 }
 
-
+const images = ref([
+    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
+    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
+    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
+    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
+    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
+])
 
 </script>
 
 <template>
-    <div>
+     <q-page padding>
+    <div class="gallery">
+      <div class="gallery-item main" v-if="images.length > 0">
+        <q-img :src="images[0]" />
+      </div>
+      <div
+        class="gallery-item"
+        v-for="(image, index) in images.slice(1, 5)"
+        :key="index"
+      >
+        <q-img :src="image" />
+      </div>
     </div>
+    <q-btn v-if="images.length > 5" class="show-more-btn" flat label="Show all photos" />
+  </q-page>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="row">
         <div class="col-8">
             {{ facility }}
@@ -110,3 +144,41 @@ function options(date) {
         </div>
     </div>
 </template>
+
+<style scoped>
+.gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+}
+
+.gallery-item {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.gallery-item.main {
+  grid-row: span 2;
+}
+
+.gallery-item q-img {
+  height: 100px;
+  object-fit: cover;
+}
+
+.show-more-btn {
+  margin-top: 10px;
+}
+
+/* @media (max-width: 600px) {
+  .gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
+  }
+
+  .gallery-item.main {
+    grid-row: span 1;
+  }
+} */
+</style>
