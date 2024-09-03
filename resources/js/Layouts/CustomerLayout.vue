@@ -12,6 +12,7 @@ const rightDrawerOpen = ref(false)
 const items = ref(null) 
 const notifications = ref([])
 const notification_badge = ref(0)
+const drawer = ref(false)
 
 import axios from 'axios'
 
@@ -51,7 +52,7 @@ watch(rightDrawerOpen, (newVal) => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
-            <q-toolbar class="row q-py-xs q-px-lg">
+            <q-toolbar class="row q-py-xs q-px-md">
                 <!-- <div class="row bg-red"> -->
                     <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
                         <Link :href="route('homepage')" style="text-decoration: none;">
@@ -59,47 +60,50 @@ watch(rightDrawerOpen, (newVal) => {
                                 <q-avatar size="50px">
                                     <q-img src="../logo.jpg" fill="cover" />
                                 </q-avatar>
-                                <span class="text-primary text-h6 text-weight-bolder gt-sm q-ml-md">Taytayan Camp Hub</span>
+                                <span class="text-primary text-h6 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
                             </q-toolbar-title>
                         </Link>
                     </div>
-                    <div class="col-10 flex items-center justify-center col-md-6 col-lg-6 col-xl-6 col-sm-10 col-xs-10">
-                        <Link :href="route('customer.products.index')" class="q-mx-lg text-subtitle2 navlink">
-                            <q-avatar size="md">
+                    <div class="flex items-center justify-center col-md-6 col-lg-6 col-xl-6 gt-sm">
+                        <!-- {{ $q.screen.gt.xs }} -->
+                        <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
+                            <q-avatar size="sm" class="">
                                 <q-img fit="cover" src="images/product_logo.png"/>
                             </q-avatar>
                             Products
                         </Link>
-                        <Link :href="route('customer.events.index')" class="q-mx-lg text-subtitle2 navlink">
-                            <q-avatar size="md">
+                        <Link :href="route('customer.events.index')" class="text-subtitle2 navlink q-mr-xl">
+                            <q-avatar size="sm" class="">
                                 <q-img fit="cover" src="images/event_logo.png"/>
                             </q-avatar>
                             Events
                         </Link>
-                        <Link :href="route('customer.facilities.index')" class="q-mx-lg text-subtitle2 navlink">
-                            <q-avatar size="md">
+                        <Link :href="route('customer.facilities.index')" class="text-subtitle2 navlink q-mr-xl">
+                            <q-avatar size="sm" class="">
                                 <q-img fit="cover" src="images/facility_logo.png"/>
                             </q-avatar>
                             Facilities
                         </Link>
                     </div>
-                    <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
+                    <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-11 col-xs-11">
                         <div v-if="!$page.props.auth.user">
                             <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-sm">
                                 Sign up for free
-                                <!-- <q-btn flat no-caps to="/register" class="text-subtitle2 text-primary text-weight-regular">Sign up for free</q-btn> -->
                             </Link>
-                            <Link :href="route('login')">
+                            <Link :href="route('login')" class="gt-xs">
                                 <q-btn 
                                     no-caps 
                                     color="primary" 
                                     unelevated 
-                                    class="text-subtitle2 text-weight-regular q-px-xl"
+                                    class="text-subtitle2 text-weight-regular"
                                 >
+                                <div class="gt-sm">
                                     <q-icon left name="login" />
+                                </div>
                                     Login
-                                </q-btn>
+                                    </q-btn>
                             </Link>
+                            <q-btn icon="menu" unelevated @click="drawer = !drawer" class="lt-md" />
                         </div>
                         <div v-else>
                             <!-- <q-btn flat icon="search" round></q-btn> -->
@@ -199,6 +203,51 @@ watch(rightDrawerOpen, (newVal) => {
                     </div>
                 <!-- </div> -->
             </q-toolbar>
+                
+            <q-card v-show="drawer" class="fixed full-width lt-md">
+                <q-list class="q-pa-none">
+                    <Link :href="route('customer.products.index')" class="text-subtitle2 navlink">
+                        <q-item clickable>
+                            <q-item-section avatar>
+                                <q-avatar size="md">
+                                <q-img fit="cover" src="images/product_logo.png"/>
+                            </q-avatar>
+                            </q-item-section>
+                            <q-item-section>Products</q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('customer.events.index')" class="text-subtitle2 navlink">
+                        <q-item clickable>
+                            <q-item-section avatar>
+                                <q-avatar size="md">
+                                <q-img fit="cover" src="images/event_logo.png"/>
+                            </q-avatar>
+                            </q-item-section>
+                            <q-item-section>Events</q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('customer.facilities.index')" :class="['text-subtitle2 navlink']">
+                        <q-item clickable>
+                            <q-item-section avatar>
+                                <q-avatar size="md">
+                                    <q-img fit="cover" src="images/facility_logo.png"/>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>Facilities</q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('register')" class="navlink text-weight-bold text-primary">
+                        <q-item clickable>
+                            <q-item-section>Sign up for free</q-item-section>
+                        </q-item>
+                    </Link>
+                    <Link :href="route('login')" class="navlink xs text-weight-bold text-primary">
+                        <q-item clickable>
+                            <q-item-section>Login</q-item-section>
+                        </q-item>
+                    </Link>
+                </q-list>
+            </q-card>
         </q-header>
         <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
         <q-page-container>
@@ -231,6 +280,17 @@ watch(rightDrawerOpen, (newVal) => {
 .user-menu-link {
     text-decoration: none;
     color: inherit;
+}
+.slide-down-enter {
+  transform: translateY(-100%);
+}
+
+.slide-down-leave {
+  transform: translateY(0);
+}
+
+.slide-down-active {
+  transition: transform 0.3s ease;
 }
 
 </style>

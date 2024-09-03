@@ -28,7 +28,6 @@ createInertiaApp({
                 plugins: {
                   Notify
                 }, // import Quasar plugins and add here
-                
                 config: {
                   brand: {
                     primary: '#0e9cff',
@@ -54,7 +53,6 @@ createInertiaApp({
                    // loadingBar: { ... }, settings for LoadingBar Quasar plugin
                   // ..and many more (check Installation card on each Quasar component/directive/plugin)
                 }
-                 
             })
 
             .mount(el);

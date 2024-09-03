@@ -112,8 +112,6 @@ const attendees = ref(1)
                         />  
                     </div>
                 </div>
-                
-                
             </div>
         </div>
         <!-- <q-dialog
