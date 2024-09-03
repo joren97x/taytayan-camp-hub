@@ -35,7 +35,7 @@ const submit = () => {
 <template>
     <Head title="Reset Password" />
     <q-form @submit="submit">
-        <q-card class="q-pa-xl" flat>
+        <q-card flat>
             <Link :href="route('login')">
                 <q-btn no-caps flat color="primary">
                     <q-icon name="arrow_back" class="q-mr-sm"></q-icon>

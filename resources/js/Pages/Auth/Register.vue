@@ -29,7 +29,7 @@ const submit = () => {
 <template>
     <Head title="Register" />
     <q-form @submit="submit">
-        <q-card class="q-pa-xl" flat>
+        <q-card flat>
             <q-card-section>
                 <p class="text-h6 q-mb-lg">Create your account</p>
                 <q-input

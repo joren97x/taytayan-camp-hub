@@ -2,18 +2,22 @@
 
 import { Head } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import ProductCard from '@/Components/Customer/Product/ProductCard.vue'
 import FeaturedProductCard from '@/Components/Customer/Product/FeaturedProductCard.vue'
+import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
 
 defineOptions({
     layout: CustomerLayout
 })
 
+const $q = useQuasar()
 const props = defineProps({
     categories: Object,
     products: Object,
-    featured_products: Object
+    featured_products: Object,
+    google_maps_api_key: String
 })
 
 const slide = ref(1)
@@ -73,11 +77,18 @@ const scrollRight = () => {
   }
 };
 
+const showNewAddressDialog = ref(false)
+
 </script>
 
 <template>
     <Head title="Milktea Menu" />
     <div>
+        <NewAddressDialog 
+            :dialog="showNewAddressDialog" 
+            @close="showNewAddressDialog = false"
+            :google_maps_api_key="google_maps_api_key" 
+        />
         <q-img
             cover
             src="masarap milktea.jpeg"
@@ -85,15 +96,30 @@ const scrollRight = () => {
             height="300px"
             class="rounded-borders"
         />
-        <p class="q-mt-md">
-            <span class="text-h3">RJC Cafe</span>
-            <br>
-            <span><q-icon name="star"></q-icon>4.6 • (6)</span>
-            <br>
-            <span>San Vicente, Olango Island</span>
-        </p>
-        <div class="row q-col-gutter-md">
+        <div class="row q-col-gutter-md q-mt-xs">
             <div class="col-8">
+                <p :class="[$q.screen.lt.md ? 'text-center' : '']">
+                    <span class="text-h4 text-weight-bold">RJC Cafe</span>
+                    <br>
+                    <span><q-icon name="star"></q-icon>4.6 • (6)</span>
+                    <br>
+                    <span>San Vicente, Olango Island</span>
+                </p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, explicabo bomboclattt lmao.</p>
+                <div v-if="$page.props.auth.user">
+                    <q-banner rounded class="bg-primary" v-if="!$page.props.auth.user.location">
+                        <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
+                        <q-btn 
+                            icon="pin_drop" 
+                            label="Place your address" 
+                            no-caps 
+                            color="white" 
+                            class="full-width text-black q-my-xs"
+                            @click="showNewAddressDialog = true"
+                        >
+                        </q-btn>            
+                    </q-banner>
+                </div>
                 <p class="text-h6">Rating and reviews</p>
                 <q-card bordered>
                     <q-card-section horizontal>
@@ -116,9 +142,19 @@ const scrollRight = () => {
                 </q-card>
             </div>
             <div class="col-4">
+               
                 <q-card bordered>
                     <div style="height: 200px;" class="bg-grey">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123065.8494400433!2d123.92886618907012!3d10.25398460253611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1724885213335!5m2!1sen!2sph" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123065.8494400433!2d123.92886618907012!3d10.25398460253611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1724885213335!5m2!1sen!2sph" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                        >
+                        </iframe>
                     </div>
                     <q-card-section>
                         <q-item title="San vicente olango" subtitle="boang">
@@ -127,7 +163,7 @@ const scrollRight = () => {
                             </q-item-section>
                             <q-item-section >
                                 <q-item-label>RJC CAFE</q-item-label>
-                                <q-item-label caption>725Q+CHH, Lapu-Lapu City, Cebu</q-item-label>
+                                <!-- <q-item-label caption>725Q+CHH, Lapu-Lapu City, Cebu</q-item-label> -->
                             </q-item-section>
                             <q-item-section side>Side</q-item-section>
                         </q-item>
@@ -136,8 +172,8 @@ const scrollRight = () => {
             </div>
         </div>
         <!-- <q-separator/> -->
-        <div class="menu-header bg-white">
-            <div class="row q-my-md">
+        <div class="menu-header bg-white q-ma-sm">
+            <div class="row">
                 <div class="col-8">
                     <span class="text-h6">Menu</span>
                     <br>
@@ -272,7 +308,7 @@ const scrollRight = () => {
         <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
     </div>
     <div class="row q-col-gutter-md">
-        <div class="col-6" v-for="n in 5">
+        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="n in 5">
             <q-card bordered>
                 <q-card-section>
                     <span class="text-subtitle1">John Doe</span>

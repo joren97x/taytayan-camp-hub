@@ -25,7 +25,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
 <template>
     <Head title="Email Verification" />
-        <q-card class="q-pa-xl q-mt-xl" flat>
+        <q-card flat>
             <Link :href="route('homepage')">
                 <q-btn no-caps flat color="primary">
                     <q-icon name="arrow_back" class="q-mr-sm"></q-icon>

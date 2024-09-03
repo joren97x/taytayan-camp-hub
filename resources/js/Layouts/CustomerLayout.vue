@@ -87,7 +87,7 @@ watch(rightDrawerOpen, (newVal) => {
                     </div>
                     <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-11 col-xs-11">
                         <div v-if="!$page.props.auth.user">
-                            <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-sm">
+                            <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-xs">
                                 Sign up for free
                             </Link>
                             <Link :href="route('login')" class="gt-xs">
@@ -97,13 +97,14 @@ watch(rightDrawerOpen, (newVal) => {
                                     unelevated 
                                     class="text-subtitle2 text-weight-regular"
                                 >
-                                <div class="gt-sm">
+                                <div>
                                     <q-icon left name="login" />
                                 </div>
                                     Login
                                     </q-btn>
                             </Link>
-                            <q-btn icon="menu" unelevated @click="drawer = !drawer" class="lt-md" />
+                            <q-btn icon="menu" v-if="!drawer" unelevated @click="drawer = true" class="lt-md" />
+                            <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
                         </div>
                         <div v-else>
                             <!-- <q-btn flat icon="search" round></q-btn> -->
@@ -139,7 +140,7 @@ watch(rightDrawerOpen, (newVal) => {
                                             </q-item-section>
                                         </q-item>
                                         <q-separator />
-                                        <Link :href="route('customer.inbox')" class="user-menu-link">
+                                        <Link :href="route('customer.cart.index')" class="user-menu-link">
                                             <q-item clickable>
                                                 <q-item-section avatar>
                                                     <q-icon name="inbox" />
@@ -236,7 +237,7 @@ watch(rightDrawerOpen, (newVal) => {
                             <q-item-section>Facilities</q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('register')" class="navlink text-weight-bold text-primary">
+                    <Link :href="route('register')" class="navlink xs text-weight-bold text-primary">
                         <q-item clickable>
                             <q-item-section>Sign up for free</q-item-section>
                         </q-item>

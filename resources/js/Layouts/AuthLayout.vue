@@ -8,10 +8,16 @@ const slide = ref(1)
 
 <template>
     <q-card class="row items-center justify-center" flat style="height: 100vh;">   
-        <div class="col-6">
+        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 items-center" style="max-width: 500px">
+            <div class="justify-start items-center flex q-px-md">
+                <q-avatar size="50px">
+                    <q-img src="images/logo.jpg"></q-img>
+                </q-avatar>
+                <span class="text-h6 q-ml-md text-primary text-weight-bold">Taytayan Camp Hub</span>
+            </div>
             <slot/>
         </div>
-        <div class="col-6">
+        <div class="col-6 gt-sm">
             <div class="justify-center flex q-mt-xl">
                 <q-avatar size="80px">
                     <q-img src="images/logo.jpg"></q-img>

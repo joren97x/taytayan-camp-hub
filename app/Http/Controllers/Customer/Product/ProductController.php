@@ -21,7 +21,8 @@ class ProductController extends Controller
         return Inertia::render('Customer/Product/Index', [
             'categories' => Category::with('products.modifier_groups.modifier_items')->get(),
             'products' => Product::with('modifier_groups.modifier_items')->get(),
-            'featured_products' => Product::with('modifier_groups.modifier_items')->where('is_featured', true)->get()
+            'featured_products' => Product::with('modifier_groups.modifier_items')->where('is_featured', true)->get(),
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 

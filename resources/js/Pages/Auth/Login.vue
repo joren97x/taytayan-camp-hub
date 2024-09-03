@@ -31,9 +31,9 @@ const submit = () => {
 <template>
     <Head title="Log in" />
     <q-form @submit="submit">
-        <q-card class="q-pa-xl" flat>
+        <q-card flat>
             <q-card-section>
-                <div class="text-h6 q-mb-lg">Login to Taytayan Camp Hub</div>
+                <div class="text-h6 q-mb-lg">Log In</div>
                 <q-input
                     filled
                     v-model="form.email"
