@@ -23,10 +23,12 @@ const dialog = ref(false)
                 </q-card-section>
             </div>
             <div class="col-6">
-                <q-img height="170px" :src="`/storage/${product.photo}`"/>
+                <q-img height="170px" :src="`/storage/${product.photo}`">
+                    <q-btn round icon="add" size="md" @click="dialog = true" color="blue" class="absolute-bottom-right q-mb-sm q-mr-sm"></q-btn>
+                </q-img>
             </div>
         </div>
-        <q-btn round icon="add" size="md" @click="dialog = true" color="blue" class="absolute" style="bottom: 5px; right: 5px;"></q-btn>
+        <!-- <q-btn round icon="add" size="md" @click="dialog = true" color="blue" class="absolute" style="bottom: 5px; right: 5px;"></q-btn> -->
     </q-card>
 
     <FoodDescriptionDialog 

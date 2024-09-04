@@ -68,7 +68,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return redirect(route('admin.product.index', absolute: false));
+        return redirect(route('admin.products.index', absolute: false));
 
     }
 

@@ -1,6 +1,6 @@
 <script setup>
 
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
@@ -36,28 +36,25 @@ onMounted(() => {
     categoryElements.forEach(categoryElement => {
         observer.observe(categoryElement)
     })
+
+    const menuElement = document.querySelector('.categories-wrapper');
+    if (menuElement) {
+        menuHeight.value = menuElement.offsetHeight;
+    }
 })
 
-function scrollToSection(section) {
-    document.getElementById(section).scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
-const category = ref('Saucy Nuggs');
-const categories = [
-  'Saucy Nuggs',
-  'Meal Deals',
-  'Combos',
-  'Hamburgers',
-  'Chicken, Nuggets & More',
-  'Milkteas',
-  'Bubble Teas',
-  'Fresh-Made Salads',
-  'Fries & Sides',
-  'Beverages',
-  'Frosty'
-];
-
 const categoriesWrapper = ref(null);
+const selectedCategory = ref(null);
+const categoryRefs = ref({});
+const menuHeight = ref(0);  
+
+const scrollToCategory = (id) => {
+  const element = categoryRefs.value[id];
+   if (element) {
+    const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 130;
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+  }
+};
 
 const scrollLeft = () => {
   if (categoriesWrapper.value) {
@@ -79,15 +76,97 @@ const scrollRight = () => {
 
 const showNewAddressDialog = ref(false)
 
+const featuredItems = [
+        {
+          id: 1,
+          name: "Iced Brown Sugar Oatmilk Shaken Espresso",
+          price: "$7.75",
+          calories: "100 Cal.",
+          rank: 1,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 2,
+          name: "Starbucks® Cold Brew Coffee",
+          price: "$5.75",
+          calories: "5 Cal.",
+          rank: 2,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 3,
+          name: "Chocolate Croissant",
+          price: "$5.45",
+          calories: "300 Cal.",
+          rank: 3,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 4,
+          name: "Egg White & Roasted Red Pepper Egg Bites",
+          price: "$7.15",
+          calories: "170 Cal.",
+          rank: 4,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 5,
+          name: "Chai Latte",
+          price: "$6.45",
+          calories: "120 Cal.",
+          rank: 5,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 6,
+          name: "Egg White & Roasted Red Pepper Egg Bites",
+          price: "$7.15",
+          calories: "170 Cal.",
+          rank: 6,
+          image: "./images/dummy_image.jpg",
+        },
+        {
+          id: 7,
+          name: "Chai Latte",
+          price: "$6.47",
+          calories: "120 Cal.",
+          rank: 7,
+          image: "./images/dummy_image.jpg",
+        },
+      ]
+
+      const scrollContainer = ref(null);
+
+// Method to scroll left
+const scrollLeftFeatured = () => {
+  const container = scrollContainer.value;
+  container.scrollBy({
+    left: -container.clientWidth, // Scroll left by the width of the container
+    behavior: 'smooth'
+  });
+};
+
+// Method to scroll right
+const scrollRightFeatured = () => {
+  const container = scrollContainer.value;
+  container.scrollBy({
+    left: container.clientWidth, // Scroll right by the width of the container
+    behavior: 'smooth'
+  });
+};
+
 </script>
 
 <template>
     <Head title="Milktea Menu" />
     <div>
+                            <q-btn round color="primary" icon="shopping_cart" />
+
         <NewAddressDialog 
             :dialog="showNewAddressDialog" 
             @close="showNewAddressDialog = false"
             :google_maps_api_key="google_maps_api_key" 
+            v-if="$page.props.auth.user"
         />
         <q-img
             cover
@@ -97,7 +176,7 @@ const showNewAddressDialog = ref(false)
             class="rounded-borders"
         />
         <div class="row q-col-gutter-md q-mt-xs">
-            <div class="col-8">
+            <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">
                 <p :class="[$q.screen.lt.md ? 'text-center' : '']">
                     <span class="text-h4 text-weight-bold">RJC Cafe</span>
                     <br>
@@ -118,6 +197,21 @@ const showNewAddressDialog = ref(false)
                             @click="showNewAddressDialog = true"
                         >
                         </q-btn>            
+                    </q-banner>
+                </div>
+                <div v-else>
+                    <q-banner rounded class="bg-primary">
+                        <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
+                        <Link :href="route('login')">
+                            <q-btn 
+                                icon="pin_drop" 
+                                label="Place your address" 
+                                no-caps 
+                                color="white" 
+                                class="full-width text-black q-my-xs"
+                            >
+                            </q-btn>   
+                        </Link>         
                     </q-banner>
                 </div>
                 <p class="text-h6">Rating and reviews</p>
@@ -141,7 +235,7 @@ const showNewAddressDialog = ref(false)
                     </q-card-section>
                 </q-card>
             </div>
-            <div class="col-4">
+            <div class="col-4 gt-sm">
                
                 <q-card bordered>
                     <div style="height: 200px;" class="bg-grey">
@@ -172,7 +266,76 @@ const showNewAddressDialog = ref(false)
             </div>
         </div>
         <!-- <q-separator/> -->
-        <div class="menu-header bg-white q-ma-sm">
+         <div class="featured-items-container">
+            
+            
+
+
+
+
+
+
+            <div class="text-h5 row">
+                <div class="col">
+                    Featured items
+                </div>
+
+                <div class="col flex justify-end">
+                    <q-btn icon="arrow_back" flat @click="scrollLeftFeatured"/>
+                    <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
+                </div>
+            </div>
+            <div ref="scrollContainer" class="row q-col-gutter-md no-wrap" style="overflow-x: auto; scroll-behavior: smooth;">
+                <div 
+                    class="col-5 col-xs-5 col-sm-4 col-md-3 col-lg-3 col-xl-3"
+                    v-for="item in featuredItems"
+                    :key="item.id"
+                >
+                    <q-card
+                        flat
+                        bordered
+                    >
+                        <q-img
+                            :src="item.image"
+                            alt="Item image"
+                        >
+                            <div class="absolute-top-left bg-green-6 text-white text-caption">
+                                #{{ item.rank }} most liked
+                            </div>
+                            <q-btn
+                                icon="add"
+                                round
+                                class="absolute-bottom-right q-mb-sm q-mr-sm"
+                                color="primary"
+                            />
+                        </q-img>
+                        <q-card-section>
+                        <div class="text-weight-medium">{{ item.name }}</div>
+                        <div class="text-subtitle2">{{ item.price }} - {{ item.calories }} Cal.</div>
+                        </q-card-section>
+                    </q-card>
+                    
+                </div>
+                
+    </div>
+
+    <div class="q-gutter-md row justify-center q-mt-md">
+  
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+         </div>
+        <div class="menu-header bg-white">
             <div class="row">
                 <div class="col-8">
                     <span class="text-h6">Menu</span>
@@ -191,22 +354,30 @@ const showNewAddressDialog = ref(false)
                 <q-btn icon="menu" flat>
                     <q-menu>
                         <q-list>
-                            <q-item v-for="cat in categories">
-                                <q-item-section>{{ cat }}</q-item-section>
+                            <q-item v-for="cat in props.categories" @click="scrollToCategory(cat.id)" clickable>
+                                <q-item-section>{{ cat.name }}</q-item-section>
                             </q-item>
                         </q-list>
                     </q-menu>
                 </q-btn>
                 <div class="categories-wrapper" ref="categoriesWrapper">
                     <q-tabs
-                        v-model="category"
+                        v-model="selectedCategory"
                         class="text-grey"
                         active-color="black"
                         align="left"
                         dense
-                        inline-label
                     >
-                        <q-tab no-caps v-for="cat in categories" :key="cat" :name="cat" :label="cat" />
+                        <q-tab 
+                            no-caps 
+                            
+                            v-for="cat in props.categories" 
+                            :key="cat.id" 
+                            :name="cat.name" 
+                            :label="cat.name" 
+                            inline-label
+                            @click="scrollToCategory(cat.id)" 
+                        />
                     </q-tabs>
                 </div>
                 <q-btn icon="arrow_back" flat @click="scrollLeft" />
@@ -218,10 +389,15 @@ const showNewAddressDialog = ref(false)
             :key="i" 
             class="q-mt-md category" 
             :id="category.id"
+            :ref="el => categoryRefs[category.id] = el"
         >
             <q-item class="text-h6">{{ category.name }}</q-item>
             <div class="row q-col-gutter-md">
-                <div class="col-12 col-md-6 cold-lg-6 col-sm-12 col-xs-12" v-for="product in category.products" :key="product.id">
+                <div 
+                    class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
+                    v-for="product in category.products" 
+                    :key="product.id"
+                >
                     <ProductCard :product="product" />
                 </div>
             </div>
@@ -356,10 +532,10 @@ const showNewAddressDialog = ref(false)
   border-bottom: 2px solid black; /* Adds a bottom border to the active tab */
 }
 
-.q-btn {
+/* .q-btn {
   min-width: 0;
   width: auto;
-}
+} */
 
 ::-webkit-scrollbar {
   height: 4px;
@@ -383,5 +559,23 @@ const showNewAddressDialog = ref(false)
     top: 55px; /* Adjust this value to control the sticky position */
     z-index: 100;
 }
+
+/* .card-image {
+  position: relative;
+} */
+
+/* .absolute-top-left {
+  top: 0;
+  left: 0;
+}
+
+.absolute-bottom-right {
+  bottom: 0;
+  right: 0;
+} */
+
+/* .featured-items-container {
+    margin: auto;
+} */
 
 </style>
