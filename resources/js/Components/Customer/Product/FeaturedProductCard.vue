@@ -10,27 +10,33 @@ const dialog = ref(false)
 
 <template>
 
-    <q-card class="col-3 bg-white" flat >
-        <q-img :src="`/storage/${product.photo}`" height="180px" />
-        <q-card-section>
+    <q-card
+        flat
+        bordered
+    >
+        <q-card-section class="q-pa-none">
+            <q-img
+                :src="`./storage/${product.photo}`"
+                alt="product image"
+                height="200px"
+            >
+                <!-- <div class="absolute-top-left bg-green-6 text-white text-caption">
+                    #{{ i + 1 }} most liked
+                </div> -->
+            </q-img>
             <q-btn
-                round
-                color="primary"
                 icon="add"
-                class="absolute"
-                @click="dialog = !dialog"
-                size="md"
-                style="top: 0; right: 12px; transform: translateY(-50%);"
+                round
+                class="absolute-bottom-right q-mb-sm q-mr-sm"
+                color="primary"
+                @click="dialog = true"
             />
-
-            <div class="row no-wrap items-center">
-                <div class="col text-h6 ellipsis">
-                    {{ product.name }}
-                </div>
-            </div>
-            <div class="text-caption text-grey">
-                {{ product.description }}
-            </div>
+        </q-card-section>
+        <q-card-section class="q-pa-xs">
+            <!-- <span>hi</span> -->
+            <div class="text-subtitle1 text-weight-regular">{{ product.name }}</div>
+            <div class="text-subtitle2 text-weight-regular">{{ product.price }}</div>
+            <div class="text-caption">{{ product.description }}</div>
         </q-card-section>
     </q-card>
 

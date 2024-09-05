@@ -1,7 +1,7 @@
 <script setup>
 
 import { Head, Link } from '@inertiajs/vue3'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import ProductCard from '@/Components/Customer/Product/ProductCard.vue'
@@ -20,22 +20,22 @@ const props = defineProps({
     google_maps_api_key: String
 })
 
-const slide = ref(1)
-const currentCategory = ref(null)
+// const slide = ref(1)
+// const currentCategory = ref(null)
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            currentCategory.value = entry.target.id
-        }
-    })
-}, {threshold: 0.5})
+// const observer = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         if (entry.isIntersecting) {
+//             currentCategory.value = entry.target.id
+//         }
+//     })
+// }, {threshold: 0.5})
 
 onMounted(() => {
-    const categoryElements = document.querySelectorAll('.category')
-    categoryElements.forEach(categoryElement => {
-        observer.observe(categoryElement)
-    })
+    // const categoryElements = document.querySelectorAll('.category')
+    // categoryElements.forEach(categoryElement => {
+    //     observer.observe(categoryElement)
+    // })
 
     const menuElement = document.querySelector('.categories-wrapper');
     if (menuElement) {
@@ -43,17 +43,27 @@ onMounted(() => {
     }
 })
 
+const categoryMenu = ref(false)
 const categoriesWrapper = ref(null);
 const selectedCategory = ref(null);
 const categoryRefs = ref({});
 const menuHeight = ref(0);  
 
-const scrollToCategory = (id) => {
-  const element = categoryRefs.value[id];
-   if (element) {
-    const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 130;
-    window.scrollTo({ top: offset, behavior: 'smooth' });
-  }
+const scrollToCategory = (category) => {
+    console.log('clicked')
+    categoryMenu.value = false
+    setTimeout(() => {
+        const element = categoryRefs.value[category.id];
+        selectedCategory.value = category.name;
+        
+        if (element) {
+            const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 130;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+        
+        console.log(element);
+    }, 150);
+  
 };
 
 const scrollLeft = () => {
@@ -75,67 +85,7 @@ const scrollRight = () => {
 };
 
 const showNewAddressDialog = ref(false)
-
-const featuredItems = [
-        {
-          id: 1,
-          name: "Iced Brown Sugar Oatmilk Shaken Espresso",
-          price: "$7.75",
-          calories: "100 Cal.",
-          rank: 1,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 2,
-          name: "Starbucks® Cold Brew Coffee",
-          price: "$5.75",
-          calories: "5 Cal.",
-          rank: 2,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 3,
-          name: "Chocolate Croissant",
-          price: "$5.45",
-          calories: "300 Cal.",
-          rank: 3,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 4,
-          name: "Egg White & Roasted Red Pepper Egg Bites",
-          price: "$7.15",
-          calories: "170 Cal.",
-          rank: 4,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 5,
-          name: "Chai Latte",
-          price: "$6.45",
-          calories: "120 Cal.",
-          rank: 5,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 6,
-          name: "Egg White & Roasted Red Pepper Egg Bites",
-          price: "$7.15",
-          calories: "170 Cal.",
-          rank: 6,
-          image: "./images/dummy_image.jpg",
-        },
-        {
-          id: 7,
-          name: "Chai Latte",
-          price: "$6.47",
-          calories: "120 Cal.",
-          rank: 7,
-          image: "./images/dummy_image.jpg",
-        },
-      ]
-
-      const scrollContainer = ref(null);
+const scrollContainer = ref(null);
 
 // Method to scroll left
 const scrollLeftFeatured = () => {
@@ -155,13 +105,67 @@ const scrollRightFeatured = () => {
   });
 };
 
+const search = ref('');
+
+// Computed property to filter products
+const filteredCategories = computed(() => {
+  if (!search.value) {
+    // Return all categories with their original products
+    return props.categories.map(category => ({
+      ...category,
+      filteredProducts: category.products
+    }));
+  }
+
+  // Lowercase search term for case-insensitive search
+  const searchTerm = search.value.toLowerCase();
+  console.log('hi')
+  console.log(searchTerm)
+  // Filter each category based on the search in products' name or description
+//   return props.categories
+//     .map(category => {
+//       // Filter the products within each category
+//       const filteredProducts = category.products.filter(product =>
+//         product.name.toLowerCase().includes(searchTerm) ||
+//         product.description.toLowerCase().includes(searchTerm)
+//       );
+
+//       // Return the category with the filtered products
+      
+//       return {
+//         ...category,
+//         filteredProducts
+//       };
+//     })
+//     .filter(category => category.filteredProducts.length > 0); // Remove categories with no matching products
+    return props.categories
+    .map(category => {
+      // Filter products within this category based on search term
+      let filteredProducts = category.products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+      );
+
+        filteredProducts.filter(product =>
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.description.toLowerCase().includes(searchTerm)
+        );
+        console.log("from da here")
+        console.log(filteredProducts.length)
+      // Return the category with only the filtered products
+      return {
+        ...category,
+        filteredProducts
+      };
+    })
+    .filter(category => category.filteredProducts.length > 0); 
+});
+
 </script>
 
 <template>
     <Head title="Milktea Menu" />
     <div>
-                            <q-btn round color="primary" icon="shopping_cart" />
-
         <NewAddressDialog 
             :dialog="showNewAddressDialog" 
             @close="showNewAddressDialog = false"
@@ -186,7 +190,11 @@ const scrollRightFeatured = () => {
                 </p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, explicabo bomboclattt lmao.</p>
                 <div v-if="$page.props.auth.user">
-                    <q-banner rounded class="bg-primary" v-if="!$page.props.auth.user.location">
+                    <q-banner 
+                        rounded 
+                        class="bg-primary" 
+                        v-if="!$page.props.auth.user.location"
+                    >
                         <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
                         <q-btn 
                             icon="pin_drop" 
@@ -266,20 +274,11 @@ const scrollRightFeatured = () => {
             </div>
         </div>
         <!-- <q-separator/> -->
-         <div class="featured-items-container">
-            
-            
-
-
-
-
-
-
-            <div class="text-h5 row">
+         <div class="featured-items-container q-mt-md ">
+            <div class="text-h6 row">
                 <div class="col">
                     Featured items
                 </div>
-
                 <div class="col flex justify-end">
                     <q-btn icon="arrow_back" flat @click="scrollLeftFeatured"/>
                     <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
@@ -288,54 +287,14 @@ const scrollRightFeatured = () => {
             <div ref="scrollContainer" class="row q-col-gutter-md no-wrap" style="overflow-x: auto; scroll-behavior: smooth;">
                 <div 
                     class="col-5 col-xs-5 col-sm-4 col-md-3 col-lg-3 col-xl-3"
-                    v-for="item in featuredItems"
-                    :key="item.id"
+                    v-for="(product, i) in featured_products"
+                    :key="product.id"
                 >
-                    <q-card
-                        flat
-                        bordered
-                    >
-                        <q-img
-                            :src="item.image"
-                            alt="Item image"
-                        >
-                            <div class="absolute-top-left bg-green-6 text-white text-caption">
-                                #{{ item.rank }} most liked
-                            </div>
-                            <q-btn
-                                icon="add"
-                                round
-                                class="absolute-bottom-right q-mb-sm q-mr-sm"
-                                color="primary"
-                            />
-                        </q-img>
-                        <q-card-section>
-                        <div class="text-weight-medium">{{ item.name }}</div>
-                        <div class="text-subtitle2">{{ item.price }} - {{ item.calories }} Cal.</div>
-                        </q-card-section>
-                    </q-card>
-                    
+                    <FeaturedProductCard :product="product" />
                 </div>
-                
-    </div>
-
-    <div class="q-gutter-md row justify-center q-mt-md">
-  
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
+            </div>
          </div>
-        <div class="menu-header bg-white">
+        <div class="menu-header bg-white q-mt-md">
             <div class="row">
                 <div class="col-8">
                     <span class="text-h6">Menu</span>
@@ -343,7 +302,7 @@ const scrollRightFeatured = () => {
                     <span>Open till 8AM to 5PM or ambot</span>
                 </div>
                 <div class="col-4">
-                    <q-input placeholder="Search..." filled>
+                    <q-input placeholder="Search..." v-model="search" debounce="300" outlined dense rounded>
                         <template v-slot:prepend>
                             <q-icon name="search"></q-icon>
                         </template>
@@ -351,11 +310,16 @@ const scrollRightFeatured = () => {
                 </div>
             </div>
             <div class="category-container q-pb-xs">
-                <q-btn icon="menu" flat>
-                    <q-menu>
+                <q-btn icon="menu" flat @click="categoryMenu = !categoryMenu">
+                    <q-menu class="gt-xs" v-if="$q.screen.gt.xs">
                         <q-list>
-                            <q-item v-for="cat in props.categories" @click="scrollToCategory(cat.id)" clickable>
-                                <q-item-section>{{ cat.name }}</q-item-section>
+                            <q-item 
+                                v-for="category in props.categories" 
+                                @click="scrollToCategory(category)" 
+                                clickable
+                                :key="category.id"
+                            >
+                                <q-item-section>{{ category.name }}</q-item-section>
                             </q-item>
                         </q-list>
                     </q-menu>
@@ -370,13 +334,12 @@ const scrollRightFeatured = () => {
                     >
                         <q-tab 
                             no-caps 
-                            
-                            v-for="cat in props.categories" 
-                            :key="cat.id" 
-                            :name="cat.name" 
-                            :label="cat.name" 
+                            v-for="category in props.categories" 
+                            :key="category.id" 
+                            :name="category.name" 
+                            :label="category.name" 
                             inline-label
-                            @click="scrollToCategory(cat.id)" 
+                            @click="scrollToCategory(category)" 
                         />
                     </q-tabs>
                 </div>
@@ -385,7 +348,7 @@ const scrollRightFeatured = () => {
             </div>
         </div>
         <div 
-            v-for="(category, i) in props.categories" 
+            v-for="(category, i) in filteredCategories" 
             :key="i" 
             class="q-mt-md category" 
             :id="category.id"
@@ -395,89 +358,13 @@ const scrollRightFeatured = () => {
             <div class="row q-col-gutter-md">
                 <div 
                     class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
-                    v-for="product in category.products" 
+                    v-for="product in category.filteredProducts" 
                     :key="product.id"
                 >
                     <ProductCard :product="product" />
                 </div>
             </div>
         </div>
-        <!-- <div class="row">
-            <div class="col-3 sidebar" style="position: relative;">
-                <div style="position: sticky; top: 100px;">
-                    <q-list padding class="q-mr-xl">
-                        <q-item-label header>Categories</q-item-label>
-                        <q-item clickable v-ripple>
-                            <q-item-section>
-                                Featured items
-                            </q-item-section>
-                        </q-item>
-                        <q-item
-                            active-class="bg-secondary text-white" 
-                            :active="currentCategory == category.id" 
-                            clickable 
-                            @click="scrollToSection(category.id)" 
-                            v-ripple 
-                            v-for="category in props.categories" 
-                            :key="category.id"
-                        >
-                            <q-item-section>
-                                {{ category.name }}
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </div>
-            </div>
-            <div class="col-9">
-                <q-item>
-                    <q-item-section class="text-h6">
-                        Featured items
-                    </q-item-section>
-                    <q-item-section side>
-                        <div class="text-grey-8 q-gutter-xs">
-                            <q-btn class="gt-xs" size="12px" round icon="arrow_back" @click="slide--" />
-                            <q-btn class="gt-xs" size="12px" round icon="arrow_forward" @click="slide++" />
-                        </div>
-                    </q-item-section>
-                </q-item>
-
-                <div class="row">
-                    <q-carousel
-                        v-model="slide"
-                        transition-prev="slide-right"
-                        transition-next="slide-left"
-                        swipeable
-                        animated
-                        height="300px"
-                        class="full-width  bg-transparent"
-                    >
-                        <q-carousel-slide :name="1">
-                            <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="product in featured_products" :product="product" :key="product.id"/>
-                            </div>
-                        </q-carousel-slide>
-                        <q-carousel-slide :name="2">
-                            <div class="row fit items-center q-col-gutter-sm">
-                                <FeaturedProductCard v-for="product in featured_products" :product="product" :key="product.id"/>
-                            </div>
-                        </q-carousel-slide>
-                    </q-carousel>
-                </div>
-                <div 
-                    v-for="(category, i) in props.categories" 
-                    :key="i" 
-                    class="q-mt-md category" 
-                    :id="category.id"
-                >
-                    <q-item class="text-h6">{{ category.name }}</q-item>
-                    <div class="row q-col-gutter-md">
-                        <div class="col-6" v-for="product in category.products" :key="product.id">
-                            <ProductCard :product="product" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
     <div class="q-my-md">
         <div class="text-h6">Rating and Reviews</div>
@@ -497,6 +384,37 @@ const scrollRightFeatured = () => {
             </q-card>
         </div>
     </div>
+
+    <q-dialog 
+        v-model="categoryMenu" 
+        class="lt-sm" 
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        maximized
+        v-if="$q.screen.lt.sm"
+    >
+        <q-card style="margin-top: 30%;">
+            <q-card-section>
+                <div class="text-center">Lorem idivsum dolor sit amet.</div>
+                <div class="text-center">Lorem idivsum dolor sit amet.</div>
+                <q-list>
+                    <q-btn>Hi</q-btn>
+                    <q-item 
+                        v-for="category in props.categories" 
+                        @click="scrollToCategory(category)" 
+                        clickable
+                        :key="category.id"
+                    >
+                        <q-item-section>{{ category.name }}</q-item-section>
+                    </q-item>
+                </q-list>
+            </q-card-section>
+            <q-card-actions class="fixed-bottom">
+                <q-btn v-close-popup color="primary" no-caps class="full-width">Close</q-btn>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+
     <div style="height: 200px;" class="bg-grey q-mt-md">
         ang footer ayaw kalimti
     </div>

@@ -106,16 +106,7 @@ watch(selected, (modifier_group) => {
                 <q-btn icon="arrow_back" flat round></q-btn>
                 <span class="text-h6 q-mt-xs q-ml-sm">Edit Product</span>
                 <q-space/>
-                <q-btn 
-                    type="submit" 
-                    no-caps 
-                    color="primary" 
-                    class="q-mr-sm"
-                    :loading="form.processing"
-                    :disable="form.processing"
-                >
-                    Save
-                </q-btn>
+                
             </div>
             <q-separator class="q-my-lg" />
             <q-input 
@@ -168,6 +159,16 @@ watch(selected, (modifier_group) => {
                 </template>
             </q-input>
             <q-checkbox v-model="form.is_featured" label="Feature Product" />
+            <q-btn 
+                    type="submit" 
+                    no-caps 
+                    color="primary" 
+                    class="q-mr-sm full-width"
+                    :loading="form.processing"
+                    :disable="form.processing"
+                >
+                    Save
+                </q-btn>
             <q-separator class="q-my-lg" />
             <p class="text-weight-bold text-h6">Product photo</p>
             <q-item class="q-my-md">
