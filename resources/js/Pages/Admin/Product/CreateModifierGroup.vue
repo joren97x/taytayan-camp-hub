@@ -112,22 +112,24 @@ const submitModifierGroupForm = () => {
             
             <br>
             <div>
+                max quantity
                 <q-input
                     filled
                     type="number"
                     label="Whats the maximum amount of items the customer can select?"
-                    v-model="modifierGroupForm.required_quantity"
-                    :error="modifierGroupForm.errors.required_quantity ? true : false"
-                    :error-message="modifierGroupForm.errors.required_quantity"
+                    v-model="modifierGroupForm.max_quantity"
+                    :error="modifierGroupForm.errors.max_quantity ? true : false"
+                    :error-message="modifierGroupForm.errors.max_quantity"
                 >
                 </q-input>
+                required quantity
                 <q-input
                     filled
                     type="number"
                     label="How many times can customers select any single item?"
-                    v-model="modifierGroupForm.max_quantity"
-                    :error="modifierGroupForm.errors.max_quantity ? true : false"
-                    :error-message="modifierGroupForm.errors.max_quantity"
+                    v-model="modifierGroupForm.required_quantity"
+                    :error="modifierGroupForm.errors.required_quantity ? true : false"
+                    :error-message="modifierGroupForm.errors.required_quantity"
                 >
                 </q-input>
             </div>

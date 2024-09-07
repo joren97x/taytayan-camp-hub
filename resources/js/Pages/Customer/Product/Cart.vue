@@ -8,6 +8,7 @@ import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 import EditCartItemDialog from '@/Components/Customer/Product/EditCartItemDialog.vue'
+import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -181,17 +182,28 @@ const columns = [
 <template>
     
     <Head title="Cart" />
-    {{ props }}
+    <!-- {{ props }} -->
+    <NewAddressDialog 
+        :dialog="showNewAddressDialog" 
+        @close="showNewAddressDialog = false"
+        :google_maps_api_key="google_maps_api_key" 
+        v-if="$page.props.auth.user"
+    />
     <div class="row q-mb-xl q-col-gutter-md">
-        <div class="col-8">
+        <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
                 class="my-sticky-header-column-table q-mb-xl"
+                bordered
                 flat
-                title="Cart"
                 :rows="items"
                 :columns="columns"
                 row-key="name"
             >
+                <template v-slot:top>
+                        <span class="text-h6">Cart</span> 
+                        <q-space/>
+                        <span class="text-subtitle1">3 items</span>
+                </template>
                 <template v-slot:body-cell-photo="props">
                     <q-td :props="props">
                         <q-img height="80px" width="80px" :src="`/storage/${props.row.product.photo}`"></q-img>
@@ -244,12 +256,17 @@ const columns = [
                         </q-btn>
                     </q-td>
                 </template>
+                <template v-slot:no-data>
+                    <div class="full-width row flex-center q-gutter-sm" style="height: 50vh">
+                        No Orders Found
+                    </div>
+                </template>
             </q-table>
         </div>
-        <div class="col-4">
+        <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
             <q-card>
                 <q-card-section>
-                    <div class="text-h6">Cart Total</div>
+                    <div class="text-h6">Order Summary</div>
                     <q-separator></q-separator>
                     <q-item>
                         <q-item-section>
@@ -278,7 +295,7 @@ const columns = [
             </q-card>
         </div>
     </div>
-    <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" @show="initializeAutocomplete">
+    <!-- <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" @show="initializeAutocomplete">
         <div>
             <q-card style=" margin-top: 100px;">
                 <q-form @submit="submit">
@@ -288,7 +305,6 @@ const columns = [
                     </q-card-section>
                 
                     <q-card-section>
-                        <!-- <q-input filled label="Phone Number"></q-input> -->
                         <q-input
                             filled
                             v-model="form.phone_number"
@@ -337,7 +353,7 @@ const columns = [
                 </q-form>
             </q-card>
         </div>
-    </q-dialog>
+    </q-dialog> -->
 
     <EditCartItemDialog :dialog="showFoodCartItemDialog" :cart_item="selectedCartItem" @close="showFoodCartItemDialog = false" />
 

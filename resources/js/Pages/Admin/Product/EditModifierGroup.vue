@@ -103,8 +103,7 @@ watch(selected, (modifier_item) => {
                 :error-message="form.errors.name"
                 label="Name" 
                 filled
-            >
-            </q-input>
+            />
             {{ item }}
             <q-select 
                 filled 
@@ -121,8 +120,7 @@ watch(selected, (modifier_item) => {
                 :options-html="true"
                 :error="form.errors.modifier_items ? true : false"
                 :error-message="form.errors.modifier_items"
-            >
-            </q-select>
+            />
             
             <br>
             <div>
@@ -130,20 +128,18 @@ watch(selected, (modifier_item) => {
                     filled
                     type="number"
                     label="Whats the maximum amount of items the customer can select?"
-                    v-model="form.required_quantity"
-                    :error="form.errors.required_quantity ? true : false"
-                    :error-message="form.errors.required_quantity"
-                >
-                </q-input>
+                    v-model="form.max_quantity"
+                    :error="form.errors.max_quantity ? true : false"
+                    :error-message="form.errors.max_quantity"
+                />
                 <q-input
                     filled
                     type="number"
                     label="How many times can customers select any single item?"
-                    v-model="form.max_quantity"
-                    :error="form.errors.max_quantity ? true : false"
-                    :error-message="form.errors.max_quantity"
-                >
-                </q-input>
+                    v-model="form.required_quantity"
+                    :error="form.errors.required_quantity ? true : false"
+                    :error-message="form.errors.required_quantity"
+                />
             </div>
             <q-checkbox 
                 label="Require customers to select item?" 

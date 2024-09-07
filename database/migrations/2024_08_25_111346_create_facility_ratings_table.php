@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('facility_ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('user_id');
-            $table->foreignIdFor('facility_id');
+            $table->foreignId('user_id');
+            $table->foreignId('facility_id');
             $table->integer('rating');
             $table->string('review');
             $table->softDeletes();

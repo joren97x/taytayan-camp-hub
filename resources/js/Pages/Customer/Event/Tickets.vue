@@ -14,6 +14,7 @@ defineProps({
 
 <template>
 	<div class="row">
+        {{ ticket_orders }}
         <div class="col-6"></div>
         <div class="col-6">
             <q-card v-for="ticket_order in ticket_orders" class="q-my-md">

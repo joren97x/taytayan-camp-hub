@@ -40,28 +40,21 @@ defineProps({
         </div>
         
         <div class="q-my-md">
-            <p class="text-h5 text-weight-bold">Featured milkteas</p>
+            <p class="text-h5 text-weight-bold">Products</p>
             <div class="row q-col-gutter-md">
-                <div class="col-3" v-for="product in products" :key="product.id">
-                    <!-- {{ product }} -->
-                    <FeaturedProductCard :product="product"/>
-                </div>
+                // some product card
             </div>
         </div>
         <div class="q-my-md">
-            <p class="text-h5 text-weight-bold">Upcoming Events</p>
+            <p class="text-h5 text-weight-bold">Events</p>
             <div class="row q-col-gutter-md">
-                <div class="col-6" v-for="n in 4" :key="n">
-                    <!-- <FeaturedProductCard/> -->
-                </div>
+                // some event card
             </div>
         </div>
         <div class="q-my-md">
-            <p class="text-h5 text-weight-bold">Book Campsite</p>
+            <p class="text-h5 text-weight-bold">Facilities</p>
             <div class="row q-col-gutter-md">
-                <div class="col-4" v-for="n in 4" :key="n">
-                    <!-- <FeaturedProductCard/> -->
-                </div>
+                // some facility card
             </div>
         </div>
     </div>

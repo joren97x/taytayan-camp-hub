@@ -36,22 +36,24 @@ class OrderController extends Controller
         ]);
     }
 
-    public function index(string $status, CartService $cartService) 
+    public function index(Request $request, CartService $cartService) 
     {
-        if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {
-            $orders = Order::where('status', [$status])->where('user_id', auth()->user()->id)->get();
-        }
-        else {
-            $orders = Order::whereIn('status', [
-                Order::STATUS_PENDING,
-                Order::STATUS_READY_FOR_DELIVERY,
-                Order::STATUS_READY_FOR_PICKUP,
-                Order::STATUS_DELIVERING,
-                Order::STATUS_PREPARING,
-            ])
-            ->where('user_id', auth()->user()->id)
-            ->get();
-        }
+        // if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {
+        //     $orders = Order::where('status', [$status])->where('user_id', auth()->user()->id)->get();
+        // }
+        // else {
+        //     $orders = Order::whereIn('status', [
+        //         Order::STATUS_PENDING,
+        //         Order::STATUS_READY_FOR_DELIVERY,
+        //         Order::STATUS_READY_FOR_PICKUP,
+        //         Order::STATUS_DELIVERING,
+        //         Order::STATUS_PREPARING,
+        //     ])
+        //     ->where('user_id', auth()->user()->id)
+        //     ->get();
+        // }
+
+        $orders = Order::where('user_id', $request->user()->id)->get();
 
         foreach($orders as $order) {
             $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);

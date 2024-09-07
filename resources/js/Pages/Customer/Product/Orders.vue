@@ -33,7 +33,7 @@ watch(tab, () => {
 <template>
     <div>
         {{ orders }}
-    <Head title="Orders" />
+    <!-- <Head title="Orders" />
         <q-btn-group spread class="bg-white q-mb-md">
             <q-btn class="q-pa-md" no-caps label="All" />
             <q-btn class="q-pa-md" v-for="(order_constant, index) in order_constants.statuses" :key="index" no-caps :label="order_constant" />
@@ -88,7 +88,7 @@ watch(tab, () => {
                     </q-card-actions>
                 </q-card>
             </q-list-item>
-        </q-list>
+        </q-list> -->
 
     </div>
 </template>

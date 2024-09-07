@@ -54,10 +54,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                         Resend Verification Email
                     </q-btn>
                 </q-form>
-                    <Link
-                        :href="route('logout')"
-                        method="post"
-                    >
+                    <Link :href="route('logout')" method="post">
                         <q-btn no-caps class="full-width" outline color="negative">Logout</q-btn>
                     </Link>
 

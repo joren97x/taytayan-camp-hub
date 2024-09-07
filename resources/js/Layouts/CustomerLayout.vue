@@ -51,7 +51,7 @@ watch(rightDrawerOpen, (newVal) => {
 <template>
     <q-layout view="hHh lpR lfr">
 
-        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" >
+        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'"  style="z-index: 999;">
             <q-toolbar class="row q-py-xs q-px-md">
                 <!-- <div class="row bg-red"> -->
                     <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
@@ -128,17 +128,19 @@ watch(rightDrawerOpen, (newVal) => {
                                 <!-- Joren -->
                                 <q-menu class="q-pa-sm" style="width: 300px">
                                     <q-list>
-                                        <q-item>
-                                            <q-item-section top avatar>
-                                                <q-avatar color="primary" text-color="white">
-                                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                                </q-avatar>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
-                                                <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
-                                            </q-item-section>
-                                        </q-item>
+                                        <Link :href="route('profile.edit')" class="user-menu-link">
+                                            <q-item>
+                                                <q-item-section top avatar>
+                                                    <q-avatar color="primary" text-color="white">
+                                                        <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                                    </q-avatar>
+                                                </q-item-section>
+                                                <q-item-section>
+                                                    <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
+                                                    <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
+                                                </q-item-section>
+                                            </q-item>
+                                        </Link>
                                         <q-separator />
                                         <Link :href="route('customer.cart.index')" class="user-menu-link">
                                             <q-item clickable>
@@ -148,7 +150,7 @@ watch(rightDrawerOpen, (newVal) => {
                                                 <q-item-section>Cart</q-item-section>
                                             </q-item>
                                         </Link>
-                                        <Link :href="route('customer.inbox')" class="user-menu-link">
+                                        <Link :href="route('customer.orders.index')" class="user-menu-link">
                                             <q-item clickable>
                                                 <q-item-section avatar>
                                                     <q-icon name="inbox" />
@@ -156,15 +158,15 @@ watch(rightDrawerOpen, (newVal) => {
                                                 <q-item-section>Orders</q-item-section>
                                             </q-item>
                                         </Link>
-                                        <Link :href="route('profile.edit')" class="user-menu-link">
+                                        <Link :href="route('customer.bookings.index')" class="user-menu-link">
                                             <q-item clickable>
                                                 <q-item-section avatar>
                                                     <q-icon name="manage_accounts" />
                                                 </q-item-section>
-                                                <q-item-section>Reservations</q-item-section>
+                                                <q-item-section>Bookings</q-item-section>
                                             </q-item>
                                         </Link>
-                                        <Link :href="route('tickets')" class="user-menu-link">
+                                        <Link :href="route('customer.tickets.index')" class="user-menu-link">
                                             <q-item clickable>
                                                 <q-item-section avatar>
                                                     <q-icon name="logout" />
@@ -173,6 +175,15 @@ watch(rightDrawerOpen, (newVal) => {
                                             </q-item>
                                         </Link>
                                         <q-separator />
+                                        <q-item clickable @click="$q.dark.toggle()">
+                                            <q-item-section avatar>
+                                                <q-icon name="dark_mode" />
+                                            </q-item-section>
+                                            <q-item-section>Dark Mode</q-item-section>
+                                            <q-item-section avatar>
+                                                <q-toggle v-model="$q.dark.isActive"></q-toggle>
+                                            </q-item-section>
+                                        </q-item>
                                         <Link :href="route('customer.inbox')" class="user-menu-link">
                                             <q-item clickable>
                                                 <q-item-section avatar>

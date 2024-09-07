@@ -17,22 +17,7 @@ const form = useForm({
     modifiers: []
 })
 
-const handleItemSelection = (modifierGroupId, modifierItemId) => {
-    const index = form.modifiers.findIndex(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
-    if (index === -1) {
-        form.modifiers.push({
-            modifier_group_id: modifierGroupId,
-            modifier_item_id: modifierItemId,
-            quantity: 1 // You can manage quantity if needed
-        });
-    } else {
-        form.modifiers.splice(index, 1); // Remove the modifier if already selected
-    }
-};
 
-const isSelected = (modifierGroupId, modifierItemId) => {
-    return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
-};
 
 const submit = () => {
     form.post(route('customer.cart.store'), {
@@ -43,6 +28,66 @@ const submit = () => {
         }
     })
 }
+
+const handleRadioSelection = (modifierGroupId, modifierItemId) => {
+  // Remove any previously selected item for this modifier group
+  form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
+  
+  // Add the newly selected item
+  form.modifiers.push({
+    modifier_group_id: modifierGroupId,
+    modifier_item_id: modifierItemId,
+    quantity: 1
+  });
+};
+
+// Handle checkbox selection when required_quantity > 1
+const handleItemSelection = (modifierGroupId, modifierItemId, requiredQuantity) => {
+  if (requiredQuantity === 1) {
+    // If required_quantity is 1, replace the current selection
+    form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
+
+    form.modifiers.push({
+      modifier_group_id: modifierGroupId,
+      modifier_item_id: modifierItemId,
+      quantity: 1
+    });
+  } else {
+    // For checkboxes (required_quantity > 1), allow multiple selections
+    const selectedCount = form.modifiers.filter(modifier => modifier.modifier_group_id === modifierGroupId).length;
+
+    if (isSelected(modifierGroupId, modifierItemId)) {
+      // Remove the modifier if it's already selected (toggle off)
+      form.modifiers = form.modifiers.filter(
+        modifier => !(modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId)
+      );
+    } else if (selectedCount < requiredQuantity) {
+      // Add the modifier if it's not selected and under the limit
+      form.modifiers.push({
+        modifier_group_id: modifierGroupId,
+        modifier_item_id: modifierItemId,
+        quantity: 1
+      });
+    }
+  }
+};
+
+// Check if a modifier item is selected
+const isSelected = (modifierGroupId, modifierItemId) => {
+  return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
+};
+
+// Get the selected radio item (for required_quantity === 1)
+const getSelectedItem = (modifierGroupId) => {
+  const selected = form.modifiers.find(modifier => modifier.modifier_group_id === modifierGroupId);
+  return selected ? selected.modifier_item_id : null;
+};
+
+// Limit checkbox selections when required_quantity > 1
+const isMaxSelected = (modifierGroupId, requiredQuantity) => {
+  const selectedCount = form.modifiers.filter(modifier => modifier.modifier_group_id === modifierGroupId).length;
+  return selectedCount >= requiredQuantity;
+};
 
 </script>
 
@@ -62,7 +107,11 @@ const submit = () => {
             <q-form @submit="submit">
                 <div class="row q-col-gutter-md">
                     <div class="col-12 col-md-5 col-lg-5 col-xl-5 col-sm-12 col-xs-12" style="position: relative;">
-                        <q-img fill="cover" :src="`/storage/${product.photo}`" style="position: sticky; top: 50px;" height="40vh"/>
+                        <!-- so kuhaa ang modifier group id and then check pilay required quantity then if 1 ra kay poydi if nalapas
+                        kay dili na  -->
+                        <q-img fill="cover" :src="`/storage/${product.photo}`" style="position: sticky; top: 30px;" height="40vh">
+                        </q-img>
+                        <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-md lt-md"></q-btn>
                     </div>
                     <div class="col-12 col-md-7 col-lg-7 col-xl-7 col-sm-12 col-xs-12">
                         <!-- <p>
@@ -77,22 +126,25 @@ const submit = () => {
                         <p>
                             {{ product.description }}
                         </p> -->
+                        <div class="row justify-end">
+                            <div>
+                                <q-btn round icon="close" flat @click="emit('close')" class="gt-sm"></q-btn>
+                            </div>
+                        </div>
                         <q-item>
-                            <q-item-section>
+                            <q-item-section class="text-center">
                                 <q-item-label class="text-h6">{{ product.name }}</q-item-label>
-                                <q-item-label >P{{ product.price }}</q-item-label>
+                                <q-item-label class="text-subtitle1">P{{ product.price }}</q-item-label>
                                 <q-item-label caption>P{{ product.description }}</q-item-label>
                             </q-item-section>
-                            <q-item-section side top>
-                                <q-btn round icon="close" flat @click="emit('close')"></q-btn>
-                            </q-item-section>
                         </q-item>
-                        <q-separator/>
+                        <!-- <q-separator/> -->
                         <div v-for="(modifier_group, index) in product.modifier_groups" :key="index">
                             <q-item>
                                 <q-item-section class="text-h6">
                                     {{ modifier_group.name }}
                                     <q-item-label caption>Choose {{ modifier_group.required_quantity }}</q-item-label>
+                                    <!-- <q-item-label caption>Max Quantity each item {{ modifier_group.max_quantity }}</q-item-label> -->
                                 </q-item-section>
                                 <q-item-section side v-if="modifier_group.required">
                                     <q-chip :class="$q.dark.isActive ? 'bg-grey-8' : ''">Required</q-chip>
@@ -104,25 +156,44 @@ const submit = () => {
                                     v-ripple 
                                     v-for="modifier_item in modifier_group.modifier_items" 
                                     :key="modifier_item.id"
-                                    @click="handleItemSelection(modifier_group.id, modifier_item.id)"
+                                    @click="handleItemSelection(modifier_group.id, modifier_item.id, modifier_group.required_quantity)"
                                 >
                                     <q-item-section>
                                         <q-item-label>{{ modifier_item.name }}</q-item-label>
                                         <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
                                     </q-item-section>
-                                    <q-item-section side>
+                                    <!-- <q-item-section side>
                                         <q-checkbox 
-                                            color="secondary"
+                                            color="primary"
                                             :model-value="isSelected(modifier_group.id, modifier_item.id)"
                                             @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id)"
+                                        />
+
+                                    </q-item-section> -->
+                                    <q-item-section side>
+                                        <!-- Use q-radio when required_quantity is 1 -->
+                                        <q-radio 
+                                            v-if="modifier_group.required_quantity === 1"
+                                            color="primary"
+                                            :model-value="getSelectedItem(modifier_group.id)"
+                                            :val="modifier_item.id"
+                                            @update:model-value="selected => handleRadioSelection(modifier_group.id, modifier_item.id)"
+                                        />
+
+                                        <!-- Use q-checkbox when required_quantity is greater than 1 -->
+                                        <q-checkbox
+                                            v-else
+                                            color="primary"
+                                            :disable="isMaxSelected(modifier_group.id, modifier_group.required_quantity) && !isSelected(modifier_group.id, modifier_item.id)"
+                                            :model-value="isSelected(modifier_group.id, modifier_item.id)"
+                                            @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id, modifier_group.required_quantity)"
                                         />
                                     </q-item-section>
                                 </q-item>
                             </q-list>
-                            <q-separator/>
                         </div>
                         <q-item>
-                            <q-item-section class="text-subtitle1">
+                            <q-item-section class="text-h6">
                                 Special instructions
                             </q-item-section>
                             <q-item-section side>
@@ -157,9 +228,9 @@ const submit = () => {
                                         <div class="text-subtitle1">
                                             Quantity
                                         </div>
-                                        <div>
+                                        <!-- <div>
                                             {{ product.price }}
-                                        </div>
+                                        </div> -->
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-btn-group style="align-items: center;">

@@ -53,7 +53,7 @@ class ModifierGroupController extends Controller
             ]);
         }
 
-        return redirect(route('admin.modifier_group.index', absolute: false));
+        return redirect(route('admin.modifier_groups.index', absolute: false));
 
 
     }
@@ -106,7 +106,7 @@ class ModifierGroupController extends Controller
             ]);
         }
 
-        return redirect(route('admin.modifier_group.index', absolute: false));
+        return redirect(route('admin.modifier_groups.index', absolute: false));
     }
 
     /**

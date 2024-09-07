@@ -93,8 +93,8 @@ async function map() {
     })
 
     const content = `
-            <div class="text-weight-bold text-center text-subtitle1">Yo joren you can actually move this marker</div>
-            <div class="text-subtitle2">waitt frr?</div>
+            <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
+            <div>Please check your map location is correct</div>
         `
         // infoWindow.close()
         infoWindow.setContent(content)
@@ -111,8 +111,8 @@ async function map() {
             form.address_coordinates.lat = position.lat
             form.address_coordinates.lng = position.lng
             const content = `
-                <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
-                <div class="text-subtitle2">Please check your map location is correct</div>
+                <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
+                <div>Please check your map location is correct</div>
             `;
             infoWindow.setContent(content);
             infoWindow.open(map, draggableMarker);
@@ -129,6 +129,8 @@ async function map() {
         @show="initializeAutocomplete"
         :maximized="$q.screen.lt.sm"
         style="z-index: 999;"
+         transition-show="slide-up"
+        transition-hide="slide-down"
     >
         <q-card 
             :style="[
@@ -136,13 +138,17 @@ async function map() {
                 $q.screen.sm ? 'width: 100%; max-width: 90vw;' : '',
             ]"
         >
-        {{ $q.screen.width >= 700 }}
-        {{ $q.screen.lt.sm }}
 
             <q-form @submit="submit">
-                <q-card-section>
-                    <div class="text-h6">New Address</div>
-                    <div>To place order, please add a delivery address</div>
+                <q-card-section class="row justify-between">
+                    <div>
+                        <span class="text-h6">New Address</span>
+                        <br>
+                        To place order, please add a delivery address
+                    </div>
+                    <div>
+                        <q-btn icon="close" round unelevated @click="emit('close')" v-close-popup/>
+                    </div>
                 </q-card-section>
             
                 <q-card-section>
@@ -165,27 +171,38 @@ async function map() {
                         :error-message="form.errors.address"
                         label="Barangay, City, Province"
                     />
-                    <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
-                        <template v-slot:avatar>
-                            <q-icon name="alert" color="primary" />
-                        </template>
-                        <p class="text-weight-bold text-primary text-h6">Place an accurate pin</p>
-                        <p class="text-subtitle-1">
-                            We will deliver to your map location. 
+                    <!-- <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
+                     
+                    </q-banner> -->
+                    <div v-show="form.address" class="q-pa-sm q-mb-md bg-red-1">
+                        <span class="text-primary text-subtitle1">
+                            <q-icon name="warning" color="red" class="q-mx-md"></q-icon>
+                            Place an accurate pin.
+                            <span class="text-weight-light text-body2">
+                                We will deliver to your map location. 
                             Please check it is correct, else click the map to adjust.
-                        </p>
-                    </q-banner>
-                    <div id="map" style="width: 100%; height: 600px"  v-if="form.address"></div>
+                            </span>
+                        </span>
+                    </div>
+                    <div 
+                        style="width: 100%; height: 500px" 
+                        :class="['bg-grey items-center flex', form.address ? '' : 'non-selectable cursor-not-allowed']"
+                    >
+                        <div id="map" style="width: 100%; height: 100%;" v-if="form.address"></div>
+                        <div class="text-center" style="width: 100%; position: relative;" v-else>
+                            <q-btn icon="add" no-caps class="non-selectable cursor-not-allowed">Add Location</q-btn>
+                        </div>
+                    </div>
                 </q-card-section>
-                <q-card-actions>
+                <q-card-actions :class="['bg-white', $q.screen.lt.sm ? 'fixed-bottom' : '']">
                     <q-space/>
-                    <q-btn v-close-popup no-caps flat @click="emit('close')">Cancel</q-btn>
                     <q-btn 
                         v-close-popup 
                         color="primary"
                         type="submit" 
                         unelevated 
                         no-caps
+                        class="full-width"
                         :loading="form.processing"
                         :disable="form.processing"
                     >

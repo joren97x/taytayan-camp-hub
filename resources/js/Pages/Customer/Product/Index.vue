@@ -57,7 +57,7 @@ const scrollToCategory = (category) => {
         selectedCategory.value = category.name;
         
         if (element) {
-            const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 130;
+            const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 150;
             window.scrollTo({ top: offset, behavior: 'smooth' });
         }
         
@@ -223,6 +223,7 @@ const filteredCategories = computed(() => {
                     </q-banner>
                 </div>
                 <p class="text-h6">Rating and reviews</p>
+                <span class="text-red">it dont work rn wala ko kahibaw asa pangitaon ang reviews</span>
                 <q-card bordered>
                     <q-card-section horizontal>
                         <q-card-section class="text-center q-pa-md">
@@ -274,7 +275,7 @@ const filteredCategories = computed(() => {
             </div>
         </div>
         <!-- <q-separator/> -->
-         <div class="featured-items-container q-mt-md ">
+         <div class="featured-items-container q-mt-md">
             <div class="text-h6 row">
                 <div class="col">
                     Featured items
@@ -284,7 +285,7 @@ const filteredCategories = computed(() => {
                     <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
                 </div>
             </div>
-            <div ref="scrollContainer" class="row q-col-gutter-md no-wrap" style="overflow-x: auto; scroll-behavior: smooth;">
+            <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
                 <div 
                     class="col-5 col-xs-5 col-sm-4 col-md-3 col-lg-3 col-xl-3"
                     v-for="(product, i) in featured_products"
@@ -294,14 +295,14 @@ const filteredCategories = computed(() => {
                 </div>
             </div>
          </div>
-        <div class="menu-header bg-white q-mt-md">
+        <div class="menu-header bg-white q-pt-md">
             <div class="row">
-                <div class="col-8">
+                <div class="col-6 col-md-8 col-lg-8 col-xl-8 col-xs-6 col-sm-6">
                     <span class="text-h6">Menu</span>
                     <br>
                     <span>Open till 8AM to 5PM or ambot</span>
                 </div>
-                <div class="col-4">
+                <div class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <q-input placeholder="Search..." v-model="search" debounce="300" outlined dense rounded>
                         <template v-slot:prepend>
                             <q-icon name="search"></q-icon>
@@ -309,7 +310,7 @@ const filteredCategories = computed(() => {
                     </q-input>
                 </div>
             </div>
-            <div class="category-container q-pb-xs">
+            <div class="category-container q-py-sm">
                 <q-btn icon="menu" flat @click="categoryMenu = !categoryMenu">
                     <q-menu class="gt-xs" v-if="$q.screen.gt.xs">
                         <q-list>
@@ -398,7 +399,6 @@ const filteredCategories = computed(() => {
                 <div class="text-center">Lorem idivsum dolor sit amet.</div>
                 <div class="text-center">Lorem idivsum dolor sit amet.</div>
                 <q-list>
-                    <q-btn>Hi</q-btn>
                     <q-item 
                         v-for="category in props.categories" 
                         @click="scrollToCategory(category)" 
