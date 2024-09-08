@@ -57,5 +57,7 @@ defineProps({
                 // some facility card
             </div>
         </div>
+        <p class="text-center text-red">designi inig human sa laing pages</p>
+        <q-img src="https://avatars.githubusercontent.com/u/112835241?s=400&u=5c5ce654a02c61684c3e00d25d695ce142ede5ef&v=4"></q-img>
     </div>
 </template>

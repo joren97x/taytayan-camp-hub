@@ -6,6 +6,7 @@ import CashierLayout from '@/Layouts/CashierLayout.vue'
 // import OrderItem from '@/Components/Admin/Product/OrderItem.vue'
 import PreparingOrderItem from '@/Components/Admin/Product/PreparingOrderItem.vue'
 import ReadyOrderItem from '@/Components/Admin/Product/ReadyOrderItem.vue'
+import ImageGallery from './ImageGallery.vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 
@@ -20,6 +21,7 @@ const props = defineProps({
 })
 
 const orders = ref([])
+const tab = ref('preparing')
 
 props.orders.forEach(order => {
     orders.value.push(order)
@@ -102,6 +104,38 @@ Echo.private('orders')
                 />
             </q-list>
         </div>
+        <q-card>
+            <q-tabs
+                v-model="tab"
+                dense
+                class="text-grey"
+                active-color="primary"
+                indicator-color="primary"
+                align="justify"
+                narrow-indicator
+            >
+                <q-tab name="preparing" label="preparing" />
+                <q-tab name="ready" label="ready" />
+            </q-tabs>
+            <q-separator />
+        </q-card>
+        <q-card>
+            <q-tab-panels v-model="tab" animated>
+                <q-tab-panel name="preparing">
+                    <div class="text-h6">Mails</div>
+                    <ImageGallery :images="[
+                        'https://www.inkatrinaskitchen.com/wp-content/uploads/2020/05/Strawberry-Bubble-Tea-24-wm-600.jpg',
+                        'https://www.dadcooksdinner.com/wp-content/uploads/2022/04/Instant-Pot-Boba-Tea-DSCF9377.jpg',
+                        'https://teacultureoftheworld.com/cdn/shop/articles/taiwan-milk-tea-with-boba-bubble-pearl-on-plastic-2024-02-05-02-27-11-utc_2191x.jpg?v=1714023533'
+                    ]" />
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </q-tab-panel>
+                <q-tab-panel name="ready">
+                    <div class="text-h6">Alarms</div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </q-tab-panel>
+            </q-tab-panels>
+        </q-card>
     </div>
 
 </template>

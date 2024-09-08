@@ -3,9 +3,9 @@
 import { ref, watch, onMounted } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import Footer from '@/Components/Customer/Footer.vue'
-import FoodCardItem from '@/Components/Customer/Product/FoodCardItem.vue'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import NavLinks from '@/Components/Customer/NavLinks.vue'
 
 const $q = useQuasar()
 const rightDrawerOpen = ref(false)
@@ -13,6 +13,7 @@ const items = ref(null)
 const notifications = ref([])
 const notification_badge = ref(0)
 const drawer = ref(false)
+const sidebar = ref(false)
 
 import axios from 'axios'
 
@@ -121,94 +122,31 @@ watch(rightDrawerOpen, (newVal) => {
                                     </q-list>
                                 </q-menu>
                             </q-btn>
-                            <q-btn flat round no-caps>
-                                <q-avatar size="3em">
+                            <q-btn round flat @click="sidebar = !sidebar" class="lt-md">
+                                <q-avatar size="3em" class="bg-red">
                                     <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
                                 </q-avatar>
-                                <!-- Joren -->
-                                <q-menu class="q-pa-sm" style="width: 300px">
-                                    <q-list>
-                                        <Link :href="route('profile.edit')" class="user-menu-link">
-                                            <q-item>
-                                                <q-item-section top avatar>
-                                                    <q-avatar color="primary" text-color="white">
-                                                        <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                                    </q-avatar>
-                                                </q-item-section>
-                                                <q-item-section>
-                                                    <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
-                                                    <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
-                                                </q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <q-separator />
-                                        <Link :href="route('customer.cart.index')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="inbox" />
-                                                </q-item-section>
-                                                <q-item-section>Cart</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <Link :href="route('customer.orders.index')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="inbox" />
-                                                </q-item-section>
-                                                <q-item-section>Orders</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <Link :href="route('customer.bookings.index')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="manage_accounts" />
-                                                </q-item-section>
-                                                <q-item-section>Bookings</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <Link :href="route('customer.tickets.index')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="logout" />
-                                                </q-item-section>
-                                                <q-item-section>Tickets</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <q-separator />
-                                        <q-item clickable @click="$q.dark.toggle()">
-                                            <q-item-section avatar>
-                                                <q-icon name="dark_mode" />
+                            </q-btn>
+                            <q-btn class="gt-sm" round>
+                                <q-avatar size="3em" class="bg-red">
+                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                </q-avatar>
+                                <q-menu class="q-pa-sm gt-sm" style="width: 300px">
+                                    <Link :href="route('profile.edit')" class="user-menu-link">
+                                        <q-item>
+                                            <q-item-section top avatar>
+                                                <q-avatar color="primary" text-color="white">
+                                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                                </q-avatar>
                                             </q-item-section>
-                                            <q-item-section>Dark Mode</q-item-section>
-                                            <q-item-section avatar>
-                                                <q-toggle v-model="$q.dark.isActive"></q-toggle>
+                                            <q-item-section>
+                                                <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
+                                                <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
                                             </q-item-section>
                                         </q-item>
-                                        <Link :href="route('customer.inbox')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="inbox" />
-                                                </q-item-section>
-                                                <q-item-section>Inbox</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <Link :href="route('profile.edit')" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="manage_accounts" />
-                                                </q-item-section>
-                                                <q-item-section>Profile</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                        <Link :href="route('logout')" method="post" class="user-menu-link">
-                                            <q-item clickable>
-                                                <q-item-section avatar>
-                                                    <q-icon name="logout" />
-                                                </q-item-section>
-                                                <q-item-section>Logout</q-item-section>
-                                            </q-item>
-                                        </Link>
-                                    </q-list>
+                                    </Link>
+                                    <q-separator />
+                                    <NavLinks/>
                                 </q-menu>
                             </q-btn>
                         </div>
@@ -260,6 +198,59 @@ watch(rightDrawerOpen, (newVal) => {
                     </Link>
                 </q-list>
             </q-card>
+            <q-drawer
+                v-model="sidebar"
+                :width="300"
+                behavior="mobile"
+                v-if="$q.screen.lt.md"
+                side="right"
+            >
+                <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+                    <q-list class="q-pa-none">
+                        <Link :href="route('customer.products.index')" class="text-subtitle2 navlink">
+                            <q-item clickable>
+                                <q-item-section avatar>
+                                    <q-avatar size="md">
+                                    <q-img fit="cover" src="images/product_logo.png"/>
+                                </q-avatar>
+                                </q-item-section>
+                                <q-item-section>Products</q-item-section>
+                            </q-item>
+                        </Link>
+                        <Link :href="route('customer.events.index')" class="text-subtitle2 navlink">
+                            <q-item clickable>
+                                <q-item-section avatar>
+                                    <q-avatar size="md">
+                                    <q-img fit="cover" src="images/event_logo.png"/>
+                                </q-avatar>
+                                </q-item-section>
+                                <q-item-section>Events</q-item-section>
+                            </q-item>
+                        </Link>
+                        <Link :href="route('customer.facilities.index')" :class="['text-subtitle2 navlink']">
+                            <q-item clickable>
+                                <q-item-section avatar>
+                                    <q-avatar size="md">
+                                        <q-img fit="cover" src="images/facility_logo.png"/>
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>Facilities</q-item-section>
+                            </q-item>
+                        </Link>
+                    </q-list>
+                    <NavLinks/>
+                </q-scroll-area>
+
+                <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+                <div class="absolute-bottom bg-transparent">
+                    <q-avatar size="56px" class="q-mb-sm">
+                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                    </q-avatar>
+                    <div class="text-weight-bold">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</div>
+                    <div>{{ $page.props.auth.user.email }}</div>
+                </div>
+                </q-img>
+            </q-drawer>
         </q-header>
         <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
         <q-page-container>

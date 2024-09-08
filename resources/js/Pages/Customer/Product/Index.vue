@@ -222,7 +222,45 @@ const filteredCategories = computed(() => {
                         </Link>         
                     </q-banner>
                 </div>
-                <p class="text-h6">Rating and reviews</p>
+
+                <div class="row justify-between q-mt-md q-mb-sm">
+                    <div class="text-h6">
+                        Rating and Reviews
+                    </div>
+                    <div class="">
+                        <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
+                    </div>
+                </div>
+                <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
+                    <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
+                        <q-card class="q-py-md" style="max-height: 600px; height: 115px">
+                            <q-card-section class="row flex-center q-pa-none">
+                                <div class="text-h5">4.8</div>
+                                <q-rating size="xs"/>
+                                6 Ratings
+                            </q-card-section>
+                        </q-card>
+                    </div>
+                    <div 
+                        class="col-5 col-xs-7 col-sm-7 col-md-4 col-lg-4 col-xl-4"
+                        v-for="(review, i) in 10"
+                        :key="review.id"
+                    >
+                        <q-card style="max-height: 600px; height: 115px">
+                            <q-card-section class="q-pb-none">
+                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
+                            </q-card-section>
+                            <q-card-actions class="q-pt-sm">
+                                <q-rating/>
+                                • Lissa H. • 02/01/23
+                            </q-card-actions>
+                        </q-card>
+                    </div>
+                    
+                </div>
+
+                
+                <!-- <p class="text-h6">Rating and reviews</p>
                 <span class="text-red">it dont work rn wala ko kahibaw asa pangitaon ang reviews</span>
                 <q-card bordered>
                     <q-card-section horizontal>
@@ -242,7 +280,7 @@ const filteredCategories = computed(() => {
                             <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
                         </q-card-section> 
                     </q-card-section>
-                </q-card>
+                </q-card> -->
             </div>
             <div class="col-4 gt-sm">
                

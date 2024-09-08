@@ -28,6 +28,7 @@ const submit = () => {
     form.put(route('add-address'), {
         onSuccess: () => {
             $q.notify('Address Successfully Set')
+            emit('close')
         }
     })
 }

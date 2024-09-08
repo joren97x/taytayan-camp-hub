@@ -115,13 +115,18 @@ const submit = () => {
     
     <Head title="Checkout" />
     <div>
-        <Link :href="route('customer.cart.index')">
-            <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
-        </Link>
-        <div class="q-mb-xl q-mx-xl">
+        <div class="row justify-between">
+            <div class="col-12 text-center center text-h6">
+                Checkout
+                <Link :href="route('customer.cart.index')" class="absolute-left">
+                    <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated />
+                </Link>
+            </div>
+        </div>
+        <div class="q-mb-xl">
             <div class="row q-col-gutter-xl">
-                <div class="col-7">
-                    <q-card flat bordered>
+                <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                    <q-card flat >
                         <q-card-section>
                             <q-item>
                                 <q-item-section class="text-h6 text-capitalize">{{ form.mode }} Details</q-item-section>
@@ -129,7 +134,7 @@ const submit = () => {
                                     <q-btn-toggle
                                         v-model="form.mode"
                                         no-caps
-                                        rounded
+                                        round
                                         unelevated
                                         toggle-color="primary"
                                         color="white"
@@ -157,26 +162,28 @@ const submit = () => {
                                     <div id="map" style="height: 450px; width: 100%;"></div>
                                     <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
                                 </div>
-                                <q-item>
+                                
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <q-btn-group spread flat unelevated class="no-border">
+                                                <q-btn push label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
+                                                <q-btn push label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
+                                                <q-btn push label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
+                                                <q-btn push label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
+                                                <q-btn push label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
+                                            </q-btn-group>
+                                        </div>
+                                    </div>
+                                <q-item class="q-my-md">
                                     <q-item-section avatar>
                                         <q-icon name="home"></q-icon>
                                     </q-item-section>
                                     <q-item-section class="text-h6">
-                                        Store Location
-                                        <q-item-label caption>Barangay San Vicente, Olango Island</q-item-label>
-                                    </q-item-section>
-                                    <q-item-section side>
-                                        <q-btn-group push>
-                                            <q-btn push label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
-                                            <q-btn push label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
-                                            <q-btn push label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
-                                            <q-btn push label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
-                                            <q-btn push label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
-                                        </q-btn-group>
+                                        Barangay San Vicente, Olango Island
+                                        <q-item-label caption>Store Location</q-item-label>
                                     </q-item-section>
                                 </q-item>
                             </div>
-                                <q-separator class="q-my-md" />
                                 <q-item>
                                     <q-item-section class="text-h6">Pay With</q-item-section>
                                     <q-item-section side>
@@ -184,10 +191,15 @@ const submit = () => {
                                     </q-item-section>
                                 </q-item>
                             <q-list>
+                                <span class="text-red">fix this later </span>
                                 <q-item 
                                     tag="label" v-ripple 
                                     v-for="(payment_method, index) in order_constants.payment_methods" 
                                     :key="index"
+                                    v-if="!(
+                                        (payment_method === 'cash_on_delivery' && form.mode === 'pickup') || 
+                                        (payment_method === 'walk_in' && form.mode === 'delivery')
+                                    )"
                                 >
                                     <q-item-section side top>
                                         <q-radio v-model="form.payment_method" :val="payment_method"/>
@@ -202,7 +214,6 @@ const submit = () => {
                                     </q-item-section>
                                 </q-item>
                             </q-list>
-                            <q-separator class="q-my-md" />
                             <q-item>
                                 <q-item-section class="text-h6">Order Summary</q-item-section>
                                 <q-item-section side>
@@ -215,7 +226,7 @@ const submit = () => {
                         </q-card-section>
                     </q-card>
                 </div>
-                <div class="col-5"  style="position: relative;">
+                <div class="col-5 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5"  style="position: relative;">
                     <div style="position: sticky; top: 50px">
                         <q-card>
                             <q-card-section>
@@ -242,8 +253,36 @@ const submit = () => {
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>
+                            <q-card-actions class="fixed-bottom row bg-white">
+                                <div class="col-8 items-center">
+                                    <q-item>
+                                        <q-item-section>
+                                            <div class="text-subtitle1">
+                                                Total
+                                            </div>
+                                            <!-- <div>
+                                                {{ product.price }}
+                                            </div> -->
+                                        </q-item-section>
+                                        <q-item-section side>
+                                            P{{ subtotal }}
+                                        </q-item-section>
+                                    </q-item>
+                                </div>
+                                <div class="col-4">
+                                    <!-- <q-btn
+                                        label="Add To Cart"
+                                        color="primary"
+                                        class="full-width"
+                                        type="submit"
+                                        no-caps
+                                        :loading="form.processing"
+                                        :disable="form.processing"
+                                    />   -->
+                                    <q-btn class="full-width" @click="submit" label="Contit" no-caps color="blue"></q-btn>
+                                </div>
+                            </q-card-actions>
                         </q-card>
-                        <q-btn class="full-width q-mt-xl" @click="submit" label="Continue to payment" no-caps color="blue" size="lg"></q-btn>
                     </div>
                 </div>
             </div>
@@ -262,7 +301,7 @@ const submit = () => {
   width: 100%;
   height: 500px; /* or any desired height */
 }
-
+/* 
 #map-buttons {
   position: absolute;
   bottom: 10px;
@@ -270,6 +309,6 @@ const submit = () => {
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-}
+} */
 
 </style>

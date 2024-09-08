@@ -46,7 +46,8 @@ class ProductSeeder extends Seeder
                 'name' => $item,
                 'description' => fake()->sentence(),
                 'price' => fake()->numberBetween(10, 50),
-                'photo' => fake()->randomElement($imageFilenames)
+                'photo' => fake()->randomElement($imageFilenames),
+                'is_featured' => fake()->boolean()
             ]);
         }
 

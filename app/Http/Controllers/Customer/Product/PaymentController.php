@@ -40,8 +40,7 @@ class PaymentController extends Controller
         Cart::create([
             'user_id' => auth()->user()->id
         ]);
-        dd($order);
-        return redirect('/orders/on-progress');
+        return redirect(route('customer.orders.index'));
     }
 
     public function pay(Request $request) 
