@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'cashier'])->group(function () {
     Route::get('/cashier/dashboard', [ViewController::class, 'dashboard'])->name('cashier.dashboard');
+    Route::patch('/cashier/orders/{order}', [OrderController::class, 'prepare_order'])->name('cashier.orders.prepare_order');
     // Route::get('/cashier/orders', [OrderController::class, 'index'])->name('cashier.orders.index');
     Route::resource('/cashier/orders', OrderController::class)->names([
         'index' => 'cashier.orders.index',

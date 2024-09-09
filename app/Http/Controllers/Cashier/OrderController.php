@@ -6,6 +6,7 @@ use App\Events\Product\OrderReadyForDelivery;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -51,11 +52,12 @@ class OrderController extends Controller
     public function update_status(string $id, Request $request) 
     {
         $order = Order::find($id);
-
         // event(new OrderStatusUpdated($order));
         $request->validate([
             'status' => 'required'
         ]);
+
+        // $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
         
         switch($request->status) {
             case Order::STATUS_PREPARING:
@@ -81,6 +83,20 @@ class OrderController extends Controller
                 break;
         }
         // event(new OrderStatusUpdated($order));
+
+        return back();
+    }
+
+    public function prepare_order(Order $order, Request $request)
+    {
+        $request->validate([
+            'waiting_time' => 'required',
+            'status' => 'required'
+        ]);
+
+        $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
+        $order->status = $request->status;
+        $order->update();
 
         return back();
     }

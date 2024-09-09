@@ -50,10 +50,19 @@ Echo.private(`orders`)
             bordered
             class="bg-grey-2"
         >
-            <q-list>
+        <q-img src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+          <div class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            <div class="text-weight-bold">Razvan Stoenescu</div>
+            <div>@rstoenescu</div>
+          </div>
+        </q-img>    
+            <q-list class="q-mx-sm">
                 <q-item-label header>Essential Links</q-item-label>
                 <Link :href="route('cashier.dashboard')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Dashboard'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -64,7 +73,7 @@ Echo.private(`orders`)
                     </q-item>
                 </Link>
                 <Link :href="route('cashier.orders.index')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Orders'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -75,7 +84,7 @@ Echo.private(`orders`)
                     </q-item>
                 </Link>
                 <Link :href="route('cashier.tickets.index')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Tickets'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -86,19 +95,19 @@ Echo.private(`orders`)
                     </q-item>
                 </Link>
                 <Link :href="route('cashier.orders.index')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Bookings'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>Reservations</q-item-label>
+                            <q-item-label>Bookings</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                         </q-item-section>
                     </q-item>
                 </Link>
                 
                 <Link :href="route('cashier.account')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Account'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -109,7 +118,7 @@ Echo.private(`orders`)
                     </q-item>
                 </Link>
                 <Link :href="route('cashier.inbox')">
-                    <q-item clickable>
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Inbox'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -127,4 +136,11 @@ Echo.private(`orders`)
         </q-page-container>
     </q-layout>
   </template>
+
+  <style scoped>
+
+a {
+    text-decoration: none;
+}
+</style>
   

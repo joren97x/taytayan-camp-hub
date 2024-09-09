@@ -20,7 +20,7 @@ const form = useForm({
 })
 
 function completeOrder() {
-    form.patch(route('admin.orders.update_status', props.order.id), {
+    form.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: () => {
             isOrderCompleteDialog.value = false
             $q.notify('Order marked as completed')
@@ -43,7 +43,13 @@ function completeOrder() {
             {{ order.status }}
         </q-item-section>
     </OrderItem>
-    <q-dialog v-model="dialog" full-width>
+    <q-dialog 
+        v-model="dialog" 
+        full-width
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
         <q-card>
             <q-card-section>
                 <q-item>
@@ -60,7 +66,10 @@ function completeOrder() {
                     v-model="step"
                     color="primary"
                     flat
+                    :contracted="$q.screen.lt.sm"
+                    class="q-pa-none q-ma-none"
                     active-icon="hourglass_empty"
+                    alternative-labels
                 >
                     <q-step
                         :name="1"
@@ -92,7 +101,7 @@ function completeOrder() {
                     />
                 </q-stepper>
                 <div class="row q-col-gutter-xl">
-                    <div class="col-8">
+                    <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
                         <q-item>
                             <q-item-section>
                                 <q-item-label class="text-h6">
@@ -134,7 +143,7 @@ function completeOrder() {
                             </q-item>
                         </q-list>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                         <q-item>
                             <q-item-section class="text-h6">Order Total</q-item-section>
                         </q-item>

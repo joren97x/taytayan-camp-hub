@@ -24,7 +24,7 @@ const readyOrderForm = useForm({
 })
 
 function acceptOrder() {
-    acceptOrderForm.patch(route('cashier.orders.update_status', props.order.id), {
+    acceptOrderForm.patch(route('cashier.orders.prepare_order', props.order.id), {
         onSuccess: (e) => {
             console.log(e)
             dialog.value = false
@@ -70,8 +70,14 @@ function readyOrder() {
             </q-btn>
         </q-item-section> 
     </OrderItem>
-    <q-dialog v-model="dialog" full-width>
-        <q-card>
+    <q-dialog 
+        v-model="dialog" 
+        full-width
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card >
             <q-card-section>
                 <q-item>
                     <q-item-section>
@@ -84,7 +90,7 @@ function readyOrder() {
                     </q-item-section>
                 </q-item>
                 <div class="row q-col-gutter-xl">
-                    <div class="col-8">
+                    <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
                         <q-item>
                             <q-item-section>
                                 <q-item-label class="text-h6">
@@ -130,15 +136,15 @@ function readyOrder() {
                             Subtotal - {{ order.subtotal }}
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="text-center text-h6">Waiting Time</div>
-                        <div class="text-center text-h6">15 min</div>
+                    <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                         <q-input
                             filled
                             v-model="acceptOrderForm.waiting_time"
                             label="Waiting Time"
                             mask="###/mins"
                             unmasked-value
+                            :error="acceptOrderForm.errors.waiting_time ? true : false"
+                            :error-message="acceptOrderForm.errors.waiting_time"
                             hint="Mask: ###/##"
                         />
                         <div class="text-center  text-subtitle-1 text-green">
@@ -190,6 +196,7 @@ function readyOrder() {
         <q-card>
             <q-card-section>
                 Is the order ready?
+                {{ readyOrderForm }}
             </q-card-section>
             <q-card-actions>
                 <q-btn no-caps v-close-popup>No</q-btn>

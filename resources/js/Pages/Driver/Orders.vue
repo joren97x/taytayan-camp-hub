@@ -44,6 +44,7 @@ Echo.private('orders')
 
 <template>
     <h1>Orders </h1>
+    kailangan pa naay fucntion nga complete order from driver ug customer ?
     <q-table
         class="my-sticky-header-column-table q-ma-xl"
         flat

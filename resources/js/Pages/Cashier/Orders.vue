@@ -72,13 +72,10 @@ Echo.private('orders')
 <template>
     
     <Head title="Orders" />
-    <div class="row q-mx-md q-pa-md q-mt-lg">
-        <div class="col text-h5 text-weight-bold">
-            Orders
-        </div>
+    <div class="text-h6 text-weight-bold">
+        Orders
     </div>
-    <hr>
-    <div class="row q-mx-md">
+    <div class="row q-mx-md" v-if="$q.screen.gt.sm">
         <div class="col-6 q-pa-md">
             <p class="text-h6">Preparing</p>
             <q-list>
@@ -104,38 +101,56 @@ Echo.private('orders')
                 />
             </q-list>
         </div>
-        <q-card>
+    </div>
+        
+        <q-card flat class="q-gutter-y-md" v-else>
             <q-tabs
                 v-model="tab"
-                dense
                 class="text-grey"
                 active-color="primary"
                 indicator-color="primary"
-                align="justify"
+                align="start"
                 narrow-indicator
             >
-                <q-tab name="preparing" label="preparing" />
-                <q-tab name="ready" label="ready" />
+                <q-tab name="preparing" no-caps class="q-px-lg" label="Preparing">
+                    <q-badge color="red" floating>4</q-badge>
+                </q-tab>
+                <q-tab name="ready" no-caps label="Ready" class="q-px-lg">
+                    <q-badge color="red" floating>2</q-badge>
+                </q-tab>
             </q-tabs>
             <q-separator />
         </q-card>
-        <q-card>
+        <q-card class="full-width" flat v-if="$q.screen.lt.md">
             <q-tab-panels v-model="tab" animated>
                 <q-tab-panel name="preparing">
-                    <div class="text-h6">Mails</div>
-                    <ImageGallery :images="[
-                        'https://www.inkatrinaskitchen.com/wp-content/uploads/2020/05/Strawberry-Bubble-Tea-24-wm-600.jpg',
-                        'https://www.dadcooksdinner.com/wp-content/uploads/2022/04/Instant-Pot-Boba-Tea-DSCF9377.jpg',
-                        'https://teacultureoftheworld.com/cdn/shop/articles/taiwan-milk-tea-with-boba-bubble-pearl-on-plastic-2024-02-05-02-27-11-utc_2191x.jpg?v=1714023533'
-                    ]" />
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    <q-list>
+                        <PreparingOrderItem
+                            v-for="(order, index) in preparingOrders" 
+                            :key="index"
+                            :order="order" 
+                            :order_statuses="order_statuses"
+                        />
+                        <p v-if="preparingOrders.length == 0" class="text-center">
+                            No orders yet...
+                        </p>
+                    </q-list>
                 </q-tab-panel>
                 <q-tab-panel name="ready">
-                    <div class="text-h6">Alarms</div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    <q-list>
+                        <ReadyOrderItem 
+                            v-for="(order, index) in readyOrders" 
+                            :key="index"
+                            :order="order" 
+                            :order_statuses="order_statuses"
+                        />
+                        <p v-if="readyOrders.length == 0" class="text-center">
+                            No orders yet...
+                        </p>
+                    </q-list>
                 </q-tab-panel>
             </q-tab-panels>
         </q-card>
-    </div>
+    <!-- </div> -->
 
 </template>
