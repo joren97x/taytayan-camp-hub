@@ -8,6 +8,7 @@ import { ref, onMounted } from 'vue'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 
 const props = defineProps({
+    cart_id: Number,
     order_constants: Object,
     items: Object,
     subtotal: Number,
@@ -95,10 +96,12 @@ onMounted(() => {
     })
 })
 
+console.log(page.props)
 const form = useForm({
     items: props.items,
     payment_method: 'gcash',
-    mode: 'pickup'
+    mode: 'pickup',
+    cart_id: props.cart_id
 })
 
 const submit = () => {
@@ -166,11 +169,11 @@ const submit = () => {
                                     <div class="row">
                                         <div class="col-12">
                                             <q-btn-group spread flat unelevated class="no-border">
-                                                <q-btn push label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
-                                                <q-btn push label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
-                                                <q-btn push label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
-                                                <q-btn push label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
-                                                <q-btn push label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
+                                                <q-btn push no-caps label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
+                                                <q-btn push no-caps label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
+                                                <q-btn push no-caps label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
+                                                <q-btn push no-caps label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
+                                                <q-btn push no-caps label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
                                             </q-btn-group>
                                         </div>
                                     </div>
@@ -253,7 +256,7 @@ const submit = () => {
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>
-                            <q-card-actions class="fixed-bottom row bg-white">
+                            <q-card-actions :class="['row bg-white', $q.screen.lt.md ? 'fixed-bottom' : '']">
                                 <div class="col-8 items-center">
                                     <q-item>
                                         <q-item-section>

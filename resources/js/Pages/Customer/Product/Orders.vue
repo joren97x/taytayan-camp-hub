@@ -5,6 +5,7 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import CompletedOrderItem from '@/Components/Customer/Product/CompletedOrderItem.vue'
 import PendingOrderItem from '@/Components/Customer/Product/PendingOrderItem.vue'
 import CancelledOrderItem from '@/Components/Customer/Product/CancelledOrderItem.vue'
+import OrderCardItem from '@/Components/Customer/Product/OrderCardItem.vue'
 import { Head, router, Link } from '@inertiajs/vue3'
 
 defineOptions({
@@ -32,9 +33,15 @@ watch(tab, () => {
 
 <template>
     <div>
-        {{ orders }}
-    <!-- <Head title="Orders" />
-        <q-btn-group spread class="bg-white q-mb-md">
+        <Head title="Orders" />
+        <div class="row">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="order in orders">
+                <OrderCardItem :order="order" />
+            </div>
+        </div>
+        
+
+     <!--    <q-btn-group spread class="bg-white q-mb-md">
             <q-btn class="q-pa-md" no-caps label="All" />
             <q-btn class="q-pa-md" v-for="(order_constant, index) in order_constants.statuses" :key="index" no-caps :label="order_constant" />
         </q-btn-group>

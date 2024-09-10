@@ -15,11 +15,15 @@ defineProps({
 
 <template>
     <div>
-        <q-card v-for="facility in facilities" class="q-my-md">
-            {{ facility }}
-            <Link :href="route('customer.facilities.show', facility.id)">
-                <q-btn>button</q-btn>
-            </Link>
-        </q-card>
+        <div class="row">
+            <div class="col-3" v-for="facility in facilities" >
+                <q-card class="q-my-md">
+                {{ facility.name }}
+                <Link :href="route('customer.facilities.show', facility.id)">
+                    <q-btn>button</q-btn>
+                </Link>
+            </q-card>
+            </div>
+        </div>
     </div>
 </template>

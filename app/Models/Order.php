@@ -17,6 +17,7 @@ class Order extends Model
     const STATUS_READY_FOR_DELIVERY = 'ready_for_delivery';
     const STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
     const STATUS_DELIVERING = 'delivering';
+    const STATUS_DELIVERED = 'delivered';
     const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
 
@@ -42,6 +43,7 @@ class Order extends Model
                 self::STATUS_READY_FOR_DELIVERY,
                 self::STATUS_READY_FOR_PICKUP,
                 self::STATUS_DELIVERING,
+                self::STATUS_DELIVERED,
                 self::STATUS_COMPLETED,
                 self::STATUS_CANCELLED,
             ],

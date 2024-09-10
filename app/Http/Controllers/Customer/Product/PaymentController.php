@@ -15,37 +15,41 @@ use Luigel\Paymongo\Facades\Paymongo;
 class PaymentController extends Controller
 {
     //
-    public function success(Request $request, $mode, $payment_method, CartService $cartService) 
+    public function success($mode, $payment_method, $cart_id, CartService $cartService) 
     {
-        $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
+        $cart = Cart::find($cart_id);
 
         $order = Order::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
             'cart_id' => $cart->id,
             'status' => Order::STATUS_PENDING,
             'payment_method' => $payment_method,
             'mode' => $mode
         ]);
 
-        $result = $cartService->getCartLineItemsAndSubtotal(true, $order->cart_id);
+        $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
         $order->cart_products = $result['cart_products'];
         $order->subtotal = $result['subtotal'];
 
         Log::info($order);
         event(new OrderPending($order));
 
-        $cart->status = false;
-        $cart->save();
-
-        Cart::create([
-            'user_id' => auth()->user()->id
-        ]);
+        // if ang cart kay active mag create bag-o then e inactive dayun!!!
+        if($cart->status) {
+            Cart::create([
+                'user_id' => auth()->id()
+            ]);
+            $cart->status = false;
+            $cart->update();
+        }
+      
         return redirect(route('customer.orders.index'));
     }
 
     public function pay(Request $request) 
     {
-        $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
+        $cart = Cart::find($request->cart_id);
+        // dd($cart);
         $line_items = [];
         $subtotal = 0;
         // Fetch cart products with related product and modifiers
@@ -92,14 +96,14 @@ class PaymentController extends Controller
             'success_url' => route('product.checkout.success', 
                 [
                     'mode' => $request->mode,
-                    'payment_method' => $request->payment_method
+                    'payment_method' => $request->payment_method,
+                    'cart_id' => $cart->id
                 ]),
             'statement_descriptor' => 'Laravel Paymongo Library',
             'metadata' => [
                 'Key' => 'Value'
             ]
         ]);
-    
         return Inertia::location($checkout->checkout_url);
     }
 

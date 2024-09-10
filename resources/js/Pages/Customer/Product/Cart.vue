@@ -17,7 +17,8 @@ defineOptions({
 const props = defineProps({
     items: Object,
     subtotal: Number,
-    google_maps_api_key: String
+    google_maps_api_key: String,
+    cart: Object
 })
 
 const showNewAddressDialog = ref(false)
@@ -31,7 +32,11 @@ const isAdressSet = () => {
         showNewAddressDialog.value = true
     }
     else {
-        router.visit(route('product.checkout'))
+        router.visit(route('product.checkout'), {
+            data: {
+                cart_id: props.cart.id
+            }
+        })
     }
 }
 
@@ -189,6 +194,7 @@ const columns = [
         :google_maps_api_key="google_maps_api_key" 
         v-if="$page.props.auth.user"
     />
+    {{ cart }}
     <div class="row q-mb-xl q-col-gutter-md">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table

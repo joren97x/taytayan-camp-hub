@@ -27,11 +27,18 @@ class ViewController extends Controller
         return Inertia::render('Customer/Product/Orders');
     }
 
-    public function checkout(CartService $cartService) {
-        $cart_id = $cartService->getUserActiveCartId(auth()->user()->id);
-        $result = $cartService->getCartLineItemsAndSubtotal(true, $cart_id);
+    public function checkout(CartService $cartService, Request $request) {
+
+        // $request->validate([
+        //     'cart_id' => 'required'
+        // ]);
+
+        // dd($request->query('cart_id'));
+        // $cart_id = $cartService->getUserActiveCartId(auth()->user()->id);
+        $result = $cartService->getCartLineItemsAndSubtotal($request->query('cart_id'));
         
         return Inertia::render('Customer/Product/Checkout', [
+            'cart_id' => $request->query('cart_id'),
             'order_constants' => Order::getConstants(),
             'items'=> $result['cart_products'], 
             'subtotal' => $result['subtotal'],

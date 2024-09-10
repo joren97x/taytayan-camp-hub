@@ -7,17 +7,15 @@ use Illuminate\Support\Facades\Auth;
 class CartService
 {
 
-    public function getUserActiveCartId($user_id) {
-        $cart = Cart::where('status', 1)->where('user_id', $user_id)->first();
-        return $cart->id;
+    public function getActiveCart($user_id) {
+        return Cart::where('status', true)->where('user_id', $user_id)->first();
     }
 
-    public function getCartLineItemsAndSubtotal($cart_status, $cart_id)
+    public function getCartLineItemsAndSubtotal($cart_id)
     {
         
         // $cart = Cart::where('user_id', $user_id)
-        $cart = Cart::where('status', $cart_status)
-        ->find($cart_id);
+        $cart = Cart::find($cart_id);
         // ->firstOrFail();
 
         // Initialize subtotal

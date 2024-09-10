@@ -14,6 +14,8 @@ const notifications = ref([])
 const notification_badge = ref(0)
 const drawer = ref(false)
 const sidebar = ref(false)
+const btnToggle = ref('products')
+const btnToggleLoading = ref(false)
 
 import axios from 'axios'
 
@@ -45,6 +47,17 @@ watch(rightDrawerOpen, (newVal) => {
             console.error('Error fetching cart items:', error)
         }
     }
+})
+
+watch(btnToggle, () => {
+    router.visit(route(`customer.${btnToggle.value}.index`), {
+        onStart: () => {
+            btnToggleLoading.value = true
+        },
+        onFinish: () => {
+            btnToggleLoading.value = false
+        }
+    })
 })
 
 </script>
@@ -251,6 +264,7 @@ watch(rightDrawerOpen, (newVal) => {
                 </div>
                 </q-img>
             </q-drawer>
+            
         </q-header>
         <!-- class="bg-grey-3" TIS BELONGED TO Q PAGE CONTAINER -->
         <q-page-container>
@@ -258,6 +272,70 @@ watch(rightDrawerOpen, (newVal) => {
                 <slot/>
             </div>
         </q-page-container>
+        <q-footer reveal elevated class="lt-md" style="z-index: 998;">
+            <q-toolbar class="row bg-white q-pa-none q-ma-none">
+                <div class="col-12 ">
+                    <q-btn-toggle 
+                        v-model="btnToggle"
+                        toggle-color="primary"
+                        spread
+                        unelevated
+                        class="text-black"
+                        :options="[
+                            {  value: 'products', slot: 'products'},
+                            {  value: 'events', slot: 'events'},
+                            {  value: 'facilities', slot: 'facilities'}
+                        ]" 
+                    >
+                        <template v-slot:products>
+                            <q-btn 
+                                no-caps 
+                                unelevated 
+                                :ripple="false" 
+                                class="full-width" 
+                                :loading="btnToggle == 'products' && btnToggleLoading"
+                                :disabled="btnToggle == 'products' && btnToggleLoading"
+                            >
+                                <q-avatar size="sm" class="q-mr-sm">
+                                    <q-img fit="cover" src="images/product_logo.png"/>
+                                </q-avatar>
+                                Products
+                            </q-btn>
+                        </template>
+                        <template v-slot:events>
+                            <q-btn 
+                                no-caps 
+                                unelevated 
+                                :ripple="false" 
+                                class="full-width" 
+                                :loading="btnToggle == 'events' && btnToggleLoading"
+                                :disabled="btnToggle == 'events' && btnToggleLoading"
+                            >
+                                <q-avatar size="sm" class="q-mr-sm">
+                                    <q-img fit="cover" src="images/product_logo.png"/>
+                                </q-avatar>
+                                Events
+                            </q-btn>
+                        </template>
+                        <template v-slot:facilities>
+                            <q-btn 
+                                no-caps 
+                                unelevated 
+                                :ripple="false" 
+                                class="full-width" 
+                                :loading="btnToggle == 'facilities' && btnToggleLoading"
+                                :disabled="btnToggle == 'facilities' && btnToggleLoading"
+                            >
+                                <q-avatar size="sm" class="q-mr-sm">
+                                    <q-img fit="cover" src="images/product_logo.png"/>
+                                </q-avatar>
+                                Facilities
+                            </q-btn>
+                        </template>
+                    </q-btn-toggle>
+                </div>
+            </q-toolbar>
+        </q-footer>
         <!-- <Footer/> -->
     </q-layout>
 </template>

@@ -16,12 +16,14 @@ class CartController extends Controller
      */
     public function index(Request $request, CartService $cartService)
     {
-        $cart_id = $cartService->getUserActiveCartId(auth()->user()->id);
-        $result = $cartService->getCartLineItemsAndSubtotal(true, $cart_id);
+        $cart = $cartService->getActiveCart(auth()->id());
+        $result = $cartService->getCartLineItemsAndSubtotal($cart->id);
+
         return Inertia::render('Customer/Product/Cart', [
             'items'=> $result['cart_products'], 
             'subtotal' => $result['subtotal'],
-            'google_maps_api_key' => config('app.google_maps_api_key')
+            'google_maps_api_key' => config('app.google_maps_api_key'),
+            'cart' => $cart
         ]);
         
     }

@@ -52,6 +52,8 @@ const columns = [
     
     <Head title="Products" />
     <div class="q-pa-md">
+        <h1>Add Item Availability</h1>
+        kung naa pa bay stock or wala na ug sa modifier group pod apili
         <q-table
             class="my-sticky-header-column-table"
             flat
