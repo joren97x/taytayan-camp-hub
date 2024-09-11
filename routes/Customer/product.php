@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::resource('orders', OrderController::class)->names([
         'show' => 'customer.orders.show',
         'index' => 'customer.orders.index',
+        'update' => 'customer.orders.update'
     ]);
     
     Route::get('/on-progress-orders', [OrderController::class, 'on_progress'])->name('orders.on_progress');

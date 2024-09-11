@@ -2,13 +2,16 @@
 
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar';
 
 const props = defineProps({
     order: Object
 })
 
+const $q = useQuasar()
 const dialog = ref(false)
 const deliverOrderForm = useForm({})
+const completeOrderForm = useForm({})
 
 function deliverOrder() {
     deliverOrderForm.patch(route('driver.order.deliver', props.order.id), {
@@ -19,48 +22,37 @@ function deliverOrder() {
     })
 }
 
+const completeOrder = () => {
+    completeOrderForm.patch(route('driver.order.complete_delivery', props.order.id), {
+        onSuccess: () => {
+            $q.notify('Order Has Been Delivered')
+        }
+    })
+}
+
 </script>
 
 <template>
     <q-btn no-caps color="primary" @click="dialog = !dialog">Button</q-btn>
-    <q-dialog v-model="dialog" full-width>
+    <q-dialog 
+        v-model="dialog" 
+        full-width 
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
         <q-card>
-            <q-card-section>
-                <q-item>
-                    <q-item-section>
-                        <q-item-label class="text-h6">Customer Details</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                        <q-btn round icon="close" unelevated v-close-popup></q-btn>
-                    </q-item-section>
-                    
-                </q-item>
-                <div class="q-mx-md">
-                    {{ order.user.first_name + ' ' + order.user.last_name }}
-                    <br>
-                    {{ order.user.address }}
-                    <br>
-                    {{ order.user.phone_number }}
-                </div>
-                <q-item>
-                    <q-item-section>
-                        <q-item-label class="text-h6">Order Details</q-item-label>
-                        <q-item-label caption> {{ order.created_at }}
-                        </q-item-label>
-                    </q-item-section>
-                </q-item>
-                <div class="row q-col-gutter-xl">
-                    <div class="col-8">
-                        <q-item>
-                            <q-item-section>
-                                <q-item-label class="text-h6">
-                                    {{ order.cart_products.length }} items
-                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
-                                        {{ order.mode }}
-                                    </q-chip>
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
+            <q-card-section class="row">
+                    <q-btn no-caps icon="close" round unelevated class="absolute-top-right" @click="dialog = !dialog"></q-btn>
+                    <div class="col-8 col-xs-12 col-sm-12 col-lg-8 col-md-8 col-xl-8">
+                        CUstomer Details
+                        <div class="q-mx-md">
+                            {{ order.user.first_name + ' ' + order.user.last_name }}
+                            <br>
+                            {{ order.user.address }}
+                            <br>
+                            {{ order.user.phone_number }}
+                        </div>
                         <q-list>
                             <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                                 <q-item-section thumbnail>
@@ -92,7 +84,8 @@ function deliverOrder() {
                             </q-item>
                         </q-list>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 col-xs-12 col-sm-12 col-lg-4 col-md-4 col-xl-4">
+                        Order Deatils
                         <q-item>
                             <q-item-section class="text-h6">Order Total</q-item-section>
                         </q-item>
@@ -118,19 +111,26 @@ function deliverOrder() {
                         <div class="q-mt-md">
                             <q-btn 
                                 class="full-width" 
-                                color="primary" no-caps
+                                color="primary" 
+                                no-caps
                                 :loading="deliverOrderForm.processing"
                                 :disable="deliverOrderForm.processing"
                                 @click="deliverOrder()"
                             >
                                 Deliver Order
                             </q-btn>
-                            <!-- <q-btn class="full-width q-my-sm" color="red" outline no-caps>Cancel Order</q-btn> -->
+                            <q-btn
+                                no-caps
+                                class="full-width"
+                                :loading="completeOrderForm.processing"
+                                :disable="completeOrderForm.processing"
+                                @click="completeOrder()"
+                            >
+                                Complete Order
+                            </q-btn>
                         </div>
                     </div>
-                </div>
             </q-card-section>
-           
         </q-card>
     </q-dialog>
 </template>

@@ -11,20 +11,22 @@ const props = defineProps({
 })
 
 const dialog = ref(false)
-const isOrderReadyDialog = ref(false)
+const orderReadyDialog = ref(false)
+const cancelOrderDialog = ref(false)
+const readyOrderDialog = ref(false)
 const $q = useQuasar()
 
 const acceptOrderForm = useForm({
-    waiting_time: '15 mins',
+    waiting_time: 15,
     status: props.order_statuses.preparing
 })
 
-const readyOrderForm = useForm({
+const orderForm = useForm({
     status: props.order.mode == 'pickup' ? props.order_statuses.ready_for_pickup : props.order_statuses.ready_for_delivery
 })
 
 function acceptOrder() {
-    acceptOrderForm.patch(route('cashier.orders.prepare_order', props.order.id), {
+    acceptOrderForm.patch(`/cashier/orders/prepare-order/${props.order.id}`, {
         onSuccess: (e) => {
             console.log(e)
             dialog.value = false
@@ -43,11 +45,22 @@ function acceptOrder() {
 // }
 
 function readyOrder() {
-    readyOrderForm.patch(route('cashier.orders.update_status', props.order.id), {
+    orderForm.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: (e) => {
             console.log(e)
-            isOrderReadyDialog.value = false
+            readyOrderDialog.value = false
             $q.notify('Order Accepted')
+        }
+    })
+}
+
+function cancelOrder() {
+    orderForm.status = 'cancelled'
+    orderForm.patch(route('cashier.orders.update_status', props.order.id), {
+        onSuccess: (e) => {
+            console.log(e)
+            cancelOrderDialog.value = false
+            $q.notify('Order Cancelled')
         }
     })
 }
@@ -65,7 +78,7 @@ function readyOrder() {
         </q-item-section>
         <q-item-section side top v-else>
             <q-item-label caption>{{ order.created_at }}</q-item-label>
-            <q-btn no-caps color="primary" @click.stop="isOrderReadyDialog = true">
+            <q-btn no-caps color="primary" @click.stop="readyOrderDialog = true">
                 Ready Order
             </q-btn>
         </q-item-section> 
@@ -136,7 +149,7 @@ function readyOrder() {
                             Subtotal - {{ order.subtotal }}
                         </div>
                     </div>
-                    <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
+                    <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12" v-if="order.status == 'pending'">
                         <q-input
                             filled
                             v-model="acceptOrderForm.waiting_time"
@@ -184,7 +197,15 @@ function readyOrder() {
                             >
                                 Accept Order
                             </q-btn>
-                            <q-btn class="full-width q-my-sm" color="red" outline no-caps>Cancel Order</q-btn>
+                            <q-btn 
+                                class="full-width q-my-sm" 
+                                color="red" 
+                                outline 
+                                no-caps
+                                @click="cancelOrderDialog = true"
+                            >
+                                Cancel Order
+                            </q-btn>
                         </div>
                     </div>
                 </div>
@@ -192,19 +213,38 @@ function readyOrder() {
            
         </q-card>
     </q-dialog>
-    <q-dialog v-model="isOrderReadyDialog">
+    <q-dialog v-model="readyOrderDialog">
         <q-card>
             <q-card-section>
                 Is the order ready?
-                {{ readyOrderForm }}
+                {{ orderForm }}
             </q-card-section>
             <q-card-actions>
                 <q-btn no-caps v-close-popup>No</q-btn>
                 <q-btn 
                     no-caps
-                    :loading="readyOrderForm.processing"
-                    :disable="readyOrderForm.processing"
+                    :loading="orderForm.processing"
+                    :disable="orderForm.processing"
                     @click="readyOrder()"
+                >
+                    Yes
+                </q-btn>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+    <q-dialog v-model="cancelOrderDialog">
+        <q-card>
+            <q-card-section>
+                Cancel Order?
+                {{ orderForm }}
+            </q-card-section>
+            <q-card-actions>
+                <q-btn no-caps v-close-popup>No</q-btn>
+                <q-btn 
+                    no-caps
+                    :loading="orderForm.processing"
+                    :disable="orderForm.processing"
+                    @click="cancelOrder()"
                 >
                     Yes
                 </q-btn>

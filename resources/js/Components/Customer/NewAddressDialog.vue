@@ -18,9 +18,11 @@ const $q = useQuasar()
 const form = useForm({
     phone_number: page.props.auth.user.phone_number,
     address: page.props.auth.user.address,
+    // use if expired na ang free trial :P
+    // 10.259152, 124.046597
     address_coordinates: {
-        lat: null,
-        lng: null
+        lat: 10.259152,
+        lng: 124.046597
     }
 })
 

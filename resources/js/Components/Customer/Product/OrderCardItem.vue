@@ -1,11 +1,21 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
-defineProps({ order: Object })
+const props = defineProps({ order: Object })
 const $q = useQuasar()
 const viewOrderDialog = ref(false)
+const rateDialog = ref(false)
+const completeOrderForm = useForm({})
+
+const completeOrder = () => {
+    completeOrderForm.patch(route('customer.orders.update', props.order.id), {
+        onSuccess: () => {
+            rateDialog.value = true
+        }
+    })
+}
 
 </script>
 <template>
@@ -26,6 +36,15 @@ const viewOrderDialog = ref(false)
                     <q-btn no-caps>Reorder</q-btn>
                 </Link>
                 <q-btn no-caps @click="viewOrderDialog = true">View Order</q-btn>
+                <q-btn 
+                    v-if="order.status == 'ready_for_pickup' || order.status == 'delivered'"
+                    no-caps 
+                    @click="completeOrder()"
+                    :loading="completeOrderForm.processing"
+                    :disable="completeOrderForm.processing"
+                >
+                    Complete Order
+                </q-btn>
             </q-item-section>
         </q-item>
         <!-- <div class="row">
@@ -49,6 +68,37 @@ const viewOrderDialog = ref(false)
                     hi
                     {{ order }}
                 </q-card-section>
+                
+            </q-card>
+        </q-dialog>
+        <q-dialog 
+            v-model="rateDialog" 
+            transition-show="slide-up"
+            transition-hide="slide-down"
+            :maximized="$q.screen.lt.md"
+        >
+            <q-card>
+                <q-card-section>
+                    <q-btn 
+                        icon="close" 
+                        class="absolute-top-right q-mr-sm q-mt-sm" 
+                        round 
+                        unelevated 
+                        v-close-popup
+                    />
+                    <div class="text-h6">Rate</div>
+                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
+                    <q-rating size="xl" />
+                    <q-input type="textarea" filled label="Write your review here..."/>
+                </q-card-section>
+                <q-card-actions>
+                    <q-btn 
+                        class="full-width" 
+                        color="primary"
+                    >
+                        Submit
+                    </q-btn>
+                </q-card-actions>
             </q-card>
         </q-dialog>
     </div>

@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::patch('/driver/deliver-order/{id}', [OrderController::class, 'deliver'])->name('driver.order.deliver');
+    Route::patch('/driver/deliver-order/{order}', [OrderController::class, 'deliver'])->name('driver.order.deliver');
+    Route::patch('/driver/complete-order/{order}', [OrderController::class, 'complete_delivery'])->name('driver.order.complete_delivery');
     Route::resource('/driver/orders', OrderController::class)->names([
         'index' => 'driver.orders.index',
         'show' => 'driver.orders.show',

@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FacilitySeeder::class);
         $this->call(ConversationSeeder::class);
 
+        //admin account
         User::factory()->create([
             'email' => 'sumagangjoren@gmail.com',
             'first_name' => 'Joren',
@@ -54,7 +55,23 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'password' => Hash::make('jorenjoren')
         ]);
-
+        //cashier account
+        User::factory()->create([
+            'email' => 'cashier@gmail.com',
+            'first_name' => 'Chaewon',
+            'last_name' => 'Maganda',
+            'role' => 'cashier',
+            'password' => Hash::make('jorenjoren')
+        ]);
+        //driver account
+        User::factory()->create([
+            'email' => 'driver@gmail.com',
+            'first_name' => 'Daniel',
+            'last_name' => 'Caesar',
+            'role' => 'driver',
+            'password' => Hash::make('jorenjoren')
+        ]);
+        //customer account :)
         $user = User::factory()->create([
             'email' => 'user@gmail.com',
             'first_name' => 'Joren',

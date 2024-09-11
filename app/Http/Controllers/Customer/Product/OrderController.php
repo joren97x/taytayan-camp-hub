@@ -68,4 +68,11 @@ class OrderController extends Controller
 
     }
 
+    public function update(Order $order)
+    {
+        $order->status = Order::STATUS_COMPLETED;
+        $order->update();
+        return back();
+    }
+
 }

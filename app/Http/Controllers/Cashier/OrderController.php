@@ -26,7 +26,7 @@ class OrderController extends Controller
         // dd($orders);
         
         foreach($orders as $order) {
-            $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }
@@ -42,7 +42,7 @@ class OrderController extends Controller
     {
         $order = Order::with('user')->find($id);
         // dd($order);
-        $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+        $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
         $order->cart_products = $result['cart_products'];
         $order->subtotal = $result['subtotal'];
 
@@ -58,33 +58,35 @@ class OrderController extends Controller
         ]);
 
         // $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
-        
-        switch($request->status) {
-            case Order::STATUS_PREPARING:
-                $order->status = Order::STATUS_PREPARING;
-                $order->update();
-                break;
-            case Order::STATUS_DELIVERING:
-                $order->status = Order::STATUS_DELIVERING;
-                $order->update();
-                break;
-            case Order::STATUS_COMPLETED:
-                $order->status = Order::STATUS_COMPLETED;
-                $order->update();
-                break;
-            case Order::STATUS_READY_FOR_DELIVERY:
-                $order->status = Order::STATUS_READY_FOR_DELIVERY;
-                event(new OrderReadyForDelivery($order));
-                $order->update();
-                break;
-            case Order::STATUS_READY_FOR_PICKUP:
-                $order->status = Order::STATUS_READY_FOR_PICKUP;
-                $order->update();
-                break;
-        }
+        $order->status = $request->status;
+        $order->update();
+        // switch($request->status) {
+        //     case Order::STATUS_PREPARING:
+        //         $order->status = Order::STATUS_PREPARING;
+        //         $order->update();
+        //         break;
+        //     case Order::STATUS_DELIVERING:
+        //         $order->status = Order::STATUS_DELIVERING;
+        //         $order->update();
+        //         break;
+        //     case Order::STATUS_COMPLETED:
+        //         $order->status = Order::STATUS_COMPLETED;
+        //         $order->update();
+        //         break;
+        //     case Order::STATUS_READY_FOR_DELIVERY:
+        //         $order->status = Order::STATUS_READY_FOR_DELIVERY;
+        //         event(new OrderReadyForDelivery($order));
+        //         $order->update();
+        //         break;
+        //     case Order::STATUS_READY_FOR_PICKUP:
+        //         $order->status = Order::STATUS_READY_FOR_PICKUP;
+        //         $order->update();
+        //         break;
+        // }
         // event(new OrderStatusUpdated($order));
 
-        return back();
+        return redirect(route('cashier.orders.index'));
+
     }
 
     public function prepare_order(Order $order, Request $request)
@@ -93,12 +95,11 @@ class OrderController extends Controller
             'waiting_time' => 'required',
             'status' => 'required'
         ]);
-
-        $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
+        $order->waiting_time = Carbon::now()->addMinutes((int)$request->waiting_time);
         $order->status = $request->status;
         $order->update();
 
-        return back();
-    }
+        return redirect(route('cashier.orders.index'));
+    }   
 
 }

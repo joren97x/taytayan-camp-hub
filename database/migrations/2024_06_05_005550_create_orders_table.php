@@ -21,6 +21,7 @@ return new class extends Migration
                 Order::STATUS_PENDING,
                 Order::STATUS_PREPARING,
                 Order::STATUS_READY_FOR_DELIVERY,
+                Order::STATUS_DELIVERED,
                 Order::STATUS_READY_FOR_PICKUP,
                 Order::STATUS_DELIVERING,
                 Order::STATUS_CANCELLED,
