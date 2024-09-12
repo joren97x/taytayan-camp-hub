@@ -91,15 +91,17 @@ class OrderController extends Controller
 
     public function prepare_order(Order $order, Request $request)
     {
+        $local_time = Carbon::now()->setTimezone('Asia/Manila');
+
         $request->validate([
             'waiting_time' => 'required',
             'status' => 'required'
         ]);
-        $order->waiting_time = Carbon::now()->addMinutes((int)$request->waiting_time);
+        $order->waiting_time = $local_time->addMinutes((int)$request->waiting_time);
         $order->status = $request->status;
         $order->update();
 
-        return redirect(route('cashier.orders.index'));
+        return back();
     }   
 
 }
