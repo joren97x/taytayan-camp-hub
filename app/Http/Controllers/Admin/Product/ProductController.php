@@ -106,6 +106,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required',
             'is_featured' => 'required',
+            'available' => 'required',
             'categories' => 'nullable',
         ]);
 
@@ -116,6 +117,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->is_featured = $request->is_featured;
+        $product->available = $request->available;
         
         foreach($request->categories as $category) {
             CategoryProduct::create([

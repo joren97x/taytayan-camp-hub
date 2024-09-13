@@ -118,7 +118,7 @@ const submit = () => {
     
     <Head title="Checkout" />
     <div>
-        <div class="row justify-between">
+        <div class="row justify-between lt-md">
             <div class="col-12 text-center center text-h6">
                 Checkout
                 <Link :href="route('customer.cart.index')" class="absolute-left">
@@ -127,10 +127,12 @@ const submit = () => {
             </div>
         </div>
         <div class="q-mb-xl">
+            
             <div class="row q-col-gutter-xl">
                 <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                     <q-card flat >
                         <q-card-section>
+                            <p class="text-h5 q-ml-md gt-sm">Checkout</p>
                             <q-item>
                                 <q-item-section class="text-h6 text-capitalize">{{ form.mode }} Details</q-item-section>
                                 <q-item-section side>

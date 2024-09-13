@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Driver;
 
+use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
@@ -32,6 +33,8 @@ class OrderController extends Controller
     {
         $order->status = Order::STATUS_DELIVERING;
         $order->update();
+        event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        
         return redirect(route('driver.map'));
 
     }

@@ -25,7 +25,8 @@ const form = useForm({
     description: props.product.description,
     price: props.product.price,
     categories: props.product.categories,
-    is_featured: props.product.is_featured ? true : false
+    is_featured: props.product.is_featured ? true : false,
+    available: props.product.available ? true : false
 })
 
 const photoForm = useForm({
@@ -159,6 +160,7 @@ watch(selected, (modifier_group) => {
                 </template>
             </q-input>
             <q-checkbox v-model="form.is_featured" label="Feature Product" />
+            <q-checkbox v-model="form.available" label="Out Of Stock" />
             <q-btn 
                     type="submit" 
                     no-caps 

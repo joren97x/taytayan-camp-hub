@@ -1,7 +1,7 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
@@ -10,9 +10,10 @@ const viewOrderDialog = ref(false)
 const rateDialog = ref(false)
 const completeOrderForm = useForm({})
 const step = ref(1)
+const order = ref(props.order)
 
 const completeOrder = () => {
-    completeOrderForm.patch(route('customer.orders.update', props.order.id), {
+    completeOrderForm.patch(route('customer.orders.update', order.value.id), {
         onSuccess: () => {
             rateDialog.value = true
         }
@@ -85,15 +86,47 @@ const deliverySteps = [
 ]
 
 
-var newStep
-if(props.order.mode == 'pickup') {
-    newStep = pickupSteps.findIndex((s) => props.order.status == s.name)
+
+
+onMounted(() => {
+    calculateSteps()
+})
+
+function calculateSteps() {
+    var newStep
+    if(order.value.mode == 'pickup') {
+        newStep = pickupSteps.findIndex((s) => order.value.status == s.name)
+    }
+    else {
+        newStep = deliverySteps.findIndex((s) => order.value.status == s.name)
+    }
+    step.value = newStep 
+
+    // if complete na increment ang step para mo mark as done sa QStepper
+    // idk y
+    if(order.value.status == 'completed') {
+        step.value++
+    }
 }
-else {
-    newStep = deliverySteps.findIndex((s) => props.order.status == s.name)
-}
-step.value = newStep 
-console.log(newStep)
+
+Echo.private(`orders.${order.value.id}`)
+    .listen('Product\\OrderStatusUpdated', (data) => {
+        $q.notify('new order arrived')
+        console.log(data.order)
+        order.value = data.order
+        console.log(order.value)
+        calculateSteps()
+        // axios.get(route('cashier.orders.show', data.order.id))
+        // .then((orderData) => {
+        //     $q.notify('fetched and ykwis bruh')
+        //     console.log(orderData)
+        //     orders.value.push(orderData.data)
+        // })
+        // .catch((err) => {
+        //     console.error(err)
+        // })
+    })
+console.log(order.value)
 // const date1 = new Date(2017, 4, 12) April 12 2017
 // const date2 = new Date(2017, 3, 8)  March 8 2017
 // const unit = 'days'
@@ -109,6 +142,7 @@ console.log(newStep)
             </q-item-section>
             <q-item-section>
                 <br>
+                <h1>Order Id : {{ order.id }}</h1>
                 <span class="text-red">if hurot na ang waiting time(negative) unsay mahitabo</span>
                 waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes
                 <q-item-label>{{ order.created_at }}</q-item-label>
@@ -123,7 +157,7 @@ console.log(newStep)
                 </Link>
                 <q-btn no-caps @click="viewOrderDialog = true">View Order</q-btn>
                 <q-btn 
-                    v-if="order.status == 'ready_for_pickup' || order.status == 'delivered'"
+                    v-if="order.status == 'delivered'"
                     no-caps 
                     @click="completeOrder()"
                     :loading="completeOrderForm.processing"
@@ -159,8 +193,6 @@ console.log(newStep)
                         class="absolute-top-right q-mt-sm q-mr-sm"
                         unelevated
                     />
-                    <div class="text-red">ang cancelled status nalang kulang dong</div>
-                    
                     <q-stepper
                         v-model="step"
                         ref="stepper"
@@ -168,19 +200,22 @@ console.log(newStep)
                         color="primary"
                         animated
                         alternative-labels
+                        active-icon="hourglass_top"
                     >
                         <q-step
                             :name="index"
-                            :title="s.title"
-                            icon="settings"
+                            :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
+                            :icon="s.icon"
+                            :error="order.status == 'cancelled'"
                             v-for="(s, index) in pickupSteps"
                             :done="step > index || order.status == 'completed'"
                             v-if="order.mode == 'pickup'"
                         />
                         <q-step
                             :name="index"
-                            :title="s.title"
-                            icon="settings"
+                            :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
+                            :icon="s.icon"
+                            :error="order.status == 'cancelled'"
                             v-for="(s, index) in deliverySteps"
                             :done="step > index || order.status == 'completed'"
                             v-else

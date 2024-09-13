@@ -247,7 +247,7 @@ const filteredCategories = computed(() => {
                         :key="review.id"
                     >
                         <q-card style="max-height: 600px; height: 115px">
-                            <q-card-section class="q-pb-none">
+                            <q-card-section class="q-pb-none ellipsis-2-lines">
                                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
                             </q-card-section>
                             <q-card-actions class="q-pt-sm">

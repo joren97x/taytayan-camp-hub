@@ -42,12 +42,12 @@ Echo.channel('hello-channel')
 <template>
     <Head title="Welcome" />
     <div style="background: linear-gradient(to bottom, #FFFFFF, #EEEEEE)">
-        <div class="row q-col-gutter-xl items-center">
+        <div class="row q-col-gutter-lg items-center">
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
                     <p class="text-start text-h3 q-mt-xl text-weight-medium">Lorem ipsum dolor emit ambatukam</p>
                     <p class="text-start text-subtitle1"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus accusantium, numquam porro, exercitationem quos debitis fugit ducimus </p>
-                    <q-btn size="lg" unelevated color="blue" no-caps class="q-px-xl"> Create your account - it's free! </q-btn>
+                    <q-btn size="lg" unelevated color="blue" no-caps class="q-px-xl"> Create your account </q-btn>
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">

@@ -18,7 +18,7 @@ const dialog = ref(false)
             <q-img
                 :src="`./storage/${product.photo}`"
                 alt="product image"
-                height="200px"
+                height="160px"
             >
                 <!-- <div class="absolute-top-left bg-green-6 text-white text-caption">
                     #{{ i + 1 }} most liked

@@ -19,6 +19,7 @@ class Product extends Model
         'description',
         'photo',
         'is_featured',
+        'available',
         'price'
     ];
 

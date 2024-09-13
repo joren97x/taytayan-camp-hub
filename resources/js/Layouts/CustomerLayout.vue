@@ -254,15 +254,17 @@ watch(btnToggle, () => {
                     <NavLinks/>
                 </q-scroll-area>
 
-                <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
-                <div class="absolute-bottom bg-transparent">
-                    <q-avatar size="56px" class="q-mb-sm">
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                    </q-avatar>
-                    <div class="text-weight-bold">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</div>
-                    <div>{{ $page.props.auth.user.email }}</div>
+                <div  class="absolute-top" v-if="$page.props.auth.user">
+                    <q-img src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+                        <div class="absolute-bottom bg-transparent">
+                            <q-avatar size="56px" class="q-mb-sm">
+                            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                            </q-avatar>
+                            <div class="text-weight-bold">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</div>
+                            <div>{{ $page.props.auth.user.email }}</div>
+                        </div>
+                    </q-img>
                 </div>
-                </q-img>
             </q-drawer>
             
         </q-header>

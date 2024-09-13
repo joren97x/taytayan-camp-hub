@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cashier;
 
 use App\Events\Product\OrderReadyForDelivery;
+use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
@@ -49,10 +50,11 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    public function update_status(string $id, Request $request) 
+    public function update_status(string $id, Request $request, CartService $cartService) 
     {
         $order = Order::find($id);
-        // event(new OrderStatusUpdated($order));
+        // dd($order);
+  
         $request->validate([
             'status' => 'required'
         ]);
@@ -60,6 +62,10 @@ class OrderController extends Controller
         // $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
         $order->status = $request->status;
         $order->update();
+
+        // dd($order);
+        event(new OrderStatusUpdated($order, true, app(CartService::class)));
+
         // switch($request->status) {
         //     case Order::STATUS_PREPARING:
         //         $order->status = Order::STATUS_PREPARING;

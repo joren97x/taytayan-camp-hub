@@ -57,15 +57,15 @@ Echo.private('orders')
         })
     })
 
-    axios.get(route('cashier.orders.show', 12))
-        .then((orderData) => {
-            $q.notify('fetched and ykwis bruh')
-            console.log(orderData.data)
-            orders.value.push(orderData.data)
-        })
-        .catch((err) => {
-            console.error(err)
-        })
+axios.get(route('cashier.orders.show', 12))
+    .then((orderData) => {
+        $q.notify('fetched and ykwis bruh')
+        console.log(orderData.data)
+        orders.value.push(orderData.data)
+    })
+    .catch((err) => {
+        console.error(err)
+    })
 
 </script>
 
