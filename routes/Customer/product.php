@@ -4,6 +4,7 @@ use App\Http\Controllers\Customer\Product\CartController;
 use App\Http\Controllers\Customer\Product\OrderController;
 use App\Http\Controllers\Customer\Product\PaymentController;
 use App\Http\Controllers\Customer\Product\ProductController;
+use App\Http\Controllers\Customer\Product\ProductRatingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\Product\ViewController;
 
@@ -30,6 +31,9 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::put('/cart/update-cart-quantity/{id}', [CartController::class, 'update_cart_item_quantity'])->name('customer.cart.update_cart_item_quantity');
     Route::get('/product-checkout-success/{mode}/{payment_method}/{cart_id}', [PaymentController::class, 'success'])->name('product.checkout.success');
     Route::post('/product-pay', [PaymentController::class, 'pay'])->name('product.pay');
+
+    Route::post('/product-rating', [ProductRatingController::class, 'store'])->name('customer.product_rating.store');
+
 });
 
 // Route::get('/products', [ViewController::class, 'index'])->name('products')->middleware('customer');

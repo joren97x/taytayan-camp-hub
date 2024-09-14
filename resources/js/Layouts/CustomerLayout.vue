@@ -213,10 +213,11 @@ watch(btnToggle, () => {
             </q-card>
             <q-drawer
                 v-model="sidebar"
-                :width="300"
+                :width="250"
                 behavior="mobile"
                 v-if="$q.screen.lt.md"
                 side="right"
+                @click="sidebar = false"
             >
                 <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
                     <q-list class="q-pa-none">
@@ -274,7 +275,7 @@ watch(btnToggle, () => {
                 <slot/>
             </div>
         </q-page-container>
-        <q-footer reveal elevated class="lt-md" style="z-index: 998;">
+        <q-footer reveal elevated class="lt-md" v-show="false" style="z-index: 998;">
             <q-toolbar class="row bg-white q-pa-none q-ma-none">
                 <div class="col-12 ">
                     <q-btn-toggle 

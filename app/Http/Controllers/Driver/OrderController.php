@@ -43,6 +43,8 @@ class OrderController extends Controller
     {
         $order->status = Order::STATUS_DELIVERED;
         $order->update();
+        event(new OrderStatusUpdated($order, true, app(CartService::class)));
+
         return redirect(route('driver.orders.index'));
     }
 

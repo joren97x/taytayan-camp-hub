@@ -104,12 +104,14 @@ const attendees = ref(1)
                         </q-item>
                     </div>
                     <div class="col-4 self-center">
-                        <q-btn
-                            label="Checkout"
-                            color="primary"
-                            class="full-width"
-                            no-caps
-                        />  
+                        <Link :href="route('event.checkout')" :data="{ event_id: event.id, attendees }">
+                            <q-btn
+                                label="Checkout"
+                                color="primary"
+                                class="full-width"
+                                no-caps
+                            />  
+                        </Link>
                     </div>
                 </div>
             </div>

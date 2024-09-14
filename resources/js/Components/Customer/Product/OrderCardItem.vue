@@ -9,6 +9,10 @@ const $q = useQuasar()
 const viewOrderDialog = ref(false)
 const rateDialog = ref(false)
 const completeOrderForm = useForm({})
+const ratingForm = useForm({
+    rating: 0,
+    review: ''
+})
 const step = ref(1)
 const order = ref(props.order)
 
@@ -20,6 +24,13 @@ const completeOrder = () => {
     })
 }
 
+const submitRatingForm = () => {
+    ratingForm.post(route('customer.product_rating.store'), {
+        onSuccess: () => {
+            rateDialog.value = false
+        }
+    })
+}
 // so i want to get the index of the step based from the order,status
 // and then set the index to the step
 
@@ -244,30 +255,47 @@ console.log(order.value)
             transition-show="slide-up"
             transition-hide="slide-down"
             :maximized="$q.screen.lt.md"
+            persistent
         >
-            <q-card>
+                <q-card>
+            <q-form @submit="submitRatingForm()">
                 <q-card-section>
-                    <q-btn 
-                        icon="close" 
-                        class="absolute-top-right q-mr-sm q-mt-sm" 
-                        round 
-                        unelevated 
-                        v-close-popup
-                    />
-                    <div class="text-h6">Rate</div>
-                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
-                    <q-rating size="xl" />
-                    <q-input type="textarea" filled label="Write your review here..."/>
-                </q-card-section>
-                <q-card-actions>
-                    <q-btn 
-                        class="full-width" 
-                        color="primary"
-                    >
-                        Submit
-                    </q-btn>
-                </q-card-actions>
-            </q-card>
+                        <q-btn 
+                            icon="close" 
+                            class="absolute-top-right q-mr-sm q-mt-sm" 
+                            round 
+                            unelevated 
+                            v-close-popup
+                        />
+                        <div class="text-h6">Rate</div>
+                        <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
+                        <q-rating 
+                            size="xl" 
+                            v-model="ratingForm.rating" 
+                        />
+                        <div class="text-red" v-if="ratingForm.errors.rating ? true : false">
+                            {{ ratingForm.errors.rating }}
+                        </div>
+                        <q-input 
+                            type="textarea" 
+                            v-model="ratingForm.review" 
+                            filled 
+                            label="Write your review here..."
+                        />
+                    </q-card-section>
+                    <q-card-actions>
+                        <q-btn 
+                            class="full-width" 
+                            color="primary"
+                            :loading="ratingForm.processing"
+                            :disable="ratingForm.processing"
+                            type="submit"
+                        >
+                            Submit
+                        </q-btn>
+                    </q-card-actions>
+                </q-form>
+                </q-card>
         </q-dialog>
     </div>
 </template>

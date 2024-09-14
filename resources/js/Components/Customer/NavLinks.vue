@@ -6,7 +6,7 @@ import { Link } from '@inertiajs/vue3'
 <template>
     <q-list>
         
-        <Link :href="route('customer.cart.index')" class="user-menu-link">
+        <Link :href="route('customer.cart.index')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="inbox" />
@@ -14,7 +14,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section>Cart</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('customer.orders.index')" class="user-menu-link">
+        <Link :href="route('customer.orders.index')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="inbox" />
@@ -22,7 +22,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section>Orders</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('customer.bookings.index')" class="user-menu-link">
+        <Link :href="route('customer.bookings.index')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="manage_accounts" />
@@ -30,7 +30,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section>Bookings</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('customer.tickets.index')" class="user-menu-link">
+        <Link :href="route('customer.tickets.index')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="logout" />
@@ -48,7 +48,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-toggle v-model="$q.dark.isActive"></q-toggle>
             </q-item-section>
         </q-item>
-        <Link :href="route('customer.inbox')" class="user-menu-link">
+        <Link :href="route('customer.inbox')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="inbox" />
@@ -56,7 +56,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section>Inbox</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('profile.edit')" class="user-menu-link">
+        <Link :href="route('profile.edit')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="manage_accounts" />
@@ -64,7 +64,7 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section>Profile</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('logout')" method="post" class="user-menu-link">
+        <Link :href="route('logout')" method="post" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="logout" />
@@ -74,3 +74,12 @@ import { Link } from '@inertiajs/vue3'
         </Link>
     </q-list>
 </template>
+
+<style scoped>
+
+.nav-link {
+    text-decoration: none;
+    color: black;
+}
+
+</style>

@@ -100,8 +100,9 @@ watch(selected, (modifier_group) => {
     
     <Head title="Edit Product" />
     <div class="q-pa-md q-mb-xl">
-        {{form}}
         {{ currentProductPhoto }}
+        {{ product.available }}
+        {{ form.available }}
         <q-form @submit="submit">
             <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
@@ -160,7 +161,7 @@ watch(selected, (modifier_group) => {
                 </template>
             </q-input>
             <q-checkbox v-model="form.is_featured" label="Feature Product" />
-            <q-checkbox v-model="form.available" label="Out Of Stock" />
+            <q-checkbox v-model="form.available" label="Available" />
             <q-btn 
                     type="submit" 
                     no-caps 

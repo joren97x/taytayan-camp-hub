@@ -17,9 +17,10 @@ const props = defineProps({
     categories: Object,
     products: Object,
     featured_products: Object,
-    google_maps_api_key: String
+    google_maps_api_key: String,
+    ratings: Object
 })
-
+const overAllRating = ref(4)
 // const slide = ref(1)
 // const currentCategory = ref(null)
 
@@ -179,248 +180,237 @@ const filteredCategories = computed(() => {
             height="300px"
             class="rounded-borders"
         />
-        <div class="row q-col-gutter-md q-mt-xs">
-            <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">
-                <p :class="[$q.screen.lt.md ? 'text-center' : '']">
-                    <span class="text-h4 text-weight-bold">RJC Cafe</span>
-                    <br>
-                    <span><q-icon name="star"></q-icon>4.6 • (6)</span>
-                    <br>
-                    <span>San Vicente, Olango Island</span>
-                </p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, explicabo bomboclattt lmao.</p>
-                <div v-if="$page.props.auth.user">
-                    <q-banner 
-                        rounded 
-                        class="bg-primary" 
-                        v-if="!$page.props.auth.user.location"
-                    >
-                        <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
-                        <q-btn 
-                            icon="pin_drop" 
-                            label="Place your address" 
-                            no-caps 
-                            color="white" 
-                            class="full-width text-black q-my-xs"
-                            @click="showNewAddressDialog = true"
+        <div class="q-mx-sm">
+            <div class="row q-col-gutter-md q-mt-xs">
+                <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">
+                    <p :class="[$q.screen.lt.md ? 'text-center' : '']">
+                        <span class="text-h4 text-weight-bold">RJC Cafe</span>
+                        <br>
+                        <span><q-icon name="star"></q-icon>4.6 • (6)</span>
+                        <br>
+                        <span>San Vicente, Olango Island</span>
+                    </p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, explicabo bomboclattt lmao.</p>
+                    <div v-if="$page.props.auth.user">
+                        <q-banner 
+                            rounded 
+                            class="bg-primary" 
+                            v-if="!$page.props.auth.user.address"
                         >
-                        </q-btn>            
-                    </q-banner>
-                </div>
-                <div v-else>
-                    <q-banner rounded class="bg-primary">
-                        <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
-                        <Link :href="route('login')">
+                            <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
                             <q-btn 
                                 icon="pin_drop" 
                                 label="Place your address" 
                                 no-caps 
                                 color="white" 
                                 class="full-width text-black q-my-xs"
+                                @click="showNewAddressDialog = true"
                             >
-                            </q-btn>   
-                        </Link>         
-                    </q-banner>
-                </div>
+                            </q-btn>            
+                        </q-banner>
+                    </div>
+                    <div v-else>
+                        <q-banner rounded class="bg-primary">
+                            <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
+                            <Link :href="route('login')">
+                                <q-btn 
+                                    icon="pin_drop" 
+                                    label="Place your address" 
+                                    no-caps 
+                                    color="white" 
+                                    class="full-width text-black q-my-xs"
+                                >
+                                </q-btn>   
+                            </Link>         
+                        </q-banner>
+                    </div>
 
-                <div class="row justify-between q-mt-md q-mb-sm">
-                    <div class="text-h6">
-                        Rating and Reviews
-                    </div>
-                    <div class="">
-                        <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
-                    </div>
-                </div>
-                <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
-                    <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
-                        <q-card class="q-py-md" style="max-height: 600px; height: 115px">
-                            <q-card-section class="row flex-center q-pa-none">
-                                <div class="text-h5">4.8</div>
-                                <q-rating size="xs"/>
-                                6 Ratings
-                            </q-card-section>
-                        </q-card>
-                    </div>
-                    <div 
-                        class="col-5 col-xs-7 col-sm-7 col-md-4 col-lg-4 col-xl-4"
-                        v-for="(review, i) in 10"
-                        :key="review.id"
-                    >
-                        <q-card style="max-height: 600px; height: 115px">
-                            <q-card-section class="q-pb-none ellipsis-2-lines">
-                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
-                            </q-card-section>
-                            <q-card-actions class="q-pt-sm">
-                                <q-rating/>
-                                • Lissa H. • 02/01/23
-                            </q-card-actions>
-                        </q-card>
-                    </div>
-                    
-                </div>
-
-                
-                <!-- <p class="text-h6">Rating and reviews</p>
-                <span class="text-red">it dont work rn wala ko kahibaw asa pangitaon ang reviews</span>
-                <q-card bordered>
-                    <q-card-section horizontal>
-                        <q-card-section class="text-center q-pa-md">
-                            <span class="text-h4">4.8</span>
-                            <br>
-                            <q-rating size="sm" />
-                            <br>
-                            <span>6 Ratings</span>
-                        </q-card-section>
-                        <q-card-section>
-                            <q-card-section v-for="n in 2">
-                                <span>"I love love love love!!! Their Thai tea and cream cheese bagels. Best breakfast on the go. And cheap too!!"</span>
-                                <br>
-                                <q-rating /> • Giuliana R. • 07/26/23
-                            </q-card-section>  
+                    <div class="row justify-between q-mt-md q-mb-sm">
+                        <div class="text-h6">
+                            Rating and Reviews
+                        </div>
+                        <div class="">
                             <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
-                        </q-card-section> 
-                    </q-card-section>
-                </q-card> -->
-            </div>
-            <div class="col-4 gt-sm">
-               
-                <q-card bordered>
-                    <div style="height: 200px;" class="bg-grey">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123065.8494400433!2d123.92886618907012!3d10.25398460253611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1724885213335!5m2!1sen!2sph" 
-                            width="100%" 
-                            height="100%" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade"
-                        >
-                        </iframe>
+                        </div>
                     </div>
-                    <q-card-section>
-                        <q-item title="San vicente olango" subtitle="boang">
-                            <q-item-section avatar>
-                                <q-icon name="signal_wifi_off" />
-                            </q-item-section>
-                            <q-item-section >
-                                <q-item-label>RJC CAFE</q-item-label>
-                                <!-- <q-item-label caption>725Q+CHH, Lapu-Lapu City, Cebu</q-item-label> -->
-                            </q-item-section>
-                            <q-item-section side>Side</q-item-section>
-                        </q-item>
-                    </q-card-section>
-                </q-card>
-            </div>
-        </div>
-        <!-- <q-separator/> -->
-         <div class="featured-items-container q-mt-md">
-            <div class="text-h6 row">
-                <div class="col">
-                    Featured items
+                    <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
+                        <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
+                            <q-card class="q-py-md" style="max-height: 600px; height: 115px">
+                                <q-card-section class="q-pa-none text-center">
+                                    <div class="text-h5">4.8</div>
+                                    <div class="column items-center">
+                                        <q-rating size="xs" v-model="overAllRating" />
+                                    </div>
+                                    6 Ratings
+                                </q-card-section>
+                            </q-card>
+                        </div>
+                        <div 
+                            class="col-5 col-xs-7 col-sm-7 col-md-4 col-lg-4 col-xl-4"
+                            v-for="(review, i) in 10"
+                            :key="review.id"
+                        >
+                            <q-card style="max-height: 600px; height: 115px">
+                                <q-card-section class="q-pb-none ellipsis-2-lines">
+                                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
+                                </q-card-section>
+                                <q-card-actions class="q-pt-sm">
+                                    <q-rating/>
+                                    • Lissa H. • 02/01/23
+                                </q-card-actions>
+                            </q-card>
+                        </div>
+                        
+                    </div>
                 </div>
-                <div class="col flex justify-end">
-                    <q-btn icon="arrow_back" flat @click="scrollLeftFeatured"/>
-                    <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
-                </div>
-            </div>
-            <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
-                <div 
-                    class="col-5 col-xs-5 col-sm-4 col-md-3 col-lg-3 col-xl-3"
-                    v-for="(product, i) in featured_products"
-                    :key="product.id"
-                >
-                    <FeaturedProductCard :product="product" />
-                </div>
-            </div>
-         </div>
-        <div class="menu-header bg-white q-pt-md">
-            <div class="row">
-                <div class="col-6 col-md-8 col-lg-8 col-xl-8 col-xs-6 col-sm-6">
-                    <span class="text-h6">Menu</span>
-                    <br>
-                    <span>Open till 8AM to 5PM or ambot</span>
-                </div>
-                <div class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                    <q-input placeholder="Search..." v-model="search" debounce="300" outlined dense rounded>
-                        <template v-slot:prepend>
-                            <q-icon name="search"></q-icon>
-                        </template>
-                    </q-input>
-                </div>
-            </div>
-            <div class="category-container q-py-sm">
-                <q-btn icon="menu" flat @click="categoryMenu = !categoryMenu">
-                    <q-menu class="gt-xs" v-if="$q.screen.gt.xs">
-                        <q-list>
-                            <q-item 
-                                v-for="category in props.categories" 
-                                @click="scrollToCategory(category)" 
-                                clickable
-                                :key="category.id"
+                <div class="col-4 gt-sm">
+                
+                    <q-card bordered>
+                        <div style="height: 200px;" class="bg-grey">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123065.8494400433!2d123.92886618907012!3d10.25398460253611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1724885213335!5m2!1sen!2sph" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
                             >
-                                <q-item-section>{{ category.name }}</q-item-section>
+                            </iframe>
+                        </div>
+                        <q-card-section>
+                            <q-item title="San vicente olango" subtitle="boang">
+                                <q-item-section avatar>
+                                    <q-icon name="signal_wifi_off" />
+                                </q-item-section>
+                                <q-item-section >
+                                    <q-item-label>RJC CAFE</q-item-label>
+                                    <!-- <q-item-label caption>725Q+CHH, Lapu-Lapu City, Cebu</q-item-label> -->
+                                </q-item-section>
+                                <q-item-section side>Side</q-item-section>
                             </q-item>
-                        </q-list>
-                    </q-menu>
-                </q-btn>
-                <div class="categories-wrapper" ref="categoriesWrapper">
-                    <q-tabs
-                        v-model="selectedCategory"
-                        class="text-grey"
-                        active-color="black"
-                        align="left"
-                        dense
+                        </q-card-section>
+                    </q-card>
+                </div>
+            </div>
+            <!-- <q-separator/> -->
+            <div class="featured-items-container q-mt-md">
+                <div class="text-h6 row">
+                    <div class="col">
+                        Featured items
+                    </div>
+                    <div class="col flex justify-end">
+                        <q-btn icon="arrow_back" flat @click="scrollLeftFeatured"/>
+                        <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
+                    </div>
+                </div>
+                <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
+                    <div 
+                        class="col-5 col-xs-5 col-sm-4 col-md-3 col-lg-3 col-xl-3"
+                        v-for="(product, i) in featured_products"
+                        :key="product.id"
                     >
-                        <q-tab 
-                            no-caps 
-                            v-for="category in props.categories" 
-                            :key="category.id" 
-                            :name="category.name" 
-                            :label="category.name" 
-                            inline-label
-                            @click="scrollToCategory(category)" 
-                        />
-                    </q-tabs>
+                        <FeaturedProductCard :product="product" />
+                    </div>
                 </div>
-                <q-btn icon="arrow_back" flat @click="scrollLeft" />
-                <q-btn icon="arrow_forward" flat @click="scrollRight" />
             </div>
+            <div class="menu-header bg-white q-pt-md">
+                <div class="row">
+                    <div class="col-6 col-md-8 col-lg-8 col-xl-8 col-xs-6 col-sm-6">
+                        <span class="text-h6">Menu</span>
+                        <br>
+                        <span>Open till 8AM to 5PM or ambot</span>
+                    </div>
+                    <div class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 self-center">
+                        <q-input placeholder="Search..." v-model="search" debounce="300" outlined dense rounded>
+                            <template v-slot:prepend>
+                                <q-icon name="search"></q-icon>
+                            </template>
+                        </q-input>
+                    </div>
+                </div>
+                <div class="category-container q-py-sm">
+                    <q-btn icon="menu" flat @click="categoryMenu = !categoryMenu">
+                        <q-menu class="gt-xs" v-if="$q.screen.gt.xs">
+                            <q-list>
+                                <q-item 
+                                    v-for="category in props.categories" 
+                                    @click="scrollToCategory(category)" 
+                                    clickable
+                                    :key="category.id"
+                                >
+                                    <q-item-section>{{ category.name }}</q-item-section>
+                                </q-item>
+                            </q-list>
+                        </q-menu>
+                    </q-btn>
+                    <div class="categories-wrapper" ref="categoriesWrapper">
+                        <q-tabs
+                            v-model="selectedCategory"
+                            class="text-grey"
+                            active-color="black"
+                            align="left"
+                            dense
+                        >
+                            <q-tab 
+                                no-caps 
+                                v-for="category in props.categories" 
+                                :key="category.id" 
+                                :name="category.name" 
+                                :label="category.name" 
+                                inline-label
+                                @click="scrollToCategory(category)" 
+                            />
+                        </q-tabs>
+                    </div>
+                    <q-btn icon="arrow_back" flat @click="scrollLeft" />
+                    <q-btn icon="arrow_forward" flat @click="scrollRight" />
+                </div>
+            </div>
+            <div style="height: 30vh;" class="column bg-grey q-mt-md" v-if="filteredCategories.length <= 0">
+                <div class="col items-center self-center flex">
+                    No Products Found
+                </div>
+            
+            </div>
+            <div 
+                v-for="(category, i) in filteredCategories" 
+                :key="i" 
+                class="q-mt-md category" 
+                :id="category.id"
+                :ref="el => categoryRefs[category.id] = el"
+            >
+                <q-item class="text-h6">{{ category.name }}</q-item>
+                <div class="row q-col-gutter-md">
+                    <div 
+                        class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
+                        v-for="product in category.filteredProducts" 
+                        :key="product.id"
+                    >
+                        <ProductCard :product="product" />
+                    </div>
+                </div>
+            </div>
+            
         </div>
-        <div 
-            v-for="(category, i) in filteredCategories" 
-            :key="i" 
-            class="q-mt-md category" 
-            :id="category.id"
-            :ref="el => categoryRefs[category.id] = el"
-        >
-            <q-item class="text-h6">{{ category.name }}</q-item>
+        <div class="q-mx-sm">
+            <div class="q-my-md">
+                <div class="text-h6">Rating and Reviews</div>
+                <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
+            </div>
             <div class="row q-col-gutter-md">
-                <div 
-                    class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
-                    v-for="product in category.filteredProducts" 
-                    :key="product.id"
-                >
-                    <ProductCard :product="product" />
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
+                    <q-card bordered>
+                        <q-card-section>
+                            <span class="text-subtitle1">{{ rating.user.first_name + ' ' + rating.user.last_name }}</span>
+                            <br>
+                            <q-rating></q-rating> • {{ rating.created_at }}
+                            <br>
+                            {{ rating.review }}
+                        </q-card-section>
+                    </q-card>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="q-my-md">
-        <div class="text-h6">Rating and Reviews</div>
-        <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
-    </div>
-    <div class="row q-col-gutter-md">
-        <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="n in 5">
-            <q-card bordered>
-                <q-card-section>
-                    <span class="text-subtitle1">John Doe</span>
-                    <br>
-                    <q-rating></q-rating> • 02/06/24
-                    <br>
-                    Ive tried different varieties of boba drink from numerous places and Little Sweet became an instant one of my favorite boba drinks due 
-                    to its deliciousness and exactly what I ordered 😊
-                </q-card-section>
-            </q-card>
         </div>
     </div>
 

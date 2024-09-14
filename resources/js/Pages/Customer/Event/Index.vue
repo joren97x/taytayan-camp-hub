@@ -14,6 +14,14 @@ defineProps({
 </script>
 
 <template>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
+            <EventCard :event="event" />
+        </div>
+    </div>
+</template>
+
+<!-- <template>
     <Head title="Milktea Menu" />
     <div>
         <q-img
@@ -25,8 +33,6 @@ defineProps({
         />
         <p class="q-mt-md">
             <span class="text-h3">Unsay Title</span>
-            <!-- <br>
-            <span><q-icon name="star"></q-icon>4.6 • (6)</span> -->
             <br>
             <span>San Vicente, Olango Island</span>
         </p>
@@ -55,7 +61,6 @@ defineProps({
                 </q-card>
             </div>
         </div>
-        <!-- <q-separator/> -->
         <div class="row q-my-lg">
             <div class="col-8">
                 <span class="text-h6">Events</span>
@@ -91,25 +96,8 @@ defineProps({
         </div>
         
     </div>
-    <!-- <div class="q-my-md">
-        <div class="text-h6">Rating and Reviews</div>
-        <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
-    </div>
-    <div class="row q-col-gutter-md">
-        <div class="col-6" v-for="n in 5">
-            <q-card bordered>
-                <q-card-section>
-                    <span class="text-subtitle1">John Doe</span>
-                    <br>
-                    <q-rating></q-rating> • 02/06/24
-                    <br>
-                    Ive tried different varieties of boba drink from numerous places and Little Sweet became an instant one of my favorite boba drinks due 
-                    to its deliciousness and exactly what I ordered 😊
-                </q-card-section>
-            </q-card>
-        </div>
-    </div> -->
+   
     <div style="height: 200px;" class="bg-grey q-mt-md">
         ang footer ayaw kalimti
     </div>
-</template>
+</template> -->

@@ -32,11 +32,11 @@ const dialog = ref(false)
                 @click="dialog = true"
             />
         </q-card-section>
-        <q-card-section class="q-pa-xs">
+        <q-card-section class="q-pa-sm">
             <!-- <span>hi</span> -->
-            <div class="text-subtitle1 text-weight-regular">{{ product.name }}</div>
+            <div class="text-subtitle1 text-weight-regular ellipsis">{{ product.name }}</div>
             <div class="text-subtitle2 text-weight-regular">{{ product.price }}</div>
-            <div class="text-caption">{{ product.description }}</div>
+            <div class="text-caption ellipsis-2-lines">{{ product.description }}</div>
         </q-card-section>
     </q-card>
 

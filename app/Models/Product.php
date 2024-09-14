@@ -26,7 +26,7 @@ class Product extends Model
     //i added these hints if something went wrong delete it
     public function categories() : BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'category_products');
+        return $this->belongsToMany(Category::class, 'category_products')->whereNull('category_products.deleted_at');
     }
 
     public function modifier_groups() : BelongsToMany

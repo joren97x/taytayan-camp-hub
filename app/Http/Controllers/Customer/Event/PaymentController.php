@@ -67,7 +67,7 @@ class PaymentController extends Controller
         $ticket_order->qr_code_path = $qr_code_path;
         $ticket_order->save();
 
-        return redirect(route('tickets'));
+        return redirect(route('customer.tickets.index'));
     }
 
     public function pay(Request $request) 

@@ -64,10 +64,10 @@ const addAttendee = () => {
         <Link :href="route('customer.events.index')">
             <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
         </Link>
-        <div class="q-mb-xl q-mx-xl">
+        <div class="q-mb-xl ">
             {{ attendees }}
             <div class="row q-col-gutter-xl">
-                <div class="col-7">
+                <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12">
                     <q-card flat bordered>
                         <q-card-section>
                             <q-item>
@@ -173,7 +173,7 @@ const addAttendee = () => {
                         </q-card-section>
                     </q-card>
                 </div>
-                <div class="col-5"  style="position: relative;">
+                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12"  style="position: relative;">
                     {{ form }}
                     <div style="position: sticky; top: 50px">
                         <q-card>

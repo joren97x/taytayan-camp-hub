@@ -86,6 +86,7 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         //
+        // dd(Product::with(['categories', 'modifier_groups.modifier_items'])->find($id));
         return Inertia::render('Admin/Product/EditProduct', 
         [
             'categories' => Category::all(),
@@ -109,7 +110,6 @@ class ProductController extends Controller
             'available' => 'required',
             'categories' => 'nullable',
         ]);
-
         $product = Product::find($id);
         CategoryProduct::where('product_id', $id)->delete();
 
@@ -118,8 +118,12 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->is_featured = $request->is_featured;
         $product->available = $request->available;
+
+        
         
         foreach($request->categories as $category) {
+
+
             CategoryProduct::create([
                 'product_id' => $product->id,
                 'category_id' => $category,

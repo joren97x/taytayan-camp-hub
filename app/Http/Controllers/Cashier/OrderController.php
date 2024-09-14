@@ -106,6 +106,7 @@ class OrderController extends Controller
         $order->waiting_time = $local_time->addMinutes((int)$request->waiting_time);
         $order->status = $request->status;
         $order->update();
+        event(new OrderStatusUpdated($order, true, app(CartService::class)));
 
         return back();
     }   
