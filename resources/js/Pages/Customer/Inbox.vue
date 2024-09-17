@@ -7,8 +7,13 @@ defineOptions({
     layout: CustomerLayout
 })
 
+defineProps({
+    selected_user: Object
+})
+
+
 </script>
 
 <template>
-    <Chat/>
+    <Chat :selected_user="selected_user" />
 </template>

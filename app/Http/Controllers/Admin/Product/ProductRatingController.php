@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Customer\Event;
+namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
-use App\Models\Event;
+use App\Models\ProductRating;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class EventController extends Controller
+class ProductRatingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class EventController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Customer/Event/Index', [
-            'events' => Event::all()
+        return Inertia::render('Admin/Product/Ratings', [
+            'ratings' => ProductRating::get()
         ]);
     }
 
@@ -42,9 +42,6 @@ class EventController extends Controller
     public function show(string $id)
     {
         //
-        return Inertia::render('Customer/Event/Show', [
-            'event' => Event::find($id)
-        ]);
     }
 
     /**
@@ -69,6 +66,5 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
-        // return back();
     }
 }

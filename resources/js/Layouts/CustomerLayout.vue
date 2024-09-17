@@ -16,6 +16,7 @@ const drawer = ref(false)
 const sidebar = ref(false)
 const btnToggle = ref('products')
 const btnToggleLoading = ref(false)
+const notificationMenu = ref(false)
 
 import axios from 'axios'
 
@@ -121,8 +122,9 @@ watch(btnToggle, () => {
                             <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
                         </div>
                         <div v-else>
+
                             <!-- <q-btn flat icon="search" round></q-btn> -->
-                            <q-btn flat dense round class="q-mr-md">
+                            <q-btn flat dense round class="q-mr-md gt-sm">
                                 <q-icon size="2em" name="notifications" />
                                 <!-- uncomment soon -->
                                 <!-- <q-badge color="red" floating>{{ notification_badge }}</q-badge> -->
@@ -253,6 +255,14 @@ watch(btnToggle, () => {
                         </Link>
                     </q-list>
                     <NavLinks/>
+                    <q-item @click="notificationMenu = true" clickable>
+                        <q-item-section avatar>
+                            <q-avatar size="md">
+                                <q-img fit="cover" src="images/facility_logo.png"/>
+                            </q-avatar>
+                        </q-item-section>
+                        <q-item-section>Notifications</q-item-section>
+                    </q-item>
                 </q-scroll-area>
 
                 <div  class="absolute-top" v-if="$page.props.auth.user">
@@ -338,6 +348,32 @@ watch(btnToggle, () => {
                     </q-btn-toggle>
                 </div>
             </q-toolbar>
+            <q-dialog 
+                maximized 
+                v-model="notificationMenu" 
+                class="lt-md"      
+                transition-show="slide-up"
+                transition-hide="slide-down"
+            >
+                <q-card>
+                    <q-card-section>
+                        <div class="text-h6">Notifications</div>
+                        <q-list>
+                            <q-item v-for="n in 5" class="q-pa-none q-ma-none">
+                                <q-item-section avatar>
+                                    <q-avatar color="primary">
+                                        {{ n }}
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>Notification {{ n }}</q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-card-section>
+                    <q-card-actions  class="absolute-top-right">
+                        <q-btn icon="close" v-close-popup round unelevated></q-btn>
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
         </q-footer>
         <!-- <Footer/> -->
     </q-layout>

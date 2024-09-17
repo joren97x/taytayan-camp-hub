@@ -14,9 +14,11 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
     // Route::get('/orders/{status}', [OrderController::class, 'index'])->name('orders');
     // Route::get('/order/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{status?}', [OrderController::class, 'index'])->name('customer.orders.index');
+
     Route::resource('orders', OrderController::class)->names([
         'show' => 'customer.orders.show',
-        'index' => 'customer.orders.index',
+        // 'index' => 'customer.orders.index',
         'update' => 'customer.orders.update'
     ]);
     
@@ -31,7 +33,6 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::put('/cart/update-cart-quantity/{id}', [CartController::class, 'update_cart_item_quantity'])->name('customer.cart.update_cart_item_quantity');
     Route::get('/product-checkout-success/{mode}/{payment_method}/{cart_id}', [PaymentController::class, 'success'])->name('product.checkout.success');
     Route::post('/product-pay', [PaymentController::class, 'pay'])->name('product.pay');
-
     Route::post('/product-rating', [ProductRatingController::class, 'store'])->name('customer.product_rating.store');
 
 });

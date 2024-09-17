@@ -2,6 +2,7 @@
 
 import { Head } from '@inertiajs/vue3'
 import ShowChat from './ShowChat.vue'
+import CreateConversation from './CreateConversation.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
@@ -11,7 +12,8 @@ import axios from 'axios'
 
 const props = defineProps({
     users: Object,
-    conversations: Object
+    conversations: Object,
+    selected_user: Object
 })
 
 const currentConversation = ref(null)
@@ -60,51 +62,40 @@ onMounted(() => {
 
 <template>
  
+ <div class="row">
+    hiiiiiiiii
+    {{ selected_user }}
+ </div>
     <div class="row">
             <div class="col-4">
                 <q-card>
-                    <!-- <q-tabs
-                        v-model="tab"
-                        dense
-                        class="text-grey"
-                        active-color="primary"
-                        indicator-color="primary"
-                        align="justify"
-                        narrow-indicator
-                    >
-                        <q-tab name="chats" label="chats" />
-                        <q-tab name="people" label="people" />
-                    </q-tabs>
-                    <q-separator /> -->
-                    <!-- <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="chats"> -->
-                            <div class="text-h6">chats</div>
-                            <q-list>
-                                <q-item 
-                                    v-for="conversation in conversations" 
-                                    clickable 
-                                    @click="getConversation(conversation)"
-                                >
-                                    <q-item-section avatar>
-                                        <q-avatar color="primary" class="text-capitalize" text-color="white">
-                                            <!-- {{ conversation.user.first_name[0] }} -->
-                                            <div v-for="participant in conversation.participants">
-                                                <div v-if="participant.id != $page.props.auth.user.id">
-                                                    {{ participant.first_name[0] }}
-                                                </div>
-                                            </div>
-                                        </q-avatar>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <!-- {{ conversation.user.first_name + ' ' + conversation.user.last_name }} -->
+                    <div class="text-h6">chats</div>
+                        <q-list>
+                            <q-item 
+                                v-for="conversation in conversations" 
+                                clickable 
+                                @click="getConversation(conversation)"
+                            >
+                                <q-item-section avatar>
+                                    <q-avatar color="primary" class="text-capitalize" text-color="white">
+                                        <!-- {{ conversation.user.first_name[0] }} -->
                                         <div v-for="participant in conversation.participants">
                                             <div v-if="participant.id != $page.props.auth.user.id">
-                                                {{ participant.first_name + ' ' + participant.last_name }}
+                                                {{ participant.first_name[0] }}
                                             </div>
                                         </div>
-                                    </q-item-section>
-                                </q-item> 
-                            </q-list>
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <!-- {{ conversation.user.first_name + ' ' + conversation.user.last_name }} -->
+                                    <div v-for="participant in conversation.participants">
+                                        <div v-if="participant.id != $page.props.auth.user.id">
+                                            {{ participant.first_name + ' ' + participant.last_name }}
+                                        </div>
+                                    </div>
+                                </q-item-section>
+                            </q-item> 
+                        </q-list>
                         <!-- </q-tab-panel>
                         <q-tab-panel name="people">
                             <div class="text-h6">people</div>
@@ -126,12 +117,14 @@ onMounted(() => {
                 dili makita dire kung wala pay conversation
             </div>
             <div class="col-8 q-pb-md">
-                <div class="text-center q-mt-xl" v-if="currentConversation == null">
-                    You havent selected a chat...
-                    <p>this shit should have the chat layout</p>
+                <CreateConversation :selected_user="selected_user" v-if="selected_user" />
+                <div v-else>
+                    <div class="text-center q-mt-xl" v-if="currentConversation == null">
+                        You havent selected a chat...
+                        <p>this shit should have the chat layout</p>
+                    </div>
+                    <ShowChat v-else :conversation="currentConversation" />
                 </div>
-                <ShowChat v-else :conversation="currentConversation" />
-                <!-- <ChatBox v-if="currentConversation" :conversation="currentConversation"/> -->
             </div>
         </div>
     

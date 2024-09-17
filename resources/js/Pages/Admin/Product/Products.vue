@@ -43,6 +43,7 @@ const columns = [
   { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
   { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
   { name: 'categories', align: 'center', label: 'Categories', field: 'categories', sortable: true },
+  { name: 'available', align: 'center', label: 'Available', field: 'available', sortable: true },
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -52,8 +53,7 @@ const columns = [
     
     <Head title="Products" />
     <div class="q-pa-md">
-        <h1>Add Item Availability</h1>
-        kung naa pa bay stock or wala na ug sa modifier group pod apili
+        <!-- kung naa pa bay stock or wala na ug sa modifier group pod apili -->
         <q-table
             class="my-sticky-header-column-table"
             flat
@@ -86,6 +86,11 @@ const columns = [
                         <q-btn no-caps unelevated>Edit</q-btn>
                     </Link>
                     <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
+                </q-td>
+            </template>
+            <template v-slot:body-cell-available="props">
+                <q-td :props="props">
+                    {{ props.row.available ? 'Yes' : 'No' }}
                 </q-td>
             </template>
             <template v-slot:top>

@@ -94,7 +94,7 @@ Echo.private(`orders`)
                         </q-item-section>
                     </q-item>
                 </Link>
-                <Link :href="route('cashier.orders.index')">
+                <Link :href="route('cashier.bookings.index')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Bookings'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />

@@ -53,7 +53,7 @@ const navigation_list = [
             {   
                 label: 'Reviews', 
                 value: 'reviews', 
-                href: 'admin.products.reviews', 
+                href: 'admin.product_ratings.index', 
                 component: 'Admin/Product/Reviews' ,
                 icon: ''
             },
@@ -96,19 +96,19 @@ const navigation_list = [
                 icon: ''
             },
             { 
-                label: 'Reservations', 
-                value: 'reservations', 
-                href: 'admin.reservations.index', 
-                component: 'Admin/Facility/Reservations',
+                label: 'Bookings', 
+                value: 'bookings', 
+                href: 'admin.bookings.index', 
+                component: 'Admin/Facility/Bookings',
                 icon: ''
             },
-            { 
-                label: 'Reviews', 
-                value: 'reviews', 
-                href: 'admin.facilities.reviews', 
-                component: 'Admin/Facility/Reviews',
-                icon: ''
-            },
+            // { 
+            //     label: 'Reviews', 
+            //     value: 'reviews', 
+            //     href: 'admin.facilities.reviews', 
+            //     component: 'Admin/Facility/Reviews',
+            //     icon: ''
+            // },
         ]
     },
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer\Facility;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Facility;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
 
-        Reservation::create([
+        Booking::create([
             'facility_id' => $request->facility_id,
             'user_id' => $request->user()->id,
             'payment_method' => $request->payment_method,
@@ -27,7 +28,7 @@ class PaymentController extends Controller
             'total' => $request->total
         ]);
 
-        return redirect(route('reservations'));
+        return redirect(route('customer.bookings.index'));
 
     }
 

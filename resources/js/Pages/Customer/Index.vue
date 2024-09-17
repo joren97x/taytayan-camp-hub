@@ -16,7 +16,7 @@ defineProps({
 
 <template>
     <Head title="Home" />
-    <div>
+    <!-- <div>
         <p class="text-h4 text-weight-bold">Nice to see you, {{ $page.props.auth.user.first_name }}👋</p>
         <div class="row q-col-gutter-md">
             <div class="col-4" v-for="n in 3" :key="n">
@@ -57,7 +57,8 @@ defineProps({
                 // some facility card
             </div>
         </div>
-        <p class="text-center text-red">designi inig human sa laing pages</p>
-        <q-img src="https://avatars.githubusercontent.com/u/112835241?s=400&u=5c5ce654a02c61684c3e00d25d695ce142ede5ef&v=4"></q-img>
-    </div>
+    </div> -->
+    <p class="text-center text-red q-mt-xl">designi inig human sa laing pages</p>
+    <q-img src="https://avatars.githubusercontent.com/u/112835241?s=400&u=5c5ce654a02c61684c3e00d25d695ce142ede5ef&v=4"></q-img>
+
 </template>

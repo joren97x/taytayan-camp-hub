@@ -149,35 +149,42 @@ console.log(order.value)
     <div>
         <q-item>
             <q-item-section avatar>
-                <q-img height="100px" width="100px" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg"></q-img>
+                <q-img height="85px" width="85px" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg"></q-img>
             </q-item-section>
             <q-item-section>
-                <br>
-                <h1>Order Id : {{ order.id }}</h1>
-                <span class="text-red">if hurot na ang waiting time(negative) unsay mahitabo</span>
-                waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes
-                <q-item-label>{{ order.created_at }}</q-item-label>
-                <q-item-label caption>{{ order.cart_products.length }} items</q-item-label>
-                <q-item-label caption>{{ order.created_at }} - {{ order.status }}</q-item-label>
+                <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
+                <div class="ellipsi-2-lines">
+                    <span v-for="(p, index) in order.cart_products">
+                        {{ p.product.name }}, 
+                    </span>
+                </div>
+                <q-item-label caption>
+                    {{ order.cart_products.length }} items - {{ order.created_at }}
+                    <br>
+                    <q-chip>{{ order.status }}</q-chip>
+                </q-item-label>
             </q-item-section>
             <q-item-section side>
                 <Link :href="route('product.checkout', {
                     cart_id: order.cart_id
                 })">
-                    <q-btn no-caps>Reorder</q-btn>
+                    <q-btn no-caps rounded>Reorder</q-btn>
                 </Link>
-                <q-btn no-caps @click="viewOrderDialog = true">View Order</q-btn>
+                <q-btn no-caps @click="viewOrderDialog = true" rounded>View Order</q-btn>
                 <q-btn 
                     v-if="order.status == 'delivered'"
                     no-caps 
                     @click="completeOrder()"
                     :loading="completeOrderForm.processing"
                     :disable="completeOrderForm.processing"
+                    rounded
                 >
                     Complete Order
                 </q-btn>
             </q-item-section>
         </q-item>
+        <q-separator/>
+
         <!-- <div class="row">
             <div class="col-4">
                 <div style="height: 150px; width: 100%;" class="bg-grey"></div>
@@ -244,10 +251,12 @@ console.log(order.value)
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                             Subtotal: {{ order.subtotal }}
+                            <!-- <Link :href="route('customer.inbox', 3)">
+                                <q-btn no-caps>Message Driver</q-btn>
+                            </Link> -->
                         </div>
                     </div>
                 </q-card-section>
-                
             </q-card>
         </q-dialog>
         <q-dialog 

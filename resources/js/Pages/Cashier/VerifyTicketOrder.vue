@@ -13,7 +13,6 @@ defineProps({
 </script>
 
 <template>
-    <h1>TYPE SHITT</h1>
     <p>
         {{ ticket_order }}
     </p>

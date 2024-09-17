@@ -20,12 +20,12 @@ const props = defineProps({
     order_constants: Object
 })
 
-const orders = ref([])
+const orders = ref(props.orders)
 const tab = ref('preparing')
 
-props.orders.forEach(order => {
-    orders.value.push(order)
-});
+// props.orders.forEach(order => {
+//     orders.value.push(order)
+// });
 
 const preparingOrders = computed(() => {
     return orders.value.filter(order => ['pending', 'preparing'].includes(order.status))
@@ -48,8 +48,8 @@ Echo.private('orders')
         console.log(data)
         axios.get(route('cashier.orders.show', data.order.id))
         .then((orderData) => {
-            $q.notify('fetched and ykwis bruh')
-            console.log(orderData)
+            // $q.notify('fetched and ykwis bruh')
+            // console.log(orderData)
             orders.value.push(orderData.data)
         })
         .catch((err) => {
@@ -57,15 +57,15 @@ Echo.private('orders')
         })
     })
 
-axios.get(route('cashier.orders.show', 12))
-    .then((orderData) => {
-        $q.notify('fetched and ykwis bruh')
-        console.log(orderData.data)
-        orders.value.push(orderData.data)
-    })
-    .catch((err) => {
-        console.error(err)
-    })
+// axios.get(route('cashier.orders.show', 12))
+//     .then((orderData) => {
+//         $q.notify('fetched and ykwis bruh')
+//         console.log(orderData.data)
+//         orders.value.push(orderData.data)
+//     })
+//     .catch((err) => {
+//         console.error(err)
+//     })
 
 </script>
 
@@ -75,6 +75,7 @@ axios.get(route('cashier.orders.show', 12))
     <div class="text-h6 text-weight-bold">
         Orders
     </div>
+    {{ orders.length }}
     <div class="row q-mx-md" v-if="$q.screen.gt.sm">
         <div class="col-6 q-pa-md">
             <p class="text-h6">Preparing</p>

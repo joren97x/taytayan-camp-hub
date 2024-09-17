@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/conversations/get-users-with-convo', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
 Route::get('/conversations/get-users', [ConversationController::class, 'get_users'])->name('conversations.get_users');
 
 require __DIR__.'/admin.php';
@@ -58,7 +59,8 @@ Route::resource('conversations', ConversationController::class)->names([
     'store' => 'conversations.store',
     'index' => 'conversations.index'
 ]);
-Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
+// Route::get('/conversations/c/{id}', [ConversationController::class, 'show_convo'])->name('show_convo');
+// Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
 
 Route::get('/test', function() {
     return Inertia::render('Test');

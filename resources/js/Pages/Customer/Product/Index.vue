@@ -229,9 +229,9 @@ const filteredCategories = computed(() => {
                         <div class="text-h6">
                             Rating and Reviews
                         </div>
-                        <div class="">
+                        <!-- <div class="">
                             <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
-                        </div>
+                        </div> -->
                     </div>
                     <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
                         <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">

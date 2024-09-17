@@ -27,7 +27,7 @@ class OrderController extends Controller
         ])->with('user')->get();
 
         foreach($orders as $order) {
-            $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }

@@ -9,19 +9,19 @@ defineOptions({
 })
 
 const props = defineProps({
-    orders: Object
+    bookings: Object
 })
 
 const filter = ref('')
 
-const columns = [
-    { name: 'user', label: 'User', align: 'center', field: 'user', sortable: true },
-    { name: 'cart_products', align: 'center', label: 'Items', field: 'cart_products', sortable: true },
-    { name: 'subtotal', align: 'center', label: 'subtotal', field: 'subtotal', sortable: true },
-    { name: 'mode', align: 'center', label: 'mode', field: 'mode', sortable: true },
-    { name: 'created_at', align: 'center', label: 'created_at', field: 'created_at', sortable: true },
-    { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
-]
+// const columns = [
+//     { name: 'facility', label: 'Facility', align: 'center', field: 'name', sortable: true },
+//     { name: 'description', align: 'center', label: 'description', field: 'description', sortable: true },
+//     { name: 'price', align: 'center', label: 'price', field: 'price', sortable: true },
+//     { name: 'images', align: 'center', label: 'images', field: 'images', sortable: true },
+//     { name: 'amenities', align: 'center', label: 'amenities', field: 'amenities', sortable: true },
+//     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
+// ]
 
 </script>
 
@@ -33,34 +33,22 @@ const columns = [
             class="my-sticky-header-column-table"
             flat
             title="Treats"
-            :rows="orders"
+            :rows="bookings"
             :columns="columns"
             row-key="name"
             :filter="filter"
         >
-            <template v-slot:body-cell-user="props">
-                <q-td :props="props">
-                    {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-cart_products="props">
-                <q-td :props="props">
-                    {{ props.row.cart_products.length }} items
-                </q-td>
-            </template>
-            <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                    <q-btn no-caps color="primary">View Order</q-btn>
-                </q-td>
-            </template>
             <template v-slot:top>
-                <p class="text-h6 q-pt-md">Orders</p>
+                <p class="text-h6 q-pt-md">Bookings</p>
                 <q-space />
                 <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                     <template v-slot:append>
                         <q-icon name="search" />
                     </template>
                 </q-input>
+                <Link :href="route('admin.facilities.create')">
+                    <q-btn no-caps color="primary">Create Facility</q-btn>
+                </Link>
             </template>
         </q-table>
         <!-- <q-dialog v-model="deleteProductDialog">

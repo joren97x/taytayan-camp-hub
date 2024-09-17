@@ -11,7 +11,7 @@ const props = defineProps({
 })
 
 const form = useForm({
-    payment_method: null,
+    payment_method: 'gcash',
     total: props.facility.price,
     guests: 1,
     check_in: props.date.from,

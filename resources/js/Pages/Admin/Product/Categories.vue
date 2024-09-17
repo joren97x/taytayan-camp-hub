@@ -79,21 +79,23 @@ const columns = [
                         <q-btn color="primary" size="sm" flat icon="edit" @click="showEditCategoryNameMenu(props.row)">
                             <q-menu persistent>
                                 <q-card bordered>
-                                    <q-card-section>
-                                        <div class="q-mb-sm">Edit Category Name</div>
-                                        <q-input filled v-model="editCategoryNameForm.name"/>
-                                    </q-card-section>
-                                    <q-card-actions>
-                                        <q-btn no-caps>Cancel</q-btn>
-                                        <q-btn 
-                                            no-caps color="blue" 
-                                            :disable="editCategoryNameForm.processing"
-                                            :loading="editCategoryNameForm.processing"
-                                            @click="updateCategoryName"
-                                        >
-                                            Save
-                                        </q-btn>
-                                    </q-card-actions>
+                                    <q-form @submit.prevent="updateCategoryName()">
+                                        <q-card-section>
+                                            <div class="q-mb-sm">Edit Category Name</div>
+                                            <q-input filled v-model="editCategoryNameForm.name"/>
+                                        </q-card-section>
+                                        <q-card-actions>
+                                            <q-btn no-caps>Cancel</q-btn>
+                                            <q-btn 
+                                                no-caps color="blue" 
+                                                :disable="editCategoryNameForm.processing"
+                                                :loading="editCategoryNameForm.processing"
+                                                type="submit"
+                                            >
+                                                Save
+                                            </q-btn>
+                                        </q-card-actions>
+                                    </q-form>
                                 </q-card>
                             </q-menu>
                             </q-btn>

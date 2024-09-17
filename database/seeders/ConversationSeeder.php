@@ -24,7 +24,7 @@ class ConversationSeeder extends Seeder
 
         Participant::create([
             'conversation_id' => $convo->id,
-            'user_id' => 2
+            'user_id' => 4
         ]);
 
     }

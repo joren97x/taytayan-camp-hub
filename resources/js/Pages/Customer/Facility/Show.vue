@@ -85,36 +85,6 @@ const images = ref([
 </script>
 
 <template>
-     <q-page padding>
-    <div class="gallery">
-      <div class="gallery-item main" v-if="images.length > 0">
-        <q-img :src="images[0]" />
-      </div>
-      <div
-        class="gallery-item"
-        v-for="(image, index) in images.slice(1, 5)"
-        :key="index"
-      >
-        <q-img :src="image" />
-      </div>
-    </div>
-    <q-btn v-if="images.length > 5" class="show-more-btn" flat label="Show all photos" />
-  </q-page>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="row">
         <div class="col-8">
             {{ facility }}

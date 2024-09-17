@@ -7,10 +7,15 @@ defineOptions({
     layout: AdminLayout
 })
 
+defineProps({
+    ratings: Object
+})
+
 </script>
 
 <template>
     
     <Head title="Reviews" />
     <h1>Reviews</h1>
+    {{ ratings }}
 </template>

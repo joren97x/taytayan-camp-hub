@@ -36,8 +36,9 @@ class OrderController extends Controller
         ]);
     }
 
-    public function index(Request $request, CartService $cartService) 
+    public function index(Request $request, CartService $cartService, string $status = null) 
     {
+        dd($status);
         // if(strcmp($status, Order::STATUS_COMPLETED) == 0 || strcmp($status, Order::STATUS_CANCELLED) == 0) {
         //     $orders = Order::where('status', [$status])->where('user_id', auth()->user()->id)->get();
         // }

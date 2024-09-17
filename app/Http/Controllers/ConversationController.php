@@ -8,6 +8,7 @@ use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ConversationController extends Controller
 {
@@ -22,6 +23,11 @@ class ConversationController extends Controller
                 $query->where('user_id', auth()->user()->id);
             })->get()
         ]);
+        // return Inertia::render(ucwords(auth()->user()->role).'/Inbox/Index', [
+        //     'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+        //         $query->where('user_id', auth()->id());
+        //     })->get(),
+        // ]);
 
     }
 
@@ -36,33 +42,35 @@ class ConversationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $user_id)
+    public function store(Request $request)
     {
         //
         //could add validation like if user exists but nahh
         $request->validate([
-            'message' => 'required'
+            'message' => 'required',
+            'receiver_id' => 'required'
         ]);
 
         $conversation = Conversation::create();
 
         Participant::create([
-            'user_id' => $user_id,
+            'user_id' => $request->receiver_id,
             'conversation_id' => $conversation->id
         ]);
 
         Participant::create([
-            'user_id' => $request->user()->id,
+            'user_id' => auth()->id(),
             'conversation_id' => $conversation->id
         ]);
 
         Message::create([
-            'user_id' => $user_id,
+            'user_id' => $request->receiver_id,
             'conversation_id' => $conversation->id,
             'message' => $request->message
         ]);
 
-        return back();
+
+        // return redirect(route(auth()->user()->role.'conversations.show'));
 
     }
 
@@ -81,6 +89,9 @@ class ConversationController extends Controller
         //     })->first();
         $conversation = Conversation::with(['messages.user', 'participants'])->find($id);
         return response()->json(['conversation' => $conversation]);
+        // return Inertia::render(ucwords(auth()->user()->role).'/Inbox/Show', [
+        //     'conversation' => Conversation::with(['messages.user', 'participants'])->find($id)
+        // ]);
     }
 
     /**
@@ -107,20 +118,24 @@ class ConversationController extends Controller
         //
     }
 
-    public function get_users_with_convo(string $id)
+    public function get_users_with_convo()
     {
-        $conversation = Conversation::with('messages')->whereHas('participant', function ($query) use ($id) {
-                $query->where('user_id', $id);
-            })->first();
+        $conversations = Conversation::with(['participants' => function ($query) {
+            $query->where('user_id', '!=', auth()->id());
+        }])
+        ->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+        })
+        ->get();
         return response()->json([
-            'conversation' => $conversation
+            'conversations' => $conversations,
         ]);
     }
 
     public function get_users()
     {
         return response()->json([
-            'users' => User::where('id', '!=', auth()->user()->id)->get()
+            'people' => User::where('id', '!=', auth()->id())->get()
         ]);
     }
 
