@@ -64,7 +64,7 @@ const columns = [
                     </template>
                 </q-input>
                 <Link :href="route('admin.modifier_groups.create')">
-                    <q-btn class="q-ml-sm" color="primary" no-caps label="New Group" />
+                    <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
                 </Link>
             </template>
             <template v-slot:body-cell-contains="props">

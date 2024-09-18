@@ -43,7 +43,7 @@ import { Link } from '@inertiajs/vue3'
             <q-item-section avatar>
                 <q-icon name="dark_mode" />
             </q-item-section>
-            <q-item-section>Dark Mode</q-item-section>
+            <q-item-section>Dark Mode(buggy)</q-item-section>
             <q-item-section avatar>
                 <q-toggle v-model="$q.dark.isActive"></q-toggle>
             </q-item-section>

@@ -79,12 +79,13 @@ const columns = [
         <template v-slot:top>
             <p class="text-h6 q-pt-md text-capitalize">{{ role }}</p>
             <q-space />
-            <q-btn class="q-mr-md" no-caps color="primary" @click="newUserDialog = true">New User</q-btn>
-                <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+            <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
                 <template v-slot:append>
                     <q-icon name="search" />
                 </template>
             </q-input>
+            <q-btn class="q-ml-md" no-caps color="primary" @click="newUserDialog = true" label="Create User" />
+
         </template>
     </q-table>
     <q-dialog v-model="newUserDialog" persistent>

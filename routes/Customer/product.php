@@ -14,11 +14,11 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
     // Route::get('/orders/{status}', [OrderController::class, 'index'])->name('orders');
     // Route::get('/order/{id}', [OrderController::class, 'show'])->name('orders.show');
-    Route::get('/orders/{status?}', [OrderController::class, 'index'])->name('customer.orders.index');
+    Route::get('/past-orders', [OrderController::class, 'past_orders'])->name('customer.orders.past_orders');
 
     Route::resource('orders', OrderController::class)->names([
         'show' => 'customer.orders.show',
-        // 'index' => 'customer.orders.index',
+        'index' => 'customer.orders.index',
         'update' => 'customer.orders.update'
     ]);
     

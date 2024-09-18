@@ -21,86 +21,89 @@ const $q = useQuasar()
 const navigation_list = [
     {
         name: 'Product Management',
+        icon: 'restaurant',
         navigations: [
             { 
                 label: 'Products', 
                 value: 'products', 
                 href: 'admin.products.index', 
                 component: 'Admin/Product/Products',
-                icon: ''
+                icon: 'restaurant'
             },
             {   
                 label: 'Categories', 
                 value: 'categories', 
                 href: 'admin.categories.index', 
                 component: 'Admin/Product/Categories' ,
-                icon: ''
+                icon: 'category'
             },
             {   
                 label: 'Modifier Groups', 
                 value: 'modifier-groups', 
                 href: 'admin.modifier_groups.index', 
                 component: 'Admin/Product/ModifierGroups',
-                icon: ''
+                icon: 'checklist_rtl'
             },
             {   
                 label: 'Orders', 
                 value: 'orders', 
                 href: 'admin.orders.index', 
                 component: 'Admin/Product/Orders' ,
-                icon: ''
+                icon: 'shopping_cart'
             },
             {   
                 label: 'Reviews', 
                 value: 'reviews', 
                 href: 'admin.product_ratings.index', 
                 component: 'Admin/Product/Reviews' ,
-                icon: ''
+                icon: 'star_rate'
             },
         ]
     },
     {
         name: 'Event Management',
+        icon: 'event',
         navigations: [
             { 
                 label: 'Events', 
                 value: 'events', 
                 href: 'admin.events.index', 
                 component: 'Admin/Event/Events',
-                icon: ''
+                icon: 'event'
             },
             { 
                 label: 'Tickets', 
                 value: 'tickets', 
                 href: 'admin.tickets.index', 
                 component: 'Admin/Event/Tickets',
-                icon: ''
+                icon: 'confirmation_number'
             },
-            { 
-                label: 'Reviews', 
-                value: 'reviews', 
-                href: 'admin.events.reviews', 
-                component: 'Admin/Event/Reviews',
-                icon: ''
-            },
+            // { 
+            //     label: 'Reviews', 
+            //     value: 'reviews', 
+            //     href: 'admin.events.reviews', 
+            //     component: 'Admin/Event/Reviews',
+            //     icon: ''
+            // },
         ]
     },
     {
         name: 'Facility Management',
+        icon: 'cottage',
         navigations: [
             { 
                 label: 'Facilities', 
                 value: 'facility', 
                 href: 'admin.facilities.index', 
                 component: 'Admin/Facility/Facilities',
-                icon: ''
+                icon: 'cottage'
             },
             { 
                 label: 'Bookings', 
                 value: 'bookings', 
                 href: 'admin.bookings.index', 
                 component: 'Admin/Facility/Bookings',
-                icon: ''
+                icon: 'description'
             },
             // { 
             //     label: 'Reviews', 
@@ -130,7 +133,7 @@ const navigation_list = [
                             <q-item-label caption lines="2" class="text-white">Administrator</q-item-label>
                         </q-item-section>
 
-                         <q-item-section side top>
+                         <!-- <q-item-section side top>
                             <q-btn 
                                 round
                                 :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'" 
@@ -138,7 +141,7 @@ const navigation_list = [
                                 class="text-black" 
                                 @click="$q.dark.toggle"
                             />
-                        </q-item-section> 
+                        </q-item-section>  -->
                     </q-item>
             </q-img>
             <!-- drawer content -->
@@ -154,12 +157,17 @@ const navigation_list = [
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <q-expansion-item icon="supervisor_account" :label="navigation.name" v-for="navigation in navigation_list" class="rounded-borders">
+                    <q-expansion-item 
+                        :icon="navigation.icon" 
+                        :label="navigation.name" 
+                        v-for="navigation in navigation_list" 
+                        class="rounded-borders"
+                    >
                         <q-card class="q-mx-md">
                             <Link :href="route(nav.href)" v-for="nav in navigation.navigations">
                                 <q-item clickable v-ripple class="rounded-borders" :active="$page.component == nav.component" active-class="bg-primary text-white">
                                     <q-item-section avatar>
-                                        <q-icon name="star" />
+                                        <q-icon :name="nav.icon" />
                                     </q-item-section>
                                     <q-item-section>
                                         {{ nav.label }}
@@ -194,7 +202,7 @@ const navigation_list = [
                             <Link :href="route(`admin.user_management`)">
                                 <q-item clickable v-ripple >
                                     <q-item-section avatar>
-                                        <q-icon name="star" />
+                                        <q-icon name="people" />
                                     </q-item-section>
                                     <q-item-section class="text-capitalize">
                                         <!-- {{ user_role }} -->
@@ -202,22 +210,6 @@ const navigation_list = [
                                     </q-item-section>
                                 </q-item>
                             </Link>
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="drafts" />
-                        </q-item-section>
-                        <q-item-section>
-                            Etc etc
-                        </q-item-section>
-                    </q-item>
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="drafts" />
-                        </q-item-section>
-                        <q-item-section>
-                            Unsa pa akong e butang ari
-                        </q-item-section>
-                    </q-item>
                     <Link :href="route('admin.conversation.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
@@ -243,9 +235,10 @@ const navigation_list = [
                         <q-item-section side top>
                         <q-btn 
                             round
-                            icon="unfold_more"
+                            icon="menu"
                             color="white" 
                             class="text-black" 
+                            unelevated
                         >
                             <q-menu>
                                 <q-list>
@@ -257,7 +250,7 @@ const navigation_list = [
                                         @click="$q.dark.toggle"
                                     >
                                         <q-item-section>
-                                            Dark Mode
+                                            Dark Mode(buggy)
                                         </q-item-section>
                                         <q-item-section avatar>
                                             <q-icon color="primary" :name="$q.dark.isActive ? 'dark_mode' : 'light_mode'" />
@@ -292,6 +285,7 @@ const navigation_list = [
 
 a {
     text-decoration: none;
+    color: black
 }
 
 </style>

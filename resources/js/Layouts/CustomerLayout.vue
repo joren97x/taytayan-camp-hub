@@ -122,7 +122,7 @@ watch(btnToggle, () => {
                             <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
                         </div>
                         <div v-else>
-
+                            
                             <!-- <q-btn flat icon="search" round></q-btn> -->
                             <q-btn flat dense round class="q-mr-md gt-sm">
                                 <q-icon size="2em" name="notifications" />

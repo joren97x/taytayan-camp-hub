@@ -16,7 +16,7 @@ class ProductRatingController extends Controller
     {
         //
         return Inertia::render('Admin/Product/Ratings', [
-            'ratings' => ProductRating::get()
+            'ratings' => ProductRating::with('user')->get()
         ]);
     }
 

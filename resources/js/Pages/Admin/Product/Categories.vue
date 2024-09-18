@@ -110,7 +110,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated @click="showDeleteCategoryDialog(props.row)">Delete</q-btn>
+                        <q-btn no-caps unelevated @click="showDeleteCategoryDialog(props.row)" label="Delete"/>
                     </q-td>
                 </template>
                 <template v-slot:top>
@@ -122,7 +122,7 @@ const columns = [
                         </template>
                     </q-input>
                     <Link :href="route('admin.categories.create')">
-                        <q-btn class="q-ml-sm" color="primary" no-caps label="New Category" />
+                        <q-btn class="q-ml-sm" color="primary" no-caps label="Create Category" />
                     </Link>
                 </template>
             </q-table>
