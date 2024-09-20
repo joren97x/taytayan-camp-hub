@@ -40,6 +40,20 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
+     /**
+     * Update the user's profile information.
+     */
+    public function update_profile_pic(Request $request): RedirectResponse
+    {
+        dd($request);
+        $request->validate([
+            'profile_pic' => 'required'
+        ]);
+        $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
     /**
      * Delete the user's account.
      */

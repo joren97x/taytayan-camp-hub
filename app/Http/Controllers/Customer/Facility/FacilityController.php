@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Customer\Facility;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Facility;
-use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -45,8 +45,8 @@ class FacilityController extends Controller
         //
         $facility = Facility::find($id);
 
-        $reserved_dates = Reservation::where('facility_id', $facility->id)
-        ->where('status', '!=', Reservation::STATUS_CANCELLED)  
+        $reserved_dates = Booking::where('facility_id', $facility->id)
+        ->where('status', '!=', Booking::STATUS_CANCELLED)  
         ->select('check_in', 'check_out')
         ->get();
 

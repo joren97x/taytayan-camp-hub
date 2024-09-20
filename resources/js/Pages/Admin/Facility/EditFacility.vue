@@ -1,7 +1,9 @@
 <script setup>
 
-import { Head } from '@inertiajs/vue3'
+import { Head, Link, useForm } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 
 defineOptions({
     layout: AdminLayout
@@ -11,10 +13,221 @@ const props = defineProps({
     facility: Object
 })
 
+const $q = useQuasar()
+const form = useForm({
+    name: props.facility.name,
+    description: props.facility.description,
+    price: props.facility.price,
+    guests: props.facility.guests,
+    amenities: [],
+})
+
+const imagesForm = useForm({
+    images: null
+})
+
+const submit = () => {
+    form.put(route('admin.facilities.update', props.event.id), {
+        onSuccess: () => {
+            $q.notify('Facility Successfully Updated')
+        }
+    })
+}
+
+const submitImagesForm = () => {
+    imagesForm.post(route('admin.facilities.update_images', props.event.id), {
+        onSuccess: () => {
+            $q.notify('Cover Photo Updated')
+            coverPhotoForm.images = null
+        }
+    })
+}
+
+const amenities = ref([])
+
+for(var i = 0; i < 10; i++) {
+    amenities.value.push(
+        {
+            id: i,
+            icon: 'style',
+            name: 'Amenity'
+        }
+    )
+}
+
+function addAmenity(amenity) {
+    if(!form.amenities.includes(amenity)) {
+        form.amenities.push(amenity)
+    }
+}
+
+function deleteAmenity(amenity) {
+    form.amenities = form.amenities.filter(a => a.id !== amenity.id)
+}
+
+const facilityImagesRef = ref(null)
+const imgPreview = ref('')
+
+const triggerFilePicker = () => {
+    eventPhotoRef.value.pickFiles();
+};
+
+const onFileChange = (file) => {
+    imgPreview.value = URL.createObjectURL(file)
+}
 </script>
 
 <template>
     
-    <Head title="Reviews" />
-    {{ facility }}
+    <Head title="Edit Event" />
+    <div class="q-pa-md">
+        <q-form @submit="submit">
+            <div class="row justify-between" style="z-index: 400;">
+                <div class="text-h6 text-center col-12" style="position: relative">
+                    Edit Facility
+                    <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                </div>
+            </div>
+            <q-separator class="q-my-md" />
+            <div class="q-mt-md">
+                <p class="text-weight-bold text-h6">Facility Images</p>
+                <q-item class="q-my-md">
+                    <q-item-section avatar>
+                        <q-img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTym_mmZPWEJQnh9tUlH6IApysMxsFSdQifnw&s" 
+                            style="width: 100px; height: 100px;" 
+                        />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-file 
+                            v-model="imagesForm.images"
+                            :error="imagesForm.errors.images ? true : false"
+                            :error-message="imagesForm.errors.images"
+                            style="display: none;"
+                            ref="facilityImagesRef"
+                            @update:model-value="onFileChange"
+                        />
+                        <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
+                        <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                        <q-item-label>
+                            <q-btn 
+                                no-caps color="primary" 
+                                v-if="imagesForm.images" 
+                                @click="submitImagesForm"
+                                :loading="imagesForm.processing"
+                                :disable="imagesForm.processing"
+                            >
+                                Save
+                            </q-btn>
+                            <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+                <q-separator class="q-my-md" />
+                <p class="text-weight-bold text-h6">Facility Details</p>
+            </div>
+            <div class="q-mx-sm q-mt-md">
+                <!-- <div>Event title</div>
+                <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
+                <q-input 
+                    filled 
+                    label="Name"
+                    v-model="form.name" 
+                    :error="form.errors.name ? true : false"
+                    :error-message="form.errors.name"
+                />
+                <!-- <div>Description</div>
+                <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div> -->
+                <q-input 
+                    filled 
+                    label="Description"
+                    v-model="form.description" 
+                    :error="form.errors.description ? true : false"
+                    :error-message="form.errors.description"
+                />
+                <!-- <div>Date and location</div>    
+                <div>Date and time</div> -->
+                <!-- <div>Location</div>
+                <div> maybe a map or what></div> -->
+                <!-- <div>Capacity</div>
+                <p class="text-red text-h4">!!!</p>
+                <p class="text-red h6">inig ka edit ani kay kung greater than the current capacity ang bag o nga capacity mag create ug bag - o ticket or what</p>
+                <p class="text-red h6">unya what if less than ang bag-o nga capacity epang delete ang ticket,,, no??</p>
+                <div>capacity = amount of tickets u want to sell</div> -->
+                <!-- <q-input 
+                    filled 
+                    label="Price"
+                    type="number" 
+                    v-model="form.capacity" 
+                    :error="form.errors.capacity ? true : false"
+                    :error-message="form.errors.capacity"
+                /> -->
+                <!-- <div>Tickets</div>
+                <p class="text-red">unya kung e adjust pod ang price unya naa nay ni purchase nga ticket ma change pod ang total price naa sa dashboard</p>
+                <p class="text-red">like kung naay ni purchase tickets worth of 100 x 3 = 300</p>
+                <p class="text-red">unya kung e update ni ang price dire (ilisag 200) ma ilisan pod to ang price to 200 x 3 = 600</p>
+                <div>How much do you want to charge for tickets?</div> -->
+                <q-input 
+                    filled 
+                    label="Price"
+                    type="number" 
+                    v-model="form.price" 
+                    :error="form.errors.price ? true : false"
+                    :error-message="form.errors.price"
+                    mask="#.##"
+                    fill-mask="0"
+                    reverse-fill-mask
+                />
+                <!-- <div>TIckets per order</div> -->
+                <q-input 
+                    filled
+                    type="number" 
+                    label="Guests"
+                    v-model="form.guests" 
+                    :error="form.errors.guests ? true : false"
+                    :error-message="form.errors.guests"
+                />
+                    
+                <q-btn 
+                    no-caps 
+                    type="submit" 
+                    color="primary" 
+                    class="q-mr-sm full-width"
+                    :loading="form.processing"
+                    :disable="form.processing"
+                >
+                    Save
+                </q-btn>
+                <q-separator class="q-my-md" />
+                <p class="text-weight-bold text-h6">Facility Ameneties</p>
+                <div class="row q-col-gutter-md">
+                    <div class="col-3 cursor-pointer" v-for="(amenity, i) in amenities" v-if="amenities">
+                        <q-card  flat bordered @click="addAmenity(amenity)" :class="form.amenities.includes(amenity) ? 'bg-primary' : ''">
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon :name="amenity.icon" />
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>
+                                        {{ amenity.name }} {{ i }}
+                                    </q-item-label>
+                                </q-item-section>
+                                <q-item-section right>
+                                    <q-btn icon="close" v-if="form.amenities.includes(amenity)" flat @click.stop="deleteAmenity(amenity)" />
+                                </q-item-section>
+                            </q-item>
+                        </q-card>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <div class="q-mx-xl q-mt-md">
+                <div>Frequently Asked Questions (Optional)</div>    
+                <div>Answer questions your attendees may have about the event, like parking, accessibility and refunds.</div>
+                <q-input filled label="Question"></q-input>
+                <q-input filled label="Answer" type="textarea"></q-input>
+                <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
+            </div> -->
+        </q-form>
+    </div>
 </template>

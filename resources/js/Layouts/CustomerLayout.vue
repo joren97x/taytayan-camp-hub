@@ -17,10 +17,12 @@ const sidebar = ref(false)
 const btnToggle = ref('products')
 const btnToggleLoading = ref(false)
 const notificationMenu = ref(false)
+const cartLength = ref(0)
 
 import axios from 'axios'
 
 onMounted(() => {
+
     axios.get(route('customer.notifications'))
     .then((res) => {
         // console.log(res)

@@ -171,9 +171,10 @@ class ProductController extends Controller
         $request->validate([
             'photo' => 'required'
         ]);
-
-        $photo = $request->photo[0]->getClientOriginalName();
-        $request->photo[0]->move(public_path('/images'), $photo);
+        // dd($request->photo);
+        // $photo = $request->photo[0]->getClientOriginalName();
+        // $request->photo[0]->move(public_path('/images'), $photo);
+        $photo = $request->photo->store('products', 'public');
 
         $product = Product::find($id);
 

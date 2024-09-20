@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
     
     Route::get('/on-progress-orders', [OrderController::class, 'on_progress'])->name('orders.on_progress');
     Route::get('/product-checkout', [ViewController::class, 'checkout'])->name('product.checkout');
+    Route::get('/cart-length', [CartController::class, 'length'])->name('customer.cart.length');
     Route::resource('/cart', CartController::class)->names([
         'index' => 'customer.cart.index',
         'store' => 'customer.cart.store',

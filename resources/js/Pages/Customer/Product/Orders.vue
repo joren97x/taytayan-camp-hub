@@ -47,15 +47,15 @@ watch(tab, () => {
                 <div 
                     class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9" 
                     v-for="order in orders"
-                    v-if="orders.length > 1"
+
                 >
                     <OrderCardItem :order="order"/>
                 </div>
-                <div class="col-12 items-center self-center flex " style="height: 50vh;" v-else>
+                <!-- <div class="col-12 items-center self-center flex " style="height: 50vh;" v-else>
                     <div class="col text-center">
                         There is currently no orders...
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 </template>

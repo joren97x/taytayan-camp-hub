@@ -47,7 +47,7 @@ Echo.channel('hello-channel')
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
                     <p class="text-start text-h3 q-mt-xl text-weight-medium">Lorem ipsum dolor emit ambatukam</p>
                     <p class="text-start text-subtitle1"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus accusantium, numquam porro, exercitationem quos debitis fugit ducimus </p>
-                    <q-btn size="lg" unelevated color="blue" no-caps class="q-px-xl"> Create your account </q-btn>
+                    <q-btn size="lg" unelevated color="primary" no-caps class="q-px-xl"> Create your account </q-btn>
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -71,7 +71,7 @@ Echo.channel('hello-channel')
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Milk Tea Delights </p>
                         <p class="text-start text-subtitle1"> Explore our wide range of refreshing milk tea flavors and customizable options </p>
-                        <q-btn size="lg" unelevated color="blue" no-caps> Order Milk Tea </q-btn>
+                        <q-btn size="lg" unelevated color="primary" no-caps> Order Milk Tea </q-btn>
                     </div>
                 </div>
                 <div class="col-xl-5 col-lg-5 col-md-5 gt-sm">
@@ -89,7 +89,7 @@ Echo.channel('hello-channel')
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Nature Retreats </p>
                         <p class="text-start text-subtitle1"> Plan your next outdoor adventure with our camp reservation system. Discover scenic campsites and book your stay hassle-free. </p>
-                        <q-btn size="lg" unelevated color="blue" no-caps> Reserve Campsite </q-btn>
+                        <q-btn size="lg" unelevated color="primary" no-caps> Reserve Campsite </q-btn>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@ Echo.channel('hello-channel')
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Exciting Events </p>
                         <p class="text-start text-subtitle1"> Browse upcoming events and concerts. Secure your tickets and be part of unforgettable experiences. </p>
-                        <q-btn size="lg" unelevated color="blue" no-caps> Buy Event Tickets </q-btn>
+                        <q-btn size="lg" unelevated color="primary" no-caps> Buy Event Tickets </q-btn>
                     </div>
                 </div>
                 <div class="col-5 gt-sm">

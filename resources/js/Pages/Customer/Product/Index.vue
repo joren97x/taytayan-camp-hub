@@ -162,6 +162,9 @@ const filteredCategories = computed(() => {
     .filter(category => category.filteredProducts.length > 0); 
 });
 
+const slide = ref('style')
+const lorem = ref('stylestylestylestylestylestyle')
+
 </script>
 
 <template>
@@ -173,13 +176,45 @@ const filteredCategories = computed(() => {
             :google_maps_api_key="google_maps_api_key" 
             v-if="$page.props.auth.user"
         />
-        <q-img
+        <!-- <q-img
             cover
             src="masarap milktea.jpeg"
             :ratio="16/9"
             height="300px"
             class="rounded-borders"
-        />
+        /> -->
+        <div>
+        <q-carousel
+            v-model="slide"
+            transition-prev="slide-right"
+            transition-next="slide-left"
+            animated
+            swipeable
+            control-color="red"
+            navigation
+        >
+            <q-carousel-slide name="tv" class="column no-wrap flex-center q-pa-none">
+                <q-img src="https://scontent.fmnl8-6.fna.fbcdn.net/v/t39.30808-6/327176035_2597203457087463_6666288379572413234_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHT6bAH_xzh6Vg9iFUnt9gsxyJehLiQb3PHIl6EuJBvcw4nDhus6WwDL6T4fK7p9R8-8LqvpNDq2urrB75YENcK&_nc_ohc=E7uRMRCh2pcQ7kNvgFqMqeT&_nc_ht=scontent.fmnl8-6.fna&oh=00_AYADGlYxrGEIUMRv-umEj4-opVYiYHGjWNA0Af3WDHP9nA&oe=66F32406"></q-img>
+            </q-carousel-slide>
+            <q-carousel-slide name="style" class="column no-wrap flex-center q-pa-none">
+                <q-img src="https://t3.ftcdn.net/jpg/04/64/30/76/360_F_464307620_CYWfA00cdwwtYPxXMfFpbTjVjaFYmP93.jpg"></q-img>
+            </q-carousel-slide>
+            <q-carousel-slide name="layers" class="column no-wrap flex-center q-pa-none">
+                <q-img src="https://scontent.fmnl8-1.fna.fbcdn.net/v/t39.30808-6/429651402_889256136542523_718280217750389034_n.png?_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHGGK0N0_9U3uEEKF4u42UKzlPQJZH18AfOU9AlkfXwB7Um-T8361oFY_dmTbLWO6gXGJ5aBriU_bqyr-tCIUig&_nc_ohc=T36VYrD1TpwQ7kNvgHAG6iL&_nc_ht=scontent.fmnl8-1.fna&_nc_gid=AtWspy-0XSBL8CaIaUaOrsc&oh=00_AYBTfSFPnmVVkZc-Q0__gNDt5KJyH_ChrO4HPWKr-S5FnQ&oe=66F331CE"></q-img>
+            </q-carousel-slide>
+            <q-carousel-slide name="map" class="column no-wrap flex-center q-pa-none">
+                <q-icon name="terrain" color="primary" size="56px" />
+                <div class="q-mt-md text-center">
+                    {{ lorem }}
+                </div>
+            </q-carousel-slide>
+            <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+                <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
+                <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
+            </template>
+        </q-carousel>
+
+    </div>
         <div class="q-mx-sm">
             <div class="row q-col-gutter-md q-mt-xs">
                 <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">

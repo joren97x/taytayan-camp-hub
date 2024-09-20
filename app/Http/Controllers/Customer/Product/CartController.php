@@ -28,6 +28,17 @@ class CartController extends Controller
         
     }
 
+    public function length(CartService $cartService)
+    {
+        $cart = $cartService->getActiveCart(auth()->id());
+        $result = $cartService->getCartLineItemsAndSubtotal($cart->id);
+        
+        return response()->json([
+            'cart_length' => count($result['cart_products'])
+        ]);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */

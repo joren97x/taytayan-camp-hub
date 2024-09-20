@@ -1,6 +1,7 @@
 <script setup>
 
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -18,85 +19,63 @@ const form = useForm({
     last_name: user.last_name,
     email: user.email,
 });
+
+const profilePicForm = useForm({
+    profile_pic: null,
+    hi: 'hi'
+})
+
+const filePicker = ref(null);
+const triggerFilePicker = () => {
+    filePicker.value.pickFiles();
+}
+
 </script>
 
 <template>
-    <!-- <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
+    <q-form class="q-mb-lg" >
+        <q-card>
+            <q-card-section>
+                <div class="text-h6 q-mb-sm">Profile Picture</div>
+                <div class="q-mb-lg">Update your account's profile information and email address.</div>
+                {{ profilePicForm }}
+                {{ profilePicForm.profile_pic }}
+                <div class="row q-col-gutter-md ">
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 justify-center flex">
+                        <q-avatar size="100px">
+                            <q-img src="https://p16-tm-sg.tiktokmusic.me/img/tos-alisg-v-2102/04dc6545750e489bbd4228b640874126~c5_750x750.image"></q-img>
+                        </q-avatar>
+                    </div>
+                    <div :class="['col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 flex', $q.screen.lt.md ? 'justify-center' : 'items-center']">
+                        <div>
+                            <q-btn 
+                                no-caps
+                                class="q-mr-md"
+                                type="submit" 
+                                @click="profilePicForm.patch(route('profile.update_profile_pic'))"
+                                v-if="profilePicForm.profile_pic"
+                                :disable="profilePicForm.processing"
+                                :loading="profilePicForm.processing"
+                            >
+                                Save
+                            </q-btn>
+                            <q-btn no-caps class="q-mr-md" v-else @click="triggerFilePicker">Edit</q-btn>
+    <!-- Delete Button -->
+                            <q-btn no-caps>Delete</q-btn>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Update your account's profile information and email address.
-            </p>
-        </header>
-
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                    Your email address is unverified.
-                    <Link
-                        :href="route('verification.send')"
-                        method="post"
-                        as="button"
-                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >
-                        Click here to re-send the verification email.
-                    </Link>
-                </p>
-
-                <div
-                    v-show="status === 'verification-link-sent'"
-                    class="mt-2 font-medium text-sm text-green-600 dark:text-green-400"
-                >
-                    A new verification link has been sent to your email address.
+                            <!-- Hidden File Picker -->
+                            <q-file 
+                                v-model="profilePicForm.profile_pic"
+                                ref="filePicker"
+                                class="q-mt-md"
+                                style="display: none" 
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                </Transition>
-            </div>
-        </form>
-    </section> -->
+            </q-card-section>
+        </q-card>
+    </q-form>
     <q-form @submit="form.patch(route('profile.update'))">
         <q-card>
             <q-card-section>

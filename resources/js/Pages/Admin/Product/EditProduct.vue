@@ -56,6 +56,7 @@ const submitphotoForm = () => {
     photoForm.post(route('admin.products.update_photo', props.product.id), {
         onSuccess: () => {
             $q.notify('Product Photo Successfully Updated')
+            photoForm.photo = null
         }
     })
 }
@@ -93,24 +94,76 @@ watch(selected, (modifier_group) => {
     addModifierGroupForm.modifier_group_ids = modifier_group.map(row => row.id)
 })
 
+watch(photoForm, () => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      console.log(e.target.result); // Set the preview to the image URL
+    };
+    console.log('the fuck')
+    console.log(photoForm.photo)
+    
+})
 
+const productPhotoRef = ref(null)
+const imgPreview = ref('')
+
+const triggerFilePicker = () => {
+    productPhotoRef.value.pickFiles();
+};
+
+const onFileChange = (file) => {
+    imgPreview.value = URL.createObjectURL(file)
+}
 </script>
 
 <template>
     
     <Head title="Edit Product" />
-    <div class="q-pa-md q-mb-xl">
-        {{ currentProductPhoto }}
-        {{ product.available }}
-        {{ form.available }}
+    <div class="q-pa-md">
         <q-form @submit="submit">
-            <div class="row">
-                <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">Edit Product</span>
-                <q-space/>
-                
+            <div class="row justify-between" style="z-index: 400;">
+                <div class="text-h6 text-center col-12" style="position: relative">
+                    Edit Product
+                    <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                </div>
             </div>
+            <q-separator class="q-my-md" />
+            <p class="text-weight-bold text-h6">Product photo</p>
+            <q-item class="q-my-md">
+                <q-item-section avatar>
+                    <q-img 
+                        :src="photoForm.photo ? imgPreview : `/storage/${product.photo}`" 
+                        style="width: 100px; height: 100px;" 
+                        fit="contain"    
+                    />
+                </q-item-section>
+                <q-item-section>
+                    <q-file 
+                        v-model="photoForm.photo"
+                        :error="photoForm.errors.photo ? true : false"
+                        :error-message="photoForm.errors.photo"
+                        style="display: none;"
+                        ref="productPhotoRef"
+                        @update:model-value="onFileChange"
+                    />
+                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
+                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                    <q-item-label>
+                        <q-btn 
+                            no-caps color="primary" 
+                            v-if="photoForm.photo" 
+                            @click="submitphotoForm()"
+                            :loading="photoForm.processing"
+                            :disable="photoForm.processing"
+                        >
+                            Save
+                        </q-btn>
+                        <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                    </q-item-label>
+                </q-item-section>
+            </q-item>
             <q-separator class="q-my-lg" />
+            <p class="text-weight-bold text-h6">Product Details</p>
             <q-input 
                 label="Name" 
                 v-model="form.name" 
@@ -163,46 +216,17 @@ watch(selected, (modifier_group) => {
             <q-checkbox v-model="form.is_featured" label="Feature Product" />
             <q-checkbox v-model="form.available" label="Available" />
             <q-btn 
-                    type="submit" 
-                    no-caps 
-                    color="primary" 
-                    class="q-mr-sm full-width"
-                    :loading="form.processing"
-                    :disable="form.processing"
-                >
-                    Save
-                </q-btn>
+                type="submit" 
+                no-caps 
+                color="primary" 
+                class="q-mr-sm full-width"
+                :loading="form.processing"
+                :disable="form.processing"
+            >
+                Save
+            </q-btn>
             <q-separator class="q-my-lg" />
-            <p class="text-weight-bold text-h6">Product photo</p>
-            <q-item class="q-my-md">
-                <q-item-section avatar>
-                    <q-img :src="`/storage/${product.photo}`" style="width: 100px; height: 100px;" />
-                </q-item-section>
-                <q-item-section>
-                    <q-input 
-                        type="file" 
-                        filled 
-                        v-model="photoForm.photo"
-                        :error="photoForm.errors.photo ? true : false"
-                        :error-message="photoForm.errors.photo"
-                    >
-                    </q-input>
-                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
-                    <q-item-label>
-                        <q-btn 
-                            no-caps color="primary" 
-                            v-if="photoForm.photo" 
-                            @click="submitphotoForm()"
-                            :loading="photoForm.processing"
-                            :disable="photoForm.processing"
-                        >
-                            Save
-                        </q-btn>
-                        <q-btn no-caps color="primary" v-else>Change photo</q-btn>
-                    </q-item-label>
-                </q-item-section>
-            </q-item>
+            
             <p class="text-weight-bold text-h6">Modifier Groups</p>
             <p class="text-weight-light">
                 Modifier groups allow customers to customize items

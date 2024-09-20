@@ -17,6 +17,12 @@ class ViewController extends Controller
         return Inertia::render('Admin/Dashboard');
     }
 
+    public function profile() {
+
+
+        return Inertia::render('Admin/Profile');
+    }
+
     public function inbox()
     {
         return Inertia::render('Admin/Inbox', [

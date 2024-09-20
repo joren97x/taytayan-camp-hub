@@ -17,6 +17,7 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::get('/admin/user-management', [UserController::class, 'index'])->name('admin.user_management');
     Route::post('/admin/user-management', [UserController::class, 'store'])->name('admin.user_management.store');
+    Route::get('/admin/profile', [ViewController::class, 'profile'])->name('admin.profile');
 
     Route::get('/admin/user-roles', [UserController::class, 'user_roles'])->name('admin.get_user_roles');
     require __DIR__.'/Admin/product.php';

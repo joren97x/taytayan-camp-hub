@@ -65,7 +65,7 @@ const columns = [
         >
             <template v-slot:body-cell-photo="props">
                 <q-td :props="props">
-                    <q-img :src="`/storage/${props.row.photo}`" style="width: 50px; height: 50px;" />
+                    <q-img :src="`/storage/${props.row.photo}`" fit="contain" style="width: 50px; height: 50px;" />
                 </q-td>
             </template>
             <template v-slot:body-cell-price="props">

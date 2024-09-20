@@ -35,6 +35,7 @@ Route::middleware(['auth', 'customer'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::patch('/profile/update-profile-pic', [ProfileController::class, 'update_profile_pic'])->name('profile.update_profile_pic');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

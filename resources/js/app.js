@@ -30,9 +30,9 @@ createInertiaApp({
                 }, // import Quasar plugins and add here
                 config: {
                   brand: {
-                    primary: '#0e9cff',
-                    secondary: '#f7a11a',
-                    accent: '#9C27B0',
+                    primary: '#4CAF50',
+                    secondary: '#FF6F61',
+                    accent: '#87CEEB',
             
                     dark: '#1d1d1d',
                     'dark-page': '#121212',

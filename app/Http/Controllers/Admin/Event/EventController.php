@@ -160,7 +160,21 @@ class EventController extends Controller
 
     public function update_cover_photo(Request $request, string $id)
     {
-        dd($request);
+        // dd($request);
+        $request->validate([
+            'cover_photo' => 'required'
+        ]);
+        // dd($request->photo);
+        // $photo = $request->photo[0]->getClientOriginalName();
+        // $request->photo[0]->move(public_path('/images'), $photo);
+        $cover_photo = $request->cover_photo->store('events', 'public');
+
+        $event = Event::find($id);
+
+        $event->cover_photo = $cover_photo;
+        $event->save();
+
+        return back();
     }
 
 }

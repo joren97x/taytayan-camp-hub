@@ -16,7 +16,6 @@ const props = defineProps({
 const $q = useQuasar()
 const form = useForm({
     title: props.event.title,
-    cover_photo: null,
     description: props.event.description,
     date: props.event.date,
     start_time: props.event.start_time,
@@ -41,56 +40,56 @@ const submit = () => {
 }
 
 const submitCoverPhotoForm = () => {
-    coverPhotoForm.put(route('admin.events.update_cover_photo', props.event.id), {
+    coverPhotoForm.post(route('admin.events.update_cover_photo', props.event.id), {
         onSuccess: () => {
             $q.notify('Cover Photo Updated')
+            coverPhotoForm.cover_photo = null
         }
     })
 }
 
+const eventPhotoRef = ref(null)
+const imgPreview = ref('')
+
+const triggerFilePicker = () => {
+    eventPhotoRef.value.pickFiles();
+};
+
+const onFileChange = (file) => {
+    imgPreview.value = URL.createObjectURL(file)
+}
 </script>
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Edit Event" />
     <div class="q-pa-md">
         <q-form @submit="submit">
-            <div class="row">
-                <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">Edit Event</span>
-                <q-space/>
-                <q-btn 
-                    no-caps 
-                    type="submit" 
-                    color="primary" 
-                    class="q-mr-sm"
-                    :loading="form.processing"
-                    :disable="form.processing"
-                >
-                    Save
-                </q-btn>
+            <div class="row justify-between" style="z-index: 400;">
+                <div class="text-h6 text-center col-12" style="position: relative">
+                    Edit Event
+                    <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                </div>
             </div>
             <q-separator class="q-my-md" />
-            <div>Build Your Event Page</div>
-            <div>Add all of your event details and let attendees know what to expect</div>
-            <p>
-                {{ form }}
-            </p>
-            <div class="q-mx-xl q-mt-md">
+            <div class="q-mt-md">
                 <p class="text-weight-bold text-h6">Event Cover Photo</p>
                 <q-item class="q-my-md">
                     <q-item-section avatar>
-                        <q-img :src="`/storage/${event.cover_photo}`" style="width: 100px; height: 100px;" />
+                        <q-img 
+                            :src="coverPhotoForm.cover_photo ? imgPreview : `/storage/${event.cover_photo}`" 
+                            style="width: 100px; height: 100px;" 
+                        />
                     </q-item-section>
                     <q-item-section>
-                        <q-input 
-                            type="file" 
-                            filled 
+                        <q-file 
                             v-model="coverPhotoForm.cover_photo"
                             :error="coverPhotoForm.errors.cover_photo ? true : false"
                             :error-message="coverPhotoForm.errors.cover_photo"
-                        >
-                        </q-input>
+                            style="display: none;"
+                            ref="eventPhotoRef"
+                            @update:model-value="onFileChange"
+                        />
                         <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
                         <q-item-label caption>File requirement: JPG, PNG</q-item-label>
                         <q-item-label>
@@ -103,26 +102,16 @@ const submitCoverPhotoForm = () => {
                             >
                                 Save
                             </q-btn>
-                            <q-btn no-caps color="primary" v-else>Change photo</q-btn>
+                            <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
-                <div>Add cover photo</div>    
-                <div>Add photos to show what your event will be about. See examples</div>
-                <div class="full-width bg-grey-3" style="height: 200px">
-                    <q-input 
-                        type="file" 
-                        filled 
-                        v-model="form.cover_photo"
-                        :error="form.errors.cover_photo ? true : false"
-                        :error-message="form.errors.cover_photo"
-                    />
-                </div>
+                <q-separator class="q-my-md" />
+                <p class="text-weight-bold text-h6">Event Details</p>
             </div>
-            <div class="q-mx-xl q-mt-md">
-                <div>Event Overview</div>    
-                <div>Event title</div>
-                <div>Be clear and descriptive with a title that tells people what your event is about.</div>
+            <div class="q-mx-sm q-mt-md">
+                <!-- <div>Event title</div>
+                <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
                 <q-input 
                     filled 
                     label="Title"
@@ -130,8 +119,8 @@ const submitCoverPhotoForm = () => {
                     :error="form.errors.title ? true : false"
                     :error-message="form.errors.title"
                 />
-                <div>Description</div>
-                <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div>
+                <!-- <div>Description</div>
+                <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div> -->
                 <q-input 
                     filled 
                     label="Description"
@@ -139,8 +128,8 @@ const submitCoverPhotoForm = () => {
                     :error="form.errors.description ? true : false"
                     :error-message="form.errors.description"
                 />
-                <div>Date and location</div>    
-                <div>Date and time</div>
+                <!-- <div>Date and location</div>    
+                <div>Date and time</div> -->
                 <div class="row q-col-gutter-md">
                     <div class="col-3">
                         <q-input 
@@ -189,8 +178,8 @@ const submitCoverPhotoForm = () => {
                         </q-input>
                     </div>
                 </div>
-                <div>Location</div>
-                <div> maybe a map or what></div>
+                <!-- <div>Location</div>
+                <div> maybe a map or what></div> -->
                 <q-input 
                     filled 
                     label="Location"
@@ -198,11 +187,11 @@ const submitCoverPhotoForm = () => {
                     :error="form.errors.location ? true : false"
                     :error-message="form.errors.location"
                 />
-                <div>Capacity</div>
+                <!-- <div>Capacity</div>
                 <p class="text-red text-h4">!!!</p>
                 <p class="text-red h6">inig ka edit ani kay kung greater than the current capacity ang bag o nga capacity mag create ug bag - o ticket or what</p>
                 <p class="text-red h6">unya what if less than ang bag-o nga capacity epang delete ang ticket,,, no??</p>
-                <div>capacity = amount of tickets u want to sell</div>
+                <div>capacity = amount of tickets u want to sell</div> -->
                 <q-input 
                     filled 
                     label="Capacity"
@@ -211,11 +200,11 @@ const submitCoverPhotoForm = () => {
                     :error="form.errors.capacity ? true : false"
                     :error-message="form.errors.capacity"
                 />
-                <div>Tickets</div>
+                <!-- <div>Tickets</div>
                 <p class="text-red">unya kung e adjust pod ang price unya naa nay ni purchase nga ticket ma change pod ang total price naa sa dashboard</p>
                 <p class="text-red">like kung naay ni purchase tickets worth of 100 x 3 = 300</p>
                 <p class="text-red">unya kung e update ni ang price dire (ilisag 200) ma ilisan pod to ang price to 200 x 3 = 600</p>
-                <div>How much do you want to charge for tickets?</div>
+                <div>How much do you want to charge for tickets?</div> -->
                 <q-input 
                     filled 
                     label="Price"
@@ -227,7 +216,7 @@ const submitCoverPhotoForm = () => {
                     fill-mask="0"
                     reverse-fill-mask
                 />
-                <div>TIckets per order</div>
+                <!-- <div>TIckets per order</div> -->
                 <div class="row q-col-gutter-md">
                     <div class="col-4">
                         <q-input 
@@ -250,15 +239,25 @@ const submitCoverPhotoForm = () => {
                         />
                     </div>
                 </div>
+                <q-btn 
+                    no-caps 
+                    type="submit" 
+                    color="primary" 
+                    class="q-mr-sm full-width"
+                    :loading="form.processing"
+                    :disable="form.processing"
+                >
+                    Save
+                </q-btn>
             </div>
             
-            <div class="q-mx-xl q-mt-md">
+            <!-- <div class="q-mx-xl q-mt-md">
                 <div>Frequently Asked Questions (Optional)</div>    
                 <div>Answer questions your attendees may have about the event, like parking, accessibility and refunds.</div>
                 <q-input filled label="Question"></q-input>
                 <q-input filled label="Answer" type="textarea"></q-input>
                 <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
-            </div>
+            </div> -->
         </q-form>
     </div>
 </template>

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Route::middleware(['auth', 'verified', 'customer'])->group(function () {
-    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
+    // Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
     Route::get('/facility-checkout', [ViewController::class, 'checkout'])->name('facility.checkout');
     Route::post('/facility-pay', [PaymentController::class, 'pay'])->name('facility.pay');
     // Route::post('/facility-sucess', [PaymentController::class, 'pay'])->name('facility.pay');

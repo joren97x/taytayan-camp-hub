@@ -17,8 +17,6 @@ const form = useForm({
     modifiers: []
 })
 
-
-
 const submit = () => {
     form.post(route('customer.cart.store'), {
         onSuccess: (e) => {
@@ -109,7 +107,7 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
                     <div class="col-12 col-md-5 col-lg-5 col-xl-5 col-sm-12 col-xs-12" style="position: relative;">
                         <!-- so kuhaa ang modifier group id and then check pilay required quantity then if 1 ra kay poydi if nalapas
                         kay dili na  -->
-                        <q-img fill="cover" :src="`/storage/${product.photo}`" style="position: sticky; top: 30px;" height="40vh">
+                        <q-img fill="cover" :src="`/storage/${product.photo}`" style="position: sticky; top: 30px;" height="100%">
                         </q-img>
                         <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-md lt-md"></q-btn>
                     </div>

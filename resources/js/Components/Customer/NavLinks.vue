@@ -1,7 +1,21 @@
 <script setup>
 
 import { Link } from '@inertiajs/vue3'
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
 
+const cartLength = ref(0)
+
+onMounted(() => {
+    axios.get(route('customer.cart.length'))
+    .then((res) => {
+        console.log(res)
+        cartLength.value = res.data.cart_length
+    })
+    .catch((err) => {
+        console.error(err)
+    })
+})
 </script>
 <template>
     <q-list>
@@ -11,7 +25,8 @@ import { Link } from '@inertiajs/vue3'
                 <q-item-section avatar>
                     <q-icon name="inbox" />
                 </q-item-section>
-                <q-item-section>Cart</q-item-section>
+                <q-item-section>Cart {{ cartLength }} </q-item-section>
+                
             </q-item>
         </Link>
         <Link :href="route('customer.orders.index')" class="nav-link">
