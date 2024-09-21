@@ -11,7 +11,7 @@ Route::resource('/admin/bookings', BookingController::class)->names([
     'index' => 'admin.bookings.index'
 ]);
 
-// Route::get('/admin/facilities/reviews', [ViewController::class, 'index'])->name('admin.facilities.reviews');
+Route::post('/admin/facilities/{facility}/update-images', [FacilityController::class, 'update_images'])->name('admin.facilities.update_images');
 Route::resource('/admin/facilities', FacilityController::class)->names([
     'index' => 'admin.facilities.index',
     'create' => 'admin.facilities.create',

@@ -35,7 +35,7 @@ class FacilityController extends Controller
     public function store(Request $request)
     {
         //
-        
+        // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
@@ -60,7 +60,7 @@ class FacilityController extends Controller
             'price' => $request->price
         ]);
 
-        return back();
+        return redirect(route('admin.facilities.index'));
 
     }
 
@@ -92,6 +92,32 @@ class FacilityController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function update_images(Request $request, string $id)
+    {
+        //
+        // dd($request->file('images'));
+        $facility = Facility::find($id);
+        // dd(json_decode($facility->images));
+        // $image_paths = [];
+        // for($i = 0; $i < count($request->file('images')); $i++) {
+        //     $path = $request->file('images')[$i]->store('facilities', 'public');
+        //     array_push($image_paths, $path);
+        // }
+        $facility_images = json_decode($facility->images);
+
+        foreach($request->file('images') as $img) {
+            $path = $img->store('facilities', 'public');
+            array_push($facility_images, $path);
+        }
+
+        $facility->images = json_encode($facility_images);
+        // $facility->images = array_push($facility_images, $image_paths);
+        $facility->save();
+        return back();
+        // $facility->images = array_push($facility->json_decode())
+
     }
 
     /**

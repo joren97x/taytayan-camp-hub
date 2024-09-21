@@ -23,7 +23,7 @@ const form = useForm({
 })
 
 const imagesForm = useForm({
-    images: null
+    images: JSON.parse(props.facility.images)
 })
 
 const submit = () => {
@@ -35,10 +35,10 @@ const submit = () => {
 }
 
 const submitImagesForm = () => {
-    imagesForm.post(route('admin.facilities.update_images', props.event.id), {
+    imagesForm.post(route('admin.facilities.update_images', props.facility.id), {
         onSuccess: () => {
             $q.notify('Cover Photo Updated')
-            coverPhotoForm.images = null
+            // coverPhotoForm.images = null
         }
     })
 }
@@ -66,15 +66,28 @@ function deleteAmenity(amenity) {
 }
 
 const facilityImagesRef = ref(null)
-const imgPreview = ref('')
+const imgPreview = ref([])
 
 const triggerFilePicker = () => {
-    eventPhotoRef.value.pickFiles();
+    facilityImagesRef.value.pickFiles();
 };
 
 const onFileChange = (file) => {
-    imgPreview.value = URL.createObjectURL(file)
+    console.log(imagesForm.images)
+    imgPreview.value.push(URL.createObjectURL(file))
+    imagesForm.images.push(file)
+    console.log(imagesForm.images)
+    // imgPreview.value = URL.createObjectURL(file)
 }
+
+const editImages = ref(false)
+const facilityImages = ref(JSON.parse(props.facility.images))
+
+const handleRemoveImage = (img) => {
+    imagesForm.images = imagesForm.images.filter(a => a !== img)
+    facilityImages.value = facilityImages.value.filter(a => a !== img)
+}
+
 </script>
 
 <template>
@@ -99,14 +112,6 @@ const onFileChange = (file) => {
                         />
                     </q-item-section>
                     <q-item-section>
-                        <q-file 
-                            v-model="imagesForm.images"
-                            :error="imagesForm.errors.images ? true : false"
-                            :error-message="imagesForm.errors.images"
-                            style="display: none;"
-                            ref="facilityImagesRef"
-                            @update:model-value="onFileChange"
-                        />
                         <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
                         <q-item-label caption>File requirement: JPG, PNG</q-item-label>
                         <q-item-label>
@@ -123,6 +128,69 @@ const onFileChange = (file) => {
                         </q-item-label>
                     </q-item-section>
                 </q-item>
+                <div class="row q-col-gutter-sm">
+                    <div class="col-3 text-h6 items-center flex">
+                        Faciliy Images
+                    </div>
+                    <div class="col-9 justify-end flex items-end self-end">
+                        <q-btn 
+                            no-caps 
+                            v-if="imgPreview.length > 0" 
+                            color="primary"
+                            :disable="imagesForm.processing"
+                            :loading="imagesForm.processing"
+                            @click="submitImagesForm()"
+                            label="Save"
+                        />
+                    </div>
+                    <div class="col-2" v-for="img in facilityImages">
+                        <q-card 
+                            style="height: 100px; width: 100%" 
+                            bordered 
+                        >
+                            <q-img 
+                                :src="`/storage/${img}`" 
+                                style="width: 100%; height: 100%;" 
+                                fit="fill"
+                            />
+                        </q-card>
+                    </div>
+                    <div class="col" v-if="imgPreview.length > 0" v-for="img in imgPreview">
+                        <q-card 
+                            style="height: 100px; width: 100%" 
+                            bordered 
+                            @click="handleRemoveImage(img)"
+                        >
+                            <q-img 
+                                :src="img" 
+                                style="width: 100%; height: 100%;" 
+                                fit="fill"
+                            />
+                        </q-card>
+                    </div>
+                    <div class="col-2">
+                        <q-card 
+                            style="height: 100px; width: 100%" 
+                            bordered 
+                            :flat="!editImages"
+                            @click="triggerFilePicker"
+                            class="cursor-pointer"
+                        >
+                                <q-btn 
+                                    icon="add" 
+                                    class="absolute-center" 
+                                    label="Add" 
+                                    no-caps 
+                                    unelevated
+                                />
+                        </q-card>
+                    </div>
+                </div>
+                <q-file 
+                    style="display: none;"
+                    ref="facilityImagesRef"
+                    @update:model-value="onFileChange"
+                />
                 <q-separator class="q-my-md" />
                 <p class="text-weight-bold text-h6">Facility Details</p>
             </div>
@@ -231,3 +299,21 @@ const onFileChange = (file) => {
         </q-form>
     </div>
 </template>
+
+<style scoped>
+
+.imageCard .deleteImageBtn {
+    display: none;
+}
+
+.imageCard:hover .deleteImageBtn {
+    display: block;
+}
+
+.imageCard:hover {  
+    transform: scale(1.05);
+    border: 1px solid red
+    /* Semi-transparent black background */
+}
+
+</style>
