@@ -201,7 +201,7 @@ const navigation_list = [
                     </Link> -->
                     <!-- <q-expansion-item icon="supervisor_account" label="User Management">
                         <q-card class="q-mx-md"> -->
-                            <Link :href="route(`admin.user_management`)">
+                            <Link :href="route(`admin.users.index`)">
                                 <q-item clickable v-ripple >
                                     <q-item-section avatar>
                                         <q-icon name="people" />

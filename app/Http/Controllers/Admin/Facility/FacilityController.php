@@ -92,6 +92,24 @@ class FacilityController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'guests' => 'required',
+            'amenities' => 'required'
+        ]);
+
+        $facility = Facility::find($id);
+        $facility->name = $request->name;
+        $facility->description = $request->description;
+        $facility->price = $request->price;
+        $facility->guests = $request->guests;
+        $facility->amenities = json_encode($request->amenities);
+        $facility->save();
+
+        return back();
+
     }
 
     public function update_images(Request $request, string $id)
@@ -126,5 +144,7 @@ class FacilityController extends Controller
     public function destroy(string $id)
     {
         //
+        Facility::find($id)->delete();
+        return redirect(route('admin.facilities.index'));
     }
 }

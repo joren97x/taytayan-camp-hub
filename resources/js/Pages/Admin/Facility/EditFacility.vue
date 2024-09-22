@@ -19,7 +19,7 @@ const form = useForm({
     description: props.facility.description,
     price: props.facility.price,
     guests: props.facility.guests,
-    amenities: [],
+    amenities: JSON.parse(props.facility.amenities),
 })
 
 const imagesForm = useForm({
@@ -27,7 +27,7 @@ const imagesForm = useForm({
 })
 
 const submit = () => {
-    form.put(route('admin.facilities.update', props.event.id), {
+    form.put(route('admin.facilities.update', props.facility.id), {
         onSuccess: () => {
             $q.notify('Facility Successfully Updated')
         }
@@ -56,13 +56,19 @@ for(var i = 0; i < 10; i++) {
 }
 
 function addAmenity(amenity) {
-    if(!form.amenities.includes(amenity)) {
+    // if(form.amenities.find((amenity))) {
+    //     form.amenities.push(amenity)
+    // }
+    if(!form.amenities.find((el) => el.id == amenity.id)) {
         form.amenities.push(amenity)
     }
+
 }
 
 function deleteAmenity(amenity) {
-    form.amenities = form.amenities.filter(a => a.id !== amenity.id)
+    console.log(amenity)
+    console.log(form.amenities)
+    form.amenities = form.amenities.filter(a => a.id != amenity.id)
 }
 
 const facilityImagesRef = ref(null)
@@ -88,6 +94,15 @@ const handleRemoveImage = (img) => {
     facilityImages.value = facilityImages.value.filter(a => a !== img)
 }
 
+const deleteFacilityDialog = ref(false)
+const deleteFacilityForm = useForm({})
+const submitDeleteFacilityForm = () => {
+    deleteFacilityForm.delete(route('admin.facilities.destroy', props.facility.id), {
+        onSuccess: () => {
+            $q.notify('Facility Deleted Successfully')
+        }
+    })
+}
 </script>
 
 <template>
@@ -95,15 +110,16 @@ const handleRemoveImage = (img) => {
     <Head title="Edit Event" />
     <div class="q-pa-md">
         <q-form @submit="submit">
+            {{ JSON.parse(facility.amenities) }}
             <div class="row justify-between" style="z-index: 400;">
                 <div class="text-h6 text-center col-12" style="position: relative">
                     Edit Facility
-                    <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                    <q-btn icon="delete" @click="deleteFacilityDialog = true" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
                 </div>
             </div>
             <q-separator class="q-my-md" />
             <div class="q-mt-md">
-                <p class="text-weight-bold text-h6">Facility Images</p>
+                <!-- <p class="text-weight-bold text-h6">Facility Images</p>
                 <q-item class="q-my-md">
                     <q-item-section avatar>
                         <q-img 
@@ -127,7 +143,7 @@ const handleRemoveImage = (img) => {
                             <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
                         </q-item-label>
                     </q-item-section>
-                </q-item>
+                </q-item> -->
                 <div class="row q-col-gutter-sm">
                     <div class="col-3 text-h6 items-center flex">
                         Faciliy Images
@@ -155,7 +171,7 @@ const handleRemoveImage = (img) => {
                             />
                         </q-card>
                     </div>
-                    <div class="col" v-if="imgPreview.length > 0" v-for="img in imgPreview">
+                    <div class="col-2" v-if="imgPreview.length > 0" v-for="img in imgPreview">
                         <q-card 
                             style="height: 100px; width: 100%" 
                             bordered 
@@ -256,21 +272,17 @@ const handleRemoveImage = (img) => {
                     :error-message="form.errors.guests"
                 />
                     
-                <q-btn 
-                    no-caps 
-                    type="submit" 
-                    color="primary" 
-                    class="q-mr-sm full-width"
-                    :loading="form.processing"
-                    :disable="form.processing"
-                >
-                    Save
-                </q-btn>
+                
                 <q-separator class="q-my-md" />
                 <p class="text-weight-bold text-h6">Facility Ameneties</p>
                 <div class="row q-col-gutter-md">
                     <div class="col-3 cursor-pointer" v-for="(amenity, i) in amenities" v-if="amenities">
-                        <q-card  flat bordered @click="addAmenity(amenity)" :class="form.amenities.includes(amenity) ? 'bg-primary' : ''">
+                        <q-card  
+                            flat 
+                            bordered 
+                            @click="addAmenity(amenity)" 
+                            :class="form.amenities.find((el) => amenity.id == el.id) ? 'bg-primary text-white' : ''"
+                        >
                             <q-item>
                                 <q-item-section avatar>
                                     <q-icon :name="amenity.icon" />
@@ -280,14 +292,32 @@ const handleRemoveImage = (img) => {
                                         {{ amenity.name }} {{ i }}
                                     </q-item-label>
                                 </q-item-section>
-                                <q-item-section right>
-                                    <q-btn icon="close" v-if="form.amenities.includes(amenity)" flat @click.stop="deleteAmenity(amenity)" />
+                                <q-item-section side>
+                                    <q-btn 
+                                        icon="close" 
+                                        v-if="form.amenities.find((el) => amenity.id == el.id)"
+                                        round
+                                        unelevated
+                                        color="white"
+                                        flat
+                                        @click.stop="deleteAmenity(amenity)" />
                                 </q-item-section>
                             </q-item>
                         </q-card>
                     </div>
                 </div>
+                <q-btn 
+                    no-caps 
+                    type="submit" 
+                    color="primary" 
+                    class="q-mr-sm full-width q-my-lg"
+                    :loading="form.processing"
+                    :disable="form.processing"
+                >
+                    Save
+                </q-btn>
             </div>
+            
             
             <!-- <div class="q-mx-xl q-mt-md">
                 <div>Frequently Asked Questions (Optional)</div>    
@@ -298,6 +328,22 @@ const handleRemoveImage = (img) => {
             </div> -->
         </q-form>
     </div>
+    <q-dialog v-model="deleteFacilityDialog">
+        <q-card>
+            <q-card-section>
+                Delete Facility?
+            </q-card-section>
+            <q-card-actions>
+                <q-btn v-close-popup label="Cancel" />
+                <q-btn 
+                    label="Delete"
+                    @click="submitDeleteFacilityForm"
+                    :loading="deleteFacilityForm.processing"
+                    :disable="deleteFacilityForm.processing"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>
 
 <style scoped>

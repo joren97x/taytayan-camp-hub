@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,6 +16,14 @@ class ViewController extends Controller
 
     public function account() {
         return Inertia::render('Driver/Account');
+    }
+
+    public function profile(Request $request)
+    {
+        return Inertia::render('Driver/Profile', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
+        ]);
     }
 
     public function inbox() {

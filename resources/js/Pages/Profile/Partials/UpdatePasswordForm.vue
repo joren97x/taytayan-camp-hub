@@ -136,7 +136,7 @@ const updatePassword = () => {
                     :error-message="form.errors.password_confirmation"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
-                <q-btn label="Save" :processing="form.processing" type="submit" :disabled="form.processing" unelevated no-caps color="blue" />
+                <q-btn label="Save" :processing="form.processing" type="submit" :disabled="form.processing" unelevated no-caps color="primary" />
             </q-card-section>
         </q-card>
     </q-form>

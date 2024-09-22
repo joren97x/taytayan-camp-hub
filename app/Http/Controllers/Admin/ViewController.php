@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,10 +18,12 @@ class ViewController extends Controller
         return Inertia::render('Admin/Dashboard');
     }
 
-    public function profile() {
-
-
-        return Inertia::render('Admin/Profile');
+    public function profile(Request $request)
+    {
+        return Inertia::render('Admin/Profile', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
+        ]);
     }
 
     public function inbox()

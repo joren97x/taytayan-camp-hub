@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
     ]);
     Route::get('/driver/dashboard', [ViewController::class, 'dashboard'])->name('driver.dashboard');
     Route::get('/driver/inbox', [ViewController::class, 'inbox'])->name('driver.inbox');
-    Route::get('/driver/account', [ViewController::class, 'account'])->name('driver.account');
+    Route::get('/driver/profile', [ViewController::class, 'profile'])->name('driver.profile');
     Route::get('/driver/map', [ViewController::class, 'map'])->name('driver.map');
 
 // });

@@ -73,7 +73,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
-        dd(User::find($id));
+        // dd(User::find($id));
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         //
-        dd(User::find($id));
+        // dd(User::find($id));
     }
 
     /**
@@ -91,6 +91,24 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255',
+            'role' => 'required',
+        ]);
+
+        User::find($id)->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address
+        ]);
+
+        return redirect(route('admin.users.index'));
+
     }
 
     /**
@@ -99,6 +117,8 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+        User::find($id)->delete();
+        return back();
     }
 
     public function user_roles()

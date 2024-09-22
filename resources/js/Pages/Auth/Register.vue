@@ -101,7 +101,16 @@ const submit = () => {
                     </template>
                 </q-input>
 
-                <q-btn label="Register" :loading="form.processing" :disabled="form.processing" no-caps type="submit" class="full-width q-mt-lg" color="primary"/>
+                <q-btn 
+                    label="Register" 
+                    :loading="form.processing" 
+                    :disabled="form.processing" 
+                    no-caps 
+                    type="submit" 
+                    class="full-width q-mt-lg" 
+                    rounded
+                    color="primary"
+                />
             </q-card-section>
 
             <q-card-section>

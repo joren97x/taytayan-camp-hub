@@ -76,7 +76,16 @@ const submit = () => {
                     </p>
                 </div>
 
-                <q-btn label="Log in" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+                <q-btn 
+                    label="Log in" 
+                    :loading="form.processing" 
+                    :disable="form.processing" 
+                    no-caps 
+                    type="submit" 
+                    class="full-width" 
+                    color="primary"
+                    rounded
+                />
             </q-card-section>
 
             <q-card-section>

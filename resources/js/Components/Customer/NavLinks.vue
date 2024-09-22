@@ -71,7 +71,7 @@ onMounted(() => {
                 <q-item-section>Inbox</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('profile.edit')" class="nav-link">
+        <Link :href="route('customer.profile')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="manage_accounts" />

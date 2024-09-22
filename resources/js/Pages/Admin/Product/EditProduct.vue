@@ -1,6 +1,6 @@
 <script setup>
 
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, useForm, Link } from '@inertiajs/vue3'
 // import AdminLayout from '@/Layouts/AdminSidebar.vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
@@ -73,6 +73,7 @@ const updateProductModifierGroup = () => {
 
 const clearModifierGroupForm = useForm({})
 const clearModifierGroupDialog = ref(false)
+
 const submitClearModifierGroup = () => {
     clearModifierGroupForm.delete(route('admin.products.clear_modifier_group', props.product.id), {
         onSuccess: () => {
@@ -122,8 +123,13 @@ const onFileChange = (file) => {
     <div class="q-pa-md">
         <q-form @submit="submit">
             <div class="row justify-between" style="z-index: 400;">
-                <div class="text-h6 text-center col-12" style="position: relative">
-                    Edit Product
+                <div class="text-center col-12" style="position: relative">
+                    <div class="text-h6 ">Edit Product</div>
+                    <Link :href="route('admin.products.index')" class="absolute-left text-subtitle2 items-center flex" >
+                        <q-icon name="arrow_back" class="q-mr-xs"/>
+                        Go Back
+                    </Link>
+                    <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
                     <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
                 </div>
             </div>
@@ -349,3 +355,12 @@ const onFileChange = (file) => {
         </q-card>
     </q-dialog>
 </template>
+
+<style scoped>
+
+a {
+    text-decoration: none;
+}
+
+
+</style>

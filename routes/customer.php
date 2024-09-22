@@ -11,6 +11,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/add-address', [CustomerController::class, 'add_address'])->name('add-address');
     Route::get('/customer-notifications', [NotificationController::class, 'index'])->name('customer.notifications');
     Route::get('/inbox/{id?}', [ViewController::class, 'inbox'])->name('customer.inbox');
+    Route::get('/profile', [ViewController::class, 'profile'])->name('customer.profile');
+
 });
 
 require __DIR__.'/Customer/product.php';

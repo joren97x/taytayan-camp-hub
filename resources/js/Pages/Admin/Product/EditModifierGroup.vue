@@ -1,6 +1,6 @@
 <script setup>
 
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, useForm, Link } from '@inertiajs/vue3'
 import { ref, onMounted, watch } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
@@ -23,7 +23,7 @@ const modifierItemForm = useForm({
 console.log(props)
 const form = useForm({
     name: props.modifier_group.name,
-    required: props.modifier_group.required,
+    required: props.modifier_group.required ? true : false,
     // items: null,
     required_quantity: props.modifier_group.required_quantity,
     max_quantity: props.modifier_group.max_quantity,
@@ -67,12 +67,32 @@ watch(selected, (modifier_item) => {
 
 <template>
     
-    <Head title="New Modifiers Groups" />
+    <Head title="Edit Modifier Group" />
     <q-form @submit="submitForm">
         <div class="q-pa-md">
-            {{ form }}
-            {{ selected }}
-            <div class="row">
+            <div class="row justify-between" style="z-index: 400;">
+                <div class="text-center col-12" style="position: relative">
+                    <div class="text-h6 ">Edit Modifier Group</div>
+                    <Link :href="route('admin.modifier_groups.index')" class="absolute-left text-subtitle2 items-center flex" >
+                        <q-icon name="arrow_back" class="q-mr-xs"/>
+                        Go Back
+                    </Link>
+                    <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
+                    <div class="absolute-right">
+                        <q-btn 
+                            @click="dialog = !dialog" 
+                            no-caps 
+                            color="primary" 
+                            class="q-mr-sm" 
+                            outline
+                        >
+                            New Modifier Item
+                        </q-btn>
+                        <!-- <q-btn icon="delete" unelevated label="Delete" no-caps color="negative" /> -->
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row">
                 <q-btn icon="arrow_back" flat round></q-btn>
                 <span class="text-h6 q-mt-xs q-ml-sm">Edit Modifier Group</span>
                 <q-space/>
@@ -95,7 +115,7 @@ watch(selected, (modifier_item) => {
                 >
                     Save
                 </q-btn>
-            </div>
+            </div> -->
             <q-separator class="q-my-md" />
             <q-input 
                 v-model="form.name"
@@ -147,6 +167,18 @@ watch(selected, (modifier_item) => {
                 :error="form.errors.required ? true : false"
                 :error-message="form.errors.required"
             />
+            <q-card-actions>
+                    <q-btn 
+                        no-caps 
+                        color="primary" 
+                        class="q-mr-sm full-width"
+                        type="submit"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                    >
+                        Save
+                    </q-btn>
+                </q-card-actions>
         </div>
     </q-form>
     <q-dialog v-model="dialog" position="right" full-height>
@@ -198,7 +230,16 @@ watch(selected, (modifier_item) => {
                         </template>
                     </q-input>
                 </q-card-section>
+                
             </q-form>
         </q-card>
     </q-dialog>
 </template>
+
+<style scoped>
+
+a {
+    text-decoration: none
+}
+
+</style>

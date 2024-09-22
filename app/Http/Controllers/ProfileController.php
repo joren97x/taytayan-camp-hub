@@ -45,10 +45,14 @@ class ProfileController extends Controller
      */
     public function update_profile_pic(Request $request): RedirectResponse
     {
-        dd($request);
+        // dd($request->profile_pic);
         $request->validate([
             'profile_pic' => 'required'
         ]);
+
+        $path = $request->profile_pic->store('profiles', 'public');
+
+        $request->user()->profile_pic = $path;
         $request->user()->save();
 
         return Redirect::route('profile.edit');

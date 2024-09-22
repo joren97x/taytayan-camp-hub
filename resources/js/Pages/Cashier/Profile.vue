@@ -8,8 +8,6 @@ defineOptions({
     layout: CashierLayout
 })
 
-
-
 </script>
 
 <template>

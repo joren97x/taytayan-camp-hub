@@ -2,6 +2,7 @@
 
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 defineProps({
     mustVerifyEmail: {
@@ -12,6 +13,7 @@ defineProps({
     },
 });
 
+const $q = useQuasar()
 const user = usePage().props.auth.user;
 
 const form = useForm({
@@ -25,9 +27,22 @@ const profilePicForm = useForm({
     hi: 'hi'
 })
 
+const submitProfilePicForm = () => {
+    profilePicForm.post(route('profile.update_profile_pic'), {
+        onSuccess: () => {
+            $q.notify('Profile Picture Updated')
+        }
+    })
+}
+
 const filePicker = ref(null);
+const imgPreview = ref('')
 const triggerFilePicker = () => {
     filePicker.value.pickFiles();
+}
+
+const onFileChange = (file) => {
+    imgPreview.value = URL.createObjectURL(file)
 }
 
 </script>
@@ -38,39 +53,43 @@ const triggerFilePicker = () => {
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Profile Picture</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
-                {{ profilePicForm }}
-                {{ profilePicForm.profile_pic }}
                 <div class="row q-col-gutter-md ">
+                    {{ $page.props.auth.user }}
                     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 justify-center flex">
                         <q-avatar size="100px">
-                            <q-img src="https://p16-tm-sg.tiktokmusic.me/img/tos-alisg-v-2102/04dc6545750e489bbd4228b640874126~c5_750x750.image"></q-img>
+                            <q-img :src="imgPreview ? imgPreview : `storage/${$page.props.auth.user.profile_pic}`" />
                         </q-avatar>
                     </div>
                     <div :class="['col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 flex', $q.screen.lt.md ? 'justify-center' : 'items-center']">
-                        <div>
-                            <q-btn 
-                                no-caps
-                                class="q-mr-md"
-                                type="submit" 
-                                @click="profilePicForm.patch(route('profile.update_profile_pic'))"
-                                v-if="profilePicForm.profile_pic"
-                                :disable="profilePicForm.processing"
-                                :loading="profilePicForm.processing"
-                            >
-                                Save
-                            </q-btn>
-                            <q-btn no-caps class="q-mr-md" v-else @click="triggerFilePicker">Edit</q-btn>
-    <!-- Delete Button -->
-                            <q-btn no-caps>Delete</q-btn>
-
-                            <!-- Hidden File Picker -->
-                            <q-file 
-                                v-model="profilePicForm.profile_pic"
-                                ref="filePicker"
-                                class="q-mt-md"
-                                style="display: none" 
-                            />
-                        </div>
+                        <q-file 
+                            v-model="profilePicForm.profile_pic"
+                            ref="filePicker"
+                            class="q-mt-md"
+                            style="display: none" 
+                            @update:model-value="onFileChange"
+                        />
+                    </div>
+                    <div class="col-12">
+                        <q-btn 
+                            no-caps
+                            class="q-mr-md"
+                            type="submit" 
+                            @click="submitProfilePicForm"
+                            v-if="profilePicForm.profile_pic"
+                            :disable="profilePicForm.processing"
+                            :loading="profilePicForm.processing"
+                            color="primary"
+                            label="Save"
+                        />
+                        <q-btn 
+                            no-caps 
+                            unelevated 
+                            color="primary" 
+                            class="q-mr-md" 
+                            v-else 
+                            @click="triggerFilePicker" 
+                            label="Change Profile Picture" 
+                        />
                     </div>
                 </div>
             </q-card-section>
@@ -122,10 +141,10 @@ const triggerFilePicker = () => {
                         method="post"
                         as="button"
                     >
-                        <q-btn outline no-caps color="blue" label="Resend Verification Email" />
+                        <q-btn outline no-caps color="primary" label="Resend Verification Email" />
                     </Link>
                 </q-banner>
-                <q-btn label="Save" type="submit" :loading="form.processing" :disable="form.processing" class="q-mt-sm" unelevated no-caps color="blue" />
+                <q-btn label="Save" type="submit" :loading="form.processing" :disable="form.processing" class="q-mt-sm" unelevated no-caps color="primary" />
             </q-card-section>
         </q-card>
     </q-form>

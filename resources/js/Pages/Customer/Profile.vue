@@ -2,8 +2,8 @@
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Head } from '@inertiajs/vue3'
-import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue'
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue'
+import UpdateProfileInformationForm from '../Profile/Partials/UpdateProfileInformationForm.vue'
+import UpdatePasswordForm from '../Profile/Partials/UpdatePasswordForm.vue'
 
 defineOptions({
     layout: CustomerLayout

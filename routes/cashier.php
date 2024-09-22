@@ -21,7 +21,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
         'index' => 'cashier.bookings.index'
     ]);
     Route::get('/cashier/tickets', [TicketOrderController::class, 'index'])->name('cashier.tickets.index');
-    Route::get('/cashier/account', [ViewController::class, 'account'])->name('cashier.account');
+    Route::get('/cashier/profile', [ViewController::class, 'profile'])->name('cashier.profile');
     Route::get('/cashier/inbox', [ViewController::class, 'inbox'])->name('cashier.inbox');
     Route::get('/cashier/inbox/{conversation}', [ConversationController::class, 'show'])->name('cashier.conversation.show');
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');

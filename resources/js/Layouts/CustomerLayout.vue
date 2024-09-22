@@ -85,19 +85,19 @@ watch(btnToggle, () => {
                         <!-- {{ $q.screen.gt.xs }} -->
                         <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
                             <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="images/product_logo.png"/>
+                                <q-img fit="cover" src="/images/product_logo.png"/>
                             </q-avatar>
                             Products
                         </Link>
                         <Link :href="route('customer.events.index')" class="text-subtitle2 navlink q-mr-xl">
                             <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="images/event_logo.png"/>
+                                <q-img fit="cover" src="/images/event_logo.png"/>
                             </q-avatar>
                             Events
                         </Link>
                         <Link :href="route('customer.facilities.index')" class="text-subtitle2 navlink q-mr-xl">
                             <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="images/facility_logo.png"/>
+                                <q-img fit="cover" src="/images/facility_logo.png"/>
                             </q-avatar>
                             Facilities
                         </Link>
@@ -149,7 +149,7 @@ watch(btnToggle, () => {
                                     <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
                                 </q-avatar>
                                 <q-menu class="q-pa-sm gt-sm" style="width: 300px">
-                                    <Link :href="route('profile.edit')" class="user-menu-link">
+                                    <Link :href="route('customer.profile')" class="user-menu-link">
                                         <q-item>
                                             <q-item-section top avatar>
                                                 <q-avatar color="primary" text-color="white">
@@ -177,7 +177,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                <q-img fit="cover" src="images/product_logo.png"/>
+                                <q-img fit="cover" src="/images/product_logo.png"/>
                             </q-avatar>
                             </q-item-section>
                             <q-item-section>Products</q-item-section>
@@ -187,7 +187,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                <q-img fit="cover" src="images/event_logo.png"/>
+                                <q-img fit="cover" src="/images/event_logo.png"/>
                             </q-avatar>
                             </q-item-section>
                             <q-item-section>Events</q-item-section>
@@ -197,7 +197,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                    <q-img fit="cover" src="images/facility_logo.png"/>
+                                    <q-img fit="cover" src="/images/facility_logo.png"/>
                                 </q-avatar>
                             </q-item-section>
                             <q-item-section>Facilities</q-item-section>
@@ -229,7 +229,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                    <q-img fit="cover" src="images/product_logo.png"/>
+                                    <q-img fit="cover" src="/images/product_logo.png"/>
                                 </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Products</q-item-section>
@@ -239,7 +239,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                    <q-img fit="cover" src="images/event_logo.png"/>
+                                    <q-img fit="cover" src="/images/event_logo.png"/>
                                 </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Events</q-item-section>
@@ -249,7 +249,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                        <q-img fit="cover" src="images/facility_logo.png"/>
+                                        <q-img fit="cover" src="/images/facility_logo.png"/>
                                     </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Facilities</q-item-section>
@@ -260,7 +260,7 @@ watch(btnToggle, () => {
                     <q-item @click="notificationMenu = true" clickable>
                         <q-item-section avatar>
                             <q-avatar size="md">
-                                <q-img fit="cover" src="images/facility_logo.png"/>
+                                <q-img fit="cover" src="/images/facility_logo.png"/>
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>Notifications</q-item-section>

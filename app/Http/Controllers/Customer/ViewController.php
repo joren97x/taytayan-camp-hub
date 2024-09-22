@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,6 +16,14 @@ class ViewController extends Controller
     public function home() {
         return Inertia::render('Customer/Index', [
             'products' => Product::with('modifier_groups.modifier_items')->get()
+        ]);
+    }
+
+    public function profile(Request $request)
+    {
+        return Inertia::render('Customer/Profile', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
         ]);
     }
 
