@@ -21,7 +21,7 @@ function shareOnFacebook() {
                     <q-img 
                         fill="cover" 
                         height="200px" 
-                        width="250px" 
+                        width="220px" 
                         :src="`/storage/${event.cover_photo}`"
                     />
                 </q-card-section>

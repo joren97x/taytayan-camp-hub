@@ -16,35 +16,31 @@ defineProps({
 
 <template>
     <Head  title="Events" />
-    <div class="row">
-        <div class="col-12">
-            <div class="gradient-overlay">
-                <q-img 
-                    style="width: 100%; height: 50vh;"
-                    class="rounded-borders" 
-                    src="https://cdn.evbstatic.com/s3-build/fe/build/images/39ac4703250a1d0fb15911c2c5f10174-generic_1_desktop.webp"
-                >
-                    <div 
-                        :class="['bg-transparent', $q.screen.lt.md ? ' q-pa-xs q-ma-xs' : ' q-pa-xl q-ma-md']" 
-                        style="z-index: 10; max-width: 500px; "
-                    >
-                        <div style="border-left: 5px solid #FF6F61; background-image: linear-gradient(to right, #FF6F61, transparent);" class="q-pa-sm q-mb-xs">
-                            Upcoming Event
-                        </div>
-                        <div class=" text-h3 text-weight-bold q-mb-sm">
-                            Under The Sky Disco Party SKibidi Gyatt
-                        </div>
-                        <div :class="['text-subtitle2', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
-                            Let's GO DISCO sa OLANGO this Wednesday hello annyeong
-                            The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient.
-                        </div>
-                        <div>
-                            <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
-                        </div>
-                    </div>
-                </q-img>
+    <div class="gradient-overlay">
+        <q-img 
+            style="width: 100%; height: 50vh;"
+            class="rounded-borders" 
+            src="https://cdn.evbstatic.com/s3-build/fe/build/images/39ac4703250a1d0fb15911c2c5f10174-generic_1_desktop.webp"
+        >
+            <div 
+                :class="['bg-transparent', $q.screen.lt.md ? ' q-pa-xs q-ma-xs' : ' q-pa-xl q-ma-md']" 
+                style="z-index: 10; max-width: 500px; "
+            >
+                <div style="border-left: 5px solid #FF6F61; background-image: linear-gradient(to right, #FF6F61, transparent);" class="q-pa-sm q-mb-xs">
+                    Upcoming Event
+                </div>
+                <div class=" text-h3 text-weight-bold q-mb-sm">
+                    Under The Sky Disco Party SKibidi Gyatt
+                </div>
+                <div :class="['text-subtitle2', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
+                    Let's GO DISCO sa OLANGO this Wednesday hello annyeong
+                    The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient.
+                </div>
+                <div>
+                    <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
+                </div>
             </div>
-        </div>
+        </q-img>
     </div>
     <div class="q-ma-md">
         <div class="text-h6 q-my-md">Upcoming Events</div>

@@ -2,7 +2,7 @@
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Link, useForm } from '@inertiajs/vue3'
-import { date as qdate } from 'quasar'
+import { date as qdate, useQuasar } from 'quasar'
 import { onMounted, ref, watch } from 'vue'
 
 defineOptions({
@@ -14,12 +14,14 @@ const props = defineProps({
     reserved_dates: Object
 })
 
+const $q = useQuasar()
 const form = useForm({
     facility_id: props.facility.id,
     date: {
         from: '',
         to: ''
-    }
+    },
+    guests: 1
 })
 
 onMounted(() => {
@@ -74,72 +76,160 @@ function options(date) {
     return !disabled_dates.value.includes(formattedIncomingDate);
 }
 
-const images = ref([
-    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-    'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-])
+const images = JSON.parse(props.facility.images)
+const slide = ref(0)
 
 </script>
 
 <template>
-    <div class="row">
+    <Head :title="facility.name" />
+    <div>
+        <q-carousel
+            swipeable
+            animated
+            v-model="slide"
+            infinite
+            navigation
+            transition-prev="slide-right"
+            transition-next="slide-left"
+            height="280px"
+            class="q-pa-none q-ma-none lt-md"
+        >
+            <q-carousel-slide :name="index" v-for="(image, index) in images" class="q-pa-none">
+                <q-img
+                    class="fit"
+                    :src="`/storage/${image}`"
+                />
+            </q-carousel-slide>
+            <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+                <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="white" flat round dense @click="onClick" />
+                <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
+            </template>
+            <template v-slot:control>
+                <q-carousel-control>
+                    <q-chip size="md">{{ slide + 1 }} / {{ images.length }}</q-chip>
+                </q-carousel-control>
+            </template>
+        </q-carousel>
+        <div class="row q-col-gutter-sm">
+            <div class="col-md-6">
+                <q-img src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200"></q-img>
+            </div>
+            <div class="col-md-6">
+                <div class="row q-col-gutter-sm">
+                    <div class="col-md-6" v-for="n in 4">
+                        <q-img src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200"></q-img>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="q-mx-md">
+        <div class="row q-col-gutter-md">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                <div class="text-h6 text-capitalize">{{ facility.name }}</div>
+                <div class="text-subtitle1">{{ facility.description }}</div>
+                <q-separator class="q-my-md" />
+                <div class="text-h6">About This Place</div>
+                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
+                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                </div>
+                <q-separator class="q-my-md" />
+                <div class="text-h6">What This Place Offers</div>
+                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
+                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                </div>
+            </div>
+            <div class="gt-sm col-md-4 col-lg-4 col-xl-4">
+                <q-card>
+                    <q-card-section class="q-pb-xs"> 
+                        <span class="text-subtitle1">P{{ facility.price }}</span>
+                        night
+                    </q-card-section>
+                    <q-card-section class="row q-py-none">
+                        <div class="col-6">
+                            <q-card flat bordered class="no-border-radius">
+                                <q-card-section>
+                                    <div class="text-caption">Check-in</div>
+                                    <div>9/23/2024</div>
+                                </q-card-section>
+                            </q-card>
+                        </div>
+                        <div class="col-6">
+                            <q-card flat bordered class="no-border-radius">
+                                <q-card-section>
+                                    <div class="text-caption">Check-out</div>
+                                    <div>9/26/2024</div>
+                                </q-card-section>
+                            </q-card>
+                        </div>
+                        <q-card class="col-12" bordered flat>
+                            <q-card-section class="row">
+                                <div class="col-6 items-center flex">
+                                    <div>Guests</div>
+                                </div>
+                                <div class="col-6 justify-end items-center flex">
+                                    <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="form.guests--"></q-btn>
+                                    <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
+                                    <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
+                                </div>
+                            </q-card-section>
+                        </q-card>
+                    </q-card-section>
+                    <q-card-actions>
+                        <q-btn class="full-width" color="primary" rounded no-caps>Book Now</q-btn>
+                    </q-card-actions>
+                </q-card>
+            </div>
+        </div>
+        <div class="lt-md absolute-bottom">
+                <q-card bordered flat>
+                    <q-card-section class="row">
+                        <div class="col-5 items-center flex">
+                            <span class="text-subtitle1">P{{ facility.price  }} night</span>
+                            <q-btn>Dates</q-btn>
+                        </div>
+                        <div class="col-7 justify-end items-center flex">
+                            Guests
+                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4 q-ml-sm" @click="form.guests--"></q-btn>
+                            <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
+                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
+                            <q-btn color="primary" class="q-ml-sm" rounded no-caps>Book Now</q-btn>
+                        </div>
+                    </q-card-section>
+                </q-card>
+            </div>
+    </div>
+    <!-- <div class="row">
         <div class="col-8">
-            {{ facility }}
             <q-img v-for="image in JSON.parse(facility.images)" :src="`../storage/${image}`" style="width: 150px; height: 150px">
             </q-img>
             <hr>
-            {{ form }}
             <hr>
         </div>
         <div class="col-4">
             <div class="q-pa-md">
-                <p class="text-red">// what if one day ra... </p>
-                <q-date
+                <p class="text-red">// what if one day ra... </p> -->
+                <!-- <q-date
                     v-model="date"
                     landscape
                     range
                     :options="options"
                 >
-                </q-date>
-            </div>
-            {{ date }}
+                </q-date> -->
+            <!-- </div>
             <Link :href="route('facility.checkout')" :data="form.data()">
                 <q-btn unelevated color="primary">
                     Reserve
                 </q-btn>
             </Link>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
 </template>
 
 <style scoped>
-.gallery {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 10px;
-}
-
-.gallery-item {
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.gallery-item.main {
-  grid-row: span 2;
-}
-
-.gallery-item q-img {
-  height: 100px;
-  object-fit: cover;
-}
-
-.show-more-btn {
-  margin-top: 10px;
-}
 
 /* @media (max-width: 600px) {
   .gallery {

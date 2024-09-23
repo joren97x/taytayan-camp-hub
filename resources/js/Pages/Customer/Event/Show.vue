@@ -35,7 +35,7 @@ const attendees = ref(1)
             />
         </div>
 
-        <div class="row q-ma-md">
+        <div class="row q-ma-xs q-col-gutter-md">
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="text-subtitle1">
                     {{ date.formatDate(event.date, 'dddd, MMMM D') }}
@@ -80,9 +80,9 @@ const attendees = ref(1)
                             <div>{{ event.admission_fee }}</div>
                         </div>
                         <div class="col-6 justify-end items-center flex">
-                            <q-btn icon="remove" round unelevated class="bg-grey-4" @click="attendees--"></q-btn>
+                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="attendees--"></q-btn>
                             <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
-                            <q-btn icon="add" round unelevated class="bg-grey-4" @click="attendees++"></q-btn>
+                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="attendees++"></q-btn>
                         </div>
                     </q-card-section>
                     <!-- <q-item>
@@ -108,39 +108,32 @@ const attendees = ref(1)
                 </q-card>
             </div>
         </div>
-        <div class="q-pa-md bg-white fixed-bottom lt-md">
-            <div class="row q-pa-none q-col-gutter-md">
-                <div class="col-8">
-                    <q-item class="q-pa-none">
-                        <q-item-section>
-                            <div>
-                                Admission
-                            </div>
-                            <div>
-                                {{ event.admission_fee }}
-                            </div>
-                        </q-item-section>
-                        <q-item-section side>
-                            <q-btn-group>
-                                <q-btn icon="remove" @click="attendees--"></q-btn>
-                                {{ attendees }}
-                                <q-btn icon="add" @click="attendees++"></q-btn>
-                            </q-btn-group>
-                        </q-item-section>
-                    </q-item>
+        <q-card class="bg-white fixed-bottom lt-md" bordered>
+            <!-- <div class="row q-pa-none q-col-gutter-md"> -->
+            <q-card-section class="row">
+                <div class="col-3">
+                    <div>Admission</div>
+                    <div>{{ event.admission_fee }}</div>
                 </div>
-                <div class="col-4 self-center">
+                <div class="col-9 justify-end items-center flex">
+                    <q-btn icon="remove" round unelevated class="bg-grey-4" @click="attendees--"></q-btn>
+                    <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
+                    <q-btn icon="add" round unelevated class="bg-grey-4 q-mr-sm" @click="attendees++"></q-btn>
                     <Link :href="route('event.checkout')" :data="{ event_id: event.id, attendees }">
                         <q-btn
                             label="Checkout"
                             color="primary"
-                            class="full-width"
                             no-caps
+                            rounded
                         />  
                     </Link>
                 </div>
-            </div>
-        </div>
+            </q-card-section>
+                <!-- <div class="col-4 self-center"> -->
+                    
+                <!-- </div> -->
+            <!-- </div> -->
+        </q-card>
 
         <!-- <div class="row q-px-md">
             <div :class="[$q.screen.width >= 700 ? 'col-8' : 'col-12']">
