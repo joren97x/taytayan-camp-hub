@@ -24,7 +24,7 @@ defineProps({
             <div class="text-h6">Lorem Ipsum</div>
 
             <div class="row q-col-gutter-md">
-                <div class="col-3" v-for="facility in facilities">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for="facility in facilities">
                     <Link :href="route('customer.facilities.show', facility.id)">
                         <FacilityCard :facility="facility" />
                     </Link>

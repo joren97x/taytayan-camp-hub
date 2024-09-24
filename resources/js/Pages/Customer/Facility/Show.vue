@@ -1,7 +1,7 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { Link, useForm } from '@inertiajs/vue3'
+import { Link, useForm, Head } from '@inertiajs/vue3'
 import { date as qdate, useQuasar } from 'quasar'
 import { onMounted, ref, watch } from 'vue'
 
@@ -79,6 +79,8 @@ function options(date) {
 const images = JSON.parse(props.facility.images)
 const slide = ref(0)
 
+const dialog = ref(false)
+
 </script>
 
 <template>
@@ -125,30 +127,37 @@ const slide = ref(0)
         </div>
     </div>
     <div class="q-mx-md">
-        <div class="row q-col-gutter-md">
-            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                <div class="text-subtitle1">{{ facility.description }}</div>
-                <q-separator class="q-my-md" />
-                <div class="text-h6">About This Place</div>
-                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
-                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+        <div :class="['row q-col-gutter-md', $q.screen.lt.md ? '' : 'reverse']">
+            <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
+                <div class="lt-md q-mb-xs">
+                    <div class="text-h6 text-capitalize">{{ facility.name }}</div>
+                    <div class="text-subtitle1" >
+                        <q-chip :icon="amenity.icon" v-for="amenity in JSON.parse(facility.amenities)">{{ amenity.name }}</q-chip>
+                    </div>
                 </div>
-                <q-separator class="q-my-md" />
-                <div class="text-h6">What This Place Offers</div>
-                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
-                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
-                </div>
-            </div>
-            <div class="gt-sm col-md-4 col-lg-4 col-xl-4">
                 <q-card>
                     <q-card-section class="q-pb-xs"> 
                         <span class="text-subtitle1">P{{ facility.price }}</span>
                         night
                     </q-card-section>
                     <q-card-section class="row q-py-none">
+                        <q-menu v-model="dialog" persistent anchor="bottom middle" self="top middle" class="gt-sm"> 
+                            <q-card style="width: 400px;">
+                                <q-card-section>
+                                    <q-date
+                                        v-model="date"
+                                        range
+                                        :options="options"
+                                        style="width: 100%;"
+                                        :subtitle="`${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}`"
+                                    >
+                                    </q-date>
+                                </q-card-section>
+                                <q-card-actions>
+                                    <q-btn @click="dialog = false">forda close</q-btn>
+                                </q-card-actions>
+                            </q-card>
+                        </q-menu>
                         <div class="col-6">
                             <q-card flat bordered class="no-border-radius">
                                 <q-card-section>
@@ -156,6 +165,7 @@ const slide = ref(0)
                                     <div>9/23/2024</div>
                                 </q-card-section>
                             </q-card>
+                            
                         </div>
                         <div class="col-6">
                             <q-card flat bordered class="no-border-radius">
@@ -183,24 +193,43 @@ const slide = ref(0)
                     </q-card-actions>
                 </q-card>
             </div>
-        </div>
-        <div class="lt-md absolute-bottom">
-                <q-card bordered flat>
-                    <q-card-section class="row">
-                        <div class="col-5 items-center flex">
-                            <span class="text-subtitle1">P{{ facility.price  }} night</span>
-                            <q-btn>Dates</q-btn>
-                        </div>
-                        <div class="col-7 justify-end items-center flex">
-                            Guests
-                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4 q-ml-sm" @click="form.guests--"></q-btn>
-                            <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
-                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
-                            <q-btn color="primary" class="q-ml-sm" rounded no-caps>Book Now</q-btn>
-                        </div>
-                    </q-card-section>
-                </q-card>
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                <div class="gt-sm">
+                    <div class="text-h6 text-capitalize">{{ facility.name }}</div>
+                    <q-chip :icon="amenity.icon" v-for="amenity in JSON.parse(facility.amenities)">{{ amenity.name }}</q-chip>
+                </div>
+                <q-separator class="q-my-md" />
+                <div class="text-h6">About This Place</div>
+                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
+                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                </div>
+                <q-separator class="q-my-md" />
+                <div class="text-h6">What This Place Offers</div>
+                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
+                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                </div>
             </div>
+            
+        </div>
+        <!-- <div class="lt-md absolute-bottom">
+            <q-card bordered flat>
+                <q-card-section class="row">
+                    <div class="col-5 items-center flex">
+                        <span class="text-subtitle1">P{{ facility.price  }} night</span>
+                        <q-btn>Dates</q-btn>
+                    </div>
+                    <div class="col-7 justify-end items-center flex">
+                        Guests
+                        <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4 q-ml-sm" @click="form.guests--"></q-btn>
+                        <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
+                        <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
+                        <q-btn color="primary" class="q-ml-sm" rounded no-caps>Book Now</q-btn>
+                    </div>
+                </q-card-section>
+            </q-card>
+        </div> -->
     </div>
     <!-- <div class="row">
         <div class="col-8">
@@ -227,6 +256,40 @@ const slide = ref(0)
             </Link>
         </div> -->
     <!-- </div> -->
+    <q-dialog 
+        v-model="dialog" 
+        maximized  
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        position="bottom"
+        class="lt-md"
+    >
+        <q-card style="width: 100%; ">
+            <q-card-section class="row justify-between">
+                    <div class="col-10">
+                        <span class="text-h6">Lorem ipsum dolor sit amtet</span>
+                        <br>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
+                    </div>
+                    <div>
+                        <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
+                    </div>
+                </q-card-section>
+            <q-card-section>
+                <q-date
+                    v-model="date"
+                    range
+                    :options="options"
+                    style="width: 100%;"
+                    :subtitle="`${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}`"
+                >
+                </q-date>
+            </q-card-section>
+            <q-card-actions>
+                <q-btn class="full-width" color="primary" no-caps rounded>Save</q-btn>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>
 
 <style scoped>
