@@ -19,7 +19,7 @@ const form = useForm({
     attendees: props.attendees,
     event_id: props.event.id,
     user_id: page.props.auth.user.id,
-    payment_method: 'gcash',
+    payment_method: 'right_now',
     amount: props.event.admission_fee * props.attendees,
     ticket_holders: []
 })
@@ -60,12 +60,152 @@ const addAttendee = () => {
 <template>
     
     <Head title="Checkout" />
-    <div>
-        <Link :href="route('customer.events.index')">
-            <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated class="q-mx-xl q-my-md" />
-        </Link>
+    <div class="bg-grey-2">
+        <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
+            <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
+               <q-avatar size="lg">
+                    <q-img src="../logo.png" fill="cover" />
+                </q-avatar>
+                    Taytayan CAMP
+                <Link :href="route('customer.cart.index')" class="absolute-left">
+                    <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
+                </Link>
+            </div>
+        </q-card>
+        <div style="max-width: 1280px; margin: 0 auto;">
+            <div class="q-mt-sm">
+                <div class="row q-col-gutter-md">
+                    <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                        <q-card flat bordered>
+                            <q-card-section>
+                                <div class="text-h6 text-center">Checkout</div>
+                                <div class="text-h6">Event Details</div>
+                                <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
+                                    <div id="map" style="height: 250px; width: 100%;">
+                                        {{ event }}
+                                    </div>
+                                    <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
+                                </div>
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-icon name="home"></q-icon>
+                                    </q-item-section>
+                                    <q-item-section class="text-h6">
+                                        Event Location
+                                        <q-item-label caption>{{ event.location }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                                <q-separator/>
+                                <q-list>
+                                    <div class="text-h6">
+                                        Attendees
+                                    </div>
+                                    <p class="text-green">need to have some error handling here!!!</p>
+                                    <q-list-item v-for="(attendee, index) in form.ticket_holders">
+                                        Attendee {{ index }}
+                                        <q-btn color="red" @click="removeAttendee(index)">Remove</q-btn>
+                                        <div class="row q-col-gutter-md">
+                                            <div class="col-6">
+                                                <q-input 
+                                                    label="Name" 
+                                                    v-model="form.ticket_holders[index].name" 
+                                                    filled
+                                                    :error="!!form.errors[`ticket_holders.${index}.name`]"
+                                                    :error-message="form.errors[`ticket_holders.${index}.name`]"
+                                                />
+                                            </div>
+                                            <div class="col-6">
+                                                <q-input 
+                                                    label="Email Address" 
+                                                    v-model="form.ticket_holders[index].email" 
+                                                    filled
+                                                    :error="!!form.errors[`ticket_holders.${index}.email`]"
+                                                    :error-message="form.errors[`ticket_holders.${index}.email`]"
+                                                />
+                                            </div>
+                                        </div>
+                                    </q-list-item>
+                                    <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn>
+                                </q-list>
+                                <q-separator class="q-my-md" />
+                                <div class="text-h6 q-mb-md">Pay With</div>
+                                <q-list>
+                                    <q-card 
+                                        bordered flat 
+                                        class="q-pa-sm q-mb-sm" 
+                                        @click="form.payment_method = 'right_now'" 
+                                        :style="form.payment_method == 'right_now' ? 'border: 1px solid black' : ''"
+                                    >
+                                        <q-item>
+                                            <q-item-section avatar>
+                                                <q-avatar square>
+                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                </q-avatar>
+                                                <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label>Right Now</q-item-label>
+                                                <q-item-label caption>E wallet, gcash, debit card etcc..</q-item-label>
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-card>
+                                    <q-card 
+                                        bordered flat 
+                                        class="q-pa-sm q-mt-sm" 
+                                        @click="form.payment_method = 'walk_in'" 
+                                        :style="form.payment_method == 'walk_in' ? 'border: 1px solid black' : ''"
+                                    >
+                                        <q-item>
+                                            <q-item-section avatar>
+                                                <q-avatar square>
+                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                </q-avatar>
+                                                <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label>Walk In</q-item-label>
+                                                <q-item-label caption>Lorem ipsum dolor sit amet.</q-item-label>
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-card>
+                                </q-list>
+                                <div class="text-h6 q-my-md">Lorem, ipsum dolor.</div>
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-img
+                                            :src="`/storage/${event.cover_photo}`"
+                                            height="80px"
+                                            width="100px"
+                                        />
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ event.title }}</q-item-label>
+                                        <q-item-label caption>P{{ event.admission_fee }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <q-item-label>{{ event.price * attendees }}</q-item-label>
+                                        <q-item-label>{{ attendees }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                        <q-card bordered flat>
+                            <q-card-section>
+                                <div class="text-h6">Ticket Order or what</div>  {{ form.amount }}
+                            </q-card-section>
+                            <q-card-actions>
+                                <q-btn class="full-width" no-caps rounded color="primary">Checkout</q-btn>
+                            </q-card-actions>
+                        </q-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div>
         <div class="q-mb-xl ">
-            {{ attendees }}
             <div class="row q-col-gutter-xl">
                 <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12">
                     <q-card flat bordered>
@@ -73,21 +213,11 @@ const addAttendee = () => {
                             <q-item>
                                 <q-item-section class="text-h6 text-capitalize">Event Details</q-item-section>
                             </q-item>
-                            <q-item v-show="form.mode == 'delivery'">
-                                <q-item-section avatar>
-                                    <q-icon name="location_on"></q-icon>
-                                </q-item-section>
-                                <q-item-section>
-                                    {{ $page.props.auth.user.phone_number }}
-                                    <q-item-label>{{ $page.props.auth.user.address }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
                             <div>
                                 <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
                                     <div id="map" style="height: 250px; width: 100%;">
                                         {{ event }}
                                     </div>
-                                    <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
                                 </div>
                                 <q-item>
                                     <q-item-section avatar>
@@ -104,9 +234,7 @@ const addAttendee = () => {
                                 <div class="text-h6">
                                     Attendees
                                 </div>
-                                <!-- :error="form.errors.email ? true : false"
-                                :error-message="form.errors.email" -->
-                                <!-- {{ form.errors.ticket_holders.0.name }} -->
+                              
                                 <p class="text-green">need to have some error handling here!!!</p>
                                 <q-list-item v-for="(attendee, index) in form.ticket_holders">
                                     Attendee {{ index }}
@@ -161,15 +289,7 @@ const addAttendee = () => {
                                 </q-item>
                             </q-list>
                             <q-separator class="q-my-md" />
-                            <!-- <q-item>
-                                <q-item-section class="text-h6">Order Summary</q-item-section>
-                                <q-item-section side>
-                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ items.length }} items</q-chip>
-                                </q-item-section>
-                            </q-item>
-                            <q-list>
-                                <FoodCardItem :item="item" v-for="(item, index) in items" :key="index" />
-                            </q-list> -->
+                           
                         </q-card-section>
                     </q-card>
                 </div>
@@ -207,7 +327,7 @@ const addAttendee = () => {
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 </template>
 

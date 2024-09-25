@@ -14,8 +14,9 @@ class BookingController extends Controller
      */
     public function index()
     {
+        
         return Inertia::render('Customer/Facility/Bookings', [
-            'bookings' => Booking::where('user_id', auth()->user()->id)->get()
+            'bookings' => Booking::where('user_id', auth()->id())->get()
         ]);
     }
 

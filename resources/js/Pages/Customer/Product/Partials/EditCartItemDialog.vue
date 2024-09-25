@@ -44,7 +44,7 @@ const submit = () => {
     form.put(route('customer.cart.update', props.cart_item.id), {
         onSuccess: () => {
             emit('close')
-            $q.notify(props.product.name + ' Added To Cart')
+            $q.notify('Food Updated')
         }
     })
 }
@@ -90,7 +90,13 @@ function onDialogShow() {
 </script>
 
 <template>
-    <q-dialog full-width v-model="show" @show="onDialogShow()">
+    <q-dialog 
+        v-model="show" 
+        @show="onDialogShow()"
+        :maximized="$q.screen.width <= 700"  
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
         <q-card class="q-px-md">
             <q-form @submit="submit">
                 <q-item>
@@ -102,22 +108,25 @@ function onDialogShow() {
                     </q-item-section>
                 </q-item>
                 <div class="row q-col-gutter-md">
-                    <div class="col-5" style="position: relative;">
-                        <q-img :src="`/images/${cart_item.product.photo}`" style="position: sticky; top: 50px;" />
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5" style="position: relative;">
+                        <q-img 
+                            fit="contain"
+                            :src="`/storage/${cart_item.product.photo}`" 
+                            style="max-width: 100%; height: 40vh; position: sticky;"
+                        />
                     </div>
-                    <div class="col-7">
-                        <p>
-                            <span class="text-h5">
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl7">
+                        <div>
+                            <span class="text-h6">
                                 {{ cart_item.product.name }}
                             </span>
                             <br>
-                            <span class="text-h6 text-weight-light">
+                            <span class="text-subtitle1">
                                 P{{ cart_item.product.price }}
                             </span>
-                        </p>
-                        <p>
+                            <br>
                             {{ cart_item.product.description }}
-                        </p>
+                        </div>
                         <q-separator/>
                         <div v-for="(modifier_group, index) in modifierGroups" :key="index">
                             <q-item>
@@ -162,7 +171,7 @@ function onDialogShow() {
                             </q-item-section>
                         </q-item>
                         <q-input type="textarea" v-model="form.special_instruction" filled placeholder="Add a note"></q-input>
-                        <q-item>
+                        <!-- <q-item>
                             <q-item-section class="text-h6">
                                 Quantity
                             </q-item-section>
@@ -181,7 +190,30 @@ function onDialogShow() {
                             :disable="form.processing"
                         >
                             Add to cart
-                        </q-btn>
+                        </q-btn> -->
+                        <q-card flat>
+                            <q-card-section class="row">
+                                <div class="col-4 items-center flex">
+                                    <div>Quantity</div>
+                                </div>
+                                <div class="col-8 justify-end items-center flex">
+                                    <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="form.quantity--"></q-btn>
+                                    <span class="q-mx-md text-subtitle1">{{ form.quantity }}</span>
+                                    <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.quantity++"></q-btn>
+                                    <q-btn
+                                        type="submit"
+                                        no-caps
+                                        rounded
+                                        class="q-ml-sm"
+                                        color="primary"
+                                        :loading="form.processing"
+                                        :disable="form.processing"
+                                    >
+                                        Update
+                                    </q-btn>
+                                </div>
+                            </q-card-section>
+                        </q-card>
                     </div>
                 </div>
             </q-form>

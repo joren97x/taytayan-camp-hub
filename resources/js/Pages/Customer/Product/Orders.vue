@@ -2,7 +2,7 @@
 
 import { ref, watch, onMounted } from 'vue'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import OrderCardItem from '@/Components/Customer/Product/OrderCardItem.vue'
+import OrderCardItem from './Partials/OrderCardItem.vue'
 import { Head, router, Link } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
@@ -47,8 +47,9 @@ watch(tab, () => {
                 <div 
                     class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9" 
                     v-for="order in orders"
-
                 >
+                    {{ order.mode }}
+                    {{ order.payment_method }}
                     <OrderCardItem :order="order"/>
                 </div>
                 <!-- <div class="col-12 items-center self-center flex " style="height: 50vh;" v-else>

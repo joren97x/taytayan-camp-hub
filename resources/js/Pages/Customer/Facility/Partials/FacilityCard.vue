@@ -35,7 +35,7 @@ const slide = ref(0)
                     arrows
                     height="280px"
                 >
-                    <q-carousel-slide id="carousel-container" :name="index" class="q-pa-none bg-red" v-for="(image, index) in images">
+                    <q-carousel-slide id="carousel-container" :name="index" class="q-pa-none" v-for="(image, index) in images">
                         <q-img 
                             class="fit"
                             :src="`/storage/${image}`"
@@ -53,11 +53,13 @@ const slide = ref(0)
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Endicott_College_Stoneridge_Hall_empty_dorm_room.jpg/800px-Endicott_College_Stoneridge_Hall_empty_dorm_room.jpg"
                 ></q-img> -->
             </q-card-section>
-            <q-card-section class="q-py-xs q-px-md">
-                <div class="text-subtitle1">{{ facility.name }}</div>
-                <div>{{ facility.amenities }}</div>
-                <div>P{{ facility.price }}</div>
-            </q-card-section>
+            <Link :href="route('customer.facilities.show', facility.id)">
+                <q-card-section class="q-py-xs q-px-md">
+                    <div class="text-subtitle1">{{ facility.name }}</div>
+                    <div>{{ facility.amenities }}</div>
+                    <div>P{{ facility.price }}</div>
+                </q-card-section>
+            </Link>
         </q-card>
     </div>
 </template>

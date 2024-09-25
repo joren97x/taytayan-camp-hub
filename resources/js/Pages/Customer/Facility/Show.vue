@@ -31,7 +31,30 @@ onMounted(() => {
 const date = ref(null)
 let disabled_dates = ref([])
 
-watch(date, () => {
+// watch(date, () => {
+//     if(date.value == null) {
+//         return
+//     }
+//     let checkInDate = date.value.from
+//     const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
+//     console.log(diff)
+//     let pwede = true
+//     for(let i = 0; i < diff; i++) {
+//         if(!options(checkInDate)) {
+//             pwede = false
+//             date.value = null
+//             alert('Please choose a date that doesnt overlap')
+//             break;
+//             console.log('dili pwede')
+//         }
+//             checkInDate = qdate.addToDate(checkInDate, { days: 1})
+//     }
+//     if(pwede) {
+//         form.date = date.value
+//     }
+// })
+
+const setDates = () => {
     if(date.value == null) {
         return
     }
@@ -45,15 +68,20 @@ watch(date, () => {
             date.value = null
             alert('Please choose a date that doesnt overlap')
             break;
-            console.log('dili pwede')
         }
-            checkInDate = qdate.addToDate(checkInDate, { days: 1})
+        checkInDate = qdate.addToDate(checkInDate, { days: 1})
     }
     if(pwede) {
         form.date = date.value
+        dialog.value = false
     }
+}
 
-})
+const clearDates = () => {
+    date.value = null
+    form.date.from = ''
+    form.date.to = ''
+}
 
 function processReservedDates() {
     if (props.reserved_dates) {
@@ -126,13 +154,17 @@ const dialog = ref(false)
             </div>
         </div>
     </div>
-    <div class="q-mx-md">
+    <div class="q-ma-md">
         <div :class="['row q-col-gutter-md', $q.screen.lt.md ? '' : 'reverse']">
             <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                 <div class="lt-md q-mb-xs">
                     <div class="text-h6 text-capitalize">{{ facility.name }}</div>
                     <div class="text-subtitle1" >
-                        <q-chip :icon="amenity.icon" v-for="amenity in JSON.parse(facility.amenities)">{{ amenity.name }}</q-chip>
+                        <q-chip 
+                            v-for="amenity in JSON.parse(facility.amenities)"
+                            :icon="amenity.icon" 
+                            :label="amenity.name"
+                        />
                     </div>
                 </div>
                 <q-card>
@@ -140,10 +172,20 @@ const dialog = ref(false)
                         <span class="text-subtitle1">P{{ facility.price }}</span>
                         night
                     </q-card-section>
-                    <q-card-section class="row q-py-none">
-                        <q-menu v-model="dialog" persistent anchor="bottom middle" self="top middle" class="gt-sm"> 
-                            <q-card style="width: 400px;">
-                                <q-card-section>
+                    <q-card-section class="row q-py-none" @click="dialog = true">
+                        <!-- <q-menu v-model="dialog" persistent class="gt-sm" anchor="bottom left" self="center right"> 
+                            <q-card style="width: 500px;">
+                                <q-card-section class="row justify-between">
+                                    <div class="col-10">
+                                        <span class="text-h6">Lorem ipsum dolor sit amtet</span>
+                                        <br>
+                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
+                                    </div>
+                                    <div>
+                                        <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
+                                    </div>
+                                </q-card-section>
+                                <q-card-section class="q-py-none">
                                     <q-date
                                         v-model="date"
                                         range
@@ -153,28 +195,40 @@ const dialog = ref(false)
                                     >
                                     </q-date>
                                 </q-card-section>
-                                <q-card-actions>
-                                    <q-btn @click="dialog = false">forda close</q-btn>
+                                <q-card-actions class="row q-col-gutter-md">
+                                    <div class="col-6" v-if="form.date.from && form.date.to">
+                                        <q-btn class="full-width" color="accent" no-caps rounded @click="clearDates()">Clear Dates</q-btn>
+                                    </div>
+                                    <div :class="form.date.from && form.date.to ? 'col-6' : 'col-12'">
+                                        <q-btn class="full-width" color="primary" no-caps rounded @click="setDates">Save</q-btn>
+                                    </div>
                                 </q-card-actions>
                             </q-card>
-                        </q-menu>
+                        </q-menu> -->
                         <div class="col-6">
                             <q-card flat bordered class="no-border-radius">
                                 <q-card-section>
-                                    <div class="text-caption">Check-in</div>
-                                    <div>9/23/2024</div>
+                                    <div >Check-in</div>
+                                    <div :class="['text-caption', form.date.to ? '' : 'text-red']">
+                                        {{ form.date.from ? '9/23/2024' : 'Required' }}
+                                    </div>
                                 </q-card-section>
+                                
                             </q-card>
-                            
                         </div>
                         <div class="col-6">
                             <q-card flat bordered class="no-border-radius">
                                 <q-card-section>
-                                    <div class="text-caption">Check-out</div>
-                                    <div>9/26/2024</div>
+                                    <div >Check-out</div>
+                                    <div :class="['text-caption', form.date.to ? '' : 'text-red']">
+                                        {{ form.date.to ? '9/23/2024' : 'Required' }}
+                                    </div>
                                 </q-card-section>
                             </q-card>
                         </div>
+                    </q-card-section>
+                    <q-card-section class="row q-py-none">
+                        
                         <q-card class="col-12" bordered flat>
                             <q-card-section class="row">
                                 <div class="col-6 items-center flex">
@@ -189,14 +243,20 @@ const dialog = ref(false)
                         </q-card>
                     </q-card-section>
                     <q-card-actions>
-                        <q-btn class="full-width" color="primary" rounded no-caps>Book Now</q-btn>
+                        <Link :href="route('facility.checkout')" class="full-width" :data="form.data()">
+                            <q-btn class="full-width" color="primary" rounded no-caps>Book Now</q-btn>
+                        </Link>
                     </q-card-actions>
                 </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="gt-sm">
                     <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                    <q-chip :icon="amenity.icon" v-for="amenity in JSON.parse(facility.amenities)">{{ amenity.name }}</q-chip>
+                    <q-chip 
+                        :icon="amenity.icon" 
+                        v-for="amenity in JSON.parse(facility.amenities)" 
+                        :label="amenity.name"
+                    />
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">About This Place</div>
@@ -211,82 +271,47 @@ const dialog = ref(false)
                     ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
                 </div>
             </div>
-            
         </div>
-        <!-- <div class="lt-md absolute-bottom">
-            <q-card bordered flat>
-                <q-card-section class="row">
-                    <div class="col-5 items-center flex">
-                        <span class="text-subtitle1">P{{ facility.price  }} night</span>
-                        <q-btn>Dates</q-btn>
-                    </div>
-                    <div class="col-7 justify-end items-center flex">
-                        Guests
-                        <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4 q-ml-sm" @click="form.guests--"></q-btn>
-                        <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
-                        <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
-                        <q-btn color="primary" class="q-ml-sm" rounded no-caps>Book Now</q-btn>
-                    </div>
-                </q-card-section>
-            </q-card>
+        <!-- <div style="height: 700px;">
+            bruh
+            <h1>HIII</h1>
         </div> -->
     </div>
-    <!-- <div class="row">
-        <div class="col-8">
-            <q-img v-for="image in JSON.parse(facility.images)" :src="`../storage/${image}`" style="width: 150px; height: 150px">
-            </q-img>
-            <hr>
-            <hr>
-        </div>
-        <div class="col-4">
-            <div class="q-pa-md">
-                <p class="text-red">// what if one day ra... </p> -->
-                <!-- <q-date
-                    v-model="date"
-                    landscape
-                    range
-                    :options="options"
-                >
-                </q-date> -->
-            <!-- </div>
-            <Link :href="route('facility.checkout')" :data="form.data()">
-                <q-btn unelevated color="primary">
-                    Reserve
-                </q-btn>
-            </Link>
-        </div> -->
-    <!-- </div> -->
     <q-dialog 
         v-model="dialog" 
-        maximized  
+        :maximized="$q.screen.lt.md"  
         transition-show="slide-up"
         transition-hide="slide-down"
-        position="bottom"
-        class="lt-md"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
         <q-card style="width: 100%; ">
             <q-card-section class="row justify-between">
-                    <div class="col-10">
-                        <span class="text-h6">Lorem ipsum dolor sit amtet</span>
-                        <br>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
-                    </div>
-                    <div>
-                        <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
-                    </div>
-                </q-card-section>
+                <div class="col-10">
+                    <span class="text-h6">Lorem ipsum dolor sit amtet</span>
+                    <br>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
+                </div>
+                <div>
+                    <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
+                </div>
+            </q-card-section>
             <q-card-section>
                 <q-date
                     v-model="date"
                     range
                     :options="options"
                     style="width: 100%;"
-                    :subtitle="`${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}`"
+                    :subtitle="form.date.to && form.date.from ? `${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}` : 'Please choose dates'"
                 >
                 </q-date>
             </q-card-section>
-            <q-card-actions>
-                <q-btn class="full-width" color="primary" no-caps rounded>Save</q-btn>
+            <q-card-actions class="row q-col-gutter-md">
+                <div class="col-6" v-if="form.date.from && form.date.to">
+                    <q-btn class="full-width" color="accent" no-caps rounded @click="clearDates()">Clear Dates</q-btn>
+                </div>
+                <div :class="form.date.from && form.date.to ? 'col-6' : 'col-12'">
+                    <q-btn class="full-width" color="primary" no-caps rounded @click="setDates">Save</q-btn>
+                </div>
             </q-card-actions>
         </q-card>
     </q-dialog>

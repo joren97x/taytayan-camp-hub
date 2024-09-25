@@ -21,14 +21,6 @@ class Order extends Model
     const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
 
-    // Payment method constants
-    const PAYMENT_METHOD_GCASH = 'gcash';
-    const PAYMENT_METHOD_CARD = 'card';
-    const PAYMENT_METHOD_PAYMAYA = 'paymaya';
-    const PAYMENT_METHOD_GRAB_PAY = 'grab_pay';
-    const PAYMENT_METHOD_WALK_IN = 'walk_in';
-    const PAYMENT_METHOD_CASH_ON_DELIVERY = 'cash_on_delivery';
-
     // Mode constants
     const MODE_DELIVERY = 'delivery';
     const MODE_PICKUP = 'pickup';
@@ -46,15 +38,7 @@ class Order extends Model
                 self::STATUS_DELIVERED,
                 self::STATUS_COMPLETED,
                 self::STATUS_CANCELLED,
-            ],
-            'payment_methods' => [
-                self::PAYMENT_METHOD_GCASH,
-                self::PAYMENT_METHOD_CARD,
-                self::PAYMENT_METHOD_PAYMAYA,
-                self::PAYMENT_METHOD_GRAB_PAY,
-                self::PAYMENT_METHOD_WALK_IN,
-                self::PAYMENT_METHOD_CASH_ON_DELIVERY,
-            ],
+            ]
         ];
     }
 

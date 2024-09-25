@@ -27,14 +27,7 @@ return new class extends Migration
                 Order::STATUS_CANCELLED,
                 Order::STATUS_COMPLETED
             ]);
-            $table->enum('payment_method', [
-                Order::PAYMENT_METHOD_GCASH,
-                Order::PAYMENT_METHOD_CARD,
-                Order::PAYMENT_METHOD_PAYMAYA,
-                Order::PAYMENT_METHOD_GRAB_PAY,
-                Order::PAYMENT_METHOD_WALK_IN,
-                Order::PAYMENT_METHOD_CASH_ON_DELIVERY
-            ]);
+            $table->string('payment_method');
             $table->enum('mode', [
                 Order::MODE_DELIVERY,
                 Order::MODE_PICKUP

@@ -16,7 +16,7 @@ class CartProduct extends Model
         'cart_id',
         'product_id',
         'quantity',
-        'special_instruction',
+        'special_instruction'
     ];
 
     public function modifiers()

@@ -29,14 +29,14 @@ const submit = () => {
 
 const handleRadioSelection = (modifierGroupId, modifierItemId) => {
   // Remove any previously selected item for this modifier group
-  form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
-  
-  // Add the newly selected item
-  form.modifiers.push({
-    modifier_group_id: modifierGroupId,
-    modifier_item_id: modifierItemId,
-    quantity: 1
-  });
+    form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
+    
+    // Add the newly selected item
+    form.modifiers.push({
+        modifier_group_id: modifierGroupId,
+        modifier_item_id: modifierItemId,
+        quantity: 1
+    });
 };
 
 // Handle checkbox selection when required_quantity > 1
@@ -107,8 +107,11 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
                     <div class="col-12 col-md-5 col-lg-5 col-xl-5 col-sm-12 col-xs-12" style="position: relative;">
                         <!-- so kuhaa ang modifier group id and then check pilay required quantity then if 1 ra kay poydi if nalapas
                         kay dili na  -->
-                        <q-img fill="cover" :src="`/storage/${product.photo}`" style="position: sticky; top: 30px;" height="100%">
-                        </q-img>
+                        <q-img
+                            fit="contain"
+                            :src="`/storage/${product.photo}`" 
+                            style="max-width: 100%; height: 40vh; position: sticky;"
+                        />
                         <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-md lt-md"></q-btn>
                     </div>
                     <div class="col-12 col-md-7 col-lg-7 col-xl-7 col-sm-12 col-xs-12">
@@ -190,65 +193,43 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
                                 </q-item>
                             </q-list>
                         </div>
-                        <q-item>
-                            <q-item-section class="text-h6">
-                                Special instructions
-                            </q-item-section>
-                            <q-item-section side>
-                                <q-chip :class="$q.dark.isActive ? 'bg-grey-8' : ''">Optional</q-chip>
-                            </q-item-section>
-                        </q-item>
-                        <q-input type="textarea" class="q-mx-md" v-model="form.special_instruction" filled placeholder="Add a note"></q-input>
-                        <!-- <q-item>
-                            <q-item-section class="text-h6">
-                                Quantity
-                            </q-item-section>
-                        </q-item>
-                        <q-btn-group style="align-items: center;">
-                            <q-btn round icon="remove" @click="form.quantity--" />
-                            <span style="margin: 0;">{{ form.quantity }}</span>
-                            <q-btn round icon="add" @click="form.quantity++" />
-                        </q-btn-group>
-                        <q-btn 
-                            class="full-width q-my-lg" 
-                            type="submit" 
-                            no-caps 
-                            color="blue"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                        >
-                            Add to cart
-                        </q-btn> -->
-                        <div :class="['row q-col-gutter-md bg-white ', $q.screen.width <= 700 ? 'fixed-bottom' : '']">
-                            <div class="col-8">
-                                <q-item>
-                                    <q-item-section>
-                                        <div class="text-subtitle1">
-                                            Quantity
-                                        </div>
-                                        <!-- <div>
-                                            {{ product.price }}
-                                        </div> -->
-                                    </q-item-section>
-                                    <q-item-section side>
-                                        <q-btn-group style="align-items: center;">
-                                            <q-btn round icon="remove" @click="form.quantity--" />
-                                            <span style="margin: 0;">{{ form.quantity }}</span>
-                                            <q-btn round icon="add" @click="form.quantity++" />
-                                        </q-btn-group>
-                                    </q-item-section>
-                                </q-item>
-                            </div>
-                            <div class="col-4 self-center">
-                                <q-btn
-                                    label="Add To Cart"
-                                    color="primary"
-                                    class="full-width"
-                                    type="submit"
-                                    no-caps
-                                    :loading="form.processing"
-                                    :disable="form.processing"
-                                />  
+                        <div class="q-mx-md">
+                            <q-item class="q-pa-none">
+                                <q-item-section class="text-h6">
+                                    Special instructions
+                                </q-item-section>
+                                <q-item-section side>
+                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-8' : ''">Optional</q-chip>
+                                </q-item-section>
+                            </q-item>
+                            <q-input type="textarea" v-model="form.special_instruction" filled placeholder="Add a note"></q-input>
+                            <div :class="['row q-col-gutter-md bg-white q-mt-xs', $q.screen.width <= 700 ? 'fixed-bottom' : '']">
+                                <div class="col-8">
+                                    <q-card flat>
+                                        <q-card-section class="row">
+                                            <div class="col-6 items-center flex">
+                                                <div>Quantity</div>
+                                            </div>
+                                            <div class="col-6 justify-end items-center flex">
+                                                <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="form.quantity--"></q-btn>
+                                                <span class="q-mx-md text-subtitle1">{{ form.quantity }}</span>
+                                                <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.quantity++"></q-btn>
+                                            </div>
+                                        </q-card-section>
+                                    </q-card>
+                                </div>
+                                <div class="col-4 self-center">
+                                    <q-btn
+                                        label="Add To Cart"
+                                        color="primary"
+                                        class="full-width"
+                                        type="submit"
+                                        rounded
+                                        no-caps
+                                        :loading="form.processing"
+                                        :disable="form.processing"
+                                    />  
+                                </div>
                             </div>
                         </div>
                     </div>

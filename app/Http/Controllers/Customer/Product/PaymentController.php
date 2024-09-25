@@ -17,8 +17,11 @@ class PaymentController extends Controller
     //
     public function success($mode, $payment_method, $cart_id, CartService $cartService) 
     {
+        // dd(session('checkout_id'));
+        // dd($checkout_session);
+        // dd($request->get('cart_id'));
         $cart = Cart::find($cart_id);
-
+        
         $order = Order::create([
             'user_id' => auth()->id(),
             'cart_id' => $cart->id,
@@ -26,6 +29,12 @@ class PaymentController extends Controller
             'payment_method' => $payment_method,
             'mode' => $mode
         ]);
+
+        if($payment_method == 'right_now') {
+            $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
+            $order->payment_method = $checkout_session->payment_method_used;
+            $order->save();
+        }
 
         $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
         $order->cart_products = $result['cart_products'];
@@ -46,8 +55,14 @@ class PaymentController extends Controller
         return redirect(route('customer.orders.index'));
     }
 
-    public function pay(Request $request) 
+    public function pay(Request $request, CartService $cartService) 
     {
+
+        if($request->payment_method != 'right_now') {
+            // return $this->success($request->payment_method, $request->cart_id, $request->mode, $cartService);
+            return $this->success($request->mode, $request->payment_method, $request->cart_id, $cartService);
+        }
+
         $cart = Cart::find($request->cart_id);
         // dd($cart);
         $line_items = [];
@@ -93,17 +108,21 @@ class PaymentController extends Controller
                 'grab_pay', 
                 'paymaya'
             ],
-            'success_url' => route('product.checkout.success', 
-                [
-                    'mode' => $request->mode,
-                    'payment_method' => $request->payment_method,
-                    'cart_id' => $cart->id
-                ]),
+            'success_url' => route('product.checkout.success', [
+                'mode' => $request->mode,
+                'payment_method' => $request->payment_method,
+                'cart_id' => $cart->id
+            ]),
             'statement_descriptor' => 'Laravel Paymongo Library',
-            'metadata' => [
-                'Key' => 'Value'
+            'metadata' =>  [
+                'mode' => $request->mode,
+                'payment_method' => $request->payment_method,
+                'cart_id' => $cart->id
             ]
         ]);
+
+        session(['checkout_id' => $checkout->id]);
+
         return Inertia::location($checkout->checkout_url);
     }
 

@@ -30,6 +30,43 @@ const submit = () => {
 </script>
 
 <template>
+    <Head title="Checkout" />
+    <div class="bg-grey-2">
+        <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
+            <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
+               <q-avatar size="lg">
+                    <q-img src="../logo.png" fill="cover" />
+                </q-avatar>
+                    Taytayan CAMP
+                <Link :href="route('customer.cart.index')" class="absolute-left">
+                    <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
+                </Link>
+            </div>
+        </q-card>
+        <div style="max-width: 1280px; margin: 0 auto;">
+            <div class="q-mt-sm">
+                <div class="row q-col-gutter-md">
+                    <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                        <q-card flat bordered>
+                            <q-card-section>
+                                <div class="text-h6 text-center">Checkout</div>
+                            </q-card-section>
+                        </q-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row justify-between lt-md">
+            <div class="col-12 text-center center text-h6">
+                Checkout
+                <Link :href="route('customer.cart.index')" class="absolute-left">
+                    <q-btn label="Go back" icon="arrow_back" color="blue" flat no-caps unelevated />
+                </Link>
+            </div>
+        </div>
+
     <div class="row q-col-gutter-md q-ma-lg">
         <div class="col-8">
             <q-list>

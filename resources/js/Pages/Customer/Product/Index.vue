@@ -4,8 +4,8 @@ import { Head, Link } from '@inertiajs/vue3'
 import { ref, onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import ProductCard from '@/Components/Customer/Product/ProductCard.vue'
-import FeaturedProductCard from '@/Components/Customer/Product/FeaturedProductCard.vue'
+import ProductCard from './Partials/ProductCard.vue'
+import FeaturedProductCard from './Partials/FeaturedProductCard.vue'
 import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
 
 defineOptions({

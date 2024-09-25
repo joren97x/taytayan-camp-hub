@@ -7,8 +7,9 @@ import { usePage, useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
-import EditCartItemDialog from '@/Components/Customer/Product/EditCartItemDialog.vue'
+// import EditCartItemDialog from '@/Components/Customer/Product/EditCartItemDialog.vue'
 import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
+import EditCartItemDialog from './Partials/EditCartItemDialog.vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -194,11 +195,10 @@ const columns = [
         :google_maps_api_key="google_maps_api_key" 
         v-if="$page.props.auth.user"
     />
-    {{ cart }}
-    <div class="row q-mb-xl q-col-gutter-md">
+    <div class="row">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
-                class="my-sticky-header-column-table q-mb-xl"
+                class="my-sticky-header-column-table q-mx-md"
                 bordered
                 flat
                 :rows="items"
@@ -206,9 +206,9 @@ const columns = [
                 row-key="name"
             >
                 <template v-slot:top>
-                        <span class="text-h6">Cart</span> 
-                        <q-space/>
-                        <span class="text-subtitle1">3 items</span>
+                    <span class="text-h6">Cart</span> 
+                    <q-space/>
+                    <span class="text-subtitle1">3 items</span>
                 </template>
                 <template v-slot:body-cell-photo="props">
                     <q-td :props="props">
@@ -254,8 +254,7 @@ const columns = [
                         <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)">Edit</q-btn>
                         <q-btn no-caps 
                             unelevated color="red" flat 
-                            :loading="deleteCartItemForm.processing"
-                            :disable="deleteCartItemForm.processing"
+                            
                             @click="deleteCartItem(props.row.id)"
                         >
                             Remove
@@ -270,7 +269,7 @@ const columns = [
             </q-table>
         </div>
         <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-            <q-card>
+            <q-card bordered flat :class="['q-mx-md', $q.screen.lt.md ? 'q-mt-md' : '']">
                 <q-card-section>
                     <div class="text-h6">Order Summary</div>
                     <q-separator></q-separator>
@@ -295,7 +294,7 @@ const columns = [
                 <q-card-section vertical>
                     <q-separator class="q-mb-sm"></q-separator>
                     <!-- <Link :href="route('product-checkout')"> -->
-                        <q-btn color="primary" @click="isAdressSet" class="full-width" no-caps>Go To Checkout</q-btn>
+                        <q-btn color="primary" @click="isAdressSet" class="full-width" no-caps rounded>Go To Checkout</q-btn>
                     <!-- </Link> -->
                 </q-card-section>
             </q-card>

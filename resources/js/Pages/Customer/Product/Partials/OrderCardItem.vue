@@ -2,7 +2,7 @@
 import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { computed, onMounted, ref } from 'vue'
-import FoodCardItem from './FoodCardItem.vue'
+// import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
 const $q = useQuasar()
@@ -246,8 +246,44 @@ console.log(order.value)
                         </template>
                     </q-stepper>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="product in order.cart_products">
-                            <FoodCardItem :item="product" />
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="item in order.cart_products">
+                            <!-- <FoodCardItem :item="product" /> -->
+                            <q-item >
+                                        <q-item-section avatar>
+                                            <q-img 
+                                                :src="`/storage/${item.product.photo}`"
+                                                height="70px"
+                                                width="70px"
+                                                fit="contain"
+                                                class="q-mx-md"
+                                            />
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>
+                                                {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
+                                            </q-item-label>
+                                            <template 
+                                                v-for="(modifier, index) in item.grouped_modifiers" 
+                                                :key="index"
+                                            >
+                                                <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
+                                                <q-item-label 
+                                                    caption 
+                                                    v-for="(modifier_item, index) in modifier.modifier_items" 
+                                                    :key="index"
+                                                >
+                                                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
+                                                </q-item-label>
+                                                
+                                            </template>
+                                            <q-item-label caption v-if="item.special_instruction">
+                                                Note: {{ item.special_instruction }}
+                                            </q-item-label>
+                                        </q-item-section>
+                                        <q-item-section side>
+                                            P{{ item.total }}
+                                        </q-item-section>
+                                    </q-item>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                             Subtotal: {{ order.subtotal }}

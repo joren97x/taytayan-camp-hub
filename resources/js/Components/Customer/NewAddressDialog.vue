@@ -132,7 +132,7 @@ async function map() {
         @show="initializeAutocomplete"
         :maximized="$q.screen.lt.sm"
         style="z-index: 999;"
-         transition-show="slide-up"
+        transition-show="slide-up"
         transition-hide="slide-down"
     >
         <q-card 

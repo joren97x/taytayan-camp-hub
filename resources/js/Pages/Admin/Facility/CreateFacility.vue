@@ -56,11 +56,7 @@ function deleteAmenity(amenity) {
 
 const handleFileAdded = (files) => {
     console.log('wtf')
-  // Assign the uploaded files to form.images
-//   console.log(files)
-//   files.forEach(el => console.log(el))
     files.forEach(el => form.images.push(el))
-//   form.images.push(files)
 console.log(form.images)
 }
 
