@@ -1,6 +1,7 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import DatePicker from './Partials/DatePicker.vue'
 import { Link, useForm, Head } from '@inertiajs/vue3'
 import { date as qdate, useQuasar } from 'quasar'
 import { onMounted, ref, watch } from 'vue'
@@ -24,12 +25,12 @@ const form = useForm({
     guests: 1
 })
 
-onMounted(() => {
-    processReservedDates()
-})
+// onMounted(() => {
+//     processReservedDates()
+// })
 
-const date = ref(null)
-let disabled_dates = ref([])
+// const date = ref(null)
+// let disabled_dates = ref([])
 
 // watch(date, () => {
 //     if(date.value == null) {
@@ -54,60 +55,75 @@ let disabled_dates = ref([])
 //     }
 // })
 
-const setDates = () => {
-    if(date.value == null) {
-        return
-    }
-    let checkInDate = date.value.from
-    const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
-    console.log(diff)
-    let pwede = true
-    for(let i = 0; i < diff; i++) {
-        if(!options(checkInDate)) {
-            pwede = false
-            date.value = null
-            alert('Please choose a date that doesnt overlap')
-            break;
-        }
-        checkInDate = qdate.addToDate(checkInDate, { days: 1})
-    }
-    if(pwede) {
-        form.date = date.value
-        dialog.value = false
-    }
-}
+// const setDates = () => {
+//     if(date.value == null) {
+//         return
+//     }
+//     let checkInDate = date.value.from
+//     const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
+//     console.log(diff)
+//     let pwede = true
+//     for(let i = 0; i < diff; i++) {
+//         if(!options(checkInDate)) {
+//             pwede = false
+//             date.value = null
+//             alert('Please choose a date that doesnt overlap')
+//             break;
+//         }
+//         checkInDate = qdate.addToDate(checkInDate, { days: 1})
+//     }
+//     if(pwede) {
+//         form.date = date.value
+//         dialog.value = false
+//     }
+// }
 
-const clearDates = () => {
-    date.value = null
-    form.date.from = ''
-    form.date.to = ''
-}
+// const clearDates = () => {
+//     date.value = null
+//     form.date.from = ''
+//     form.date.to = ''
+// }
 
-function processReservedDates() {
-    if (props.reserved_dates) {
-        for (let i = 0; i < props.reserved_dates.length; i++) {
-            let checkInDate = props.reserved_dates[i].check_in
-            const checkOutDate = props.reserved_dates[i].check_out
+// function processReservedDates() {
+//     if (props.reserved_dates) {
+//         for (let i = 0; i < props.reserved_dates.length; i++) {
+//             let checkInDate = props.reserved_dates[i].check_in
+//             const checkOutDate = props.reserved_dates[i].check_out
 
-            disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
-            const diff = qdate.getDateDiff(checkOutDate, checkInDate, 'days')
-            for(let j = 0; j < diff; j++) {
-                checkInDate = qdate.addToDate(checkInDate, { days: 1})
-                disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
-            }
-        }
-    }
-}
+//             disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
+//             const diff = qdate.getDateDiff(checkOutDate, checkInDate, 'days')
+//             for(let j = 0; j < diff; j++) {
+//                 checkInDate = qdate.addToDate(checkInDate, { days: 1})
+//                 disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
+//             }
+//         }
+//     }
+// }
 
-function options(date) {
-    const formattedIncomingDate = qdate.formatDate(new Date(date), 'YYYY-MM-DD');
-    return !disabled_dates.value.includes(formattedIncomingDate);
-}
+// function options(date) {
+//     const formattedIncomingDate = qdate.formatDate(new Date(date), 'YYYY-MM-DD');
+//     return !disabled_dates.value.includes(formattedIncomingDate);
+// }
 
 const images = JSON.parse(props.facility.images)
 const slide = ref(0)
-
 const dialog = ref(false)
+
+const book = () => {
+    if(form.date.from && form.date.to) {
+        form.get(route('facility.checkout'))
+    }
+    else {
+        alert('Check in and Check out dates are required')
+    }
+}
+
+const setBookingDates = (dates) => {
+    console.log(dates)
+    form.date.from = dates.check_in
+    form.date.to = dates.check_out
+    dialog.value = false
+}
 
 </script>
 
@@ -243,9 +259,7 @@ const dialog = ref(false)
                         </q-card>
                     </q-card-section>
                     <q-card-actions>
-                        <Link :href="route('facility.checkout')" class="full-width" :data="form.data()">
-                            <q-btn class="full-width" color="primary" rounded no-caps>Book Now</q-btn>
-                        </Link>
+                            <q-btn class="full-width" color="primary" @click="book" rounded no-caps>Book Now</q-btn>
                     </q-card-actions>
                 </q-card>
             </div>
@@ -277,7 +291,7 @@ const dialog = ref(false)
             <h1>HIII</h1>
         </div> -->
     </div>
-    <q-dialog 
+    <!-- <q-dialog 
         v-model="dialog" 
         :maximized="$q.screen.lt.md"  
         transition-show="slide-up"
@@ -314,8 +328,9 @@ const dialog = ref(false)
                 </div>
             </q-card-actions>
         </q-card>
-    </q-dialog>
-</template>
+    </q-dialog> -->
+    <DatePicker :dialog="dialog" :reserved_dates="reserved_dates" @setBookingDates="(dates) => setBookingDates(dates)" @close="dialog = false" />
+</template> 
 
 <style scoped>
 

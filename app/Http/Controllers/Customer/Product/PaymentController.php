@@ -15,22 +15,22 @@ use Luigel\Paymongo\Facades\Paymongo;
 class PaymentController extends Controller
 {
     //
-    public function success($mode, $payment_method, $cart_id, CartService $cartService) 
+    public function success(Request $request, CartService $cartService) 
     {
         // dd(session('checkout_id'));
         // dd($checkout_session);
         // dd($request->get('cart_id'));
-        $cart = Cart::find($cart_id);
+        $cart = Cart::find($request->cart_id);
         
         $order = Order::create([
             'user_id' => auth()->id(),
             'cart_id' => $cart->id,
             'status' => Order::STATUS_PENDING,
-            'payment_method' => $payment_method,
-            'mode' => $mode
+            'payment_method' => $request->payment_method,
+            'mode' => $request->mode
         ]);
 
-        if($payment_method == 'right_now') {
+        if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
             $order->payment_method = $checkout_session->payment_method_used;
             $order->save();
@@ -60,7 +60,8 @@ class PaymentController extends Controller
 
         if($request->payment_method != 'right_now') {
             // return $this->success($request->payment_method, $request->cart_id, $request->mode, $cartService);
-            return $this->success($request->mode, $request->payment_method, $request->cart_id, $cartService);
+            // return $this->success($request->mode, $request->payment_method, $request->cart_id, $cartService);
+            return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
         }
 
         $cart = Cart::find($request->cart_id);
@@ -108,11 +109,7 @@ class PaymentController extends Controller
                 'grab_pay', 
                 'paymaya'
             ],
-            'success_url' => route('product.checkout.success', [
-                'mode' => $request->mode,
-                'payment_method' => $request->payment_method,
-                'cart_id' => $cart->id
-            ]),
+            'success_url' => route('product.checkout.success') . '?' . http_build_query($request->all()),
             'statement_descriptor' => 'Laravel Paymongo Library',
             'metadata' =>  [
                 'mode' => $request->mode,

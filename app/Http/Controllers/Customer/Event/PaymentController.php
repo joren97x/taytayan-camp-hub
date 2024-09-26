@@ -43,8 +43,7 @@ class PaymentController extends Controller
 
             TicketHolder::create([
                 'ticket_id' => $ticket->id,
-                'name' => $ticket_holder['name'],
-                'email' => $ticket_holder['email']
+                'name' => $ticket_holder['name']
             ]);
 
 
@@ -85,7 +84,6 @@ class PaymentController extends Controller
             'amount' => 'required|numeric|min:1',
             'ticket_holders' => 'required|array|min:1',
             'ticket_holders.*.name' => 'required|string|max:255',
-            'ticket_holders.*.email' => 'required|email|max:255',
         ]);
 
         // dd($request->all());
@@ -146,7 +144,6 @@ class PaymentController extends Controller
                 'Key' => 'Value'
             ]
         ]);
-    
         return Inertia::location($checkout->checkout_url);
     }
 }

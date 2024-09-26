@@ -18,7 +18,9 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
 
-        Booking::create([
+       
+        dd($request);
+        $booking = Booking::create([
             'facility_id' => $request->facility_id,
             'user_id' => $request->user()->id,
             'payment_method' => $request->payment_method,
@@ -28,6 +30,14 @@ class PaymentController extends Controller
             'total' => $request->total
         ]);
 
+        
+        if($request->payment_method == 'right_now') {
+            dd('stop');
+            $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
+            $booking->payment_method = $checkout_session->payment_method_used;
+            $booking->save();
+        }
+
         return redirect(route('customer.bookings.index'));
 
     }
@@ -36,6 +46,8 @@ class PaymentController extends Controller
     {
         // return Redirect::back();
         // dd(url()->previous());
+
+
         $request->validate([
             'facility_id' => 'required',
             'payment_method' => 'required',
@@ -44,14 +56,20 @@ class PaymentController extends Controller
             'check_out' => 'required',
             'total' => 'required'
         ]);
+        // dd($request);
+        if($request->payment_method == 'walk_in') {
+            // dd('annyeong');
+            return redirect(route('facility.checkout.success') . '?' . http_build_query($request->all()));
+        }
+        // dd($request);
 
         $facility = Facility::find($request->facility_id);
 
         $line_items = [
             [
                 'name' => $facility->name,
-                'quantity' => 4,
-                'amount' => (double)$facility->price * 100,
+                'quantity' => 1,
+                'amount' => (double)$request->total * 100,
                 'currency' => 'PHP',
                 'description' => "uhh basta description, e change lang or what in the future",
                 'images' => [
@@ -86,6 +104,7 @@ class PaymentController extends Controller
                 'Key' => 'Value'
             ]
         ]);
+        session(['checkout_id' => $checkout->id]);
 
         return Inertia::location($checkout->checkout_url);
 

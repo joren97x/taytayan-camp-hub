@@ -135,7 +135,7 @@ watch(mode, () => {
             </div>
         </q-card>
         <div style="max-width: 1280px; margin: 0 auto;">
-            <div class="q-mt-sm">
+            <div class="q-my-md">
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <q-card flat bordered>

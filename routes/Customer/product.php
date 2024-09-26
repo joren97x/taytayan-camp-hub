@@ -32,7 +32,7 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
         'update' => 'customer.cart.update'
     ]);
     Route::put('/cart/update-cart-quantity/{id}', [CartController::class, 'update_cart_item_quantity'])->name('customer.cart.update_cart_item_quantity');
-    Route::get('/product-checkout-success/{mode}/{payment_method}/{cart_id}', [PaymentController::class, 'success'])->name('product.checkout.success');
+    Route::get('/product-checkout-success', [PaymentController::class, 'success'])->name('product.checkout.success');
     Route::post('/product-pay', [PaymentController::class, 'pay'])->name('product.pay');
     Route::post('/product-rating', [ProductRatingController::class, 'store'])->name('customer.product_rating.store');
 

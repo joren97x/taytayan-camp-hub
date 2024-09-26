@@ -15,21 +15,27 @@ const $q = useQuasar()
 const page = usePage()
 console.log(props.event.admission_fee)
 console.log(props.attendees)
+const attendees = ref(props.attendees)
+const admission_fee = ref(props.event.admission_fee)
 const form = useForm({
     attendees: props.attendees,
     event_id: props.event.id,
     user_id: page.props.auth.user.id,
     payment_method: 'right_now',
-    amount: props.event.admission_fee * props.attendees,
+    amount: 0,
     ticket_holders: []
 })
 
-    for(var i = 0; i < props.attendees; i++) {
-        form.ticket_holders.push({
-            name: '',
-            email: ''
-        })
-    }
+for(var i = 0; i < props.attendees; i++) {
+    form.ticket_holders.push({
+        name: '',
+        email: ''
+    })
+}
+
+const setAmount = () => {
+    form.amount = attendees.value * admission_fee.value
+}
 
 const submit = () => {
     form.post(route('event.pay'), {
@@ -44,15 +50,19 @@ const submit = () => {
 }
 
 const removeAttendee = (index) => {
+    attendees.value--
+    setAmount()
     console.log('should be removed')
     form.ticket_holders.splice(index, 1)
 }
 
 const addAttendee = () => {
+    attendees.value++
     form.ticket_holders.push({
         name: '',
         email: ''
     })
+    setAmount()
 }
 
 </script>
@@ -73,18 +83,24 @@ const addAttendee = () => {
             </div>
         </q-card>
         <div style="max-width: 1280px; margin: 0 auto;">
-            <div class="q-mt-sm">
+            <div class="q-my-md">
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <q-card flat bordered>
                             <q-card-section>
+                                {{ form }}
                                 <div class="text-h6 text-center">Checkout</div>
                                 <div class="text-h6">Event Details</div>
-                                <div class="rounded-borders bg-grey q-mt-sm" style="height: auto">
-                                    <div id="map" style="height: 250px; width: 100%;">
-                                        {{ event }}
-                                    </div>
-                                    <!-- <img :src="`https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key=${google_maps_api_key}`" alt=""> -->
+                                <div class="full-width rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
+                                    <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
+                                    <!-- Foreground image (not blurred) -->
+                                    <q-img 
+                                        :src="`/storage/${event.cover_photo}`"
+                                        class="rounded-borders content-wrapper" 
+                                        height="100%"
+                                        fit="contain"
+                                        style="position: relative; z-index: 2;" 
+                                    />
                                 </div>
                                 <q-item>
                                     <q-item-section avatar>
@@ -100,31 +116,25 @@ const addAttendee = () => {
                                     <div class="text-h6">
                                         Attendees
                                     </div>
-                                    <p class="text-green">need to have some error handling here!!!</p>
-                                    <q-list-item v-for="(attendee, index) in form.ticket_holders">
-                                        Attendee {{ index }}
-                                        <q-btn color="red" @click="removeAttendee(index)">Remove</q-btn>
-                                        <div class="row q-col-gutter-md">
-                                            <div class="col-6">
-                                                <q-input 
-                                                    label="Name" 
-                                                    v-model="form.ticket_holders[index].name" 
-                                                    filled
-                                                    :error="!!form.errors[`ticket_holders.${index}.name`]"
-                                                    :error-message="form.errors[`ticket_holders.${index}.name`]"
-                                                />
+                                    <div class="row q-col-gutter-sm">
+                                        <div class="col-6" v-for="(attendee, index) in form.ticket_holders">
+                                            <div class="row items-center q-pa-none">
+                                                <div class="col-6">
+                                                    Attendee
+                                                </div>
+                                                <div class="col-6 justify-end flex">
+                                                    <q-btn @click="removeAttendee(index)" flat round icon="close"></q-btn>
+                                                </div>
                                             </div>
-                                            <div class="col-6">
-                                                <q-input 
-                                                    label="Email Address" 
-                                                    v-model="form.ticket_holders[index].email" 
-                                                    filled
-                                                    :error="!!form.errors[`ticket_holders.${index}.email`]"
-                                                    :error-message="form.errors[`ticket_holders.${index}.email`]"
-                                                />
-                                            </div>
+                                            <q-input 
+                                                label="Full Name" 
+                                                v-model="form.ticket_holders[index].name" 
+                                                filled
+                                                :error="!!form.errors[`ticket_holders.${index}.name`]"
+                                                :error-message="form.errors[`ticket_holders.${index}.name`]"
+                                            />
                                         </div>
-                                    </q-list-item>
+                                    </div>
                                     <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn>
                                 </q-list>
                                 <q-separator class="q-my-md" />
@@ -193,10 +203,20 @@ const addAttendee = () => {
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <q-card bordered flat>
                             <q-card-section>
-                                <div class="text-h6">Ticket Order or what</div>  {{ form.amount }}
+                                <div class="text-h6">Order Summary</div>
+                                <q-separator class="q-my-sm"/>
+                                <div>{{ event.date }} - {{ event.start_time }}</div>
+                                <div class="row">
+                                    <div class=" col">{{ form.attendees }} Admission / eTicket</div>
+                                    <div class=" col text-right">{{ form.amount }}</div>
+                                </div>
+                                <div class="row text-h6">
+                                    <div class=" col">Total</div>
+                                    <div class=" col text-right">{{ form.amount }}</div>
+                                </div>
                             </q-card-section>
                             <q-card-actions>
-                                <q-btn class="full-width" no-caps rounded color="primary">Checkout</q-btn>
+                                <q-btn class="full-width" no-caps rounded color="primary" @click="submit">Checkout</q-btn>
                             </q-card-actions>
                         </q-card>
                     </div>
@@ -331,24 +351,29 @@ const addAttendee = () => {
 
 </template>
 
+
 <style scoped>
 
-#map-container {
-  position: relative;
-}
-
-#map {
-  width: 100%;
-  height: 500px; /* or any desired height */
-}
-
-#map-buttons {
+/* CSS IS HARD FRRR(i used chatGPT XD) */
+/* Blurred background */
+.blurred-background {
+   /* Background image you want to blur */
+  background-size: cover;
+  background-position: center;
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(8px); /* Apply blur effect */
+  z-index: 1; /* Keep it behind the foreground content */
 }
+
+/* Foreground image (clear, no blur) */
+.content-wrapper {
+  position: relative;
+  z-index: 2; /* Ensure it's on top of the blurred background */
+}
+
 
 </style>
