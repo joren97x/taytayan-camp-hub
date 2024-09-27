@@ -18,23 +18,29 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
 
-       
-        dd($request);
+        // dd($request->query('payment_method'));
         $booking = Booking::create([
-            'facility_id' => $request->facility_id,
+            'facility_id' => $request->query('facility_id'),
             'user_id' => $request->user()->id,
-            'payment_method' => $request->payment_method,
-            'guests' => $request->guests,
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-            'total' => $request->total
+            'payment_method' => $request->query('payment_method'),
+            'guests' => $request->query('guests'),
+            'check_in' => $request->query('check_in'),
+            'check_out' => $request->query('check_out'),
+            'total' => $request->query('total')
         ]);
+        // 'facility_id',
+        // 'user_id',
+        // 'total',
+        // 'status',
+        // 'payment_Method',
+        // 'check_in',
+        // 'check_out',
+        // 'guests'
 
-        
         if($request->payment_method == 'right_now') {
-            dd('stop');
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
             $booking->payment_method = $checkout_session->payment_method_used;
+            $booking->status = Booking::STATUS_CONFIRMED;
             $booking->save();
         }
 

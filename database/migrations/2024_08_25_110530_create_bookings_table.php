@@ -21,16 +21,11 @@ return new class extends Migration
                 Booking::STATUS_CANCELLED,
                 Booking::STATUS_CHECKED_IN,
                 Booking::STATUS_CHECKED_OUT,
+                Booking::STATUS_COMPLETE,
                 Booking::STATUS_PENDING,
                 Booking::STATUS_CONFIRMED
             ])->default(Booking::STATUS_PENDING);
-            $table->enum('payment_method', [
-                Booking::PAYMENT_METHOD_CARD,
-                Booking::PAYMENT_METHOD_GCASH,
-                Booking::PAYMENT_METHOD_GRAB_PAY,
-                Booking::PAYMENT_METHOD_PAYMAYA,
-                Booking::PAYMENT_METHOD_WALK_IN
-            ]);
+            $table->string('payment_method');
             $table->timestamp('check_in')->nullable();
             $table->timestamp('check_out')->nullable();
             $table->integer('guests');

@@ -1,9 +1,8 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import EditUserDialog from './Partials/EditUserDialog.vue'
 import DeleteUserDialog from './Partials/DeleteUserDialog.vue'
@@ -18,6 +17,7 @@ defineProps({
     user_roles: Object
 })
 
+const filter = ref('')
 const $q = useQuasar()
 const showPassword = ref(false)
 const showPassword2 = ref(false)
@@ -57,9 +57,8 @@ const showEditUserDialog = (user) => {
 }
 
 const columns = [
-    { name: 'id', label: 'Id', align: 'center', field: 'id', sortable: true },
-    { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
-    { name: 'fullname', align: 'center', label: 'Fullname', field: 'fullname', sortable: true },
+    // { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
+    { name: 'user', align: 'center', label: 'User', sortable: true },
     { name: 'email', align: 'center', label: 'Email', field: 'email', sortable: true },
     { name: 'contact', align: 'center', label: 'Contact', field: 'contact', sortable: true },
     { name: 'role', align: 'center', label: 'Role', field: 'role', sortable: true },
@@ -70,42 +69,77 @@ const columns = [
 
 <template>
     <Head title="User Management" />
-    <q-table
-        class="my-sticky-header-column-table"
-        flat
-        :rows="users"
-        :columns="columns"
-        row-key="name"
-    >
-        <template v-slot:body-cell-fullname="props">
-            <q-td :props="props">
-                {{ props.row.first_name + ' ' + props.row.last_name }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-contact="props">
-            <q-td :props="props">
-                {{ props.row.phone_number }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td :props="props">
-                <q-btn no-caps unelevated @click="showEditUserDialog(props.row)">Edit</q-btn>
-                <q-btn no-caps unelevated @click="showDeleteUserDialog(props.row)">Delete</q-btn>
-                <!--  -->
-            </q-td>
-        </template>
-        <template v-slot:top>
-            <p class="text-h6 q-pt-md text-capitalize">{{ role }}</p>
-            <q-space />
-            <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
-                <template v-slot:append>
-                    <q-icon name="search" />
+    <div class="q-pa-md">
+        <q-card bordered flat>
+            <q-table
+                class="my-sticky-header-column-table"
+                flat
+                :rows="users"
+                :columns="columns"
+                row-key="name"
+                :filter="filter"
+            >
+                <!-- <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Modifier Groups</p>
+                    <q-space />
+                        <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <Link :href="route('admin.modifier_groups.create')">
+                        <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
+                    </Link>
+                </template> -->
+                <template v-slot:body-cell-user="props">
+                    <q-td :props="props">
+                        <q-item class="q-pa-none">
+                            <q-item-section avatar>
+                                {{ props.row.profile_pic }}
+                                <q-avatar v-if="props.row.profile_pic">
+                                    <q-img :src="`/storage/${props.row.profile_pic}`" ></q-img>
+                                </q-avatar>
+                                <q-avatar v-else>
+                                    <q-img fit="cover" src="https://static.vecteezy.com/system/resources/thumbnails/020/911/737/small_2x/user-profile-icon-profile-avatar-user-icon-male-icon-face-icon-profile-icon-free-png.png" ></q-img>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section class="text-left">
+                                <q-item-label>{{ props.row.first_name + ' ' + props.row.last_name }}</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-td>
                 </template>
-            </q-input>
-            <q-btn class="q-ml-md" no-caps color="primary" @click="newUserDialog = true" label="Create User" />
+                <template v-slot:body-cell-contact="props">
+                    <q-td :props="props">
+                        {{ props.row.phone_number }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <q-btn no-caps unelevated @click="showEditUserDialog(props.row)">Edit</q-btn>
+                        <q-btn no-caps unelevated @click="showDeleteUserDialog(props.row)">Delete</q-btn>
+                        <!--  -->
+                    </q-td>
+                </template>
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md text-capitalize">User Management</p>
+                    <q-space />
+                    <!-- <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input> -->
+                    <q-input filled dense label="Search by email" class="q-mx-md" debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <q-btn class="q-ml-md" no-caps color="primary" @click="newUserDialog = true" label="Create User" />
 
-        </template>
-    </q-table>
+                </template>
+            </q-table>
+        </q-card>
+    </div>
     <!-- {{ selectedUser }} -->
     <DeleteUserDialog 
         @close="deleteUserDialog = false" 

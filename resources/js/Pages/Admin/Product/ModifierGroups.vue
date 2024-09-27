@@ -47,49 +47,51 @@ const columns = [
     
     <Head title="Group Modifiers" />
     <div class="q-pa-md">
-        <q-table
-            class="my-sticky-header-column-table"
-            flat
-            title="Treats"
-            :rows="props.modifier_groups"
-            :columns="columns"
-            row-key="name"
-        >
-            <template v-slot:top>
-                <p class="text-h6 q-pt-md">Modifier Groups</p>
-                <q-space />
-                    <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
-                    <template v-slot:append>
-                        <q-icon name="search" />
-                    </template>
-                </q-input>
-                <Link :href="route('admin.modifier_groups.create')">
-                    <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
-                </Link>
-            </template>
-            <template v-slot:body-cell-contains="props">
-                <q-td :props="props">
-                    <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
-                        {{ modifier_item.name + ', ' }}
-                    </span>
-                </q-td>
-            </template>
-            <template v-slot:body-cell-productsUsing="props">
-                <q-td :props="props">
-                    <span v-for="product in props.row.products" :key="product.id">
-                        {{ product.name + ', ' }}
-                    </span>
-                </q-td>
-            </template>
-            <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                    <Link :href="route('admin.modifier_groups.edit', props.row.id)">
-                        <q-btn no-caps unelevated>Edit</q-btn>
+        <q-card bordered flat>
+            <q-table
+                class="my-sticky-header-column-table"
+                flat
+                title="Treats"
+                :rows="props.modifier_groups"
+                :columns="columns"
+                row-key="name"
+            >
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Modifier Groups</p>
+                    <q-space />
+                        <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <Link :href="route('admin.modifier_groups.create')">
+                        <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
                     </Link>
-                    <q-btn no-caps unelevated @click="showDeleteModifierGroupDialog(props.row)">Delete</q-btn>
-                </q-td>
-            </template>
-        </q-table>
+                </template>
+                <template v-slot:body-cell-contains="props">
+                    <q-td :props="props">
+                        <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
+                            {{ modifier_item.name + ', ' }}
+                        </span>
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-productsUsing="props">
+                    <q-td :props="props">
+                        <span v-for="product in props.row.products" :key="product.id">
+                            {{ product.name + ', ' }}
+                        </span>
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <Link :href="route('admin.modifier_groups.edit', props.row.id)">
+                            <q-btn no-caps unelevated>Edit</q-btn>
+                        </Link>
+                        <q-btn no-caps unelevated @click="showDeleteModifierGroupDialog(props.row)">Delete</q-btn>
+                    </q-td>
+                </template>
+            </q-table>
+        </q-card>
         <q-dialog v-model="deleteModifierGroupDialog">
             <q-card>
                 <q-card-section>

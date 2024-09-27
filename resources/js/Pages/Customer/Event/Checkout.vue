@@ -13,8 +13,6 @@ const props = defineProps({
 
 const $q = useQuasar()
 const page = usePage()
-console.log(props.event.admission_fee)
-console.log(props.attendees)
 const attendees = ref(props.attendees)
 const admission_fee = ref(props.event.admission_fee)
 const form = useForm({
@@ -32,6 +30,10 @@ for(var i = 0; i < props.attendees; i++) {
         email: ''
     })
 }
+
+onMounted(() => {
+   setAmount()
+})
 
 const setAmount = () => {
     form.amount = attendees.value * admission_fee.value
@@ -77,7 +79,7 @@ const addAttendee = () => {
                     <q-img src="../logo.png" fill="cover" />
                 </q-avatar>
                     Taytayan CAMP
-                <Link :href="route('customer.cart.index')" class="absolute-left">
+                <Link :href="route('customer.events.index')" class="absolute-left">
                     <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
                 </Link>
             </div>
@@ -88,7 +90,6 @@ const addAttendee = () => {
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <q-card flat bordered>
                             <q-card-section>
-                                {{ form }}
                                 <div class="text-h6 text-center">Checkout</div>
                                 <div class="text-h6">Event Details</div>
                                 <div class="full-width rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">

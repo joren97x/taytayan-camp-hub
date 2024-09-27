@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         //
         return Inertia::render('Cashier/Bookings', [
-            'bookings' => Booking::get()
+            'bookings' => Booking::with('facility')->get()
         ]);
     }
 

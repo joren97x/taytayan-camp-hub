@@ -123,11 +123,16 @@ const navigation_list = [
 <template>
     <q-layout view="lHh LpR lFf">
         <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-            <q-img class="absolute-top" src="https://scontent.fmnl13-1.fna.fbcdn.net/v/t39.30808-6/308874170_458509852988758_1991570530264924406_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeEDYpGRK6JlvIKI9-sqqS_LETWDJ4miOCcRNYMniaI4J1eUGMw6jKrBkeeEX4msmRNehdwFLxJlrr9bQFpQLG0u&_nc_ohc=U9JIJmNsznYQ7kNvgGRvuBC&_nc_ht=scontent.fmnl13-1.fna&oh=00_AYCzG2-RVtodN2Bh16NKBOZ9lpllUDtwvGUVkjnHwW4qEQ&oe=66F29B29" style="height: 150px">
+            <q-img 
+                class="absolute-top" 
+                src="/taytayan.jpg"
+                style="height: 150px">
                     <q-item  class="absolute-bottom">
                         <q-item-section avatar>
                             <q-avatar color="primary" text-color="white">
-                                <q-img src="https://scontent.fmnl13-1.fna.fbcdn.net/v/t39.30808-6/234914753_203423238467635_2256368527109143594_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFHQZdJ1dT9kUKF9GufPVxJK4ptG1KWT7crim0bUpZPtz_CH6huv9s-JWZaChUxqwFe8pE0XjgPTeQunTOIh67n&_nc_ohc=_ExTeK8E-_sQ7kNvgFAMa-M&_nc_ht=scontent.fmnl13-1.fna&oh=00_AYDLa4QiIYyM9iS8OtJywdAKBLtxXuaBN5RHCEUumO07LQ&oe=66F291E3"></q-img>
+                                <q-img 
+                                    src="/logo.jpg"
+                                />
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>
@@ -251,7 +256,7 @@ const navigation_list = [
             <div>
                 <q-item  class="absolute-bottom bg-white">
                     <q-item-section top avatar>
-                        <q-avatar color="primary" text-color="white" icon="bluetooth" />
+                        <q-avatar color="primary" text-color="white" icon="engineering" />
                     </q-item-section>
                     <q-item-section>
                         <q-item-label>Joren Hyeung Nim</q-item-label>
@@ -272,7 +277,9 @@ const navigation_list = [
         </q-drawer>
     
         <q-page-container>
-            <slot/>
+            <div class="bg-grey-3" style="height: 100vh">
+                <slot/>
+            </div>
         </q-page-container>
     </q-layout>
 </template>

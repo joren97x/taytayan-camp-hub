@@ -29,40 +29,42 @@ const columns = [
     
     <Head title="Reviews" />
     <div class="q-pa-md">
-        <q-table
-            class="my-sticky-header-column-table"
-            flat
-            title="Treats"
-            :rows="orders"
-            :columns="columns"
-            row-key="name"
-            :filter="filter"
-        >
-            <template v-slot:body-cell-user="props">
-                <q-td :props="props">
-                    {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-cart_products="props">
-                <q-td :props="props">
-                    {{ props.row.cart_products.length }} items
-                </q-td>
-            </template>
-            <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                    <q-btn no-caps color="primary">View Order</q-btn>
-                </q-td>
-            </template>
-            <template v-slot:top>
-                <p class="text-h6 q-pt-md">Orders</p>
-                <q-space />
-                <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                    <template v-slot:append>
-                        <q-icon name="search" />
-                    </template>
-                </q-input>
-            </template>
-        </q-table>
+        <q-card flat bordered>
+            <q-table
+                class="my-sticky-header-column-table"
+                flat
+                title="Treats"
+                :rows="orders"
+                :columns="columns"
+                row-key="name"
+                :filter="filter"
+            >
+                <template v-slot:body-cell-user="props">
+                    <q-td :props="props">
+                        {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-cart_products="props">
+                    <q-td :props="props">
+                        {{ props.row.cart_products.length }} items
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <q-btn no-caps color="primary">View Order</q-btn>
+                    </q-td>
+                </template>
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Orders</p>
+                    <q-space />
+                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                </template>
+            </q-table>
+        </q-card>
         <!-- <q-dialog v-model="deleteProductDialog">
             <q-card>
                 <q-card-section>

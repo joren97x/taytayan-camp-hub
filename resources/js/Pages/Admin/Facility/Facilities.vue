@@ -28,54 +28,56 @@ const columns = [
 <template>
     
     <Head title="Reviews" />
-    <div class="q-pa-md">
-        <q-table
-            class="my-sticky-header-column-table"
-            flat
-            title="Treats"
-            :rows="facilities"
-            :columns="columns"
-            row-key="name"
-            :filter="filter"
-        >
-            <template v-slot:body-cell-images="props">
-                <q-td :props="props">
-                    {{ JSON.parse(props.row.images).length }} images
-                    <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
-                </q-td>
-            </template>
-            <template v-slot:body-cell-amenities="props">
-                <q-td :props="props">
-                    <!-- {{ JSON.parse(props.row.amenities).length }} amenities -->
-                </q-td>
-            </template>
-            <template v-slot:body-cell-price="props">
-                <q-td :props="props">
-                    P{{ props.row.price }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                    <Link :href="route(`admin.facilities.edit`, props.row.id)">
-                        {{ props.row.id }}
-                        <q-btn no-caps unelevated>Edit</q-btn>
+    <div class="q-pa-md bg-grey-3">
+        <q-card bordered flat>
+            <q-table
+                class="my-sticky-header-column-table"
+                flat
+                title="Treats"
+                :rows="facilities"
+                :columns="columns"
+                row-key="name"
+                :filter="filter"
+            >
+                <template v-slot:body-cell-images="props">
+                    <q-td :props="props">
+                        {{ JSON.parse(props.row.images).length }} images
+                        <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-amenities="props">
+                    <q-td :props="props">
+                        <!-- {{ JSON.parse(props.row.amenities).length }} amenities -->
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-price="props">
+                    <q-td :props="props">
+                        P{{ props.row.price }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <Link :href="route(`admin.facilities.edit`, props.row.id)">
+                            {{ props.row.id }}
+                            <q-btn no-caps unelevated>Edit</q-btn>
+                        </Link>
+                        <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
+                    </q-td>
+                </template>
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Facilities</p>
+                    <q-space />
+                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <Link :href="route('admin.facilities.create')">
+                        <q-btn no-caps color="primary">Create Facility</q-btn>
                     </Link>
-                    <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
-                </q-td>
-            </template>
-            <template v-slot:top>
-                <p class="text-h6 q-pt-md">Facilities</p>
-                <q-space />
-                <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                    <template v-slot:append>
-                        <q-icon name="search" />
-                    </template>
-                </q-input>
-                <Link :href="route('admin.facilities.create')">
-                    <q-btn no-caps color="primary">Create Facility</q-btn>
-                </Link>
-            </template>
-        </q-table>
+                </template>
+            </q-table>
+        </q-card>
         <!-- <q-dialog v-model="deleteProductDialog">
             <q-card>
                 <q-card-section>

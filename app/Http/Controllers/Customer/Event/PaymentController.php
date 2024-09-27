@@ -22,16 +22,22 @@ class PaymentController extends Controller
     public function success(Request $request) 
     {
         // dd($request);
-        $event = Event::find($request->input('event_id'));
+        $event = Event::find($request->query('event_id'));
 
         $ticket_order = TicketOrder::create([
             'user_id' => $request->query('user_id'),
             'event_id' => $event->id,
             'amount' => $request->query('amount'),
             'payment_method' => $request->query('payment_method'),
-            'status' => $request->payment_method == TicketOrder::PAYMENT_METHOD_WALK_IN ? TicketOrder::STATUS_PENDING :TicketOrder::STATUS_COMPLETED
         ]);
         
+        if($request->payment_method == 'right_now') {
+            $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
+            $ticket_order->payment_method = $checkout_session->payment_method_used;
+            $ticket_order->status = TicketOrder::STATUS_COMPLETED;
+            $ticket_order->save();
+        }
+
         foreach($request->query('ticket_holders') as $ticket_holder) {
 
             $ticket = Ticket::with('event')->where('status', 'AVAILABLE')->first();
@@ -88,7 +94,7 @@ class PaymentController extends Controller
 
         // dd($request->all());
 
-        if($request->payment_method == TicketOrder::PAYMENT_METHOD_WALK_IN) {
+        if($request->payment_method == 'walk_in') {
             return redirect(route('event.checkout.success') . '?' . http_build_query($request->all()));
         }
         
@@ -144,6 +150,9 @@ class PaymentController extends Controller
                 'Key' => 'Value'
             ]
         ]);
+
+        session(['checkout_id' => $checkout->id]);
+
         return Inertia::location($checkout->checkout_url);
     }
 }

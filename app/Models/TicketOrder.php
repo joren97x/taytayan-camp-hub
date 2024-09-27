@@ -14,13 +14,6 @@ class TicketOrder extends Model
     const STATUS_COMPLETED = 'completed';
     const STATUS_FAILED = 'failed';
 
-    const PAYMENT_METHOD_GCASH = 'gcash';
-    const PAYMENT_METHOD_CARD = 'card';
-    const PAYMENT_METHOD_PAYMAYA = 'paymaya';
-    const PAYMENT_METHOD_GRAB_PAY = 'grab_pay';
-    const PAYMENT_METHOD_WALK_IN = 'walk_in';
-
-
     protected $fillable = [
         'user_id',
         'event_id',
@@ -38,13 +31,6 @@ class TicketOrder extends Model
                 self::STATUS_PENDING,
                 self::STATUS_COMPLETED,
                 self::STATUS_FAILED,
-            ],
-            'payment_methods' => [
-                self::PAYMENT_METHOD_GCASH,
-                self::PAYMENT_METHOD_CARD,
-                self::PAYMENT_METHOD_PAYMAYA,
-                self::PAYMENT_METHOD_GRAB_PAY,
-                self::PAYMENT_METHOD_WALK_IN,
             ],
         ];
     }

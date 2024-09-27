@@ -18,13 +18,7 @@ return new class extends Migration
             $table->foreignId('event_id');
             $table->decimal('amount', 8, 2);
             $table->string('qr_code_path')->nullable();
-            $table->enum('payment_method', [
-                TicketOrder::PAYMENT_METHOD_CARD,
-                TicketOrder::PAYMENT_METHOD_GCASH,
-                TicketOrder::PAYMENT_METHOD_GRAB_PAY,
-                TicketOrder::PAYMENT_METHOD_WALK_IN,
-                TicketOrder::PAYMENT_METHOD_PAYMAYA
-            ]);
+            $table->string('payment_method');
             $table->enum('status', [
                 TicketOrder::STATUS_COMPLETED,
                 TicketOrder::STATUS_FAILED,

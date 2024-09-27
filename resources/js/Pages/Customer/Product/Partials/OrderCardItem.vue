@@ -204,6 +204,7 @@ console.log(order.value)
             <q-card>
                 <q-card-section>
                     <p class="text-h6">Order Details</p>
+                    <q-separator/>
                     <q-btn 
                         icon="close" 
                         v-close-popup
@@ -212,14 +213,16 @@ console.log(order.value)
                         unelevated
                     />
                     <q-stepper
+                        flat
                         v-model="step"
                         ref="stepper"
-                        :contracted="$q.screen.lt.md"
                         color="primary"
                         animated
                         alternative-labels
                         active-icon="hourglass_top"
+                        :vertical="$q.screen.lt.md"
                     >
+                        <div class="text-h6">Status</div>
                         <q-step
                             :name="index"
                             :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
@@ -238,52 +241,52 @@ console.log(order.value)
                             :done="step > index || order.status == 'completed'"
                             v-else
                         />
-
-                        <template v-slot:message v-if="$q.screen.lt.md">
+                        <!-- <template v-slot:message v-if="$q.screen.lt.md">
                             <q-banner class="bg-primary text-white q-px-lg text-capitalize text-center" dense>
                                 {{ order.status }}
                             </q-banner>
-                        </template>
+                        </template> -->
                     </q-stepper>
+                    <div class="text-h6">Items</div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="item in order.cart_products">
                             <!-- <FoodCardItem :item="product" /> -->
                             <q-item >
-                                        <q-item-section avatar>
-                                            <q-img 
-                                                :src="`/storage/${item.product.photo}`"
-                                                height="70px"
-                                                width="70px"
-                                                fit="contain"
-                                                class="q-mx-md"
-                                            />
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>
-                                                {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
-                                            </q-item-label>
-                                            <template 
-                                                v-for="(modifier, index) in item.grouped_modifiers" 
-                                                :key="index"
-                                            >
-                                                <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
-                                                <q-item-label 
-                                                    caption 
-                                                    v-for="(modifier_item, index) in modifier.modifier_items" 
-                                                    :key="index"
-                                                >
-                                                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
-                                                </q-item-label>
-                                                
-                                            </template>
-                                            <q-item-label caption v-if="item.special_instruction">
-                                                Note: {{ item.special_instruction }}
-                                            </q-item-label>
-                                        </q-item-section>
-                                        <q-item-section side>
-                                            P{{ item.total }}
-                                        </q-item-section>
-                                    </q-item>
+                                <q-item-section avatar>
+                                    <q-img 
+                                        :src="`/storage/${item.product.photo}`"
+                                        height="70px"
+                                        width="70px"
+                                        fit="contain"
+                                        class="q-mx-md"
+                                    />
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>
+                                        {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
+                                    </q-item-label>
+                                    <template 
+                                        v-for="(modifier, index) in item.grouped_modifiers" 
+                                        :key="index"
+                                    >
+                                        <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
+                                        <q-item-label 
+                                            caption 
+                                            v-for="(modifier_item, index) in modifier.modifier_items" 
+                                            :key="index"
+                                        >
+                                            {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
+                                        </q-item-label>
+                                        
+                                    </template>
+                                    <q-item-label caption v-if="item.special_instruction">
+                                        Note: {{ item.special_instruction }}
+                                    </q-item-label>
+                                </q-item-section>
+                                <q-item-section side>
+                                    P{{ item.total }}
+                                </q-item-section>
+                            </q-item>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                             Subtotal: {{ order.subtotal }}

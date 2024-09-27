@@ -26,13 +26,6 @@ const shareOnFacebook = () => {
 
 <template>
     <Head title="Dashboard" />
-    <q-btn @click="shareOnFacebook" icon="mdi-facebook" label="Share on Facebook" />
-    <a :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(route('admin.products.index'))}`" target="_blank">
-            Share on Facebook
-        </a>
-        <a href="google.com" target="_blank">
-            hii
-        </a>
     <div class="q-mx-md">
         <div class="text-h5 q-my-md">
             Dashboard

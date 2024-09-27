@@ -106,13 +106,13 @@ function toggleLeftDrawer () {
                     </q-item>
                 </Link>
                 
-                <Link :href="route('cashier.account')">
-                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Account'" active-class="bg-primary text-white">
+                <Link :href="route('cashier.profile')">
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>Account</q-item-label>
+                            <q-item-label>Profile</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                         </q-item-section>
                     </q-item>
