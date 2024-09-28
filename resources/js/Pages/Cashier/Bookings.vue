@@ -1,16 +1,18 @@
 <script setup>
 
-import { Head, Link } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 import { ref } from 'vue'
 import { date } from 'quasar'
+import BookingDialog from './Partials/BookingDialog.vue'
 
 defineOptions({
     layout: CashierLayout
 })
 
 const props = defineProps({
-    bookings: Object
+    bookings: Object,
+    booking_statuses: Array
 })
 
 const filter = ref('')
@@ -33,6 +35,7 @@ const columns = [
     
     <Head title="Bookings" />
     <div class="q-pa-md bg-grey-3" style="height: 100vh;">
+        {{ booking_statuses }}
         <q-card flat bordered>
             <q-table
                 class="my-sticky-header-column-table"
@@ -82,8 +85,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn>Check in</q-btn>
-                        <q-btn>Check out</q-btn>
+                        <BookingDialog :order="props.row" :booking_statuses="booking_statuses" />
                     </q-td>
                 </template>
             </q-table>

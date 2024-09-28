@@ -17,6 +17,9 @@ Route::middleware(['auth', 'cashier'])->group(function () {
         'index' => 'cashier.orders.index',
         'show' => 'cashier.orders.show'
     ]);
+
+    Route::patch('/cashier/bookings/{booking}/check-in', [BookingController::class, 'check_in'])->name('cashier.bookings.check_in');
+    Route::patch('/cashier/bookings/{booking}/check-out', [BookingController::class, 'check_out'])->name('cashier.bookings.check_out');
     Route::resource('/cashier/bookings', BookingController::class)->names([
         'index' => 'cashier.bookings.index'
     ]);

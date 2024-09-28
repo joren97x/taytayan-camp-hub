@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/facility-checkout-success', [PaymentController::class, 'success'])->name('facility.checkout.success');
 // });
 
+Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('customer.bookings.complete');
 Route::resource('bookings', BookingController::class)->names([
     'index' => 'customer.bookings.index'
 ]);

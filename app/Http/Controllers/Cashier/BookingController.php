@@ -16,7 +16,8 @@ class BookingController extends Controller
     {
         //
         return Inertia::render('Cashier/Bookings', [
-            'bookings' => Booking::with('facility')->get()
+            'bookings' => Booking::with('facility')->get(),
+            'booking_statuses' => Booking::getStatuses()
         ]);
     }
 
@@ -58,6 +59,20 @@ class BookingController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function check_in(Request $request, string $id)
+    {
+        //
+        Booking::find($id)->update(['status' => Booking::STATUS_CHECKED_IN]);
+        return back();
+    }
+
+    public function check_out(Request $request, string $id)
+    {
+        //
+        Booking::find($id)->update(['status' => Booking::STATUS_CHECKED_OUT]);
+        return back();
     }
 
     /**

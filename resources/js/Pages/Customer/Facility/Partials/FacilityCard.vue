@@ -62,6 +62,21 @@ const slide = ref(0)
             </Link>
         </q-card>
     </div>
+    <!-- <q-card>
+        <q-item>
+            <q-item-section>
+                <q-img :src="`/storage/${images[0]}`" height="200"></q-img>
+            </q-item-section>
+            <q-item-section>
+                <q-item-label>{{ facility.name }}</q-item-label>
+                <q-item-label caption>{{ facility.name }}</q-item-label>
+                <q-item-label>{{ facility.price }}</q-item-label>
+            </q-item-section>
+            <q-item-section side class="q-mt-lg">
+                <q-btn>Book</q-btn>
+            </q-item-section>
+        </q-item>
+    </q-card> -->
 </template>
 
 <style scoped>

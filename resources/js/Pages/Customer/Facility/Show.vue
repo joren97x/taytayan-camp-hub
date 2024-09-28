@@ -286,6 +286,19 @@ const setBookingDates = (dates) => {
                 </div>
             </div>
         </div>
+        <q-separator class="q-my-md" />
+        <div class="col-12">
+            <div class="text-h6">Ratings and Reviews</div>
+            <div class="row q-col-gutter-md">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="n in 5">
+                    <q-card>
+                        <q-card-section>
+                            <q-avatar class="bg-secondary">B</q-avatar> Lorem ipsum dolor sit amet consectetur.
+                        </q-card-section>
+                    </q-card>
+                </div>
+            </div>
+        </div>
         <!-- <div style="height: 700px;">
             bruh
             <h1>HIII</h1>

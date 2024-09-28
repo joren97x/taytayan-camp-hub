@@ -69,106 +69,104 @@ watch(btnToggle, () => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'"  style="z-index: 999;">
-            <q-toolbar class="row q-py-xs q-px-md">
-                <!-- <div class="row bg-red"> -->
-                    <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
-                        <Link :href="route('homepage')" style="text-decoration: none;">
-                            <q-toolbar-title>
-                                <q-avatar size="50px">
-                                    <q-img src="../logo.jpg" fill="cover" />
-                                </q-avatar>
-                                <span class="text-primary text-h6 text-weight-bolder q-ml-md">Taytayan Camp Hub</span>
-                            </q-toolbar-title>
-                        </Link>
-                    </div>
-                    <div class="flex items-center justify-center col-md-6 col-lg-6 col-xl-6 gt-sm">
-                        <!-- {{ $q.screen.gt.xs }} -->
-                        <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
-                            <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="/images/product_logo.png"/>
+            <q-toolbar class="row q-py-xs q-px-sm" style="max-width: 1280px; margin: 0 auto;">
+                <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
+                    <Link :href="route('homepage')" style="text-decoration: none;">
+                        <q-toolbar-title>
+                            <q-avatar size="50px">
+                                <q-img src="../logo.jpg" fill="cover" />
                             </q-avatar>
-                            Products
+                            <span class="text-primary text-h6 text-weight-bolder q-ml-xs">Taytayan Camp Hub</span>
+                        </q-toolbar-title>
+                    </Link>
+                </div>
+                <div class="flex items-center justify-center col-md-6 col-lg-6 col-xl-6 gt-sm">
+                    <!-- {{ $q.screen.gt.xs }} -->
+                    <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
+                        <q-avatar size="sm" class="">
+                            <q-img fit="cover" src="/images/product_logo.png"/>
+                        </q-avatar>
+                        Products
+                    </Link>
+                    <Link :href="route('customer.events.index')" class="text-subtitle2 navlink q-mr-xl">
+                        <q-avatar size="sm" class="">
+                            <q-img fit="cover" src="/images/event_logo.png"/>
+                        </q-avatar>
+                        Events
+                    </Link>
+                    <Link :href="route('customer.facilities.index')" class="text-subtitle2 navlink q-mr-xl">
+                        <q-avatar size="sm" class="">
+                            <q-img fit="cover" src="/images/facility_logo.png"/>
+                        </q-avatar>
+                        Facilities
+                    </Link>
+                </div>
+                <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-11 col-xs-11">
+                    <div v-if="!$page.props.auth.user">
+                        <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-xs">
+                            Sign up for free
                         </Link>
-                        <Link :href="route('customer.events.index')" class="text-subtitle2 navlink q-mr-xl">
-                            <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="/images/event_logo.png"/>
-                            </q-avatar>
-                            Events
+                        <Link :href="route('login')" class="gt-xs">
+                            <q-btn 
+                                no-caps 
+                                color="primary" 
+                                unelevated 
+                                class="text-subtitle2 text-weight-regular"
+                            >
+                            <div>
+                                <q-icon left name="login" />
+                            </div>
+                                Login
+                                </q-btn>
                         </Link>
-                        <Link :href="route('customer.facilities.index')" class="text-subtitle2 navlink q-mr-xl">
-                            <q-avatar size="sm" class="">
-                                <q-img fit="cover" src="/images/facility_logo.png"/>
-                            </q-avatar>
-                            Facilities
-                        </Link>
+                        <q-btn icon="menu" v-if="!drawer" unelevated @click="drawer = true" class="lt-md" />
+                        <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
                     </div>
-                    <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-11 col-xs-11">
-                        <div v-if="!$page.props.auth.user">
-                            <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-xs">
-                                Sign up for free
-                            </Link>
-                            <Link :href="route('login')" class="gt-xs">
-                                <q-btn 
-                                    no-caps 
-                                    color="primary" 
-                                    unelevated 
-                                    class="text-subtitle2 text-weight-regular"
-                                >
-                                <div>
-                                    <q-icon left name="login" />
-                                </div>
-                                    Login
-                                    </q-btn>
-                            </Link>
-                            <q-btn icon="menu" v-if="!drawer" unelevated @click="drawer = true" class="lt-md" />
-                            <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
-                        </div>
-                        <div v-else>
-                            
-                            <!-- <q-btn flat icon="search" round></q-btn> -->
-                            <q-btn flat dense round class="q-mr-md gt-sm">
-                                <q-icon size="2em" name="notifications" />
-                                <!-- uncomment soon -->
-                                <!-- <q-badge color="red" floating>{{ notification_badge }}</q-badge> -->
-                                <q-menu fit>
-                                    <q-list style="min-width: 400px">
-                                        <q-item class="text-h6">Notifications</q-item>
-                                        <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
-                                            <q-item-section>{{ notification }}</q-item-section>
-                                        </q-item>
-                                    </q-list>
-                                </q-menu>
-                            </q-btn>
-                            <q-btn round flat @click="sidebar = !sidebar" class="lt-md">
-                                <q-avatar size="3em" class="bg-red">
-                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                </q-avatar>
-                            </q-btn>
-                            <q-btn class="gt-sm" round>
-                                <q-avatar size="3em" class="bg-red">
-                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                </q-avatar>
-                                <q-menu class="q-pa-sm gt-sm" style="width: 300px">
-                                    <Link :href="route('customer.profile')" class="user-menu-link">
-                                        <q-item>
-                                            <q-item-section top avatar>
-                                                <q-avatar color="primary" text-color="white">
-                                                    <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
-                                                </q-avatar>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
-                                                <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </Link>
-                                    <q-separator />
-                                    <NavLinks/>
-                                </q-menu>
-                            </q-btn>
-                        </div>
+                    <div v-else>
+                        
+                        <!-- <q-btn flat icon="search" round></q-btn> -->
+                        <q-btn flat dense round class="q-mr-md gt-sm">
+                            <q-icon size="2em" name="notifications" />
+                            <!-- uncomment soon -->
+                            <!-- <q-badge color="red" floating>{{ notification_badge }}</q-badge> -->
+                            <q-menu fit>
+                                <q-list style="min-width: 400px">
+                                    <q-item class="text-h6">Notifications</q-item>
+                                    <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
+                                        <q-item-section>{{ notification }}</q-item-section>
+                                    </q-item>
+                                </q-list>
+                            </q-menu>
+                        </q-btn>
+                        <q-btn round flat @click="sidebar = !sidebar" class="lt-md">
+                            <q-avatar size="3em" class="bg-red">
+                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                            </q-avatar>
+                        </q-btn>
+                        <q-btn class="gt-sm" round>
+                            <q-avatar size="3em" class="bg-red">
+                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                            </q-avatar>
+                            <q-menu class="q-pa-sm gt-sm" style="width: 300px">
+                                <Link :href="route('customer.profile')" class="user-menu-link">
+                                    <q-item>
+                                        <q-item-section top avatar>
+                                            <q-avatar color="primary" text-color="white">
+                                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                            </q-avatar>
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label> {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }} </q-item-label>
+                                            <q-item-label caption lines="1"> {{ $page.props.auth.user.email }} </q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                </Link>
+                                <q-separator />
+                                <NavLinks/>
+                            </q-menu>
+                        </q-btn>
                     </div>
-                <!-- </div> -->
+                </div>
             </q-toolbar>
                 
             <q-card v-show="drawer" class="fixed full-width lt-md">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\Facility;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,7 +17,7 @@ class BookingController extends Controller
     {
         
         return Inertia::render('Customer/Facility/Bookings', [
-            'bookings' => Booking::where('user_id', auth()->id())->get()
+            'bookings' => Booking::where('user_id', auth()->id())->with('facility')->get()
         ]);
     }
 
@@ -64,6 +65,12 @@ class BookingController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function complete(Request $request, string $id)
+    {
+        Booking::find($id)->update(['status' => Order::STATUS_COMPLETED]);
+        return back();
     }
 
     /**

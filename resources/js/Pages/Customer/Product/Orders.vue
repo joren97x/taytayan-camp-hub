@@ -40,7 +40,7 @@ watch(tab, () => {
                     </div>
                     <div class="col-6 text-right">
                         <Link :href="route('customer.orders.past_orders')">
-                            See Past Orders
+                            <q-btn label="See Past Orders" no-caps rounded color="primary"/>
                         </Link>
                     </div>
                 </div>
@@ -54,13 +54,11 @@ watch(tab, () => {
                         </Link>
                     </div>
                 </div> -->
-                <div class="row">
+                <div class="row q-my-md">
                     <div 
-                        class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9" 
+                        class="col-12" 
                         v-for="order in orders"
                     >
-                        {{ order.mode }}
-                        {{ order.payment_method }}
                         <OrderCardItem :order="order"/>
                     </div>
                     <!-- <div class="col-12 items-center self-center flex " style="height: 50vh;" v-else>

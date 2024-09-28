@@ -29,17 +29,14 @@ class Booking extends Model
         'guests'
     ];
 
-    public static function getConstants()
+    public static function getStatuses()
     {
         return [
-            'statuses' => [
-                // DO NOT CHANGE THE ORDER WALLAHI IT WILL RUIN THE SYSTEM
-                self::STATUS_PENDING,
-                self::STATUS_CANCELLED,
-                self::STATUS_CHECKED_IN,
-                self::STATUS_CHECKED_OUT,
-                self::STATUS_CONFIRMED
-            ]
+            self::STATUS_PENDING => self::STATUS_PENDING,
+            self::STATUS_CANCELLED => self::STATUS_CANCELLED,
+            self::STATUS_CHECKED_IN => self::STATUS_CHECKED_IN,
+            self::STATUS_CHECKED_OUT => self::STATUS_CHECKED_OUT,
+            self::STATUS_CONFIRMED => self::STATUS_CONFIRMED,
         ];
     }
 

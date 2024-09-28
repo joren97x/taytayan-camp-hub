@@ -146,31 +146,28 @@ console.log(order.value)
 // `diff` is 34 (days)
 </script>
 <template>
-    <div>
-        <q-item>
-            <q-item-section avatar>
-                <q-img height="85px" width="85px" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg"></q-img>
-            </q-item-section>
-            <q-item-section>
-                <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
-                <div class="ellipsi-2-lines">
-                    <span v-for="(p, index) in order.cart_products">
-                        {{ p.product.name }}, 
-                    </span>
-                </div>
-                <q-item-label caption>
-                    {{ order.cart_products.length }} items - {{ order.created_at }}
-                    <br>
-                    <q-chip>{{ order.status }}</q-chip>
-                </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-                <Link :href="route('product.checkout', {
-                    cart_id: order.cart_id
-                })">
-                    <q-btn no-caps rounded>Reorder</q-btn>
+    <q-item>
+        <!-- <q-item-section avatar>
+            <q-img height="85px" width="85px" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg"></q-img>
+        </q-item-section> -->
+        <q-item-section>
+            <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
+            <div class="ellipsi-2-lines">
+                <!-- <span v-for="(p, index) in order.cart_products">
+                    {{ p.product.name }}, 
+                </span> -->
+                {{ date.formatDate(order.created_at, 'MMM D, YYYY') }}
+            </div>
+            <q-item-label caption>
+                {{ order.cart_products.length }} items - {{ order.status }}
+            </q-item-label>
+        </q-item-section>
+        <q-item-section side>
+            <div class="row q-gutter-sm">
+                <q-btn unelevated no-caps outline @click="viewOrderDialog = true" rounded>View</q-btn>
+                <Link :href="route('product.checkout', { cart_id: order.cart_id })">
+                    <q-btn unelevated bordered color="primary" no-caps rounded>Reorder</q-btn>
                 </Link>
-                <q-btn no-caps @click="viewOrderDialog = true" rounded>View Order</q-btn>
                 <q-btn 
                     v-if="order.status == 'delivered'"
                     no-caps 
@@ -181,10 +178,10 @@ console.log(order.value)
                 >
                     Complete Order
                 </q-btn>
-            </q-item-section>
-        </q-item>
-        <q-separator/>
-
+            </div>
+        </q-item-section>
+    </q-item>
+    <q-separator/>
         <!-- <div class="row">
             <div class="col-4">
                 <div style="height: 150px; width: 100%;" class="bg-grey"></div>
@@ -194,156 +191,155 @@ console.log(order.value)
                 {{ order }}
             </div>
         </div> -->
-        <q-dialog 
-            v-model="viewOrderDialog" 
-            :maximized="$q.screen.lt.md"  
-            transition-show="slide-up"
-            transition-hide="slide-down"
-            full-width
-        >   
-            <q-card>
-                <q-card-section>
-                    <p class="text-h6">Order Details</p>
-                    <q-separator/>
-                    <q-btn 
-                        icon="close" 
-                        v-close-popup
-                        round
-                        class="absolute-top-right q-mt-sm q-mr-sm"
-                        unelevated
+    <q-dialog 
+        v-model="viewOrderDialog" 
+        :maximized="$q.screen.lt.md"  
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        full-width
+    >   
+        <q-card>
+            <q-card-section>
+                <p class="text-h6">Order Details</p>
+                <q-separator/>
+                <q-btn 
+                    icon="close" 
+                    v-close-popup
+                    round
+                    class="absolute-top-right q-mt-sm q-mr-sm"
+                    unelevated
+                />
+                <q-stepper
+                    flat
+                    v-model="step"
+                    ref="stepper"
+                    color="primary"
+                    animated
+                    alternative-labels
+                    active-icon="hourglass_top"
+                    :vertical="$q.screen.lt.md"
+                >
+                    <div class="text-h6">Status</div>
+                    <q-step
+                        :name="index"
+                        :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
+                        :icon="s.icon"
+                        :error="order.status == 'cancelled'"
+                        v-for="(s, index) in pickupSteps"
+                        :done="step > index || order.status == 'completed'"
+                        v-if="order.mode == 'pickup'"
                     />
-                    <q-stepper
-                        flat
-                        v-model="step"
-                        ref="stepper"
-                        color="primary"
-                        animated
-                        alternative-labels
-                        active-icon="hourglass_top"
-                        :vertical="$q.screen.lt.md"
-                    >
-                        <div class="text-h6">Status</div>
-                        <q-step
-                            :name="index"
-                            :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
-                            :icon="s.icon"
-                            :error="order.status == 'cancelled'"
-                            v-for="(s, index) in pickupSteps"
-                            :done="step > index || order.status == 'completed'"
-                            v-if="order.mode == 'pickup'"
-                        />
-                        <q-step
-                            :name="index"
-                            :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
-                            :icon="s.icon"
-                            :error="order.status == 'cancelled'"
-                            v-for="(s, index) in deliverySteps"
-                            :done="step > index || order.status == 'completed'"
-                            v-else
-                        />
-                        <!-- <template v-slot:message v-if="$q.screen.lt.md">
-                            <q-banner class="bg-primary text-white q-px-lg text-capitalize text-center" dense>
-                                {{ order.status }}
-                            </q-banner>
-                        </template> -->
-                    </q-stepper>
-                    <div class="text-h6">Items</div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="item in order.cart_products">
-                            <!-- <FoodCardItem :item="product" /> -->
-                            <q-item >
-                                <q-item-section avatar>
-                                    <q-img 
-                                        :src="`/storage/${item.product.photo}`"
-                                        height="70px"
-                                        width="70px"
-                                        fit="contain"
-                                        class="q-mx-md"
-                                    />
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>
-                                        {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
-                                    </q-item-label>
-                                    <template 
-                                        v-for="(modifier, index) in item.grouped_modifiers" 
+                    <q-step
+                        :name="index"
+                        :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
+                        :icon="s.icon"
+                        :error="order.status == 'cancelled'"
+                        v-for="(s, index) in deliverySteps"
+                        :done="step > index || order.status == 'completed'"
+                        v-else
+                    />
+                    <!-- <template v-slot:message v-if="$q.screen.lt.md">
+                        <q-banner class="bg-primary text-white q-px-lg text-capitalize text-center" dense>
+                            {{ order.status }}
+                        </q-banner>
+                    </template> -->
+                </q-stepper>
+                <div class="text-h6">Items</div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="item in order.cart_products">
+                        <!-- <FoodCardItem :item="product" /> -->
+                        <q-item >
+                            <q-item-section avatar>
+                                <q-img 
+                                    :src="`/storage/${item.product.photo}`"
+                                    height="70px"
+                                    width="70px"
+                                    fit="contain"
+                                    class="q-mx-md"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
+                                </q-item-label>
+                                <template 
+                                    v-for="(modifier, index) in item.grouped_modifiers" 
+                                    :key="index"
+                                >
+                                    <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
+                                    <q-item-label 
+                                        caption 
+                                        v-for="(modifier_item, index) in modifier.modifier_items" 
                                         :key="index"
                                     >
-                                        <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
-                                        <q-item-label 
-                                            caption 
-                                            v-for="(modifier_item, index) in modifier.modifier_items" 
-                                            :key="index"
-                                        >
-                                            {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
-                                        </q-item-label>
-                                        
-                                    </template>
-                                    <q-item-label caption v-if="item.special_instruction">
-                                        Note: {{ item.special_instruction }}
+                                        {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
                                     </q-item-label>
-                                </q-item-section>
-                                <q-item-section side>
-                                    P{{ item.total }}
-                                </q-item-section>
-                            </q-item>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                            Subtotal: {{ order.subtotal }}
-                            <!-- <Link :href="route('customer.inbox', 3)">
-                                <q-btn no-caps>Message Driver</q-btn>
-                            </Link> -->
-                        </div>
+                                    
+                                </template>
+                                <q-item-label caption v-if="item.special_instruction">
+                                    Note: {{ item.special_instruction }}
+                                </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                                P{{ item.total }}
+                            </q-item-section>
+                        </q-item>
                     </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                        Subtotal: {{ order.subtotal }}
+                        <!-- <Link :href="route('customer.inbox', 3)">
+                            <q-btn no-caps>Message Driver</q-btn>
+                        </Link> -->
+                    </div>
+                </div>
+            </q-card-section>
+        </q-card>
+    </q-dialog>
+    <q-dialog 
+        v-model="rateDialog" 
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :maximized="$q.screen.lt.md"
+        persistent
+    >
+            <q-card>
+        <q-form @submit="submitRatingForm()">
+            <q-card-section>
+                    <q-btn 
+                        icon="close" 
+                        class="absolute-top-right q-mr-sm q-mt-sm" 
+                        round 
+                        unelevated 
+                        v-close-popup
+                    />
+                    <div class="text-h6">Rate</div>
+                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
+                    <q-rating 
+                        size="xl" 
+                        v-model="ratingForm.rating" 
+                    />
+                    <div class="text-red" v-if="ratingForm.errors.rating ? true : false">
+                        {{ ratingForm.errors.rating }}
+                    </div>
+                    <q-input 
+                        type="textarea" 
+                        v-model="ratingForm.review" 
+                        filled 
+                        label="Write your review here..."
+                    />
                 </q-card-section>
+                <q-card-actions>
+                    <q-btn 
+                        class="full-width" 
+                        color="primary"
+                        :loading="ratingForm.processing"
+                        :disable="ratingForm.processing"
+                        type="submit"
+                    >
+                        Submit
+                    </q-btn>
+                </q-card-actions>
+            </q-form>
             </q-card>
-        </q-dialog>
-        <q-dialog 
-            v-model="rateDialog" 
-            transition-show="slide-up"
-            transition-hide="slide-down"
-            :maximized="$q.screen.lt.md"
-            persistent
-        >
-                <q-card>
-            <q-form @submit="submitRatingForm()">
-                <q-card-section>
-                        <q-btn 
-                            icon="close" 
-                            class="absolute-top-right q-mr-sm q-mt-sm" 
-                            round 
-                            unelevated 
-                            v-close-popup
-                        />
-                        <div class="text-h6">Rate</div>
-                        <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
-                        <q-rating 
-                            size="xl" 
-                            v-model="ratingForm.rating" 
-                        />
-                        <div class="text-red" v-if="ratingForm.errors.rating ? true : false">
-                            {{ ratingForm.errors.rating }}
-                        </div>
-                        <q-input 
-                            type="textarea" 
-                            v-model="ratingForm.review" 
-                            filled 
-                            label="Write your review here..."
-                        />
-                    </q-card-section>
-                    <q-card-actions>
-                        <q-btn 
-                            class="full-width" 
-                            color="primary"
-                            :loading="ratingForm.processing"
-                            :disable="ratingForm.processing"
-                            type="submit"
-                        >
-                            Submit
-                        </q-btn>
-                    </q-card-actions>
-                </q-form>
-                </q-card>
-        </q-dialog>
-    </div>
+    </q-dialog>
 </template>
