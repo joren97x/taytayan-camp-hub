@@ -12,7 +12,8 @@ defineOptions({
 
 const props = defineProps({
     facility: Object,
-    reserved_dates: Object
+    reserved_dates: Object,
+    ratings: Object
 })
 
 const $q = useQuasar()
@@ -288,12 +289,34 @@ const setBookingDates = (dates) => {
         </div>
         <q-separator class="q-my-md" />
         <div class="col-12">
-            <div class="text-h6">Ratings and Reviews</div>
+            <div class="text-h6 q-mb-md">Ratings and Reviews</div>
             <div class="row q-col-gutter-md">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="n in 5">
-                    <q-card>
-                        <q-card-section>
-                            <q-avatar class="bg-secondary">B</q-avatar> Lorem ipsum dolor sit amet consectetur.
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
+                    <q-card bordered flat>
+                        <q-card-section class="row q-py-sm">
+                            <div class="col-8">
+                                <q-item class="q-pa-none">
+                                    <q-item-section avatar>
+                                        <q-avatar class="bg-secondary">
+                                                <q-img 
+                                                    v-if="rating.user.profile_pic"
+                                                    :src="`/storage/${rating.user.prfile_pic}`"
+                                                />
+                                                <span v-else>{{ rating.user.first_name[0] }}</span>
+                                            </q-avatar>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ rating.user.first_name + ' ' + rating.user.last_name }}</q-item-label>
+                                        <q-item-label caption>{{ qdate.formatDate(rating.created_at, 'MMM D, YYYY') }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </div>
+                            <div class="col-4 justify-end flex">
+                                <q-rating v-model="rating.rating" readonly></q-rating>
+                            </div>
+                        </q-card-section>
+                        <q-card-section class="q-py-none">
+                            <div class="q-mb-md q-mx-md">{{ rating.review }}</div>
                         </q-card-section>
                     </q-card>
                 </div>

@@ -65,11 +65,12 @@ class BookingController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        
     }
 
     public function complete(Request $request, string $id)
     {
-        Booking::find($id)->update(['status' => Order::STATUS_COMPLETED]);
+        Booking::find($id)->update(['status' => Booking::STATUS_COMPLETE]);
         return back();
     }
 

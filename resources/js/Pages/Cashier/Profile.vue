@@ -12,9 +12,6 @@ defineOptions({
 
 <template>
     <div class="q-ma-xl">
-        <q-avatar size="100px">
-            <img src="https://cdn.quasar.dev/img/avatar.png">
-        </q-avatar>
         <UpdateProfileInformationForm/>
         <UpdatePasswordForm/>
     </div>

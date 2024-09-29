@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Customer\Facility\BookingController;
 use App\Http\Controllers\Customer\Facility\FacilityController;
+use App\Http\Controllers\Customer\Facility\FacilityRatingController;
 use App\Http\Controllers\Customer\Facility\PaymentController;
 use App\Http\Controllers\Customer\Facility\ReservationController;
 use App\Http\Controllers\Customer\Facility\ViewController;
@@ -14,11 +15,13 @@ use Illuminate\Support\Facades\Route;
     Route::post('/facility-pay', [PaymentController::class, 'pay'])->name('facility.pay');
     // Route::post('/facility-sucess', [PaymentController::class, 'pay'])->name('facility.pay');
     Route::get('/facility-checkout-success', [PaymentController::class, 'success'])->name('facility.checkout.success');
+    Route::post('/facility-rating/{facility}', [FacilityRatingController::class, 'store'])->name('customer.facility_rating.store');
 // });
 
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('customer.bookings.complete');
 Route::resource('bookings', BookingController::class)->names([
-    'index' => 'customer.bookings.index'
+    'index' => 'customer.bookings.index',
+    'update' => 'customer.bookings.update'
 ]);
 
 Route::resource('facilities', FacilityController::class)->names([

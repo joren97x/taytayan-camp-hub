@@ -50,7 +50,7 @@ class EventController extends Controller
             'max_ticket' => 'required'
         ]);
 
-        $path = $request->file('cover_photo')[0]->store('events', 'public');
+        $path = $request->file('cover_photo')->store('events', 'public');
 
         $event = Event::create([
             'title' => $request->title,

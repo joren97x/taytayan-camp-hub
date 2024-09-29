@@ -86,7 +86,7 @@ class PaymentController extends Controller
 
         // dd($request);
         $checkout = Paymongo::checkout()->create([
-            'cancel_url' => url()->previous(),
+            'cancel_url' => route('customer.facilities.index'),
             'billing' => [
                 'name' => $request->user()->first_name . ' ' . $request->user()->last_name,
                 'email' => $request->user()->email,

@@ -119,14 +119,14 @@ const addAttendee = () => {
                                     </div>
                                     <div class="row q-col-gutter-sm">
                                         <div class="col-6" v-for="(attendee, index) in form.ticket_holders">
-                                            <div class="row items-center q-pa-none">
+                                            <div class="text-subtitle1 q-ml-sm">Ticket {{ index + 1 }}</div>
+                                            <!-- <div class="row items-center q-pa-none">
                                                 <div class="col-6">
-                                                    Attendee
                                                 </div>
                                                 <div class="col-6 justify-end flex">
                                                     <q-btn @click="removeAttendee(index)" flat round icon="close"></q-btn>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <q-input 
                                                 label="Full Name" 
                                                 v-model="form.ticket_holders[index].name" 
@@ -136,7 +136,7 @@ const addAttendee = () => {
                                             />
                                         </div>
                                     </div>
-                                    <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn>
+                                    <!-- <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn> -->
                                 </q-list>
                                 <q-separator class="q-my-md" />
                                 <div class="text-h6 q-mb-md">Pay With</div>

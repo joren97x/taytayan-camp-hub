@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer\Facility;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Facility;
+use App\Models\FacilityRating;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -52,7 +53,8 @@ class FacilityController extends Controller
 
         return Inertia::render('Customer/Facility/Show', [
             'facility' => Facility::find($id),
-            'reserved_dates' => $reserved_dates
+            'reserved_dates' => $reserved_dates,
+            'ratings' => FacilityRating::with('user')->where('facility_id', $facility->id)->get()
         ]);
     }
 

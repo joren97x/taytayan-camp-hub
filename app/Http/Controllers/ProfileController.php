@@ -55,7 +55,7 @@ class ProfileController extends Controller
         $request->user()->profile_pic = $path;
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return back();
     }
 
     /**

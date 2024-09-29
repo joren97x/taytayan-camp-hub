@@ -24,7 +24,6 @@ class ViewController extends Controller
         return Inertia::render('Customer/Facility/Checkout', [
             'facility' => $facility,
             'date' => $request->query('date'),
-            'reservation_constants' => Booking::getConstants(),
             'reserved_dates' => $reserved_dates
         ]);
     }

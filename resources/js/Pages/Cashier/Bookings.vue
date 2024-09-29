@@ -40,6 +40,7 @@ const columns = [
             <q-table
                 class="my-sticky-header-column-table"
                 flat
+                :grid="$q.screen.lt.md"
                 title="Treats"
                 :rows="bookings"
                 :columns="columns"

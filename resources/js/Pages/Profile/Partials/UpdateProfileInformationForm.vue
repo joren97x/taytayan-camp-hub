@@ -57,7 +57,7 @@ const onFileChange = (file) => {
                     {{ $page.props.auth.user }}
                     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 justify-center flex">
                         <q-avatar size="100px">
-                            <q-img :src="imgPreview ? imgPreview : `storage/${$page.props.auth.user.profile_pic}`" />
+                            <q-img :src="imgPreview ? imgPreview : `/storage/${$page.props.auth.user.profile_pic}`" />
                         </q-avatar>
                     </div>
                     <div :class="['col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 flex', $q.screen.lt.md ? 'justify-center' : 'items-center']">
