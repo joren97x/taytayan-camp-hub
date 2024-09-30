@@ -18,6 +18,7 @@ const columns = [
     { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
     { name: 'quantity', align: 'center', label: 'Quantity', field: 'quantity', sortable: true },
     { name: 'amount', align: 'center', label: 'Price', field: 'amount', sortable: true },
+    { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
     { name: 'created_at', align: 'center', label: 'Date', field: 'created_at', sortable: true },
     { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
 ]

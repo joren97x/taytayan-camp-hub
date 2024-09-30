@@ -40,7 +40,7 @@ class PaymentController extends Controller
 
         foreach($request->query('ticket_holders') as $ticket_holder) {
 
-            $ticket = Ticket::with('event')->where('status', 'AVAILABLE')->first();
+            $ticket = Ticket::where('event_id', $event->id)->where('status', Ticket::STATUS_AVAILABLE)->first();
 
             $ticket->update([
                 'user_id' => $request->query('user_id'),
@@ -51,7 +51,6 @@ class PaymentController extends Controller
                 'ticket_id' => $ticket->id,
                 'name' => $ticket_holder['name']
             ]);
-
 
             TicketOrderItem::create([
                 'ticket_id' => $ticket->id,
@@ -78,6 +77,7 @@ class PaymentController extends Controller
     public function pay(Request $request) 
     {
         $event = Event::find($request->event_id);
+        
         if (!($event->tickets_sold + count($request->ticket_holders) <= $event->capacity)) {
             return back()->withErrors(['error' => 'Event is full or not found']);
         }

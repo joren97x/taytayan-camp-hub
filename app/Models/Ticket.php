@@ -11,7 +11,6 @@ class Ticket extends Model
     use HasFactory, SoftDeletes;
 
     const STATUS_AVAILABLE = 'available';
-    const STATUS_RESERVED = 'reserved';
     const STATUS_SOLD = 'sold';
     const STATUS_USED = 'used';
 
@@ -31,14 +30,14 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ticket_holders()
-    {
-        return $this->hasMany(TicketHolder::class);
-    }
+    // public function ticket_holders()
+    // {
+    //     return $this->hasMany(TicketHolder::class);
+    // }
 
     public function ticket_holder()
     {
-        return $this->hasOne(TicketHolder::class);
+        return $this->hasOne(TicketHolder::class, 'ticket_id');
     }
 
     public function ticket_order_items()

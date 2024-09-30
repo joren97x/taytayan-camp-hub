@@ -27,10 +27,10 @@ return new class extends Migration
             $table->decimal('admission_fee', 8, 2);
             $table->integer('tickets_sold')->default(0);
             $table->enum('status', [
-                Event::STATUS_DRAFT,
-                Event::STATUS_PAST_EVENT,
-                Event::STATUS_UPCOMING_EVENT
-            ])->default(Event::STATUS_UPCOMING_EVENT);
+                Event::STATUS_CANCELLED,
+                Event::STATUS_ON_SALE,
+                Event::STATUS_TICKETS_AT_THE_DOOR
+            ])->default(Event::STATUS_ON_SALE);
             $table->softDeletes();
             $table->timestamps();
         });

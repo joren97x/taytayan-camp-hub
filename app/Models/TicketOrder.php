@@ -12,7 +12,9 @@ class TicketOrder extends Model
 
     const STATUS_PENDING = 'pending';
     const STATUS_COMPLETED = 'completed';
-    const STATUS_FAILED = 'failed';
+    const STATUS_CONFIRMED = 'confirmed';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_SCANNED = 'scanned';
 
     protected $fillable = [
         'user_id',

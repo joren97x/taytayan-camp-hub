@@ -19,7 +19,6 @@ return new class extends Migration
             // $table->string('ticket_code')->unique();
             $table->enum('status', [
                 Ticket::STATUS_AVAILABLE,
-                Ticket::STATUS_RESERVED,
                 Ticket::STATUS_SOLD,
                 Ticket::STATUS_USED
             ])->default(Ticket::STATUS_AVAILABLE);
