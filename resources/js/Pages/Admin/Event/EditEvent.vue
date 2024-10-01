@@ -10,7 +10,8 @@ defineOptions({
 })
 
 const props = defineProps({
-    event: Object
+    event: Object,
+    event_statuses: Object
 })
 
 const $q = useQuasar()
@@ -58,6 +59,19 @@ const triggerFilePicker = () => {
 const onFileChange = (file) => {
     imgPreview.value = URL.createObjectURL(file)
 }
+
+const statusForm = useForm({
+    status: props.event.status
+})
+const changeStatusDialog = ref(false)
+const submitStatusForm = () => {
+    statusForm.patch(route('admin.events.change_status', props.event.id), {
+        onSuccess: ()=> {
+            changeStatusDialog.value = false
+            $q.notify('Event Status Updated')
+        }
+    })
+}
 </script>
 
 <template>
@@ -70,7 +84,10 @@ const onFileChange = (file) => {
                     <div class="row justify-between" style="z-index: 400;">
                         <div class="text-h6 text-center col-12" style="position: relative">
                             Edit Event
-                            <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                            <Link :href="route('admin.events.index')">
+                                <q-btn icon="arrow_back" flat class="absolute-left" label="Go Back" no-caps  />
+                            </Link>
+                            <q-btn icon="edit_square" outline @click="changeStatusDialog = true"  class="absolute-right" :label="event.status" no-caps  />
                         </div>
                     </div>
                     <q-separator class="q-my-md" />
@@ -101,10 +118,9 @@ const onFileChange = (file) => {
                                         @click="submitCoverPhotoForm"
                                         :loading="coverPhotoForm.processing"
                                         :disable="coverPhotoForm.processing"
-                                    >
-                                        Save
-                                    </q-btn>
-                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                                        label="Update"
+                                    />
+                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker" label="Change Photo"/>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
@@ -249,7 +265,7 @@ const onFileChange = (file) => {
                             :loading="form.processing"
                             :disable="form.processing"
                         >
-                            Save
+                            Update
                         </q-btn>
                     </div>
                     
@@ -264,4 +280,37 @@ const onFileChange = (file) => {
             </q-card-section>
         </q-card>
     </div>
+    <q-dialog v-model="changeStatusDialog">
+        <q-card>
+            <q-card-section>
+                <div class="text-h6">
+                    Change Status
+                </div>
+                <q-btn icon="close" round v-close-popup class="absolute-top-right q-mt-sm q-mr-sm" flat/>
+                <div>
+                    Choose a status for your event. This status affects your tickets wherever they are sold online.
+                </div>
+                <q-select label="Status" class="q-mt-md" :options="event_statuses" v-model="statusForm.status" filled/>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn label="Cancel" no-caps flat v-close-popup />
+                <q-btn 
+                    label="Submit" 
+                    no-caps
+                    color="primary" 
+                    @click="submitStatusForm"
+                    :loading="statusForm.processing"
+                    :disable="statusForm.processing"
+                    unelevated 
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>
+
+<style scoped>
+a {
+    text-decoration: none;
+    color: black
+}
+</style>

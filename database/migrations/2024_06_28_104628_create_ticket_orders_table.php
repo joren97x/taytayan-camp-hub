@@ -19,13 +19,13 @@ return new class extends Migration
             $table->decimal('amount', 8, 2);
             $table->string('qr_code_path')->nullable();
             $table->string('payment_method');
-            $table->enum('status', [
-                TicketOrder::STATUS_COMPLETED,
-                TicketOrder::STATUS_CANCELLED,
-                TicketOrder::STATUS_SCANNED,
-                TicketOrder::STATUS_CONFIRMED,
-                TicketOrder::STATUS_PENDING,
-            ])->default(TicketOrder::STATUS_PENDING);
+            // $table->enum('status', [
+            //     TicketOrder::STATUS_COMPLETED,
+            //     TicketOrder::STATUS_CANCELLED,
+            //     TicketOrder::STATUS_SCANNED,
+            //     TicketOrder::STATUS_CONFIRMED,
+            //     TicketOrder::STATUS_PENDING,
+            // ])->default(TicketOrder::STATUS_PENDING);
             $table->softDeletes();
             $table->timestamps();
         });

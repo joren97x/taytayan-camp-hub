@@ -38,7 +38,7 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Bookings</p>
+                    <p class="text-h6 q-pt-md">Events</p>
                     <q-space />
                     <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
@@ -52,7 +52,7 @@ const columns = [
                 
                 <template v-slot:body-cell-event="props">
                     <q-td :props="props">
-                        <Link :href="route('cashier.events.dashboard', props.row.id)">
+                        <!-- <Link :href="route('cashier.events.dashboard', props.row.id)"> -->
                             <q-item>
                                 <q-item-section avatar class="items-center">
                                     <div class="text-weight-bold text-secondary">{{ date.formatDate(props.row.date, 'MMM') }}</div>
@@ -66,7 +66,7 @@ const columns = [
                                     <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  props.row.start_time}}</q-item-label>
                                 </q-item-section>
                             </q-item>
-                        </Link>
+                        <!-- </Link> -->
                     </q-td>
                 </template>
                 <template v-slot:body-cell-tickets_sold="props">

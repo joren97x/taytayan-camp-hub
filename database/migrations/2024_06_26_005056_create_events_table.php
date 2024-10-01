@@ -29,7 +29,7 @@ return new class extends Migration
             $table->enum('status', [
                 Event::STATUS_CANCELLED,
                 Event::STATUS_ON_SALE,
-                Event::STATUS_TICKETS_AT_THE_DOOR
+                Event::STATUS_EVENT_ENDED
             ])->default(Event::STATUS_ON_SALE);
             $table->softDeletes();
             $table->timestamps();

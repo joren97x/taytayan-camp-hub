@@ -10,9 +10,12 @@ class Event extends Model
 {
     use HasFactory, SoftDeletes;
 
-    const STATUS_UPCOMING_EVENT = 'upcoming_event';
-    const STATUS_PAST_EVENT = 'past_event';
-    const STATUS_DRAFT = 'draft';
+    // const STATUS_UPCOMING_EVENT = 'upcoming_event';
+    const STATUS_ON_SALE = 'on_sale';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_EVENT_ENDED = 'event_ended';
+    // const STATUS_PAST_EVENT = 'past_event';
+    // const STATUS_DRAFT = 'draft';
 
     protected $fillable = [
         'title',
@@ -33,6 +36,15 @@ class Event extends Model
     public function ticket_orders()
     {
         return $this->hasMany(TicketOrder::class);
+    }
+
+    public static function getStatus()
+    {
+        return [
+            self::STATUS_CANCELLED,
+            self::STATUS_EVENT_ENDED,
+            self::STATUS_ON_SALE
+        ];
     }
 
 }

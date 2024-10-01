@@ -121,178 +121,181 @@ const onFileChange = (file) => {
     
     <Head title="Edit Product" />
     <div class="q-pa-md">
-        <q-form @submit="submit">
-            <div class="row justify-between" style="z-index: 400;">
-                <div class="text-center col-12" style="position: relative">
-                    <div class="text-h6 ">Edit Product</div>
-                    <Link :href="route('admin.products.index')" class="absolute-left text-subtitle2 items-center flex" >
-                        <q-icon name="arrow_back" class="q-mr-xs"/>
-                        Go Back
-                    </Link>
-                    <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
-                    <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
-                </div>
-            </div>
-            <q-separator class="q-my-md" />
-            <p class="text-weight-bold text-h6">Product photo</p>
-            <q-item class="q-my-md">
-                <q-item-section avatar>
-                    <q-img 
-                        :src="photoForm.photo ? imgPreview : `/storage/${product.photo}`" 
-                        style="width: 100px; height: 100px;" 
-                        fit="contain"    
-                    />
-                </q-item-section>
-                <q-item-section>
-                    <q-file 
-                        v-model="photoForm.photo"
-                        :error="photoForm.errors.photo ? true : false"
-                        :error-message="photoForm.errors.photo"
-                        style="display: none;"
-                        ref="productPhotoRef"
-                        @update:model-value="onFileChange"
-                    />
-                    <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                    <q-item-label caption>File requirement: JPG, PNG</q-item-label>
-                    <q-item-label>
-                        <q-btn 
-                            no-caps color="primary" 
-                            v-if="photoForm.photo" 
-                            @click="submitphotoForm()"
-                            :loading="photoForm.processing"
-                            :disable="photoForm.processing"
-                        >
-                            Save
-                        </q-btn>
-                        <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
-                    </q-item-label>
-                </q-item-section>
-            </q-item>
-            <q-separator class="q-my-lg" />
-            <p class="text-weight-bold text-h6">Product Details</p>
-            <q-input 
-                label="Name" 
-                v-model="form.name" 
-                filled
-                :error="form.errors.name ? true : false"
-                :error-message="form.errors.name"
-            />
-            
-            <q-input 
-                label="Description" 
-                v-model="form.description" 
-                filled 
-                type="textarea"
-                :error="form.errors.description ? true : false"
-                :error-message="form.errors.description"
-            >
-            </q-input>
-            <q-select 
-                filled 
-                class="q-mt-lg"
-                label="Categories" 
-                multiple
-                v-model="form.categories"
-                option-label="name"
-                option-value="id"
-                emit-value
-                use-chips
-                map-options
-                :options="props.categories"
-                :error="form.errors.categories ? true : false"
-                :error-message="form.errors.categories"
-            >
-            </q-select>
-            <q-input 
-                filled 
-                label="Default Price" 
-                v-model="form.price" 
-                placeholder="None" 
-                class="q-mt-md"
-                :error="form.errors.price ? true : false"
-                :error-message="form.errors.price"
-                mask="#.##"
-                fill-mask="0"
-                reverse-fill-mask
-            >
-                <template v-slot:prepend>
-                    <q-icon name="attach_money" />
-                </template>
-            </q-input>
-            <q-checkbox v-model="form.is_featured" label="Feature Product" />
-            <q-checkbox v-model="form.available" label="Available" />
-            <q-btn 
-                type="submit" 
-                no-caps 
-                color="primary" 
-                class="q-mr-sm full-width"
-                :loading="form.processing"
-                :disable="form.processing"
-            >
-                Save
-            </q-btn>
-            <q-separator class="q-my-lg" />
-            
-            <p class="text-weight-bold text-h6">Modifier Groups</p>
-            <p class="text-weight-light">
-                Modifier groups allow customers to customize items
-            </p>
-            <q-expansion-item
-                switch-toggle-side
-                expand-separator
-                v-for="modifier_group in product.modifier_groups"
-                :key="modifier_group.id"
-            >
-            <template v-slot:header>
-                <q-item-section>
-                    {{ modifier_group.name }}
-                </q-item-section>
-
-                <q-item-section side v-if="modifier_group.required">
-                    <div class="row items-center">
-                        <q-chip>Required</q-chip>
+        <q-card bordered flat>
+            <q-card-section>
+                <q-form @submit="submit">
+                    <div class="row justify-between" style="z-index: 400;">
+                        <div class="text-center col-12" style="position: relative">
+                            <div class="text-h6 ">Edit Product</div>
+                            <Link :href="route('admin.products.index')" class="absolute-left text-subtitle2 items-center flex" >
+                                <q-btn icon="arrow_back" label="Go Back" no-caps flat />
+                            </Link>
+                            <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
+                            <q-btn icon="edit_square" unelevated class="absolute-right" label="Status" no-caps color="negative" />
+                        </div>
                     </div>
-                </q-item-section>
-            </template>
-                <q-card>
-                <q-card-section>
-                    <q-list>
-                        <q-item v-for="modifier_item in modifier_group.modifier_items" :key="modifier_item.id">
-                            <q-item-section>
-                                <q-item-label>{{ modifier_item.name }}</q-item-label>
-                            </q-item-section>
+                    <q-separator class="q-my-md" />
+                    <p class="text-weight-bold text-h6">Product photo</p>
+                    <q-item class="q-my-md">
+                        <q-item-section avatar>
+                            <q-img 
+                                :src="photoForm.photo ? imgPreview : `/storage/${product.photo}`" 
+                                style="width: 100px; height: 100px;" 
+                                fit="contain"    
+                            />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-file 
+                                v-model="photoForm.photo"
+                                :error="photoForm.errors.photo ? true : false"
+                                :error-message="photoForm.errors.photo"
+                                style="display: none;"
+                                ref="productPhotoRef"
+                                @update:model-value="onFileChange"
+                            />
+                            <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
+                            <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                            <q-item-label>
+                                <q-btn 
+                                    no-caps color="primary" 
+                                    v-if="photoForm.photo" 
+                                    @click="submitphotoForm()"
+                                    :loading="photoForm.processing"
+                                    :disable="photoForm.processing"
+                                >
+                                    Save
+                                </q-btn>
+                                <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <q-separator class="q-my-lg" />
+                    <p class="text-weight-bold text-h6">Product Details</p>
+                    <q-input 
+                        label="Name" 
+                        v-model="form.name" 
+                        filled
+                        :error="form.errors.name ? true : false"
+                        :error-message="form.errors.name"
+                    />
+                    
+                    <q-input 
+                        label="Description" 
+                        v-model="form.description" 
+                        filled 
+                        type="textarea"
+                        :error="form.errors.description ? true : false"
+                        :error-message="form.errors.description"
+                    >
+                    </q-input>
+                    <q-select 
+                        filled 
+                        class="q-mt-lg"
+                        label="Categories" 
+                        multiple
+                        v-model="form.categories"
+                        option-label="name"
+                        option-value="id"
+                        emit-value
+                        use-chips
+                        map-options
+                        :options="props.categories"
+                        :error="form.errors.categories ? true : false"
+                        :error-message="form.errors.categories"
+                    >
+                    </q-select>
+                    <q-input 
+                        filled 
+                        label="Default Price" 
+                        v-model="form.price" 
+                        placeholder="None" 
+                        class="q-mt-md"
+                        :error="form.errors.price ? true : false"
+                        :error-message="form.errors.price"
+                        mask="#.##"
+                        fill-mask="0"
+                        reverse-fill-mask
+                    >
+                        <template v-slot:prepend>
+                            <q-icon name="attach_money" />
+                        </template>
+                    </q-input>
+                    <q-checkbox v-model="form.is_featured" label="Feature Product" />
+                    <q-checkbox v-model="form.available" label="Available" />
+                    <q-btn 
+                        type="submit" 
+                        no-caps 
+                        color="primary" 
+                        class="q-mr-sm full-width"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                    >
+                        Save
+                    </q-btn>
+                    <q-separator class="q-my-lg" />
+                    
+                    <p class="text-weight-bold text-h6">Modifier Groups</p>
+                    <p class="text-weight-light">
+                        Modifier groups allow customers to customize items
+                    </p>
+                    <q-expansion-item
+                        switch-toggle-side
+                        expand-separator
+                        v-for="modifier_group in product.modifier_groups"
+                        :key="modifier_group.id"
+                    >
+                    <template v-slot:header>
+                        <q-item-section>
+                            {{ modifier_group.name }}
+                        </q-item-section>
 
-                            <q-item-section side top>
-                                <q-item-label caption>P{{ modifier_item.price }}</q-item-label>
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </q-card-section>
-                </q-card>
-            </q-expansion-item>
-            <div class="q-my-lg">
-                <q-chip 
-                    outline 
-                    clickable 
-                    color="primary" 
-                    text-color="white" 
-                    size="lg" 
-                    @click="addModifierGroupDialog = true"
-                >
-                    <span class="text-subtitle2">Add Modifier Group</span>
-                </q-chip>
-                <q-chip 
-                    outline 
-                    clickable 
-                    color="primary" 
-                    text-color="white" 
-                    size="lg" 
-                    @click="clearModifierGroupDialog = true"
-                >
-                    <span class="text-subtitle2">Clear</span>
-                </q-chip>
-            </div>
-        </q-form>
+                        <q-item-section side v-if="modifier_group.required">
+                            <div class="row items-center">
+                                <q-chip>Required</q-chip>
+                            </div>
+                        </q-item-section>
+                    </template>
+                        <q-card>
+                        <q-card-section>
+                            <q-list>
+                                <q-item v-for="modifier_item in modifier_group.modifier_items" :key="modifier_item.id">
+                                    <q-item-section>
+                                        <q-item-label>{{ modifier_item.name }}</q-item-label>
+                                    </q-item-section>
+
+                                    <q-item-section side top>
+                                        <q-item-label caption>P{{ modifier_item.price }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </q-list>
+                        </q-card-section>
+                        </q-card>
+                    </q-expansion-item>
+                    <div class="q-my-lg">
+                        <q-chip 
+                            outline 
+                            clickable 
+                            color="primary" 
+                            text-color="white" 
+                            size="lg" 
+                            @click="addModifierGroupDialog = true"
+                        >
+                            <span class="text-subtitle2">Add Modifier Group</span>
+                        </q-chip>
+                        <q-chip 
+                            outline 
+                            clickable 
+                            color="primary" 
+                            text-color="white" 
+                            size="lg" 
+                            @click="clearModifierGroupDialog = true"
+                        >
+                            <span class="text-subtitle2">Clear</span>
+                        </q-chip>
+                    </div>
+                </q-form>
+            </q-card-section>
+        </q-card>
     </div>
     <q-dialog v-model="addModifierGroupDialog" full-width>
         <q-card>

@@ -13,12 +13,12 @@ use Inertia\Inertia;
 class TicketOrderController extends Controller
 {
     //
-    public function index()
-    {
-        return Inertia::render('Cashier/Tickets', [
-            'events' => Event::with('ticket_orders')->get()
-        ]);
-    }
+    // public function index()
+    // {
+    //     return Inertia::render('Cashier/Tickets', [
+    //         'events' => Event::with('ticket_orders')->get()
+    //     ]);
+    // }
 
     public function dashboard(Event $event)
     {

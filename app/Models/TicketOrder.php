@@ -32,7 +32,9 @@ class TicketOrder extends Model
                 // DO NOT CHANGE THE ORDER WALLAHI IT WILL RUIN THE SYSTEM
                 self::STATUS_PENDING,
                 self::STATUS_COMPLETED,
-                self::STATUS_FAILED,
+                self::STATUS_CANCELLED,
+                self::STATUS_CONFIRMED,
+                self::STATUS_SCANNED,
             ],
         ];
     }

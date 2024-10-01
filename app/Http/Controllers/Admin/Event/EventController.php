@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Event;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\TicketOrder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -29,6 +30,14 @@ class EventController extends Controller
     {
         //
         return Inertia::render('Admin/Event/CreateEvent');
+    }
+
+    public function dashboard(Event $event)
+    {
+        return Inertia::render('Admin/Event/Dashboard', [
+            'event' => $event,
+            'ticket_orders' => TicketOrder::with('user', 'ticket_order_items')->where('event_id', $event->id)->get()
+        ]);
     }
 
     /**
@@ -100,6 +109,11 @@ class EventController extends Controller
         ]);
     }
 
+    public function change_status(Request $request, Event $event)
+    {
+        $event->update(['status' => $request->status]);
+        return back();
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -107,7 +121,8 @@ class EventController extends Controller
     {
         //
         return Inertia::render('Admin/Event/EditEvent', [
-            'event' => Event::find($id)
+            'event' => Event::find($id),
+            'event_statuses' => Event::getStatus()
         ]);
     }
 
@@ -152,6 +167,8 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
+        Event::destroy($id);
+        return back();
     }
 
     public function event_dashboard(string $id) {

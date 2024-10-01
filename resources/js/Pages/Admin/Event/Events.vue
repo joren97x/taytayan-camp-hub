@@ -85,9 +85,9 @@ const columns = [
                         <Link :href="route('admin.events.edit', props.row.id)">
                             <q-btn class="q-ml-sm" no-caps color="primary">Edit</q-btn>
                         </Link>
-                        <Link :href="route('admin.events.show', props.row.id)">
+                        <!-- <Link :href="route('admin.events.show', props.row.id)">
                             <q-btn class="q-ml-sm" no-caps color="primary">View Event</q-btn>
-                        </Link>
+                        </Link> -->
                     </q-td>
                 </template>
                 <template v-slot:top>

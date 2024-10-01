@@ -39,10 +39,10 @@ const deleteProduct = () => {
 }
 
 const columns = [
-  { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
-  { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
+//   { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
+  { name: 'name', align: 'center', label: 'Product', field: 'name', sortable: true },
   { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
-  { name: 'categories', align: 'center', label: 'Categories', field: 'categories', sortable: true },
+//   { name: 'categories', align: 'center', label: 'Categories', field: 'categories', sortable: true },
   { name: 'available', align: 'center', label: 'Available', field: 'available', sortable: true },
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
@@ -64,9 +64,17 @@ const columns = [
                 row-key="name"
                 :filter="filter"
             >
-                <template v-slot:body-cell-photo="props">
-                    <q-td :props="props">
-                        <q-img :src="`/storage/${props.row.photo}`" fit="contain" style="width: 50px; height: 50px;" />
+                <template v-slot:body-cell-name="props">
+                    <q-td :props="props" style="width: 200px;">
+                        <q-item class="q-pa-none">
+                            <q-item-section avatar>
+                                <q-img :src="`/storage/${props.row.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
+                            </q-item-section>
+                            <q-item-section class="items-start">
+                                <q-item-label>{{ props.row.name }}</q-item-label>
+                                <!-- <q-item-label caption class="ellipsis" style="max-width: 250px" >{{ props.row.description }}{{ props.row.description }}</q-item-label> -->
+                            </q-item-section>
+                        </q-item>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-price="props">

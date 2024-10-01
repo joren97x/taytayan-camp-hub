@@ -3,6 +3,7 @@
 import { Head, Link } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
+import { date } from 'quasar'
 
 defineOptions({
     layout: AdminLayout
@@ -15,11 +16,10 @@ const props = defineProps({
 const filter = ref('')
 
 const columns = [
-    { name: 'facility', label: 'Facility', align: 'center', field: 'name', sortable: true },
-    { name: 'description', align: 'center', label: 'description', field: 'description', sortable: true },
-    { name: 'price', align: 'center', label: 'price', field: 'price', sortable: true },
-    { name: 'images', align: 'center', label: 'images', field: 'images', sortable: true },
-    { name: 'amenities', align: 'center', label: 'amenities', field: 'amenities', sortable: true },
+    { name: 'name', label: 'Facility', align: 'center', field: 'name', sortable: true },
+    { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
+    // { name: 'guests', align: 'center', label: 'guests', field: 'guests', sortable: true },
+    // { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -28,7 +28,7 @@ const columns = [
 <template>
     
     <Head title="Reviews" />
-    <div class="q-pa-md bg-grey-3">
+    <div class="q-pa-md">
         <q-card bordered flat>
             <q-table
                 class="my-sticky-header-column-table"
@@ -39,12 +39,22 @@ const columns = [
                 row-key="name"
                 :filter="filter"
             >
-                <template v-slot:body-cell-images="props">
-                    <q-td :props="props">
-                        {{ JSON.parse(props.row.images).length }} images
+                <template v-slot:body-cell-name="props">
+                    <q-td :props="props" style="width: 200px;">
+                        <q-item class="q-pa-none">
+                            <q-item-section avatar>
+                                <q-img :src="`/storage/${JSON.parse(props.row.images)[0]}`" height="60px" width="60px" class="rounded-borders" />
+                            </q-item-section>
+                            <q-item-section class="items-start " style="">
+                                <q-item-label>{{ props.row.name }}</q-item-label>
+                                <q-item-label caption class="ellipsis" style="max-width: 250px" >{{ props.row.description }}{{ props.row.description }}</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        
                         <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
                     </q-td>
                 </template>
+                <!--  -->
                 <template v-slot:body-cell-amenities="props">
                     <q-td :props="props">
                         <!-- {{ JSON.parse(props.row.amenities).length }} amenities -->
@@ -58,7 +68,6 @@ const columns = [
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route(`admin.facilities.edit`, props.row.id)">
-                            {{ props.row.id }}
                             <q-btn no-caps unelevated>Edit</q-btn>
                         </Link>
                         <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
