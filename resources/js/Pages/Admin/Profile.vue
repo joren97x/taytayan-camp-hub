@@ -11,7 +11,7 @@ defineOptions({
 </script>
 
 <template>
-    <div class="q-ma-xl">
+    <div class="q-pa-md">
         <UpdateProfileInformationForm/>
         <UpdatePasswordForm/>
     </div>

@@ -26,10 +26,8 @@ const shareOnFacebook = () => {
 
 <template>
     <Head title="Dashboard" />
-    <div class="q-mx-md">
-        <div class="text-h5 q-my-md">
-            Dashboard
-        </div>
+    <div class="q-pa-md">
+        <div class="text-h5 q-mb-md"> Dashboard </div>
         
         <div class="row q-col-gutter-md ">
             <div class="col-3" v-for="n in 4">

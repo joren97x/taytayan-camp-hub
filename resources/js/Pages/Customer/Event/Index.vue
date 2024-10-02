@@ -2,7 +2,8 @@
 
 import { Head } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import EventCard from '@/Components/Customer/Event/EventCard.vue'
+// import EventCard from '@/Components/Customer/Event/EventCard.vue'
+import EventCard from './Partials/EventCard.vue';
 
 defineOptions({
     layout: CustomerLayout

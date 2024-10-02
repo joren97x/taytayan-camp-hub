@@ -152,7 +152,7 @@ const navigation_list = [
             </q-img>
             <!-- drawer content -->
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd;">
-                <q-list class="q-mx-sm q-mt-md" style="margin-bottom: 80px">
+                <q-list class="q-mx-sm q-mt-md" style="margin-bottom: 130px">
                     <q-item-label header class="q-pa-none q-px-md q-py-xs">Management</q-item-label>
                     <Link :href="route('admin.dashboard')">
                         <q-item clickable v-ripple class="rounded-borders" :active="$page.component == 'Admin/Dashboard'" active-class="bg-primary text-white">
@@ -217,7 +217,7 @@ const navigation_list = [
                                     </q-item-section>
                                 </q-item>
                             </Link>
-                    <q-item-label header class="q-pa-none q-px-md q-py-xs">Communications</q-item-label>
+                    <!-- <q-item-label header class="q-pa-none q-px-md q-py-xs">Communications</q-item-label>
                     <Link :href="route('admin.conversation.index')">
                         <q-item clickable v-ripple>
                             <q-item-section avatar>
@@ -238,22 +238,83 @@ const navigation_list = [
                                 Profile
                             </q-item-section>
                         </q-item>
-                    </Link>
-                    <q-item clickable v-ripple  @click="$q.dark.toggle">
-                            <q-item-section avatar>
-                                <q-icon name="drafts" />
-                            </q-item-section>
-                            <q-item-section>
-                                Dark Mode
-                            </q-item-section>
-                        <q-item-section side top>
-                                <q-toggle v-model="$q.dark.isActive"></q-toggle>
-                            </q-item-section>
-                        </q-item>
+                    </Link> -->
+                    
                         
                 </q-list>
             </q-scroll-area>
-            <div>
+            <div class="absolute-bottom bg-white">
+                <q-list >
+                    <Link :href="route('admin.inbox')">
+                        <q-item clickable class="q-mx-sm rounded-borders">
+                            <q-item-section avatar>
+                                <q-icon name="inbox" />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>Inbox</q-item-label>
+                            </q-item-section>
+                            <q-item-section side top>
+                                <q-chip>2</q-chip>
+                            </q-item-section> 
+                        </q-item>
+                    </Link>
+                    <q-separator></q-separator>
+                    <q-item class="q-pa-md">
+                        <q-item-section top avatar>
+                            <q-avatar color="primary" text-color="white" icon="engineering" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>Joren Hyeung Nim</q-item-label>
+                            <q-item-label caption lines="2">Administrator</q-item-label>
+                        </q-item-section>
+                        <q-item-section side top class="">
+                            <q-btn color="primary" icon="unfold_more" flat round>
+                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
+                                    <q-item clickable v-ripple  @click="$q.dark.toggle">
+                                        <q-item-section avatar>
+                                            <q-icon name="drafts" />
+                                        </q-item-section>
+                                        <q-item-section>
+                                            Dark Mode
+                                        </q-item-section>
+                                    <q-item-section side top>
+                                            <q-toggle v-model="$q.dark.isActive"></q-toggle>
+                                        </q-item-section>
+                                    </q-item>
+                                    <Link :href="route('admin.profile')">
+                                        <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
+                                            <q-item-section avatar >
+                                                <q-icon name="school" />
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label>View Profile</q-item-label>
+                                                <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
+                                            </q-item-section>
+                                        </q-item>
+                                    </Link>
+                                    <Link :href="route('logout')" method="post">
+                                        <!-- <q-btn icon="logout" round unelevated color="negative" flat label="flat">
+                                            <q-tooltip>
+                                                Logout
+                                            </q-tooltip>
+                                        </q-btn> -->
+                                        <q-item clickable class="rounded-borders">
+                                            <q-item-section avatar >
+                                                <q-icon name="logout" />
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label>Log out</q-item-label>
+                                                <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
+                                            </q-item-section>
+                                        </q-item>
+                                    </Link>
+                                </q-menu>
+                            </q-btn>
+                        </q-item-section> 
+                    </q-item>
+                </q-list>
+            </div>
+            <!-- <div>
                 <q-item  class="absolute-bottom bg-white">
                     <q-item-section top avatar>
                         <q-avatar color="primary" text-color="white" icon="engineering" />
@@ -272,7 +333,7 @@ const navigation_list = [
                         </Link>
                     </q-item-section> 
                 </q-item>
-            </div>
+            </div> -->
             
         </q-drawer>
     

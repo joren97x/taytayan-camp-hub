@@ -3,7 +3,7 @@
 import { Link, Head } from '@inertiajs/vue3'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 
 const props = defineProps({
     order_constants: Object,
@@ -91,8 +91,9 @@ const addAttendee = () => {
                         <q-card flat bordered>
                             <q-card-section>
                                 <div class="text-h6 text-center">Checkout</div>
-                                <div class="text-h6">Event Details</div>
-                                <div class="full-width rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
+                                <q-separator class="q-my-md"/>
+                                <div class="text-h6 q-mb-sm">Event Details</div>
+                                <div class="full-width rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
                                     <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
                                     <!-- Foreground image (not blurred) -->
                                     <q-img 
@@ -105,14 +106,23 @@ const addAttendee = () => {
                                 </div>
                                 <q-item>
                                     <q-item-section avatar>
-                                        <q-icon name="home"></q-icon>
+                                        <q-icon name="event"></q-icon>
                                     </q-item-section>
-                                    <q-item-section class="text-h6">
-                                        Event Location
-                                        <q-item-label caption>{{ event.location }}</q-item-label>
+                                    <q-item-section class="text-subtitle1">
+                                        {{ event.title }}
+                                        <q-item-label caption>{{ date.formatDate(event.date, 'MMMM D, YYYY') }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
-                                <q-separator/>
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-icon name="location_on"></q-icon>
+                                    </q-item-section>
+                                    <q-item-section class="text-subtitle1">
+                                        {{ event.location }}
+                                        <q-item-label caption>Event Location</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                                <q-separator class="q-my-md"/>
                                 <q-list>
                                     <div class="text-h6">
                                         Attendees

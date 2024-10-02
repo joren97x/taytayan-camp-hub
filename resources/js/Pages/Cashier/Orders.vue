@@ -1,11 +1,11 @@
 <script setup>
 
 import { Head } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 // import OrderItem from '@/Components/Admin/Product/OrderItem.vue'
-import PreparingOrderItem from '@/Components/Admin/Product/PreparingOrderItem.vue'
-import ReadyOrderItem from '@/Components/Admin/Product/ReadyOrderItem.vue'
+import PreparingOrderItem from '@/Pages/Cashier/Partials/PreparingOrderItem.vue'
+import ReadyOrderItem from '@/Pages/Cashier/Partials/ReadyOrderItem.vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 
@@ -41,7 +41,8 @@ const order_statuses = computed(() => {
     }, {})
 })
 
-Echo.private('orders')
+onMounted(() => {
+    Echo.private('orders')
     .listen('Product\\OrderPending', (data) => {
         $q.notify('new order arrived')
         console.log(data)
@@ -55,6 +56,7 @@ Echo.private('orders')
             console.error(err)
         })
     })
+})
 
 // axios.get(route('cashier.orders.show', 12))
 //     .then((orderData) => {
@@ -65,15 +67,14 @@ Echo.private('orders')
 //     .catch((err) => {
 //         console.error(err)
 //     })
-
 </script>
 
 <template>
     
     <Head title="Orders" />
-    
+   
     <div class="q-pa-md">
-        <q-card>
+        <q-card bordered flat>
             <div class="text-h6 text-weight-bold q-ml-md q-pt-md">
                 Orders
             </div>
@@ -160,3 +161,10 @@ Echo.private('orders')
     <!-- </div> -->
 
 </template>
+
+<style scoped>
+.custom-dialog {
+  width: 70vw;
+  max-width: 70vw;
+}
+</style>

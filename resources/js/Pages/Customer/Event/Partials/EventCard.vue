@@ -25,7 +25,7 @@ function shareOnFacebook() {
                         :src="`/storage/${event.cover_photo}`"
                     />
                 </q-card-section>
-                <q-card-section class="q-pa-md">
+                <q-card-section class="q-pa-md full-width">
                     <q-item  class="q-pa-none">
                         <q-item-section>
                             <q-item-label class="text-h6">{{ event.title }}</q-item-label>

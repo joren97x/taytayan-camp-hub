@@ -42,7 +42,6 @@ const setBookingDates = (dates) => {
 <template>
     <Head title="Checkout" />
     <div class="bg-grey-2">
-        {{ form }}
         <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
             <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
                <q-avatar size="lg">

@@ -162,6 +162,17 @@ function toggleLeftDrawer () {
                         <q-item-section side top class="">
                             <q-btn color="primary" icon="unfold_more" flat round>
                                 <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
+                                    <q-item clickable v-ripple  @click="$q.dark.toggle">
+                                        <q-item-section avatar>
+                                            <q-icon name="drafts" />
+                                        </q-item-section>
+                                        <q-item-section>
+                                            Dark Mode
+                                        </q-item-section>
+                                    <q-item-section side top>
+                                            <q-toggle v-model="$q.dark.isActive"></q-toggle>
+                                        </q-item-section>
+                                    </q-item>
                                     <Link :href="route('cashier.profile')">
                                         <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
                                             <q-item-section avatar >

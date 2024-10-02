@@ -35,7 +35,6 @@ const columns = [
     
     <Head title="Bookings" />
     <div class="q-pa-md bg-grey-3" style="height: 100vh;">
-        {{ booking_statuses }}
         <q-card flat bordered>
             <q-table
                 class="my-sticky-header-column-table"

@@ -48,16 +48,18 @@ const onFileChange = (file) => {
 </script>
 
 <template>
-    <q-form class="q-mb-lg" >
+    <q-form class="q-mb-md" >
         <q-card>
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Profile Picture</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
                 <div class="row q-col-gutter-md ">
-                    {{ $page.props.auth.user }}
                     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 justify-center flex">
-                        <q-avatar size="100px">
+                        <q-avatar size="100px" v-if="$page.props.auth.user.profile_pic">
                             <q-img :src="imgPreview ? imgPreview : `/storage/${$page.props.auth.user.profile_pic}`" />
+                        </q-avatar>
+                        <q-avatar color="grey" v-else size="100px">
+                            {{ $page.props.auth.user.first_name[0] }}
                         </q-avatar>
                     </div>
                     <div :class="['col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 flex', $q.screen.lt.md ? 'justify-center' : 'items-center']">

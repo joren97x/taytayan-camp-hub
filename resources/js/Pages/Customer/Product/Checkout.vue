@@ -141,6 +141,9 @@ watch(mode, () => {
                         <q-card flat bordered>
                             <q-card-section>
                                 <div class="text-h6 text-center">Checkout</div>
+
+                                <q-separator class="q-my-md"/>
+
                                 <q-item>
                                     <q-item-section class="text-h6 text-capitalize">{{ form.mode }} Details</q-item-section>
                                     <q-item-section side>
@@ -159,7 +162,7 @@ watch(mode, () => {
                                         />
                                     </q-item-section>
                                 </q-item>
-                                <q-separator/>
+                                <!-- <q-separator/> -->
                                 <q-item v-show="form.mode == 'delivery'">
                                     <q-item-section avatar>
                                         <q-icon name="person"></q-icon>
@@ -206,6 +209,7 @@ watch(mode, () => {
                                         </q-item-section>
                                     </q-item>
                                 </div>
+                                <q-separator class="q-my-md"/>
                                 <q-item>
                                     <q-item-section class="text-h6">Pay With</q-item-section>
                                     <q-item-section side>
@@ -273,13 +277,12 @@ watch(mode, () => {
                                         </q-item>
                                     </q-card>
                                 </q-list>
-                                <q-item>
+                                <q-item class="q-mt-md">
                                     <q-item-section class="text-h6">Order Summary</q-item-section>
                                     <q-item-section side>
                                         <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ items.length }} items</q-chip>
                                     </q-item-section>
                                 </q-item>
-                                <q-separator/>
                                 <q-list>
                                     <q-item v-for="(item, index) in items" :key="index">
                                         <q-item-section avatar>
