@@ -32,8 +32,9 @@ class PaymentController extends Controller
 
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
-            $order->payment_method = $checkout_session->payment_method_used;
-            $order->save();
+            $order->update([
+                'payment_method' => $checkout_session->payment_method_used
+            ]);
         }
 
         $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);

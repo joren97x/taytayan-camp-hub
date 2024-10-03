@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('tickets', TicketController::class)->names([
     'index' => 'customer.tickets.index',
+    'show' => 'customer.tickets.show',
 ]);
 
 Route::resource('events', EventController::class)->names([

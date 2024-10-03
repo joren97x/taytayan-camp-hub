@@ -75,16 +75,16 @@ function cancelOrder() {
             </q-item-section>
             <q-item-section side top v-if="order_statuses.pending == order.status">
                 New
-                <q-item-label caption>{{ order.created_at }}</q-item-label>
+                <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label>
                 <!-- <q-btn no-caps color="primary" @click.stop="isOrderReadyDialog = true">
                     View Order
                 </q-btn> -->
             </q-item-section>
             <q-item-section side top v-else>
-                <q-item-label caption>{{ order.created_at }}</q-item-label>
-                <q-btn no-caps color="primary" @click.stop="readyOrderDialog = true">
+                <q-btn no-caps color="primary" unelevated @click.stop="readyOrderDialog = true">
                     Ready Order
                 </q-btn>
+                <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label>
             </q-item-section> 
         </q-item>
 <!-- </OrderItem> -->
@@ -108,16 +108,6 @@ function cancelOrder() {
                         </div>
                     </div>
                     <q-separator class="q-my-md" />
-                    <!-- <q-item>
-                        <q-item-section>
-                            <q-item-label class="text-h6">
-                                {{ order.cart_products.length }} items
-                                <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
-                                    {{ order.mode }}
-                                </q-chip>
-                            </q-item-label>
-                        </q-item-section>
-                    </q-item> -->
                     <q-list>
                         <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                             <q-item-section avatar>
@@ -158,7 +148,7 @@ function cancelOrder() {
                 <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12" v-if="order.status == 'pending'">
                     <div class="q-pa-md" style="position: relative">
                         <div class="text-h6 text-center q-mt-xl">Waiting Time</div>
-                        <q-btn round icon="close" flat class="absolute-top-right"/>
+                        <q-btn round icon="close" v-close-popup flat class="absolute-top-right"/>
                     </div>
                     <q-input
                         filled

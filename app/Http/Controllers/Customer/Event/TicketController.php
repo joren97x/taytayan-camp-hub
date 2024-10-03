@@ -26,4 +26,17 @@ class TicketController extends Controller
         
     }
 
+    public function show(string $id)
+    {
+        $ticket_order = TicketOrder::with([
+            'event', 
+            'ticket_order_items', 
+            'ticket_order_items.ticket.ticket_holder',
+        ])->find($id);
+        
+        return Inertia::render('Customer/Event/ShowTicket', [
+            'ticket_order' => $ticket_order
+        ]);
+    }
+
 }

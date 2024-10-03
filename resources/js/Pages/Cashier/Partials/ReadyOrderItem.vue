@@ -229,7 +229,21 @@ function calculateSteps() {
                         </div>
                     </div>
                     <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
-                        <q-item>
+                        <q-item clickable>
+                            <q-item-section avatar>
+                                <q-avatar>
+                                    <img src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg?w=800&h=533&crop=1"/>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>John Doe</q-item-label>
+                                <q-item-label caption>09123456789</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <div class="bg-grey full-width" style="height: 200px;">
+                            a map but ill try
+                        </div>
+                        <!-- <q-item>
                             <q-item-section class="text-h6">Order Total</q-item-section>
                         </q-item>
                         <q-item>
@@ -238,19 +252,19 @@ function calculateSteps() {
                                 {{ order.subtotal }}
                             </q-item-section>
                         </q-item>
-                        <!-- <q-item>
+                        <q-item>
                             <q-item-section>Delivery fee if kung delivery? or naa ba na?</q-item-section>
                             <q-item-section side>
                                 P5.00
                             </q-item-section>
-                        </q-item> -->
+                        </q-item>
                         <q-separator/>
                         <q-item class="text-h6">
                             <q-item-section>Total</q-item-section>
                             <q-item-section side>
                                 {{ order.subtotal }}
                             </q-item-section>
-                        </q-item>
+                        </q-item> -->
                         <div class="q-mt-md">
                             <!-- <q-btn 
                                 class="full-width" 

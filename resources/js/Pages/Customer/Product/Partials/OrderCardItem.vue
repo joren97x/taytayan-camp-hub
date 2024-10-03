@@ -165,19 +165,19 @@ console.log(order.value)
         <q-item-section side>
             <div class="row q-gutter-sm">
                 <q-btn unelevated no-caps outline @click="viewOrderDialog = true" rounded>View</q-btn>
+                <!-- <q-btn unelevated no-caps outline @click="viewOrderDialog = true" rounded /> -->
                 <Link :href="route('product.checkout', { cart_id: order.cart_id })">
                     <q-btn unelevated bordered color="primary" no-caps rounded>Reorder</q-btn>
                 </Link>
                 <q-btn 
-                    v-if="order.status == 'delivered'"
+                    v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
                     no-caps 
                     @click="completeOrder()"
                     :loading="completeOrderForm.processing"
                     :disable="completeOrderForm.processing"
                     rounded
-                >
-                    Complete Order
-                </q-btn>
+                    label="Complete Order"
+                />
             </div>
         </q-item-section>
     </q-item>
@@ -238,11 +238,6 @@ console.log(order.value)
                         :done="step > index || order.status == 'completed'"
                         v-else
                     />
-                    <!-- <template v-slot:message v-if="$q.screen.lt.md">
-                        <q-banner class="bg-primary text-white q-px-lg text-capitalize text-center" dense>
-                            {{ order.status }}
-                        </q-banner>
-                    </template> -->
                 </q-stepper>
                 <div class="text-h6">Items</div>
                 <div class="row">
@@ -302,9 +297,9 @@ console.log(order.value)
         :maximized="$q.screen.lt.md"
         persistent
     >
-            <q-card>
-        <q-form @submit="submitRatingForm()">
-            <q-card-section>
+        <q-card>
+            <q-form @submit="submitRatingForm()">
+                <q-card-section>
                     <q-btn 
                         icon="close" 
                         class="absolute-top-right q-mr-sm q-mt-sm" 
@@ -327,7 +322,7 @@ console.log(order.value)
                         filled 
                         label="Write your review here..."
                     />
-                </q-card-section>
+            </q-card-section>
                 <q-card-actions>
                     <q-btn 
                         class="full-width" 
@@ -340,6 +335,6 @@ console.log(order.value)
                     </q-btn>
                 </q-card-actions>
             </q-form>
-            </q-card>
+        </q-card>
     </q-dialog>
 </template>
