@@ -48,7 +48,7 @@ const slide = ref(1)
                     <q-img fill="contain" width="400px" height="400px" src="https://dashboard.paymongo.com/static/media/api-login-signup.d8fe73e3.png"></q-img>
                     <div class="absolute-bottom">
                         <div class="text-h5">Exciting Events</div>
-                        <div class="text-subtitle1">Browse upcoming events and concerts and be part of unforgettable experiences.</div>
+                        <div class="text-subtitle1">Planning a night out? Reserve your tickets online for exclusive events like discos and more!                        </div>
                     </div>    
                 </q-carousel-slide>
             </q-carousel>

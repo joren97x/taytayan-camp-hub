@@ -45,8 +45,8 @@ Echo.channel('hello-channel')
         <div class="row q-col-gutter-lg items-center">
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
-                    <p class="text-start text-h3 q-mt-xl text-weight-medium">Lorem ipsum dolor emit ambatukam</p>
-                    <p class="text-start text-subtitle1"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus accusantium, numquam porro, exercitationem quos debitis fugit ducimus </p>
+                    <p class="text-start text-h3 q-mt-xl text-weight-medium">Taytayan Camp Hub</p>
+                    <p class="text-start text-subtitle1"> Where Every Moment is an Experience! </p>
                     <q-btn size="lg" unelevated color="primary" no-caps class="q-px-xl"> Create your account </q-btn>
                 </div>
             </div>
@@ -58,7 +58,7 @@ Echo.channel('hello-channel')
         </div>
         <!-- <q-separator class="q-my-xl"/> -->
 
-        <p class="text-center text-h5 q-ma-lg text-weight-medium">Our Services Lorem ipsum dolor emit</p>
+        <p class="text-center text-h5 q-ma-lg text-weight-medium">Our Services</p>
         <!-- <p class="text-red text-center">Do the relationships of the models tommorow</p> -->
         <div :class="$q.screen.lt.md ? 'text-center' : ''">
             <div class="row q-col-gutter-xl justify-center items-center">
@@ -70,7 +70,7 @@ Echo.channel('hello-channel')
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Milk Tea Delights </p>
-                        <p class="text-start text-subtitle1"> Explore our wide range of refreshing milk tea flavors and customizable options </p>
+                        <p class="text-start text-subtitle1"> Craving something refreshing? Indulge in our delicious, customizable milk tea, made just the way you like it. Explore our wide range of refreshing milk tea flavors and customizable options. </p>
                         <q-btn size="lg" unelevated color="primary" no-caps> Order Milk Tea </q-btn>
                     </div>
                 </div>
@@ -88,7 +88,7 @@ Echo.channel('hello-channel')
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Nature Retreats </p>
-                        <p class="text-start text-subtitle1"> Plan your next outdoor adventure with our camp reservation system. Discover scenic campsites and book your stay hassle-free. </p>
+                        <p class="text-start text-subtitle1"> Ready for an adventure? Book your camp tents, huts, or cozy camp rooms in just a few clicks! Discover scenic campsites and book your stay hassle-free. </p>
                         <q-btn size="lg" unelevated color="primary" no-caps> Reserve Campsite </q-btn>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ Echo.channel('hello-channel')
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Exciting Events </p>
-                        <p class="text-start text-subtitle1"> Browse upcoming events and concerts. Secure your tickets and be part of unforgettable experiences. </p>
+                        <p class="text-start text-subtitle1"> Planning a night out? Reserve your tickets online for exclusive events like discos and more! Browse upcoming events and concerts. Secure your tickets and be part of unforgettable experiences. </p>
                         <q-btn size="lg" unelevated color="primary" no-caps> Buy Event Tickets </q-btn>
                     </div>
                 </div>

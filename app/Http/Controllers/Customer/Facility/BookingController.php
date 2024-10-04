@@ -16,8 +16,25 @@ class BookingController extends Controller
     public function index()
     {
         
+        $active_bookings = Booking::with('facility')->whereIn('status', [
+            Booking::STATUS_CHECKED_IN,
+            Booking::STATUS_CONFIRMED,
+            Booking::STATUS_PENDING,
+            Booking::STATUS_CHECKED_OUT,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+        $past_bookings = Booking::with('facility')->whereIn('status', [
+            Booking::STATUS_CANCELLED,
+            Booking::STATUS_COMPLETE,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
         return Inertia::render('Customer/Facility/Bookings', [
-            'bookings' => Booking::where('user_id', auth()->id())->with('facility')->get()
+            'active_bookings' => $active_bookings,
+            'past_bookings' => $past_bookings
         ]);
     }
 

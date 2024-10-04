@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
 
         //admin account
         User::factory()->create([
-            'email' => 'sumagangjoren@gmail.com',
+            'email' => 'admin@gmail.com',
             'first_name' => 'Joren',
             'last_name' => 'Sumagang',
             'role' => 'admin',
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         ]);
         //customer account :)
         $user = User::factory()->create([
-            'email' => 'user@gmail.com',
+            'email' => 'sumagangjoren@gmail.com',
             'first_name' => 'Joren',
             'last_name' => 'Sumagang',
             'role' => 'customer',

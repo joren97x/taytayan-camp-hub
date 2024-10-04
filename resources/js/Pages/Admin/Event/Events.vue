@@ -3,7 +3,7 @@
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 
 defineOptions({
     layout: AdminLayout
@@ -35,11 +35,20 @@ function showDeleteEventDialog(event) {
 
 const columns = [
     { name: 'event', label: 'Event', align: 'center', field: 'event', sortable: true },
+    { name: 'date', label: 'Date', align: 'center', field: 'date', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'Tickets Sold', field: 'tickets_sold', sortable: true },
     // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
+
+const formatTime = (timeString) => {
+      // First, convert the string into a valid Date object
+      const dateObj = new Date(`1970-01-01T${timeString}Z`);
+
+      // Use Quasar's date formatter to convert to 12-hour format with AM/PM
+      return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
+    }
 
 </script>
 
@@ -71,6 +80,12 @@ const columns = [
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-date="props">
+                    <q-td :props="props">
+                        {{ date.formatDate(props.row.date, 'MMMM D, YYYY') }} at
+                        {{ formatTime(props.row.start_time) }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

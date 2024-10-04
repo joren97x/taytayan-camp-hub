@@ -34,7 +34,7 @@ class PaymentController extends Controller
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
             $ticket_order->payment_method = $checkout_session->payment_method_used;
-            $ticket_order->status = TicketOrder::STATUS_COMPLETED;
+            // $ticket_order->status = TicketOrder::STATUS_COMPLETED;
             $ticket_order->save();
         }
 

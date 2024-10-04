@@ -1,5 +1,7 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
+import { date } from 'quasar'
+
 defineProps({ event: Object })
 
 const page = usePage()
@@ -30,8 +32,7 @@ function shareOnFacebook() {
                         <q-item-section>
                             <q-item-label class="text-h6">{{ event.title }}</q-item-label>
                             <q-item-label caption class="">
-                                Wednesday, August 28, 2024
-                                {{ event.date }}
+                                {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
                             </q-item-label>
                         </q-item-section>
                     </q-item>

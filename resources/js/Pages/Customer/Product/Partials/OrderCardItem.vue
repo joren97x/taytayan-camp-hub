@@ -1,7 +1,7 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 // import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
@@ -137,7 +137,6 @@ Echo.private(`orders.${order.value.id}`)
         //     console.error(err)
         // })
     })
-console.log(order.value)
 // const date1 = new Date(2017, 4, 12) April 12 2017
 // const date2 = new Date(2017, 3, 8)  March 8 2017
 // const unit = 'days'
@@ -146,42 +145,36 @@ console.log(order.value)
 // `diff` is 34 (days)
 </script>
 <template>
-    <q-item>
-        <!-- <q-item-section avatar>
-            <q-img height="85px" width="85px" src="https://buffer.com/library/content/images/size/w1200/2023/10/free-images.jpg"></q-img>
-        </q-item-section> -->
-        <q-item-section>
-            <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
-            <div class="ellipsi-2-lines">
-                <!-- <span v-for="(p, index) in order.cart_products">
-                    {{ p.product.name }}, 
-                </span> -->
-                {{ date.formatDate(order.created_at, 'MMM D, YYYY') }}
-            </div>
-            <q-item-label caption>
-                {{ order.cart_products.length }} items - {{ order.status }}
-            </q-item-label>
-        </q-item-section>
-        <q-item-section side>
-            <div class="row q-gutter-sm">
-                <q-btn unelevated no-caps outline @click="viewOrderDialog = true" rounded>View</q-btn>
-                <!-- <q-btn unelevated no-caps outline @click="viewOrderDialog = true" rounded /> -->
-                <Link :href="route('product.checkout', { cart_id: order.cart_id })">
-                    <q-btn unelevated bordered color="primary" no-caps rounded>Reorder</q-btn>
-                </Link>
-                <q-btn 
-                    v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
-                    no-caps 
-                    @click="completeOrder()"
-                    :loading="completeOrderForm.processing"
-                    :disable="completeOrderForm.processing"
-                    rounded
-                    label="Complete Order"
-                />
-            </div>
-        </q-item-section>
-    </q-item>
-    <q-separator/>
+    <q-card bordered flat class="q-my-sm">
+        <q-item clickable  @click="viewOrderDialog = true">
+            <q-item-section avatar>
+                    <!-- {{ order }} -->
+                    <div style="height: 100px; width: 200px;" class="row">
+                        <div class="col-6" v-for="cart_product in order.cart_products">
+                            <q-img :src="`../storage/${cart_product.product.photo}`" fit="contain" height="50px" width="100px"></q-img>
+                        </div>
+                    </div>
+            </q-item-section>
+            <q-item-section top>
+                <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
+                <div class="ellipsi-2-lines">
+                    <!-- <span v-for="(p, index) in order.cart_products">
+                        {{ p.product.name }}, 
+                    </span> -->
+                    {{ date.formatDate(order.created_at, 'MMMM D, YYYY') }}
+                </div>
+                <q-item-label caption>
+                    {{ order.cart_products.length }} items - P{{ order.subtotal }}
+                </q-item-label>
+                <q-item-label caption>
+                    {{ order.mode }}
+                </q-item-label>
+            </q-item-section>
+            <q-item-section side top>
+                {{ order.status }}
+            </q-item-section>
+        </q-item>
+    </q-card>
         <!-- <div class="row">
             <div class="col-4">
                 <div style="height: 150px; width: 100%;" class="bg-grey"></div>
@@ -196,9 +189,8 @@ console.log(order.value)
         :maximized="$q.screen.lt.md"  
         transition-show="slide-up"
         transition-hide="slide-down"
-        full-width
     >   
-        <q-card>
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-section>
                 <p class="text-h6">Order Details</p>
                 <q-separator/>
@@ -241,9 +233,9 @@ console.log(order.value)
                 </q-stepper>
                 <div class="text-h6">Items</div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" v-for="item in order.cart_products">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                         <!-- <FoodCardItem :item="product" /> -->
-                        <q-item >
+                        <q-item v-for="item in order.cart_products">
                             <q-item-section avatar>
                                 <q-img 
                                     :src="`/storage/${item.product.photo}`"
@@ -279,9 +271,28 @@ console.log(order.value)
                                 P{{ item.total }}
                             </q-item-section>
                         </q-item>
+                        <q-separator/>
+                        <div class="row">
+                            <q-space/>
+                            <div class="q-mt-md q-mr-md text-subtitle1">
+                                <span class="q-mr-md">Subtotal</span> P{{ order.subtotal }}
+                            </div>
+                        </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                        Subtotal: {{ order.subtotal }}
+                    <Link :href="route('product.checkout', { cart_id: order.cart_id })">
+                        <q-btn class="full-width" label="Reorder" color="primary" no-caps unelevated />
+                    </Link>
+                    <q-btn 
+                        v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
+                        no-caps 
+                        class="q-mt-sm full-width"
+                        @click="completeOrder()"
+                        :loading="completeOrderForm.processing"
+                        :disable="completeOrderForm.processing"
+                        rounded
+                        label="Complete Order"
+                    />
                         <!-- <Link :href="route('customer.inbox', 3)">
                             <q-btn no-caps>Message Driver</q-btn>
                         </Link> -->

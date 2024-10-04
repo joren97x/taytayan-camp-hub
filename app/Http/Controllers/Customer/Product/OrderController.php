@@ -61,9 +61,10 @@ class OrderController extends Controller
     public function index(Request $request, CartService $cartService, string $status = null) 
     {
 
-        $orders = Order::whereIn('status', [
+        $active_orders = Order::whereIn('status', [
             Order::STATUS_PENDING,
             Order::STATUS_READY_FOR_DELIVERY,
+            Order::STATUS_DELIVERED,
             Order::STATUS_READY_FOR_PICKUP,
             Order::STATUS_DELIVERING,
             Order::STATUS_PREPARING,
@@ -71,14 +72,28 @@ class OrderController extends Controller
         ->where('user_id', auth()->id())
         ->get();
 
-        foreach($orders as $order) {
+        $past_orders = Order::whereIn('status', [
+            Order::STATUS_CANCELLED,
+            Order::STATUS_COMPLETED,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+        foreach($active_orders as $order) {
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+            $order->cart_products = $result['cart_products'];
+            $order->subtotal = $result['subtotal'];
+        }
+
+        foreach($past_orders as $order) {
             $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }
 
         return Inertia::render('Customer/Product/Orders', [
-            'orders' => $orders,
+            'active_orders' => $active_orders,
+            'past_orders' => $past_orders,
             'order_constants' => Order::getConstants()
         ]);
 
