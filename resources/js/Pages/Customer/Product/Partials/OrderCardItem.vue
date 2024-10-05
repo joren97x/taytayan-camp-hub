@@ -280,19 +280,37 @@ Echo.private(`orders.${order.value.id}`)
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                    <Link :href="route('product.checkout', { cart_id: order.cart_id })">
-                        <q-btn class="full-width" label="Reorder" color="primary" no-caps unelevated />
-                    </Link>
-                    <q-btn 
-                        v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
-                        no-caps 
-                        class="q-mt-sm full-width"
-                        @click="completeOrder()"
-                        :loading="completeOrderForm.processing"
-                        :disable="completeOrderForm.processing"
-                        rounded
-                        label="Complete Order"
-                    />
+                        <div style="height: 250px; position: relative" class="full-width bg-grey-3">
+                            <div v-if="order.driver">
+                                <!-- {{ order.driver }} -->
+                                <q-item class="bg-grey">
+                                    <q-item-section avatar>
+                                        <q-avatar color="secondary">
+                                            <q-img :src="`/storage/${order.driver.profile_pic}`" v-if="order.driver.profile_pic"/>
+                                            <div v-else>{{ order.driver.first_name[0] }}</div>
+                                        </q-avatar>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                                        <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </div>
+                        </div>
+                        <Link :href="route('product.checkout', { cart_id: order.cart_id })">
+                            <q-btn class="full-width q-mt-sm" label="Reorder" color="primary" no-caps unelevated />
+                        </Link>
+                        <q-btn class="full-width q-mt-sm" no-caps label="Message Driver" v-if="order.driver" />
+                        <q-btn 
+                            v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
+                            no-caps 
+                            class="q-mt-sm full-width"
+                            @click="completeOrder()"
+                            :loading="completeOrderForm.processing"
+                            :disable="completeOrderForm.processing"
+                            rounded
+                            label="Complete Order"
+                        />
                         <!-- <Link :href="route('customer.inbox', 3)">
                             <q-btn no-caps>Message Driver</q-btn>
                         </Link> -->

@@ -58,7 +58,7 @@ Echo.channel('hello-channel')
         </div>
         <!-- <q-separator class="q-my-xl"/> -->
 
-        <p class="text-center text-h5 q-ma-lg text-weight-medium">Our Services</p>
+        <p class="text-center text-h5 q-ma-lg text-weight-medium">Our Features & Services</p>
         <!-- <p class="text-red text-center">Do the relationships of the models tommorow</p> -->
         <div :class="$q.screen.lt.md ? 'text-center' : ''">
             <div class="row q-col-gutter-xl justify-center items-center">
@@ -113,7 +113,7 @@ Echo.channel('hello-channel')
             </div>
         </div>
     </div>
-    <p class="text-center text-h5 q-mt-lg"> Here's what they have to say. </p>
+    <p class="text-center text-h5 q-mt-lg text-weight-medium"> Here's what they have to say. </p>
     <q-carousel
         v-model="slide"
         transition-prev="jump-right"
@@ -148,7 +148,7 @@ Echo.channel('hello-channel')
     <div class="q-px-lg q-py-md">
         <q-timeline :layout="layout" color="secondary">
             <q-timeline-entry heading>
-                <p class="text-center text-h5 q-mt-xl"> How it Works </p>
+                <p class="text-center text-h5 q-mt-xl text-weight-medium"> How it Works </p>
             </q-timeline-entry>
 
             <q-timeline-entry
@@ -161,7 +161,7 @@ Echo.channel('hello-channel')
                     Lo dolor in reprehenderit in voluptate velit et non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </div>
                 <template v-slot:subtitle>
-                    <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 300px;"></q-img>
+                    <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 250px;"></q-img>
                 </template>
             </q-timeline-entry>
 

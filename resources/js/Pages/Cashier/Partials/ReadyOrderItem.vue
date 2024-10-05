@@ -229,15 +229,15 @@ function calculateSteps() {
                         </div>
                     </div>
                     <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
-                        <q-item clickable>
+                        <q-item clickable v-if="order.driver">
                             <q-item-section avatar>
                                 <q-avatar>
                                     <img src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg?w=800&h=533&crop=1"/>
                                 </q-avatar>
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label>John Doe</q-item-label>
-                                <q-item-label caption>09123456789</q-item-label>
+                                <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                                <q-item-label caption>{{ order.driver.phone_number }}</q-item-label>
                             </q-item-section>
                         </q-item>
                         <div class="bg-grey full-width" style="height: 200px;">

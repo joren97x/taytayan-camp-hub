@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('cart_id');
+            $table->foreignId('driver_id')->nullable();
             $table->timestamp('waiting_time')->nullable();
             $table->enum('status', [
                 Order::STATUS_PENDING,

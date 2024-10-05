@@ -4,7 +4,7 @@
 import { Link, Head } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { ref } from 'vue'
-import { useQuasar, date } from 'quasar';
+import { useQuasar, date } from 'quasar'
 
 defineOptions({
     layout: CustomerLayout

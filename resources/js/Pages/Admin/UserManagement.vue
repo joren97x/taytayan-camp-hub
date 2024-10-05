@@ -23,8 +23,10 @@ const showPassword = ref(false)
 const showPassword2 = ref(false)
 const newUserDialog = ref(false)
 const form = useForm({
+    profile_pic: null,
     first_name: '',
     last_name: '',
+    phone_number: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -32,7 +34,7 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.post(route('admin.user_management.store'), {
+    form.post(route('admin.users.store'), {
         onSuccess: () => {
             form.reset()
             newUserDialog.value = false
@@ -65,6 +67,17 @@ const columns = [
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
+const profilePicRef = ref(null)
+const imgPreview = ref('')
+
+const triggerFilePicker = () => {
+    profilePicRef.value.pickFiles();
+};
+
+const onFileChange = (file) => {
+    imgPreview.value = URL.createObjectURL(file)
+}
+
 </script>
 
 <template>
@@ -95,7 +108,6 @@ const columns = [
                     <q-td :props="props">
                         <q-item class="q-pa-none">
                             <q-item-section avatar>
-                                {{ props.row.profile_pic }}
                                 <q-avatar v-if="props.row.profile_pic">
                                     <q-img :src="`/storage/${props.row.profile_pic}`" ></q-img>
                                 </q-avatar>
@@ -129,7 +141,7 @@ const columns = [
                             <q-icon name="search" />
                         </template>
                     </q-input> -->
-                    <q-input filled dense label="Search by email" class="q-mx-md" debounce="300" color="primary" v-model="filter">
+                    <q-input filled dense label="Search by email" debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
@@ -153,27 +165,71 @@ const columns = [
         v-if="selectedUser" 
         :dialog="editUserDialog" 
     />
-    <q-dialog v-model="newUserDialog" persistent>
-        <q-card>
+    <q-dialog v-model="newUserDialog" persistent :maximized="$q.screen.lt.md">
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
             <q-card-section class="row items-center q-pb-none">
-                    <div class="text-h6">Create New User</div>
-                    <q-space />
-                    <q-btn icon="close" flat round dense v-close-popup />
+                <div class="text-h6">Create New User</div>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
             </q-card-section>
             <q-form @submit.prevent="submit"> 
             <q-card-section>
-                {{ form }}
-                <q-input
-                    filled
-                    v-model="form.email"
-                    label="Email Address"
-                    lazy-rules
-                    :error="form.errors.email ? true : false"
-                    :error-message="form.errors.email"
-                    :rules="[ val => val && val.length > 0 || 'Please type something']"
-                />
-
+                <q-item class="q-my-md" :style="form.errors.profile_pic ? 'border: 1px solid red' : ''">
+                    <q-item-section avatar>
+                        <q-img 
+                            v-if="form.profile_pic"
+                            :src="form.profile_pic == null ? '' : imgPreview" 
+                            style="width: 100px; height: 100px;"
+                        />
+                        <div style="height: 100px; width: 100px" class="bg-grey" v-else></div>
+                    </q-item-section>
+                    <q-item-section>
+                        <q-file 
+                            v-model="form.profile_pic"
+                            :error="form.errors.profile_pic ? true : false"
+                            :error-message="form.errors.profile_pic"
+                            style="display: none;"
+                            ref="profilePicRef"
+                            @update:model-value="onFileChange"
+                        />
+                        <q-item-label>User's Profile Picture</q-item-label>
+                        <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                        <q-item-label class="text-red" caption>{{ form.errors.profile_pic ? form.errors.profile_pic : '' }}</q-item-label>
+                        <q-item-label>
+                            <q-btn 
+                                no-caps color="primary" 
+                                v-if="form.profile_pic" 
+                                @click="triggerFilePicker"
+                            >
+                                Change
+                            </q-btn>
+                            <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Add photo</q-btn>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
                 <div class="row q-col-gutter-md">
+                    <div class="col-6">
+                        <q-input
+                            filled
+                            v-model="form.email"
+                            label="Email Address"
+                            lazy-rules
+                            :error="form.errors.email ? true : false"
+                            :error-message="form.errors.email"
+                            :rules="[ val => val && val.length > 0 || 'Please type something']"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <q-input
+                            filled
+                            v-model="form.phone_number"
+                            label="Phone Number"
+                            lazy-rules
+                            :error="form.errors.phone_number ? true : false"
+                            :error-message="form.errors.phone_number"
+                            :rules="[ val => val && val.length > 0 || 'Please type something']"
+                        />
+                    </div>
                     <div class="col-6">
                         <q-input
                             filled
@@ -245,10 +301,10 @@ const columns = [
             </q-card-section>
             <q-card-actions>
                 <q-space/>
-                <q-btn v-close-popup no-caps>Cancel</q-btn>
                 <q-btn 
                     color="primary" 
                     no-caps
+                    class="full-width"
                     type="submit"
                     :loading="form.processing"
                     :disable="form.processing"

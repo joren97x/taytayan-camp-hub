@@ -50,8 +50,8 @@ class DatabaseSeeder extends Seeder
         //admin account
         User::factory()->create([
             'email' => 'admin@gmail.com',
-            'first_name' => 'Joren',
-            'last_name' => 'Sumagang',
+            'first_name' => 'Hanni',
+            'last_name' => 'Pham',
             'role' => 'admin',
             'password' => Hash::make('jorenjoren')
         ]);
@@ -80,6 +80,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('jorenjoren')
         ]);
 
+        
         Cart::create([
             'user_id' => $user->id
         ]);

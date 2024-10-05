@@ -21,6 +21,6 @@ defineProps({
 
 <template>
     <Head title="Profile" />
-    <!-- <UpdateProfileInformationForm/> -->
+    <UpdateProfileInformationForm/>
     <UpdatePasswordForm/>
 </template>

@@ -45,6 +45,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'cart_id',
+        'driver_id',
         'status',
         'payment_method',
         'mode',
@@ -55,6 +56,11 @@ class Order extends Model
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function driver() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'driver_id');
     }
 
     public function cart() : BelongsTo

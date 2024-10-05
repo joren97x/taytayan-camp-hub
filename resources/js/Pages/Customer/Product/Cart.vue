@@ -208,7 +208,7 @@ const columns = [
                 <template v-slot:top>
                     <span class="text-h6">Cart</span> 
                     <q-space/>
-                    <span class="text-subtitle1">3 items</span>
+                    <span class="text-subtitle1">{{ items.length }} items</span>
                 </template>
                 <template v-slot:body-cell-photo="props">
                     <q-td :props="props">

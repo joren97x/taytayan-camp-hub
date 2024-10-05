@@ -13,6 +13,8 @@ function shareOnFacebook() {
     // console.log(facebookShareUrl)
     // window.open(facebookShareUrl, '_blank');
 }
+
+
 </script>
 
 <template>

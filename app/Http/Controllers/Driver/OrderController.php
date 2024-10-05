@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Driver;
 
 use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\Conversation;
 use App\Models\Order;
+use App\Models\Participant;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,10 +31,33 @@ class OrderController extends Controller
         return Inertia::render('Driver/Orders', ['orders' => $orders]);
     }
 
-    public function deliver(Order $order) 
+    public function deliver(Request $request, Order $order) 
     {
         $order->status = Order::STATUS_DELIVERING;
+        $order->driver_id = auth()->id();
         $order->update();
+
+        $existing_conversation = Conversation::whereHas('participants', function ($query) use ($order) {
+            $query->where('user_id', $order->user_id);
+        })->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->first();
+        
+        if (!$existing_conversation) {
+
+            $conversation = Conversation::create();
+
+            Participant::create([
+                'user_id' => $order->user_id,
+                'conversation_id' => $conversation->id
+            ]);
+
+            Participant::create([
+                'user_id' => auth()->id(),
+                'conversation_id' => $conversation->id
+            ]);
+        }
+
         event(new OrderStatusUpdated($order, true, app(CartService::class)));
         
         return redirect(route('driver.map'));

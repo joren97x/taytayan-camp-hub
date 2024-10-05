@@ -61,7 +61,8 @@ class OrderController extends Controller
     public function index(Request $request, CartService $cartService, string $status = null) 
     {
 
-        $active_orders = Order::whereIn('status', [
+        $active_orders = Order::with('driver')
+        ->whereIn('status', [
             Order::STATUS_PENDING,
             Order::STATUS_READY_FOR_DELIVERY,
             Order::STATUS_DELIVERED,

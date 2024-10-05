@@ -43,12 +43,9 @@ const columns = [
 ]
 
 const formatTime = (timeString) => {
-      // First, convert the string into a valid Date object
-      const dateObj = new Date(`1970-01-01T${timeString}Z`);
-
-      // Use Quasar's date formatter to convert to 12-hour format with AM/PM
-      return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
-    }
+    const dateObj = new Date(`1970-01-01T${timeString}Z`);
+    return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
+}
 
 </script>
 

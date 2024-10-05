@@ -41,16 +41,21 @@ class UserController extends Controller
         //
         $request->validate([
             'first_name' => 'required|string|max:255',
+            'profile_pic' => 'required',
             'last_name' => 'required|string|max:255',
+            'phone_number' => 'required',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'role' => 'required',
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        
+        $path = $request->file('profile_pic')->store('profiles', 'public');
+
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
+            'phone_number' => $request->phone_number,
+            'profile_pic' => $path,
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password)

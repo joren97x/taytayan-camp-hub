@@ -62,13 +62,13 @@ const onFileChange = (file) => {
                     <q-separator class="q-my-md" />
                     <div class="q-mt-md">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
-                        <q-item class="q-my-md">
+                        <q-item class="q-my-md" :style="form.errors.cover_photo ? 'border: 1px solid red' : ''">
                             <q-item-section avatar>
                                 <q-img 
+                                    v-if="form.cover_photo"
                                     :src="form.cover_photo == null ? '' : imgPreview" 
-                                    style="width: 100px; height: 100px;" 
+                                    style="width: 100px; height: 100px;"
                                 />
-                                <!-- {{ form.cover_photo == null ? imgPreview : 'bruh' }} -->
                             </q-item-section>
                             <q-item-section>
                                 <q-file 
@@ -81,20 +81,20 @@ const onFileChange = (file) => {
                                 />
                                 <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
                                 <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                                <q-item-label class="text-red" caption>{{ form.errors.cover_photo ? form.errors.cover_photo : '' }}</q-item-label>
                                 <q-item-label>
                                     <q-btn 
                                         no-caps color="primary" 
                                         v-if="form.cover_photo" 
-                                        @click="submitform"
-                                        :loading="form.processing"
-                                        :disable="form.processing"
+                                        @click="triggerFilePicker"
                                     >
-                                        Save
+                                        Change
                                     </q-btn>
-                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Add photo</q-btn>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
+                        
                     </div>
 <!--                     
                     <div class="q-mx-xl q-mt-md">

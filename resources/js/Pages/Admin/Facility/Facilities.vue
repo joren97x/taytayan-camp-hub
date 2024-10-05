@@ -50,8 +50,6 @@ const columns = [
                                 <q-item-label caption class="ellipsis" style="max-width: 250px" >{{ props.row.description }}{{ props.row.description }}</q-item-label>
                             </q-item-section>
                         </q-item>
-                        
-                        <!-- <q-img :src="`/storage/${props.row.images}`" style="width: 50px; height: 50px;" /> -->
                     </q-td>
                 </template>
                 <!--  -->
