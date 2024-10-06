@@ -1,17 +1,18 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { Head } from '@inertiajs/vue3'
-import Chat from '@/Components/Chat.vue'
+import Index from '@/Components/Chat/Index.vue';
 
 defineOptions({
     layout: AdminLayout
 })
 
+defineProps({
+    conversations: Object
+})
 
 </script>
 
 <template>
-    <Head title="Dashboard" />
-    <Chat/>
+     <Index :conversations="conversations" />
 </template>

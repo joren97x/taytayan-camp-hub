@@ -27,17 +27,22 @@ class ViewController extends Controller
         ]);
     }
 
-    public function inbox(string $id = null)
+    public function inbox()
     {
-        // dd(User::findOrFail($id));
-        // dd($id);
         return Inertia::render('Customer/Inbox', [
-            // 'users' => User::where('role', '!=', User::ROLE_ADMIN)
-            'selected_user' => User::find($id),
-            // 'users' => User::where('id', '!=', auth()->id())->get(),
-            // 'conversations' => Conversation::with('messages')->whereHas('participants', function ($query) {
-            //     $query->where('user_id', auth()->id());
-            // })->get()
+            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->get()
+        ]);
+    }
+
+    public function show_conversation(string $id)
+    {
+        return Inertia::render('Customer/ShowChat', [
+            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->get(),
+            'conversation' => Conversation::with('participants', 'messages.user')->find($id)
         ]);
     }
 

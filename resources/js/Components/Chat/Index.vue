@@ -1,31 +1,23 @@
 <script setup>
 
-import { onMounted, ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
-const conversations = ref([])
-
-onMounted(() => {
-    axios.get(route(`conversations.index`))
-    .then((res) => {
-        console.log(res)
-        res.data.conversations.forEach((el) => {
-            conversations.value.push(el)
-        })
-    })
-    .catch((err) => {
-        console.error(err)
-    })
+defineProps({
+    conversations: Object
 })
+
 </script>
 
 <template>
     <div class="q-pa-md">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <q-card bordered flat>
-                    <q-card-section>
-                        <q-list>
-                            <q-item v-for="conversation in conversations">
+                    <q-list class="q-pa-sm">
+                        {{ $page.props.auth.user.role }}
+                        conversations . show
+                        <Link :href="route('conversations.show', conversation.id)" v-for="conversation in conversations" >
+                            <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar color="primary" class="text-capitalize" text-color="white">
                                         <div v-for="participant in conversation.participants">
@@ -44,12 +36,17 @@ onMounted(() => {
                                     </div>
                                 </q-item-section>
                             </q-item>
-                        </q-list>
-                    </q-card-section>
+                        </Link>
+                    </q-list>
                 </q-card>
             </div>
-            <div class="col-8">
-                <div style="height: 500px; width: 500px;" class="bg-grey"></div>
+            <div class="col-9 bg-grey">
+                <div style="height: 100vh; width: 100%;" class="justify-center items-center flex text-h6" v-if="$page.component == 'Cashier/Inbox'">
+                    <q-icon name="chat" size="lg" class="q-mt-xs q-mr-md" />
+                    <div>
+                        Choose a conversation
+                    </div>
+                </div>
                 <slot />
             </div>
         </div>

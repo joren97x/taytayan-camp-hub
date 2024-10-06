@@ -295,12 +295,15 @@ Echo.private(`orders.${order.value.id}`)
                                         <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
+                                {{ order }}
                             </div>
                         </div>
                         <Link :href="route('product.checkout', { cart_id: order.cart_id })">
                             <q-btn class="full-width q-mt-sm" label="Reorder" color="primary" no-caps unelevated />
                         </Link>
-                        <q-btn class="full-width q-mt-sm" no-caps label="Message Driver" v-if="order.driver" />
+                        <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver">
+                            <q-btn class="full-width q-mt-sm" no-caps label="Message Driver"/>
+                        </Link>
                         <q-btn 
                             v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
                             no-caps 

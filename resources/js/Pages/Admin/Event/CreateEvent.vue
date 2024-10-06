@@ -51,16 +51,34 @@ const onFileChange = (file) => {
     <Head title="Reviews" />
     <div class="q-pa-md">
         <q-card>
+            <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+                <div  class="row flex justify-center bg-white">
+                    <Link :href="route('admin.facilities.index')">
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                    </Link>
+                    <div class="text-h6">Create Event</div>
+                    <q-btn 
+                            @click="submit"
+                            no-caps 
+                            icon="save"
+                            color="primary" 
+                            class="q-mr-md q-mt-md absolute-top-right"
+                            :loading="form.processing"
+                            :disable="form.processing"
+                            label="Save"
+                        />
+                </div>
+                <q-separator class="q-mt-md"/>
+            </q-card-section>
             <q-card-section>
                 <q-form @submit="submit">
-                    <div class="row justify-between" style="z-index: 400;">
+                    <!-- <div class="row justify-between" style="z-index: 400;">
                         <div class="text-h6 text-center col-12" style="position: relative">
                             Create Event
-                            <!-- <q-btn icon="delete" unelevated class="absolute-right" label="Delete" no-caps color="negative" /> -->
                         </div>
                     </div>
-                    <q-separator class="q-my-md" />
-                    <div class="q-mt-md">
+                    <q-separator class="q-my-md" /> -->
+                    <div class="">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
                         <q-item class="q-my-md" :style="form.errors.cover_photo ? 'border: 1px solid red' : ''">
                             <q-item-section avatar>
@@ -237,7 +255,7 @@ const onFileChange = (file) => {
                                 />
                             </div>
                         </div>
-                        <q-btn 
+                        <!-- <q-btn 
                             no-caps 
                             type="submit" 
                             color="primary" 
@@ -246,7 +264,7 @@ const onFileChange = (file) => {
                             :disable="form.processing"
                         >
                             Create
-                        </q-btn>
+                        </q-btn> -->
                     </div>
                     
                     <!-- <div class="q-mx-xl q-mt-md">

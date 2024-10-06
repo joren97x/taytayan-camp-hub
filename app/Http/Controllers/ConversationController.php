@@ -17,12 +17,18 @@ class ConversationController extends Controller
      */
     public function index()
     {
-        //
-        return response()->json([
-            'conversations' => Conversation::with('messages', 'participants')->whereHas('participants', function ($query) {
-                $query->where('user_id', auth()->user()->id);
+        // dd(auth()->user());
+        return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox', [
+            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->id());
             })->get()
         ]);
+        //
+        // return response()->json([
+        //     'conversations' => Conversation::with('messages', 'participants')->whereHas('participants', function ($query) {
+        //         $query->where('user_id', auth()->user()->id);
+        //     })->get()
+        // ]);
         // return Inertia::render(ucwords(auth()->user()->role).'/Inbox/Index', [
         //     'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
         //         $query->where('user_id', auth()->id());
@@ -79,19 +85,12 @@ class ConversationController extends Controller
      */
     public function show(string $id)
     {
-        //
-        // $authUserId = Auth::id();
-        // $userId = 3;
-        // $conversation = Conversation::with('messages')->whereHas('participant', function ($query) {
-        //     $query->where('user_id', auth()->user()->id);
-        //     })->whereHas('participant', function ($query) use ($user_id) {
-        //         $query->where('user_id', $user_id);
-        //     })->first();
-        $conversation = Conversation::with(['messages.user', 'participants'])->find($id);
-        return response()->json(['conversation' => $conversation]);
-        // return Inertia::render(ucwords(auth()->user()->role).'/Inbox/Show', [
-        //     'conversation' => Conversation::with(['messages.user', 'participants'])->find($id)
-        // ]);
+        return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat', [
+            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->get(),
+            'conversation' => Conversation::with('participants', 'messages.user')->find($id)
+        ]);
     }
 
     /**

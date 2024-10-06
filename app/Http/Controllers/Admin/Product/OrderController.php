@@ -18,19 +18,22 @@ class OrderController extends Controller
     
     public function index(CartService $cartService) {
         // dd('bruh');
-        $orders = Order::whereIn('status', [
-            Order::STATUS_PENDING,
-            Order::STATUS_READY_FOR_DELIVERY,
-            Order::STATUS_READY_FOR_PICKUP,
-            Order::STATUS_DELIVERING,
-            Order::STATUS_PREPARING
-        ])->with('user')->get();
+        // $orders = Order::whereIn('status', [
+        //     Order::STATUS_PENDING,
+        //     Order::STATUS_READY_FOR_DELIVERY,
+        //     Order::STATUS_READY_FOR_PICKUP,
+        //     Order::STATUS_DELIVERING,
+        //     Order::STATUS_PREPARING
+        // ])->with('user')->get();
+
+        $orders = Order::with('user')->get();
 
         foreach($orders as $order) {
             $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }
+
         return Inertia::render('Admin/Product/Orders', [
             'orders' => $orders,
             'order_constants' => Order::getConstants()

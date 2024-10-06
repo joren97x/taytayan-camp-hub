@@ -1,11 +1,11 @@
 <script setup>
 
-import CashierLayout from '@/Layouts/CashierLayout.vue'
+import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Index from '@/Components/Chat/Index.vue'
 import Show from '@/Components/Chat/Show.vue'
 
 defineOptions({
-    layout: CashierLayout
+    layout: AdminLayout
 })
 
 defineProps({

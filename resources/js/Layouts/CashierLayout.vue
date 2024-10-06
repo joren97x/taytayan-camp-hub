@@ -138,7 +138,7 @@ function toggleLeftDrawer () {
             </q-list>
             <div class="absolute-bottom bg-white">
                 <q-list >
-                    <Link :href="route('cashier.inbox')">
+                    <Link :href="route('conversations.index')">
                         <q-item clickable class="q-mx-sm rounded-borders">
                             <q-item-section avatar>
                                 <q-icon name="inbox" />

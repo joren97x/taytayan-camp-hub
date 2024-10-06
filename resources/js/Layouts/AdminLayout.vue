@@ -245,7 +245,7 @@ const navigation_list = [
             </q-scroll-area>
             <div class="absolute-bottom bg-white">
                 <q-list >
-                    <Link :href="route('admin.inbox')">
+                    <Link :href="route('conversations.index')">
                         <q-item clickable class="q-mx-sm rounded-borders">
                             <q-item-section avatar>
                                 <q-icon name="inbox" />

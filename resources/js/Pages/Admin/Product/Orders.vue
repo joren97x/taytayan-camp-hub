@@ -3,6 +3,7 @@
 import { Head, Link } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
+import { date } from 'quasar'
 
 defineOptions({
     layout: AdminLayout
@@ -17,9 +18,10 @@ const filter = ref('')
 const columns = [
     { name: 'user', label: 'User', align: 'center', field: 'user', sortable: true },
     { name: 'cart_products', align: 'center', label: 'Items', field: 'cart_products', sortable: true },
-    { name: 'subtotal', align: 'center', label: 'subtotal', field: 'subtotal', sortable: true },
-    { name: 'mode', align: 'center', label: 'mode', field: 'mode', sortable: true },
-    { name: 'created_at', align: 'center', label: 'created_at', field: 'created_at', sortable: true },
+    { name: 'subtotal', align: 'center', label: 'Subtotal', field: 'subtotal', sortable: true },
+    { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
+    { name: 'mode', align: 'center', label: 'Mode', field: 'mode', sortable: true },
+    { name: 'created_at', align: 'center', label: 'Ordered At', field: 'created_at', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -42,6 +44,11 @@ const columns = [
                 <template v-slot:body-cell-user="props">
                     <q-td :props="props">
                         {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-created_at="props">
+                    <q-td :props="props">
+                        {{ date.formatDate(props.row.created_at, 'MMM D, YYYY') }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-cart_products="props">

@@ -63,7 +63,7 @@ onMounted(() => {
                 <q-toggle v-model="$q.dark.isActive"></q-toggle>
             </q-item-section>
         </q-item>
-        <Link :href="route('customer.inbox')" class="nav-link">
+        <Link :href="route('conversations.index')" class="nav-link">
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon name="inbox" />

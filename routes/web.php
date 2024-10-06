@@ -49,18 +49,13 @@ require __DIR__.'/driver.php';
 require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
 
-Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
-// Route::get('/conversations/{conversation}/messages', [MessageController::class, 'get_messages']);
-// Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('conversations.show');
-// Route::post('/conversations/{user_id}', [ConversationController::class, 'store'])->name('conversations.store');
-// Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
-Route::resource('conversations', ConversationController::class)->names([
+Route::post('/messages/{conversation}', [MessageController::class, 'store'])->name('messages.store');
+Route::resource('inbox', ConversationController::class)->names([
     'show' => 'conversations.show',
     'store' => 'conversations.store',
     'index' => 'conversations.index'
 ]);
-// Route::get('/conversations/c/{id}', [ConversationController::class, 'show_convo'])->name('show_convo');
-// Route::get('/conversations/{id}', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
+
 
 Route::get('/test', function() {
     return Inertia::render('Test');
