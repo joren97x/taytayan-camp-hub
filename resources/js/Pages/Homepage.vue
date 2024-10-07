@@ -8,7 +8,7 @@ import { computed, ref } from 'vue'
 const slide = ref('style1')
 const $q = useQuasar()
 const layout = computed(() => {
-    return $q.screen.lt.sm ? 'dense' : ($q.screen.lt.md ? 'comfortable' : 'loose')
+    return $q.screen.lt.md ? 'dense' : ($q.screen.lt.md ? 'comfortable' : 'loose')
 })
 
 defineProps({
@@ -46,7 +46,7 @@ Echo.channel('hello-channel')
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
                     <p class="text-start text-h3 q-mt-xl text-weight-medium">Taytayan Camp Hub</p>
-                    <p class="text-start text-subtitle1"> Where Every Moment is an Experience! </p>
+                    <p class="text-start text-subtitle1"> Experience the ultimate adventure at Taytayan Camp Hub! Order your favorite drinks, book event tickets, and reserve a cozy camp tent for an unforgettable outdoor getaway. Enjoy, discover, and indulge in every moment at Taytayan Camp Hub.                    </p>
                     <q-btn size="lg" unelevated color="primary" no-caps class="q-px-xl"> Create your account </q-btn>
                 </div>
             </div>
@@ -64,7 +64,8 @@ Echo.channel('hello-channel')
             <div class="row q-col-gutter-xl justify-center items-center">
                 <div class="col-12 col-xs-12 col-sm-12 lt-md">
                     <div class="q-px-lg">
-                        <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0160a2242228e341b3_links-kv_2-p-500.png"></q-img>
+                        <!-- <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0160a2242228e341b3_links-kv_2-p-500.png"></q-img> -->
+                        <q-img src="products_pic.png"></q-img>
                     </div>
                 </div>
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -75,14 +76,15 @@ Echo.channel('hello-channel')
                     </div>
                 </div>
                 <div class="col-xl-5 col-lg-5 col-md-5 gt-sm">
-                    <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0160a2242228e341b3_links-kv_2-p-500.png"></q-img>
+                    <!-- <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0160a2242228e341b3_links-kv_2-p-500.png"></q-img> -->
+                    <q-img src="products_pic.png"></q-img>
                 </div>
             </div>
 
             <div class="row q-col-gutter-xl justify-center items-center">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="q-px-lg">
-                        <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0022599b246dcf73e5_api-kv_2-p-500.png"></q-img>
+                        <q-img src="facilities_pic.png"></q-img>
                     </div>
                 </div>
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -97,7 +99,7 @@ Echo.channel('hello-channel')
             <div class="row q-col-gutter-xl justify-center items-center">
                 <div class="col-12 col-xs-12 col-sm-12 lt-md">
                     <div class="q-px-lg">
-                        <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/61815e0160a2242228e341b3_links-kv_2-p-500.png"></q-img>
+                        <q-img src="events_pic.png"></q-img>
                     </div>
                 </div>
                 <div class="col-12 q-col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
@@ -108,7 +110,7 @@ Echo.channel('hello-channel')
                     </div>
                 </div>
                 <div class="col-5 gt-sm">
-                    <q-img src="https://cdn.prod.website-files.com/60411749e60be86afb89d2f0/629dfe065fd8cf63e7ff530e_plugin-kv-p-500.png"></q-img>
+                    <q-img src="events_pic.png"></q-img>
                 </div>
             </div>
         </div>
@@ -145,56 +147,61 @@ Echo.channel('hello-channel')
         </q-carousel-slide>
     </q-carousel>
 
-    <div class="q-px-lg q-py-md">
-        <q-timeline :layout="layout" color="secondary">
-            <q-timeline-entry heading>
-                <p class="text-center text-h5 q-mt-xl text-weight-medium"> How it Works </p>
-            </q-timeline-entry>
+    <div class="row justify-center">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
+            <div class="q-px-lg q-py-md">
+                <q-timeline :layout="layout" color="secondary">
+                    <q-timeline-entry heading>
+                        <p class="text-center text-h5 q-mt-xl text-weight-medium"> How it Works </p>
+                    </q-timeline-entry>
 
-            <q-timeline-entry
-                title="Choose Your Service"
-                subtitle="February 22, 1986"
-                side="left"
-            >
-                <div>
-                    Users select from ordering food, reserving a room, or buying tickets.
-                    Lo dolor in reprehenderit in voluptate velit et non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
-                <template v-slot:subtitle>
-                    <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 250px;"></q-img>
-                </template>
-            </q-timeline-entry>
+                    <q-timeline-entry
+                        title="Choose Your Service"
+                        subtitle="February 22, 1986"
+                        side="left"
+                    >
+                        <div>
+                            Users select from ordering food, reserving a room, or buying tickets.
+                            Lo dolor in reprehenderit in voluptate velit et non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                        <template v-slot:subtitle>
+                            <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 200px;"></q-img>
+                        </template>
+                    </q-timeline-entry>
 
-            <q-timeline-entry
-                title="Make a Selection"
-                subtitle="February 22, 1986"
-                side="right"
-            >
-                <div>
-                    Users browse through the offerings and make a choice. Lorem ipsum dolor sit amet, coat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
-                <template v-slot:subtitle>
-                    <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 300px;"></q-img>
-                </template>
-            </q-timeline-entry>
+                    <q-timeline-entry
+                        title="Make a Selection"
+                        subtitle="February 22, 1986"
+                        side="right"
+                    >
+                        <div>
+                            Users browse through the offerings and make a choice. Lorem ipsum dolor sit amet, coat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                        <template v-slot:subtitle>
+                            <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 200px;"></q-img>
+                        </template>
+                    </q-timeline-entry>
 
-            <q-timeline-entry
-                title="Enjoy!"
-                subtitle="February 22, 1986"
-                side="left"
-                color="orange"
-                icon="done_all"
-            >
-                <div>
-                    Users receive their order, check in, or attend the event.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magserunt mollit anim id est laborum.
-                </div>
-                <template v-slot:subtitle>
-                    <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 300px;"></q-img>
-                </template>
-            </q-timeline-entry>
-        </q-timeline>
+                    <q-timeline-entry
+                        title="Enjoy!"
+                        subtitle="February 22, 1986"
+                        side="left"
+                        color="orange"
+                        icon="done_all"
+                    >
+                        <div>
+                            Users receive their order, check in, or attend the event.
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magserunt mollit anim id est laborum.
+                        </div>
+                        <template v-slot:subtitle>
+                            <q-img src="https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg" style="height: 200px;"></q-img>
+                        </template>
+                    </q-timeline-entry>
+                </q-timeline>
+            </div>
+        </div>
     </div>
+
     <div class="bg-grey text-center text-h5" style="height: 350px;">
         Footer
     </div>

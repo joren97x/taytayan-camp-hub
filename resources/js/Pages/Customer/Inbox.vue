@@ -14,5 +14,7 @@ defineProps({
 </script>
 
 <template>
-     <Index :conversations="conversations" />
+    <q-card>
+        <Index :conversations="conversations" />
+    </q-card>
 </template>

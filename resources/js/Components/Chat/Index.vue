@@ -11,11 +11,10 @@ defineProps({
 <template>
     <div class="q-pa-md">
         <div class="row">
-            <div class="col-3">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <q-card bordered flat>
                     <q-list class="q-pa-sm">
-                        {{ $page.props.auth.user.role }}
-                        conversations . show
+                        <q-item-label header>Chats</q-item-label>
                         <Link :href="route('conversations.show', conversation.id)" v-for="conversation in conversations" >
                             <q-item clickable>
                                 <q-item-section avatar>
@@ -40,8 +39,16 @@ defineProps({
                     </q-list>
                 </q-card>
             </div>
-            <div class="col-9 bg-grey">
-                <div style="height: 100vh; width: 100%;" class="justify-center items-center flex text-h6" v-if="$page.component == 'Cashier/Inbox'">
+            <div class="col-md-9 col-xs-12 col-sm-12 col-lg-9 col-xl-9 bg-grey">
+                <div 
+                    style="height: 80vh; width: 100%;" 
+                    class="justify-center items-center flex text-h6 gt-sm" 
+                    v-if="
+                        $page.component == 'Cashier/Inbox' ||
+                        $page.component == 'Customer/Inbox' ||
+                        $page.component == 'Admin/Inbox' ||
+                        $page.component == 'Driver/Inbox'
+                    ">
                     <q-icon name="chat" size="lg" class="q-mt-xs q-mr-md" />
                     <div>
                         Choose a conversation

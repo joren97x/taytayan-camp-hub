@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -10,12 +11,23 @@ use Inertia\Inertia;
 class ViewController extends Controller
 {
     //
-    public function dashboard() {
+    public function dashboard() 
+    {
         return Inertia::render('Driver/Dashboard');
     }
 
-    public function account() {
+    public function account() 
+    {
         return Inertia::render('Driver/Account');
+    }
+
+    public function delivery_history() 
+    {
+        return Inertia::render('Driver/DeliveryHistory', [
+            'orders' => Order::whereIn('status', [Order::STATUS_DELIVERED, Order::STATUS_COMPLETED, Order::STATUS_CANCELLED])
+            ->where('driver_id', auth()->id())
+            ->get()
+        ]);
     }
 
     public function profile(Request $request)
@@ -26,12 +38,13 @@ class ViewController extends Controller
         ]);
     }
 
-    public function inbox() {
+    public function inbox() 
+    {
         return Inertia::render('Driver/Inbox');
     }
 
-    public function map() {
-
+    public function map() 
+    {
         return Inertia::render('Driver/Map', [
             'customers_coordinates' => [
                 'lat' => 10.258557282636918, 

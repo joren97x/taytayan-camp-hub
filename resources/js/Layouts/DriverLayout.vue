@@ -51,6 +51,7 @@ Echo.private(`orders`)
             bordered
             class="bg-grey-2"
         >
+
             <q-img 
                 class="absolute-top" 
                 src="/taytayan.jpg"
@@ -92,8 +93,8 @@ Echo.private(`orders`)
                         </q-item-section>
                     </q-item>
                 </Link>
-                <Link :href="route('driver.orders.index')">
-                    <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/deliverysds'" active-class="bg-primary text-white">
+                <Link :href="route('driver.delivery_history')">
+                    <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/DeliveryHistory'" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="school" />
                         </q-item-section>
@@ -106,7 +107,7 @@ Echo.private(`orders`)
             </q-list>
             <div class="absolute-bottom bg-white">
                 <q-list >
-                    <Link :href="route('driver.inbox')">
+                    <Link :href="route('conversations.index')">
                         <q-item clickable class="q-mx-sm rounded-borders">
                             <q-item-section avatar>
                                 <q-icon name="inbox" />
@@ -178,7 +179,20 @@ Echo.private(`orders`)
         </q-drawer>
   
         <q-page-container>
-            <slot/>
+            <div class="bg-grey-3" style="height: 100vh">
+                <!-- <q-btn icon="menu" class="q-mx-md q-mt-md" @click="leftDrawerOpen = !leftDrawerOpen"/>
+                <q-avatar>
+                    <q-img src="../logo.jpg"></q-img>
+                </q-avatar> -->
+                <q-toolbar class="bg-white">
+                    <q-btn flat round dense icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" class="q-mr-sm" />
+                    <q-avatar>
+                        <q-img src="../logo.jpg"/>
+                    </q-avatar>
+                    <q-toolbar-title>Taytayan Camp Hub</q-toolbar-title>
+                </q-toolbar>
+                <slot/>
+            </div>
         </q-page-container>
     </q-layout>
   </template>

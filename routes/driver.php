@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::patch('/driver/deliver-order/{order}', [OrderController::class, 'deliver'])->name('driver.order.deliver');
     Route::patch('/driver/complete-order/{order}', [OrderController::class, 'complete_delivery'])->name('driver.order.complete_delivery');
+    Route::get('/driver/delivery-history', [ViewController::class, 'delivery_history'])->name('driver.delivery_history');
     Route::resource('/driver/orders', OrderController::class)->names([
         'index' => 'driver.orders.index',
         'show' => 'driver.orders.show',

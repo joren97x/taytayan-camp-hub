@@ -100,16 +100,31 @@ onUnmounted(() => {
             </q-card-section>
         </q-card>
     </div> -->
-    <q-toolbar class="bg-primary text-white">
-        <q-avatar class="q-mr-md">
+    <q-toolbar class="bg-white q-pa-none">
+        <!-- <q-avatar class="q-mr-md">
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
         </q-avatar>
-        {{ receiver.first_name + ' ' + receiver.last_name }}
+        {{ receiver.first_name + ' ' + receiver.last_name }} -->
+        <q-item>
+            <q-item-section avatar>
+                <q-avatar  v-if="receiver.profile_pic">
+                    <q-img :src="`/storage/${receiver.profile_pic}`"/>
+                    
+                </q-avatar>
+                <q-avatar color="primary" v-else>
+                    {{ receiver.first_name[0] }}
+                </q-avatar>
+            </q-item-section>
+            <q-item-section>
+                <q-item-label>{{ receiver.first_name + ' ' + receiver.last_name }}</q-item-label>
+                <q-item-label caption>{{ receiver.is_online }}</q-item-label>
+            </q-item-section>
+        </q-item>
     </q-toolbar>
     <!-- {{ currentConversation }} -->
-    <div class="q-pa-md bg-blue-2">
+    <div class="bg-blue-2 q-px-sm">
         <div v-if="conversation.messages.length > 0">
-            <q-scroll-area ref="scrollArea" style="height: 75vh; max-width: 100%;" class="q-pa-lg">
+            <q-scroll-area ref="scrollArea" style="height: 75vh; max-width: 100%;" class="">
                 <q-chat-message
                     v-for="message in conversation.messages"
                     name="me"

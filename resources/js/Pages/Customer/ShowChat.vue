@@ -16,7 +16,10 @@ defineProps({
 </script>
 
 <template>
-    <Index :conversations="conversations">
-        <Show :conversation="conversation" />
-    </Index>
+    <q-card class="q-mt-md">
+        <Index :conversations="conversations" v-if="$q.screen.gt.sm">
+            <Show :conversation="conversation" />
+        </Index>
+        <Show :conversation="conversation" v-else/>
+    </q-card>
 </template>
