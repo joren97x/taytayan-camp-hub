@@ -18,7 +18,8 @@ class CashierMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::user()->role != User::ROLE_CASHIER) {
-            return redirect(route('home'));
+            abort(403);
+            // return redirect(route('home'));
         }
         return $next($request);
     }

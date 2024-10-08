@@ -41,7 +41,8 @@ Echo.channel('hello-channel')
 
 <template>
     <Head title="Welcome" />
-    <div style="background: linear-gradient(to bottom, #FFFFFF, #EEEEEE)">
+    <div >
+    <!-- <div style="background: linear-gradient(to bottom, #FFFFFF, #EEEEEE)"> -->
         <div class="row q-col-gutter-lg items-center">
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
@@ -72,7 +73,7 @@ Echo.channel('hello-channel')
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Milk Tea Delights </p>
                         <p class="text-start text-subtitle1"> Craving something refreshing? Indulge in our delicious, customizable milk tea, made just the way you like it. Explore our wide range of refreshing milk tea flavors and customizable options. </p>
-                        <q-btn size="lg" unelevated color="primary" no-caps> Order Milk Tea </q-btn>
+                        <q-btn size="lg" unelevated color="primary" no-caps label="Order Now"/>
                     </div>
                 </div>
                 <div class="col-xl-5 col-lg-5 col-md-5 gt-sm">
@@ -81,7 +82,7 @@ Echo.channel('hello-channel')
                 </div>
             </div>
 
-            <div class="row q-col-gutter-xl justify-center items-center">
+            <div class="row q-col-gutter-xl justify-center items-center q-my-xl">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="q-px-lg">
                         <q-img src="facilities_pic.png"></q-img>
@@ -91,12 +92,12 @@ Echo.channel('hello-channel')
                     <div class="q-mx-lg q-mb-lg">
                         <p class="text-start text-h5 text-weight-medium"> Nature Retreats </p>
                         <p class="text-start text-subtitle1"> Ready for an adventure? Book your camp tents, huts, or cozy camp rooms in just a few clicks! Discover scenic campsites and book your stay hassle-free. </p>
-                        <q-btn size="lg" unelevated color="primary" no-caps> Reserve Campsite </q-btn>
+                        <q-btn size="lg" unelevated color="primary" no-caps> Reserve Now </q-btn>
                     </div>
                 </div>
             </div>
 
-            <div class="row q-col-gutter-xl justify-center items-center">
+            <div class="row q-col-gutter-xl justify-center items-center q-my-xl">
                 <div class="col-12 col-xs-12 col-sm-12 lt-md">
                     <div class="q-px-lg">
                         <q-img src="events_pic.png"></q-img>
@@ -134,7 +135,7 @@ Echo.channel('hello-channel')
             <q-btn v-else size="lg" icon="minimize" :color="$q.dark.isActive ? 'white' : 'black'" flat round dense @click="onClick" />
         </template>
         <q-carousel-slide :name="`style${n}`" v-for="n in 5" :key="n">
-            <q-card class="q-pa-lg" style="height: 100%;">
+            <q-card class="q-pa-lg" style="height: 100%;" bordered>
                 <img style="height: 35px; width: 35px" src="https://assets-global.website-files.com/609cbadfde419c81adafa17b/609db59d8c7a879cbd837708_Quotation%20Mark.svg" alt="">
                 <div class="q-mt-md text-start ellipsis-3-lines">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, consectetur!
