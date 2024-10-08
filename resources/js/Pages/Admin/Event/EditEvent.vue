@@ -79,9 +79,30 @@ const submitStatusForm = () => {
     <Head title="Edit Event" />
     <div class="q-pa-md">
         <q-card>
+            <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+                <div class="row flex justify-center bg-white">
+                    <Link :href="route('admin.events.index')">
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                    </Link>
+                    <div class="text-h6">Edit Event</div>
+                    <div class="q-mr-md q-mt-md absolute-top-right">
+                        <q-btn 
+                            icon="edit_square" 
+                            outline
+                            class="q-mr-sm"
+                            color="primary"
+                            @click="changeStatusDialog = true" 
+                            :label="event.status" 
+                            no-caps 
+                        />
+                        
+                    </div>
+                </div>
+                <q-separator class="q-mt-md"/>
+            </q-card-section>
             <q-card-section>
-                <q-form @submit="submit">
-                    <div class="row justify-between" style="z-index: 400;">
+                <!-- <q-form @submit="submit"> -->
+                    <!-- <div class="row justify-between" style="z-index: 400;">
                         <div class="text-h6 text-center col-12" style="position: relative">
                             Edit Event
                             <Link :href="route('admin.events.index')">
@@ -90,7 +111,7 @@ const submitStatusForm = () => {
                             <q-btn icon="edit_square" outline @click="changeStatusDialog = true"  class="absolute-right" :label="event.status" no-caps  />
                         </div>
                     </div>
-                    <q-separator class="q-my-md" />
+                    <q-separator class="q-my-md" /> -->
                     <div class="q-mt-md">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
                         <q-item class="q-my-md">
@@ -258,6 +279,14 @@ const submitStatusForm = () => {
                             </div>
                         </div>
                         <q-btn 
+                            @click="submit"
+                            no-caps 
+                            color="primary" 
+                            :loading="form.processing"
+                            :disable="form.processing"
+                            label="Update"
+                        />
+                        <!-- <q-btn 
                             no-caps 
                             type="submit" 
                             color="primary" 
@@ -266,7 +295,7 @@ const submitStatusForm = () => {
                             :disable="form.processing"
                         >
                             Update
-                        </q-btn>
+                        </q-btn> -->
                     </div>
                     
                     <!-- <div class="q-mx-xl q-mt-md">
@@ -276,11 +305,16 @@ const submitStatusForm = () => {
                         <q-input filled label="Answer" type="textarea"></q-input>
                         <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
                     </div> -->
-                </q-form>
+                <!-- </q-form> -->
             </q-card-section>
         </q-card>
     </div>
-    <q-dialog v-model="changeStatusDialog">
+    <q-dialog 
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :maximized="$q.screen.lt.md"
+        v-model="changeStatusDialog"
+    >
         <q-card>
             <q-card-section>
                 <div class="text-h6">

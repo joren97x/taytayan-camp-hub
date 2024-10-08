@@ -3,6 +3,7 @@
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CashierMiddleware;
 use App\Http\Middleware\CustomerMiddleware;
+use App\Http\Middleware\DriverMiddleware;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,7 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'customer' => CustomerMiddleware::class,
-            'cashier' => CashierMiddleware::class
+            'cashier' => CashierMiddleware::class,
+            'driver' => DriverMiddleware::class
         ]);
 
     })

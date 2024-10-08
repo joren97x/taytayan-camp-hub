@@ -48,7 +48,7 @@ const onFileChange = (file) => {
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Create Event" />
     <div class="q-pa-md">
         <q-card>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
@@ -80,14 +80,32 @@ const onFileChange = (file) => {
                     <q-separator class="q-my-md" /> -->
                     <div class="">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
+                        <div class=" q-mx-xl q-my-md rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
+                            
+                            <div class="justify-center text-subtitle1 items-center flex full-height bg-grey-4" v-if="!imgPreview">
+                                <q-icon name="image" class="q-mr-md" size="lg"/>
+                                Choose a photo
+                            </div>
+                            <div class="blurred-background " v-else :style="`background-image: url('${imgPreview}');`">
+                            </div>
+                            <!-- Foreground image (not blurred) -->
+                            <q-img 
+                                :src="imgPreview"
+                                v-if="form.cover_photo"
+                                class="rounded-borders content-wrapper" 
+                                height="100%"
+                                fit="contain"
+                                style="position: relative; z-index: 2;" 
+                            />
+                        </div>
                         <q-item class="q-my-md" :style="form.errors.cover_photo ? 'border: 1px solid red' : ''">
-                            <q-item-section avatar>
+                            <!-- <q-item-section avatar>
                                 <q-img 
                                     v-if="form.cover_photo"
                                     :src="form.cover_photo == null ? '' : imgPreview" 
                                     style="width: 100px; height: 100px;"
                                 />
-                            </q-item-section>
+                            </q-item-section> -->
                             <q-item-section>
                                 <q-file 
                                     v-model="form.cover_photo"
@@ -279,3 +297,28 @@ const onFileChange = (file) => {
         </q-card>
     </div>
 </template>
+
+<style scoped>
+
+/* CSS IS HARD FRRR(i used chatGPT XD) */
+/* Blurred background */
+.blurred-background {
+   /* Background image you want to blur */
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(8px); /* Apply blur effect */
+  z-index: 1; /* Keep it behind the foreground content */
+}
+
+/* Foreground image (clear, no blur) */
+.content-wrapper {
+  position: relative;
+  z-index: 2; /* Ensure it's on top of the blurred background */
+}
+
+</style>

@@ -55,7 +55,6 @@ const updateCategoryName = () => {
 
 const columns = [
     { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
-    { name: 'items', align: 'center', label: 'Items', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -102,13 +101,13 @@ const columns = [
                                 </q-btn>
                         </q-td>
                     </template>
-                    <template v-slot:body-cell-items="props">
+                    <!-- <template v-slot:body-cell-items="props">
                         <q-td :props="props">
                             <span v-for="product in props.row.products" :key="product.id">
                                 {{ product.name + ', ' }}
                             </span>
                         </q-td>
-                    </template>
+                    </template> -->
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
                             <q-btn no-caps unelevated @click="showDeleteCategoryDialog(props.row)" label="Delete"/>

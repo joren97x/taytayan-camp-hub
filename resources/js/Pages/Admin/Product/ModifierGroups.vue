@@ -37,7 +37,7 @@ const deleteModifierGroup = () => {
 const columns = [
   { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
   { name: 'contains', align: 'center', label: 'Contains', field: 'contains', sortable: true },
-  { name: 'productsUsing', align: 'center', label: 'Products using', field: 'productsUsing', sortable: true },
+//   { name: 'productsUsing', align: 'center', label: 'Products using', field: 'productsUsing', sortable: true },
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -70,18 +70,18 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-contains="props">
                     <q-td :props="props">
-                        <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
-                            {{ modifier_item.name + ', ' }}
+                        <span v-for="(modifier_item, index) in props.row.modifier_items" :key="modifier_item.id">
+                            {{ modifier_item.name + (index == props.row.modifier_items.length - 1 ? '' : ', ') }}
                         </span>
                     </q-td>
                 </template>
-                <template v-slot:body-cell-productsUsing="props">
+                <!-- <template v-slot:body-cell-productsUsing="props">
                     <q-td :props="props">
                         <span v-for="product in props.row.products" :key="product.id">
                             {{ product.name + ', ' }}
                         </span>
                     </q-td>
-                </template>
+                </template> -->
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route('admin.modifier_groups.edit', props.row.id)">

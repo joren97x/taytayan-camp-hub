@@ -110,9 +110,27 @@ const submitDeleteFacilityForm = () => {
     <Head title="Edit Event" />
     <div class="q-pa-md">
         <q-card bordered flat>
+            <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+                <div  class="row flex justify-center bg-white">
+                    <Link :href="route('admin.facilities.index')">
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                    </Link>
+                    <div class="text-h6">Edit Facility</div>
+                    <q-btn 
+                            @click="submit"
+                            no-caps 
+                            color="primary" 
+                            class="q-mr-md q-mt-md absolute-top-right"
+                            :loading="form.processing"
+                            :disable="form.processing"
+                            label="Update"
+                        />
+                </div>
+                <q-separator class="q-mt-md"/>
+            </q-card-section>
             <q-card-section>
-                <q-form @submit="submit">
-                    <div class="row justify-between" style="z-index: 400;">
+                <!-- <q-form @submit="submit"> -->
+                    <!-- <div class="row justify-between" style="z-index: 400;">
                         <div class="text-h6 text-center col-12" style="position: relative">
                             <Link :href="route('admin.facilities.index')">
                                 <q-btn icon="arrow_back" label="Go Back" flat no-caps class="absolute-left"/>
@@ -121,7 +139,7 @@ const submitDeleteFacilityForm = () => {
                             <q-btn icon="delete" @click="deleteFacilityDialog = true" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
                         </div>
                     </div>
-                    <q-separator class="q-my-md" />
+                    <q-separator class="q-my-md" /> -->
                     <div class="q-mt-md">
                         <!-- <p class="text-weight-bold text-h6">Facility Images</p>
                         <q-item class="q-my-md">
@@ -310,7 +328,7 @@ const submitDeleteFacilityForm = () => {
                                 </q-card>
                             </div>
                         </div>
-                        <q-btn 
+                        <!-- <q-btn 
                             no-caps 
                             type="submit" 
                             color="primary" 
@@ -319,7 +337,7 @@ const submitDeleteFacilityForm = () => {
                             :disable="form.processing"
                         >
                             Save
-                        </q-btn>
+                        </q-btn> -->
                     </div>
                     
                     
@@ -330,7 +348,7 @@ const submitDeleteFacilityForm = () => {
                         <q-input filled label="Answer" type="textarea"></q-input>
                         <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
                     </div> -->
-                </q-form>
+                <!-- </q-form> -->
             </q-card-section>
         </q-card>
     </div>

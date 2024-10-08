@@ -14,13 +14,12 @@ const props = defineProps({
     modifier_group: Object
 })
 
-
 const modifierItemForm = useForm({
     name: '',
     description: '',
     price: 0.00
 })
-console.log(props)
+
 const form = useForm({
     name: props.modifier_group.name,
     required: props.modifier_group.required ? true : false,
@@ -44,7 +43,7 @@ const submitModifierItemForm = () => {
     })
 }
 
-const submitForm = () => {
+const submit = () => {
     form.put(route('admin.modifier_groups.update', props.modifier_group.id), {
         onSuccess: () => {
             $q.notify('Modifier Group Successfully Added')
@@ -68,119 +67,148 @@ watch(selected, (modifier_item) => {
 <template>
     
     <Head title="Edit Modifier Group" />
-    <q-form @submit="submitForm">
-        <div class="q-pa-md">
-            <div class="row justify-between" style="z-index: 400;">
-                <div class="text-center col-12" style="position: relative">
-                    <div class="text-h6 ">Edit Modifier Group</div>
-                    <Link :href="route('admin.modifier_groups.index')" class="absolute-left text-subtitle2 items-center flex" >
-                        <q-icon name="arrow_back" class="q-mr-xs"/>
-                        Go Back
-                    </Link>
-                    <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
-                    <div class="absolute-right">
-                        <q-btn 
-                            @click="dialog = !dialog" 
-                            no-caps 
-                            color="primary" 
-                            class="q-mr-sm" 
-                            outline
-                        >
-                            New Modifier Item
-                        </q-btn>
-                        <!-- <q-btn icon="delete" unelevated label="Delete" no-caps color="negative" /> -->
+    <div class="q-pa-md">
+        <q-card>
+            <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+                    <div  class="row flex justify-center bg-white">
+                        <Link :href="route('admin.modifier_groups.index')">
+                            <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        </Link>
+                        <div class="text-h6">Edit Modifier Group</div>
+                        <div class=" absolute-top-right">
+                            <q-btn 
+                                @click="dialog = !dialog" 
+                                no-caps 
+                                color="primary" 
+                                class="q-mr-sm q-mt-md" 
+                                outline
+                                label="New Modifier Item"    
+                            />
+                            
+                        </div>
                     </div>
-                </div>
-            </div>
-            <!-- <div class="row">
-                <q-btn icon="arrow_back" flat round></q-btn>
-                <span class="text-h6 q-mt-xs q-ml-sm">Edit Modifier Group</span>
-                <q-space/>
-                <q-btn 
-                    @click="dialog = !dialog" 
-                    no-caps 
-                    color="primary" 
-                    class="q-mr-sm" 
-                    outline
-                >
-                    New Modifier Item
-                </q-btn>
-                <q-btn 
-                    no-caps 
-                    color="primary" 
-                    class="q-mr-sm"
-                    type="submit"
-                    :loading="form.processing"
-                    :disable="form.processing"
-                >
-                    Save
-                </q-btn>
-            </div> -->
-            <q-separator class="q-my-md" />
-            <q-input 
-                v-model="form.name"
-                :error="form.errors.name ? true : false"
-                :error-message="form.errors.name"
-                label="Name" 
-                filled
-            />
-            {{ item }}
-            <q-select 
-                filled 
-                emit-value
-                use-chips
-                map-options
-                v-model="form.modifier_items" 
-                label="Items" 
-                multiple
-                option-value="id"
-                option-label="name"
-                class="q-mt-md" 
-                :options="props.modifier_items"
-                :options-html="true"
-                :error="form.errors.modifier_items ? true : false"
-                :error-message="form.errors.modifier_items"
-            />
-            
-            <br>
-            <div>
-                <q-input
-                    filled
-                    type="number"
-                    label="Whats the maximum amount of items the customer can select?"
-                    v-model="form.max_quantity"
-                    :error="form.errors.max_quantity ? true : false"
-                    :error-message="form.errors.max_quantity"
-                />
-                <q-input
-                    filled
-                    type="number"
-                    label="How many times can customers select any single item?"
-                    v-model="form.required_quantity"
-                    :error="form.errors.required_quantity ? true : false"
-                    :error-message="form.errors.required_quantity"
-                />
-            </div>
-            <q-checkbox 
-                label="Require customers to select item?" 
-                v-model="form.required"
-                :error="form.errors.required ? true : false"
-                :error-message="form.errors.required"
-            />
-            <q-card-actions>
+                    <q-separator class="q-mt-md"/>
+                </q-card-section>
+            <q-card-section>
+                    <!-- <div class="row justify-between" style="z-index: 400;">
+                        <div class="text-center col-12" style="position: relative">
+                            <div class="text-h6 ">Edit Modifier Group</div>
+                            <Link :href="route('admin.modifier_groups.index')" class="absolute-left text-subtitle2 items-center flex" >
+                                <q-icon name="arrow_back" class="q-mr-xs"/>
+                                Go Back
+                            </Link>
+                            <div class="absolute-right">
+                                <q-btn 
+                                    @click="dialog = !dialog" 
+                                    no-caps 
+                                    color="primary" 
+                                    class="q-mr-sm" 
+                                    outline
+                                >
+                                    New Modifier Item
+                                </q-btn>
+                            </div>
+                        </div>
+                    </div> -->
+                <!-- <div class="row">
+                    <q-btn icon="arrow_back" flat round></q-btn>
+                    <span class="text-h6 q-mt-xs q-ml-sm">Edit Modifier Group</span>
+                    <q-space/>
+                    <q-btn 
+                        @click="dialog = !dialog" 
+                        no-caps 
+                        color="primary" 
+                        class="q-mr-sm" 
+                        outline
+                    >
+                        New Modifier Item
+                    </q-btn>
                     <q-btn 
                         no-caps 
                         color="primary" 
-                        class="q-mr-sm full-width"
+                        class="q-mr-sm"
                         type="submit"
                         :loading="form.processing"
                         :disable="form.processing"
                     >
                         Save
                     </q-btn>
-                </q-card-actions>
-        </div>
-    </q-form>
+                </div> -->
+                <q-input 
+                    v-model="form.name"
+                    :error="form.errors.name ? true : false"
+                    :error-message="form.errors.name"
+                    label="Name" 
+                    filled
+                />
+                {{ item }}
+                <q-select 
+                    filled 
+                    emit-value
+                    use-chips
+                    map-options
+                    v-model="form.modifier_items" 
+                    label="Items" 
+                    multiple
+                    option-value="id"
+                    option-label="name"
+                    class="q-mt-md" 
+                    :options="props.modifier_items"
+                    :options-html="true"
+                    :error="form.errors.modifier_items ? true : false"
+                    :error-message="form.errors.modifier_items"
+                />
+                
+                <br>
+                <div>
+                    <q-input
+                        filled
+                        type="number"
+                        label="Whats the maximum amount of items the customer can select?"
+                        v-model="form.max_quantity"
+                        :error="form.errors.max_quantity ? true : false"
+                        :error-message="form.errors.max_quantity"
+                    />
+                    <q-input
+                        filled
+                        type="number"
+                        label="How many times can customers select any single item?"
+                        v-model="form.required_quantity"
+                        :error="form.errors.required_quantity ? true : false"
+                        :error-message="form.errors.required_quantity"
+                    />
+                </div>
+                <q-checkbox 
+                    label="Require customers to select item?" 
+                    v-model="form.required"
+                    :error="form.errors.required ? true : false"
+                    :error-message="form.errors.required"
+                />
+                <br>
+                <q-btn 
+                    @click="submit"
+                    no-caps 
+                    color="primary" 
+                    class="q-mr-md q-mt-md"
+                    :loading="form.processing"
+                    :disable="form.processing"
+                    label="Update"
+                />
+                <!-- <q-card-actions>
+                        <q-btn 
+                            no-caps 
+                            color="primary" 
+                            class="q-mr-sm full-width"
+                            type="submit"
+                            :loading="form.processing"
+                            :disable="form.processing"
+                        >
+                            Save
+                        </q-btn>
+                    </q-card-actions> -->
+            </q-card-section>
+        </q-card>
+    </div>
     <q-dialog v-model="dialog" position="right" full-height>
         <q-card style="width: 500px">
             <q-form @submit="submitModifierItemForm">

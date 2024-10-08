@@ -5,8 +5,7 @@ use App\Http\Controllers\Driver\OrderController;
 use App\Http\Controllers\Driver\ViewController;
 use Illuminate\Support\Facades\Route;
 
-// Route::middleware(['auth', 'verified'])->group(function () {
-
+Route::middleware(['auth', 'driver'])->group(function () {
     Route::patch('/driver/deliver-order/{order}', [OrderController::class, 'deliver'])->name('driver.order.deliver');
     Route::patch('/driver/complete-order/{order}', [OrderController::class, 'complete_delivery'])->name('driver.order.complete_delivery');
     Route::get('/driver/delivery-history', [ViewController::class, 'delivery_history'])->name('driver.delivery_history');
@@ -19,5 +18,5 @@ use Illuminate\Support\Facades\Route;
     Route::get('/driver/profile', [ViewController::class, 'profile'])->name('driver.profile');
     Route::get('/driver/map', [ViewController::class, 'map'])->name('driver.map');
 
-// });
+});
 

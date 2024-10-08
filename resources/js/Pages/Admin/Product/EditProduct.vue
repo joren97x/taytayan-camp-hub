@@ -19,7 +19,6 @@ const props = defineProps({
 const addModifierGroupDialog = ref(false)
 const $q = useQuasar()
 const selected = ref([])
-const currentProductPhoto = props.product.photo
 const form = useForm({
     name: props.product.name,
     description: props.product.description,
@@ -122,19 +121,27 @@ const onFileChange = (file) => {
     <Head title="Edit Product" />
     <div class="q-pa-md">
         <q-card bordered flat>
+            <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+                <div  class="row flex justify-center bg-white">
+                    <Link :href="route('admin.products.index')">
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                    </Link>
+                    <div class="text-h6">Edit Product</div>
+                    
+                </div>
+                <q-separator class="q-mt-md"/>
+            </q-card-section>
             <q-card-section>
                 <q-form @submit="submit">
-                    <div class="row justify-between" style="z-index: 400;">
+                    <!-- <div class="row justify-between" style="z-index: 400;">
                         <div class="text-center col-12" style="position: relative">
                             <div class="text-h6 ">Edit Product</div>
                             <Link :href="route('admin.products.index')" class="absolute-left text-subtitle2 items-center flex" >
                                 <q-btn icon="arrow_back" label="Go Back" no-caps flat />
                             </Link>
-                            <!-- <q-btn icon="arrow_back" unelevated flat label="Go Back" no-caps color="negative" /> -->
                             <q-btn icon="edit_square" unelevated class="absolute-right" label="Status" no-caps color="negative" />
                         </div>
-                    </div>
-                    <q-separator class="q-my-md" />
+                    </div> -->
                     <p class="text-weight-bold text-h6">Product photo</p>
                     <q-item class="q-my-md">
                         <q-item-section avatar>
@@ -222,7 +229,17 @@ const onFileChange = (file) => {
                     </q-input>
                     <q-checkbox v-model="form.is_featured" label="Feature Product" />
                     <q-checkbox v-model="form.available" label="Available" />
+                    <br>
                     <q-btn 
+                        @click="submit"
+                        no-caps 
+                        color="primary" 
+                        class=""
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Update"
+                    />
+                    <!-- <q-btn 
                         type="submit" 
                         no-caps 
                         color="primary" 
@@ -231,7 +248,7 @@ const onFileChange = (file) => {
                         :disable="form.processing"
                     >
                         Save
-                    </q-btn>
+                    </q-btn> -->
                     <q-separator class="q-my-lg" />
                     
                     <p class="text-weight-bold text-h6">Modifier Groups</p>
@@ -297,8 +314,13 @@ const onFileChange = (file) => {
             </q-card-section>
         </q-card>
     </div>
-    <q-dialog v-model="addModifierGroupDialog" full-width>
-        <q-card>
+    <q-dialog 
+        v-model="addModifierGroupDialog"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :maximized="$q.screen.lt.md"
+    >
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-form @submit="updateProductModifierGroup">
                 <q-card-section>
                     <q-table
@@ -341,19 +363,27 @@ const onFileChange = (file) => {
             </q-form>
         </q-card>
     </q-dialog>
-    <q-dialog v-model="clearModifierGroupDialog">
-        <q-card>
+    <q-dialog 
+        v-model="clearModifierGroupDialog"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :maximized="$q.screen.lt.md"
+    >
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
             <q-card-section>
                 Clear modifier groups?
             </q-card-section>
             <q-card-actions>
                 <q-space/>
-                <q-btn v-close-popup>Cancel</q-btn>
+                <q-btn v-close-popup no-caps>Cancel</q-btn>
                 <q-btn
+                    color="negative"
                     @click="submitClearModifierGroup"
                     :loading="clearModifierGroupForm.processing"
                     :disable="clearModifierGroupForm.processing"
-                >Clear</q-btn>
+                    label="Clear"
+                    no-caps
+                />
             </q-card-actions>
         </q-card>
     </q-dialog>
