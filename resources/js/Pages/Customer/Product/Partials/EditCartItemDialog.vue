@@ -93,20 +93,20 @@ function onDialogShow() {
     <q-dialog 
         v-model="show" 
         @show="onDialogShow()"
-        :maximized="$q.screen.width <= 700"  
+        :maximized="$q.screen.lt.md"  
         transition-show="slide-up"
         transition-hide="slide-down"
     >
-        <q-card class="q-px-md">
+        <q-card class="q-px-md" :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-form @submit="submit">
-                <q-item>
+                <!-- <q-item>
                     <q-item-section class="text-h6">
                         Food description
                     </q-item-section>
                     <q-item-section side>
                         <q-btn round icon="close" flat @click="emit('close')"></q-btn>
                     </q-item-section>
-                </q-item>
+                </q-item> -->
                 <div class="row q-col-gutter-md">
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5" style="position: relative;">
                         <q-img 
@@ -115,8 +115,9 @@ function onDialogShow() {
                             style="max-width: 100%; height: 40vh; position: sticky;"
                         />
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl7">
-                        <div>
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7" style="position: relative;">
+                        <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-lg"/>
+                        <div class="q-mt-md">
                             <span class="text-h6">
                                 {{ cart_item.product.name }}
                             </span>

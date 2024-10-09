@@ -32,6 +32,7 @@ const checkedIn = computed(() => {
         <q-card class="q-mb-md" bordered flat>
             <q-card-section>
                 <q-btn label="Go Back" no-caps icon="arrow_back" flat class="q-pa-none" />
+                <q-btn label="Scan Qr Code" no-caps icon="qr_code" color="primary" class="absolute-top-right q-mt-md q-mr-md" />
                 <div class="text-h6">Check-in</div>
                 <div>Check in attendees using their name or email</div>
                 <div class="row items-center flex">

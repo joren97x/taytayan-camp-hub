@@ -29,6 +29,9 @@ const page = usePage()
 const $q = useQuasar()
 
 const isAdressSet = () => {
+    if(page.props.auth.user.email_verified_at == null) {
+        return router.visit(route('verification.notice'))
+    }
     if(page.props.auth.user.address == null) {
         showNewAddressDialog.value = true
     }

@@ -11,14 +11,10 @@ Route::resource('tickets', TicketController::class)->names([
     'show' => 'customer.tickets.show',
 ]);
 
-Route::resource('events', EventController::class)->names([
-    'index' => 'customer.events.index',
-    'show' => 'customer.events.show',
-]);
-
-Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/event-checkout', [ViewController::class, 'checkout'])->name('event.checkout');
-});
-
+// Route::resource('events', EventController::class)->names([
+//     'index' => 'customer.events.index',
+//     'show' => 'customer.events.show',
+// ]);
+Route::get('/event-checkout', [ViewController::class, 'checkout'])->name('event.checkout');
 Route::post('/event-pay', [PaymentController::class, 'pay'])->name('event.pay');
 Route::get('/event-checkout-success', [PaymentController::class, 'success'])->name('event.checkout.success');

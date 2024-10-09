@@ -24,9 +24,9 @@ Route::resource('bookings', BookingController::class)->names([
     'update' => 'customer.bookings.update'
 ]);
 
-Route::resource('facilities', FacilityController::class)->names([
-    'index' => 'customer.facilities.index',
-    'show' => 'customer.facilities.show',
-]);
+// Route::resource('facilities', FacilityController::class)->names([
+//     'index' => 'customer.facilities.index',
+//     'show' => 'customer.facilities.show',
+// ]);
 
 

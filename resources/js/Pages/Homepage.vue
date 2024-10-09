@@ -82,7 +82,7 @@ Echo.channel('hello-channel')
                 </div>
             </div>
 
-            <div class="row q-col-gutter-xl justify-center items-center q-my-xl">
+            <div class="row q-col-gutter-xl justify-center items-center q-mt-xl">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="q-px-lg">
                         <q-img src="facilities_pic.png"></q-img>
@@ -135,7 +135,7 @@ Echo.channel('hello-channel')
             <q-btn v-else size="lg" icon="minimize" :color="$q.dark.isActive ? 'white' : 'black'" flat round dense @click="onClick" />
         </template>
         <q-carousel-slide :name="`style${n}`" v-for="n in 5" :key="n">
-            <q-card class="q-pa-lg" style="height: 100%;" bordered>
+            <q-card class="q-pa-lg" style="height: 100%;">
                 <img style="height: 35px; width: 35px" src="https://assets-global.website-files.com/609cbadfde419c81adafa17b/609db59d8c7a879cbd837708_Quotation%20Mark.svg" alt="">
                 <div class="q-mt-md text-start ellipsis-3-lines">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, consectetur!

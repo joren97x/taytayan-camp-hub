@@ -2,10 +2,10 @@
 
 import { ref, watch, onMounted } from 'vue'
 import { Link } from '@inertiajs/vue3'
-import Footer from '@/Components/Customer/Footer.vue'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import NavLinks from '@/Components/Customer/NavLinks.vue'
+import Footer from '@/Components/Footer.vue'
 
 const $q = useQuasar()
 const rightDrawerOpen = ref(false)
@@ -283,6 +283,7 @@ watch(btnToggle, () => {
         <q-page-container>
             <div class="content-wrapper">
                 <slot/>
+                <Footer class="content-wrapper"/>
             </div>
         </q-page-container>
         <q-footer reveal elevated class="lt-md" v-show="false" style="z-index: 998;">
