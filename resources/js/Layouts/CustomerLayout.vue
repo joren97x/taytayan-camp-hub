@@ -84,19 +84,19 @@ watch(btnToggle, () => {
                     <!-- {{ $q.screen.gt.xs }} -->
                     <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
                         <q-avatar square size="md">
-                            <q-img fit="contain" src="/product_icon.png"/>
+                            <q-img fit="contain" src="/product_icon2.png"/>
                         </q-avatar>
                         Products
                     </Link>
                     <Link :href="route('customer.events.index')" class="text-subtitle2 navlink q-mr-xl">
                         <q-avatar square size="md">
-                            <q-img fit="contain" src="/event_icon.png"/>
+                            <q-img fit="contain" src="/event_icon2.png"/>
                         </q-avatar>
                         Events
                     </Link>
                     <Link :href="route('customer.facilities.index')" class="text-subtitle2 navlink q-mr-xl">
                         <q-avatar square size="md">
-                            <q-img fit="contain" src="/facility_icon.png"/>
+                            <q-img fit="contain" src="/facility_icon2.png"/>
                         </q-avatar>
                         Facilities
                     </Link>
@@ -175,7 +175,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                <q-img fit="cover" src="/images/product_logo.png"/>
+                                <q-img fit="cover" src="/product_icon2.png"/>
                             </q-avatar>
                             </q-item-section>
                             <q-item-section>Products</q-item-section>
@@ -185,7 +185,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                <q-img fit="cover" src="/event_icon.png"/>
+                                <q-img fit="cover" src="/event_icon2.png"/>
                             </q-avatar>
                             </q-item-section>
                             <q-item-section>Events</q-item-section>
@@ -195,7 +195,7 @@ watch(btnToggle, () => {
                         <q-item clickable>
                             <q-item-section avatar>
                                 <q-avatar size="md">
-                                    <q-img fit="cover" src="/images/facility_logo.png"/>
+                                    <q-img fit="cover" src="/facility_icon2.png"/>
                                 </q-avatar>
                             </q-item-section>
                             <q-item-section>Facilities</q-item-section>
@@ -227,7 +227,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                    <q-img fit="cover" src="/images/product_logo.png"/>
+                                    <q-img fit="cover" src="/product_icon2.png"/>
                                 </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Products</q-item-section>
@@ -237,7 +237,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                    <q-img fit="cover" src="/event_icon.png"/>
+                                    <q-img fit="cover" src="/event_icon2.png"/>
                                 </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Events</q-item-section>
@@ -247,7 +247,7 @@ watch(btnToggle, () => {
                             <q-item clickable>
                                 <q-item-section avatar>
                                     <q-avatar size="md">
-                                        <q-img fit="cover" src="/images/facility_logo.png"/>
+                                        <q-img fit="cover" src="/facility_icon.png"/>
                                     </q-avatar>
                                 </q-item-section>
                                 <q-item-section>Facilities</q-item-section>

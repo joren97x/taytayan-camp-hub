@@ -87,6 +87,46 @@ const columns = [
                         </Link>
                     </q-td>
                 </template>
+                <template v-slot:item="props">
+                    <q-card class="col-12 q-mb-md" bordered flat>
+                        <q-card-section>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6">
+                                    <div class="text-caption text-grey">
+                                        Event
+                                    </div>
+                                    {{ props.row.name }}
+                                </div>
+                                <div class="col-xs-6 col-sm-6">
+                                    <div class="text-caption text-grey">
+                                        Sold
+                                    </div>
+                                    {{ props.row.sold }}
+                                </div>
+                                <div class="col-xs-6 col-sm-6">
+                                    <div class="text-caption text-grey">
+                                        Gross
+                                    </div>
+                                    {{ props.row.tickets_sold * props.row.admission_fee }}
+                                </div>
+                                <div class="col-xs-6 col-sm-6">
+                                    <div class="text-caption text-grey">
+                                        Status
+                                    </div>
+                                    {{ props.row.status }}
+                                </div>
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="text-caption text-grey">
+                                        Actions
+                                    </div>
+                                    <Link :href="route('cashier.events.check_in', props.row.id)">
+                                        <q-btn label="Button" color="primary" />
+                                    </Link>
+                                </div>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </template>
             </q-table>
         </q-card>
     </div>

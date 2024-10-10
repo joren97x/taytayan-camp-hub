@@ -29,14 +29,14 @@ const slide = ref(1)
                 control-color="black"
             >
                 <q-carousel-slide :name="1">
-                    <q-img fill="contain" width="400px" height="400px" src="https://dashboard.paymongo.com/static/media/plugins-login-signup.ecd38b3b.png"></q-img>
+                    <q-img fill="contain" width="400px" height="400px" src="/hp_product.png"></q-img>
                     <div class="absolute-bottom">
                         <div class="text-h5">Milk Tea Delights</div>
                         <div class="text-subtitle1">Explore our wide range of refreshing milk tea flavors and customizable options</div>
                     </div>
                 </q-carousel-slide>
                 <q-carousel-slide :name="2">
-                    <q-img fill="contain" width="400px" height="400px" src="https://dashboard.paymongo.com/static/media/pages-login-signup.740a27da.png"></q-img>
+                    <q-img fill="contain" width="400px" height="400px" src="/hp_facility.png"></q-img>
                     <div class="absolute-bottom">
                         <div class="text-h5">Nature Retreats</div>
                         <div class="text-subtitle1">Plan your next outdoor adventure with our camp reservation system. 
@@ -45,7 +45,7 @@ const slide = ref(1)
                     </div>    
                 </q-carousel-slide>
                 <q-carousel-slide :name="3">
-                    <q-img fill="contain" width="400px" height="400px" src="https://dashboard.paymongo.com/static/media/api-login-signup.d8fe73e3.png"></q-img>
+                    <q-img fill="contain" width="400px" height="400px" src="/hp_event.png"></q-img>
                     <div class="absolute-bottom">
                         <div class="text-h5">Exciting Events</div>
                         <div class="text-subtitle1">Planning a night out? Reserve your tickets online for exclusive events like discos and more!                        </div>

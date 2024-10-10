@@ -3,6 +3,9 @@
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 import { ref, computed } from 'vue'
 import EventCheckinDialog from './Partials/EventCheckinDialog.vue'
+import { QrcodeStream } from 'vue-qrcode-reader'
+import { useQuasar } from 'quasar'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({
     layout: CashierLayout
@@ -13,6 +16,7 @@ const props = defineProps({
     tickets: Object
 })
 
+const $q = useQuasar()
 const filter = ref('')
 const columns = [
     { name: 'attendee', align: 'center', label: 'Attendee Name', field: 'attendee', sortable: true },
@@ -23,6 +27,60 @@ const checkedIn = computed(() => {
     return props.tickets.filter((tix) => tix.status == 'used') 
 })
 
+const showScanner = ref(false)
+const loading = ref(false)
+
+const onDecode = (result) => {
+    $q.notify('helo its decoded')
+    showScanner.value = false;
+    loading.value = false;
+    // Do something with the QR code result
+    console.log('QR Code Result:', result);
+    // You can display it, use it, or redirect the user based on the result.
+}
+
+const onInit = (promise) => {
+    promise.then(() => {
+        this.loading = false;
+    }).catch((error) => {
+    console.error(error);
+        this.loading = false;
+        this.showScanner = false;
+    });
+}
+
+const onDetect = (detectedCodes) => {
+    $q.notify('detecented?')
+    console.log(detectedCodes)
+    router.visit(detectedCodes[0].rawValue)
+}
+
+const selectedConstraints = ref({ facingMode: 'environment' })
+const defaultConstraintOptions = [
+  { label: 'rear camera', constraints: { facingMode: 'environment' } },
+  { label: 'front camera', constraints: { facingMode: 'user' } }
+]
+const constraintOptions = ref(defaultConstraintOptions)
+
+async function onCameraReady() {
+  // NOTE: on iOS we can't invoke `enumerateDevices` before the user has given
+  // camera access permission. `QrcodeStream` internally takes care of
+  // requesting the permissions. The `camera-on` event should guarantee that this
+  // has happened.
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  const videoDevices = devices.filter(({ kind }) => kind === 'videoinput')
+
+  constraintOptions.value = [
+    ...defaultConstraintOptions,
+    ...videoDevices.map(({ deviceId, label }) => ({
+      label: `${label} (ID: ${deviceId})`,
+      constraints: { deviceId }
+    }))
+  ]
+
+//   error.value = ''
+}
+
 </script>
 
 <template>
@@ -32,7 +90,14 @@ const checkedIn = computed(() => {
         <q-card class="q-mb-md" bordered flat>
             <q-card-section>
                 <q-btn label="Go Back" no-caps icon="arrow_back" flat class="q-pa-none" />
-                <q-btn label="Scan Qr Code" no-caps icon="qr_code" color="primary" class="absolute-top-right q-mt-md q-mr-md" />
+                <q-btn 
+                    label="Scan Qr Code" 
+                    no-caps 
+                    icon="qr_code" 
+                    color="primary" 
+                    class="absolute-top-right q-mt-md q-mr-md" 
+                    @click="showScanner = true"
+                />
                 <div class="text-h6">Check-in</div>
                 <div>Check in attendees using their name or email</div>
                 <div class="row items-center flex">
@@ -79,5 +144,18 @@ const checkedIn = computed(() => {
             </q-table>
         </q-card>
     </div>
-
+    <q-dialog v-model="showScanner" persistent>
+      <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
+        <q-card-actions class="justify-end">
+            <q-btn icon="close" flat round dense @click="showScanner = false"/>
+        </q-card-actions>
+        <qrcode-stream 
+            @decode="onDecode" 
+            @init="onInit" 
+            @detect="onDetect"
+             @camera-on="onCameraReady"
+        />
+        <q-spinner v-if="loading" />
+      </q-card>
+    </q-dialog>
 </template>
