@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price');
             $table->integer('guests');
             $table->json('images');
-            $table->json('amenities')->nullable();
+            $table->string('amenities')->nullable();
+            $table->time('rental_start')->nullable();
+            $table->time('rental_end')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -42,7 +42,9 @@ class FacilityController extends Controller
             'images' => 'required',
             'guests' => 'required',
             'amenities' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'rental_start' => 'required',
+            'rental_end' => 'required',
         ]);
 
         $image_paths = [];
@@ -56,8 +58,10 @@ class FacilityController extends Controller
             'description' => $request->description,
             'guests' => $request->guests,
             'images' => json_encode($image_paths),
-            'amenities' => json_encode($request->amenities),
-            'price' => $request->price
+            'amenities' => $request->amenities,
+            'price' => $request->price,
+            'rental_start' => $request->rental_start,
+            'rental_end' => $request->rental_end,
         ]);
 
         return redirect(route('admin.facilities.index'));

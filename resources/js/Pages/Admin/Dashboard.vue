@@ -25,7 +25,7 @@ const columns = [
 <template>
     <Head title="Dashboard" />
     <div class="q-pa-md">
-        <div class="text-h5 q-mb-md"> Dashboard </div>
+        <div class="text-h6 q-mb-md"> Dashboard </div>
         
         <div class="row q-col-gutter-md ">
             <div class="col-3">

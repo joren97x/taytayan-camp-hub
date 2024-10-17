@@ -4,6 +4,7 @@ import { Head, useForm, Link } from '@inertiajs/vue3'
 import { ref, onMounted, watch } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
+import CreateModifierItemDialog from './Partials/CreateModifierItemDialog.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -14,11 +15,7 @@ const props = defineProps({
     modifier_group: Object
 })
 
-const modifierItemForm = useForm({
-    name: '',
-    description: '',
-    price: 0.00
-})
+
 
 const form = useForm({
     name: props.modifier_group.name,
@@ -33,15 +30,6 @@ const $q = useQuasar()
 const item = ref(null)
 const dialog = ref(false)
 
-const submitModifierItemForm = () => {
-    modifierItemForm.post(route('admin.modifier_items.store'), {
-        onFinish: () => modifierItemForm.reset('name', 'price'),
-        onSuccess: () => {
-            $q.notify('Modifier Item Successfully Added')
-            dialog.value = false
-        }
-    })
-}
 
 const submit = () => {
     form.put(route('admin.modifier_groups.update', props.modifier_group.id), {
@@ -68,24 +56,14 @@ watch(selected, (modifier_item) => {
     
     <Head title="Edit Modifier Group" />
     <div class="q-pa-md">
-        <q-card>
+        <q-card bordered flat>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                     <div  class="row flex justify-center bg-white">
                         <Link :href="route('admin.modifier_groups.index')">
-                            <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                            <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
                         </Link>
                         <div class="text-h6">Edit Modifier Group</div>
-                        <div class=" absolute-top-right">
-                            <q-btn 
-                                @click="dialog = !dialog" 
-                                no-caps 
-                                color="primary" 
-                                class="q-mr-sm q-mt-md" 
-                                outline
-                                label="New Modifier Item"    
-                            />
-                            
-                        </div>
+                        <CreateModifierItemDialog class="absolute-"/>
                     </div>
                     <q-separator class="q-mt-md"/>
                 </q-card-section>
@@ -139,11 +117,13 @@ watch(selected, (modifier_item) => {
                     :error="form.errors.name ? true : false"
                     :error-message="form.errors.name"
                     label="Name" 
-                    filled
+                    rounded 
+                    outlined
                 />
                 {{ item }}
                 <q-select 
-                    filled 
+                    rounded 
+                    outlined 
                     emit-value
                     use-chips
                     map-options
@@ -162,7 +142,8 @@ watch(selected, (modifier_item) => {
                 <br>
                 <div>
                     <q-input
-                        filled
+                        rounded 
+                        outlined
                         type="number"
                         label="Whats the maximum amount of items the customer can select?"
                         v-model="form.max_quantity"
@@ -170,7 +151,8 @@ watch(selected, (modifier_item) => {
                         :error-message="form.errors.max_quantity"
                     />
                     <q-input
-                        filled
+                        rounded 
+                        outlined
                         type="number"
                         label="How many times can customers select any single item?"
                         v-model="form.required_quantity"
@@ -193,6 +175,8 @@ watch(selected, (modifier_item) => {
                     :loading="form.processing"
                     :disable="form.processing"
                     label="Update"
+                    rounded
+                    unelevated
                 />
                 <!-- <q-card-actions>
                         <q-btn 
@@ -209,59 +193,6 @@ watch(selected, (modifier_item) => {
             </q-card-section>
         </q-card>
     </div>
-    <q-dialog v-model="dialog" position="right" full-height>
-        <q-card style="width: 500px">
-            <q-form @submit="submitModifierItemForm">
-                <q-card-section class="row items-center no-wrap">
-                        <div class="text-weight-bold text-subtitle1">New Item</div>
-                        <q-space />
-                        <q-btn 
-                            color="primary" 
-                            no-caps 
-                            class="q-mr-sm"
-                            type="submit"
-                            :loading="modifierItemForm.processing"
-                            :disable="modifierItemForm.processing"
-                        >
-                            Save
-                        </q-btn>
-                        <q-btn flat round icon="close" />
-                </q-card-section>
-                <q-card-section>
-                    <q-input 
-                        label="Name" 
-                        filled
-                        v-model="modifierItemForm.name"
-                        :error="modifierItemForm.errors.name ? true : false"
-                        :error-message="modifierItemForm.errors.name"
-                    />
-                    <q-input 
-                        label="Description (Optional)" 
-                        filled 
-                        class="q-mt-md" 
-                        type="textarea" 
-                        v-model="modifierItemForm.description"
-                        :error="modifierItemForm.errors.description ? true : false"
-                        :error-message="modifierItemForm.errors.description"
-                    />
-                    <q-input 
-                        filled 
-                        label="Default Price" 
-                        placeholder="None" 
-                        class="q-mt-md"
-                        v-model="modifierItemForm.price"
-                        :error="modifierItemForm.errors.price ? true : false"
-                        :error-message="modifierItemForm.errors.price"
-                    >
-                        <template v-slot:prepend>
-                            <q-icon name="attach_money" />
-                        </template>
-                    </q-input>
-                </q-card-section>
-                
-            </q-form>
-        </q-card>
-    </q-dialog>
 </template>
 
 <style scoped>

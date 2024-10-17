@@ -48,8 +48,7 @@ class ProductController extends Controller
             'price' => 'required',
             'categories' => 'required'
         ]);
-
-        $path = $request->file('photo')[0]->store('products', 'public');
+        $path = $request->file('photo')->store('products', 'public');
         // dd($path);
         // $photo = $request->photo[0]->getClientOriginalName();
         // $request->photo[0]->move(public_path('/images'), $photo);

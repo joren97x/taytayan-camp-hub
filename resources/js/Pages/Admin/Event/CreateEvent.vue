@@ -54,19 +54,21 @@ const onFileChange = (file) => {
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Create Event</div>
                     <q-btn 
-                            @click="submit"
-                            no-caps 
-                            icon="save"
-                            color="primary" 
-                            class="q-mr-md q-mt-md absolute-top-right"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                            label="Save"
-                        />
+                        @click="submit"
+                        no-caps 
+                        icon="save"
+                        color="primary" 
+                        class="q-mr-md q-mt-md absolute-top-right"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Save"
+                        rounded 
+                        unelevated
+                    />
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
@@ -80,11 +82,20 @@ const onFileChange = (file) => {
                     <q-separator class="q-my-md" /> -->
                     <div class="">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
-                        <div class=" q-mx-xl q-my-md rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
+                        <div class=" q-mx-xl q-my-md rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
                             
                             <div class="justify-center text-subtitle1 items-center flex full-height bg-grey-4" v-if="!imgPreview">
-                                <q-icon name="image" class="q-mr-md" size="lg"/>
-                                Choose a photo
+                                <!-- <q-icon name="image" class="q-mr-md" size="lg"/> -->
+                                <q-btn 
+                                    label="Choose a photo" 
+                                    no-caps 
+                                    @click="triggerFilePicker" 
+                                    outline 
+                                    color="" 
+                                    icon="image" 
+                                    rounded 
+                                />
+                                <!-- <span class="text-underlined">Choose a photo</span> -->
                             </div>
                             <div class="blurred-background " v-else :style="`background-image: url('${imgPreview}');`">
                             </div>
@@ -96,7 +107,19 @@ const onFileChange = (file) => {
                                 height="100%"
                                 fit="contain"
                                 style="position: relative; z-index: 2;" 
-                            />
+                            >
+                                <q-btn 
+                                    label="Change photo" 
+                                    @click="triggerFilePicker" 
+                                    no-caps 
+                                    rounded 
+                                    unelevated
+                                    style="z-index: 4;" 
+                                    color="primary" 
+                                    class="absolute-bottom-right q-mr-md q-mb-md" 
+                                    icon="image" 
+                                />
+                            </q-img>
                         </div>
                         <q-item class="q-my-md" :style="form.errors.cover_photo ? 'border: 1px solid red' : ''">
                             <!-- <q-item-section avatar>
@@ -115,10 +138,10 @@ const onFileChange = (file) => {
                                     ref="eventPhotoRef"
                                     @update:model-value="onFileChange"
                                 />
-                                <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                                <q-item-label caption>File requirement: JPG, PNG</q-item-label>
+                                <!-- <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
+                                <q-item-label caption>File requirement: JPG, PNG</q-item-label> -->
                                 <q-item-label class="text-red" caption>{{ form.errors.cover_photo ? form.errors.cover_photo : '' }}</q-item-label>
-                                <q-item-label>
+                                <!-- <q-item-label>
                                     <q-btn 
                                         no-caps color="primary" 
                                         v-if="form.cover_photo" 
@@ -127,7 +150,7 @@ const onFileChange = (file) => {
                                         Change
                                     </q-btn>
                                     <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Add photo</q-btn>
-                                </q-item-label>
+                                </q-item-label> -->
                             </q-item-section>
                         </q-item>
                         
@@ -153,7 +176,8 @@ const onFileChange = (file) => {
                         <div>Event title</div>
                         <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Title"
                             v-model="form.title" 
                             :error="form.errors.title ? true : false"
@@ -162,9 +186,11 @@ const onFileChange = (file) => {
                         <!-- <div>Description</div>
                         <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Description"
                             v-model="form.description" 
+                            type="textarea"
                             :error="form.errors.description ? true : false"
                             :error-message="form.errors.description"
                         />
@@ -173,7 +199,8 @@ const onFileChange = (file) => {
                         <div class="row q-col-gutter-md">
                             <div class="col-3">
                                 <q-input 
-                                    filled 
+                                    rounded 
+                                    outlined 
                                     mask="date" 
                                     label="Date" 
                                     :rules="['date']"
@@ -196,7 +223,8 @@ const onFileChange = (file) => {
                             </div>
                             <div class="col-3">
                                 <q-input 
-                                    filled 
+                                    rounded 
+                                    outlined 
                                     mask="time" 
                                     label="Start Time" 
                                     :rules="['time']"
@@ -221,7 +249,8 @@ const onFileChange = (file) => {
                         <!-- <div>Location</div>
                         <div> maybe a map or what></div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Location"
                             v-model="form.location" 
                             :error="form.errors.location ? true : false"
@@ -230,7 +259,8 @@ const onFileChange = (file) => {
                         <!-- <div>Capacity</div>
                         <div>capacity = amount of tickets u want to sell</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Capacity"
                             type="number" 
                             v-model="form.capacity" 
@@ -240,7 +270,8 @@ const onFileChange = (file) => {
                         <!-- <div>Tickets</div>
                         <div>How much do you want to charge for tickets?</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Price"
                             type="number" 
                             v-model="form.admission_fee" 
@@ -254,7 +285,8 @@ const onFileChange = (file) => {
                         <div class="row q-col-gutter-md">
                             <div class="col-4">
                                 <q-input 
-                                    filled
+                                    rounded 
+                                    outlined
                                     type="number" 
                                     label="Minimum"
                                     v-model="form.min_ticket" 
@@ -264,7 +296,8 @@ const onFileChange = (file) => {
                             </div>
                             <div class="col-4">
                                 <q-input 
-                                    filled
+                                    rounded 
+                                    outlined
                                     type="number" 
                                     label="Maximum"
                                     v-model="form.max_ticket" 

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->integer('min_ticket')->default(1);
             $table->integer('max_ticket')->default(1);
-            $table->decimal('admission_fee', 8, 2);
+            $table->decimal('admission_fee');
             $table->integer('tickets_sold')->default(0);
             $table->enum('status', [
                 Event::STATUS_CANCELLED,

@@ -37,7 +37,8 @@ const submit = () => {
             <q-card-section>
                 <div class="text-h6 q-mb-lg">Log In</div>
                 <q-input
-                    filled
+                    rounded
+                    outlined
                     v-model="form.email"
                     label="Email Address"
                     lazy-rules
@@ -47,7 +48,8 @@ const submit = () => {
                 />
                 <q-input 
                     v-model="form.password" 
-                    filled 
+                    rounded
+                    outlined 
                     :error="form.errors.password ? true : false"
                     :error-message="form.errors.password"
                     :type="!showPassword ? 'password' : 'text'" 

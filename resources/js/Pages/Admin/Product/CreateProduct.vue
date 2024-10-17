@@ -42,55 +42,43 @@ const onFileChange = (file) => {
     imgPreview.value = URL.createObjectURL(file)
 }
 
+const addCategoryDialog = ref(false)
+
 </script>
 
 <template>
     
     <Head title="New Milktea" />
     <div class="q-pa-md">
-        <q-card>
+        <q-card flat bordered>
             <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.products.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Create Product</div>
                     <q-btn 
-                            @click="submit"
-                            no-caps 
-                            color="primary" 
-                            class="q-mr-md q-mt-md absolute-top-right"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                            label="Save"
-                        />
+                        @click="submit"
+                        no-caps 
+                        rounded
+                        color="primary" 
+                        class="q-mr-md q-mt-md absolute-top-right"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Save"
+                    />
                 </div>
                 <q-separator class="q-mt-md"/>
-                <!-- <div class="row">
-                        <q-btn icon="arrow_back" flat round></q-btn>
-                        <span class="text-h6 q-mt-xs q-ml-sm">Create Product</span>
-                        <q-space/>
-                        <q-btn 
-                            type="submit" 
-                            no-caps 
-                            color="primary" 
-                            class="q-mr-sm"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                        >
-                            Save
-                        </q-btn>
-                    </div> -->
             </q-card-section>
 
             <q-card-section>
                 <q-form @submit="submit">
-                    
-                    <div>Build Your Event Page</div>
-                    <div>Add all of your event details and let attendees know what to expect</div>
-                    <div class="q-mx-xl q-mt-md">
-                        <div>Add product photo</div>    
-                        <div>Photos can help customers decide what to order and can increase sale.</div>
+                    <!-- <div>Build Your Event Page</div>
+                    <div>Add all of your event details and let attendees know what to expect</div> -->
+                    <div class="q-mx-md q-mt-md">
+                        <!-- <div>Add product photo</div>    
+                        <div>Photos can help customers decide what to order and can increase sale.</div> -->
+                        <p class="text-subtitle1 text-weight-bold">Product photo</p>
                         <q-item class="q-my-md" :style="form.errors.photo ? 'border: 1px solid red' : ''">
                             <q-item-section avatar>
                                 <q-img 
@@ -118,40 +106,53 @@ const onFileChange = (file) => {
                                         no-caps color="primary" 
                                         v-if="form.photo" 
                                         @click="triggerFilePicker"
+                                        rounded
                                     >
                                         Change
                                     </q-btn>
-                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Add photo</q-btn>
+                                    <q-btn 
+                                        no-caps 
+                                        color="primary" 
+                                        v-else 
+                                        rounded
+                                        @click="triggerFilePicker"
+                                        label="Add photo"
+                                    />
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
-                        <div>Event Overview</div>    
-                        <div>Add cover photo</div>    
-                        <div>Add photos to show what your event will be about. See examples</div>
+                        <!-- <div>Event Overview</div>     -->
+                        <!-- <div>Add cover photo</div>    
+                        <div>Add photos to show what your event will be about. See examples</div> -->
+                    <p class="text-subtitle1 text-weight-bold">Product Details</p>
+
                         <q-input 
                             label="Name" 
                             v-model="form.name" 
-                            filled
+                            outlined
+                            rounded
                             :error="form.errors.name ? true : false"
                             :error-message="form.errors.name"
                         />
-                        <div>Add cover photo</div>    
-                        <div>Add photos to show what your event will be about. See examples</div>
+                        <!-- <div>Add cover photo</div>    
+                        <div>Add photos to show what your event will be about. See examples</div> -->
                         <q-input 
                             label="Description" 
                             v-model="form.description" 
-                            filled 
+                            outlined 
+                            rounded
                             type="textarea"
                             :error="form.errors.description ? true : false"
                             :error-message="form.errors.description"
                         />
-                        <div>Add cover photo</div>    
-                        <div>Add photos to show what your event will be about. See examples</div>
+                        <!-- <div>Add cover photo</div>    
+                        <div>Add photos to show what your event will be about. See examples</div> -->
                         <q-select 
-                            filled 
+                            outlined 
                             class="q-mt-lg"
                             label="Categories" 
                             multiple
+                            rounded
                             v-model="form.categories"
                             option-label="name"
                             option-value="id"
@@ -162,10 +163,11 @@ const onFileChange = (file) => {
                             :error="form.errors.categories ? true : false"
                             :error-message="form.errors.categories"
                         />
-                        <div>Tickets</div>
-                        <div>How much do you want to charge for tickets?</div>
+                        <!-- <div>Tickets</div>
+                        <div>How much do you want to charge for tickets?</div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Default Price" 
                             v-model="form.price" 
                             placeholder="None" 
@@ -185,4 +187,11 @@ const onFileChange = (file) => {
             </q-card-section>
         </q-card>
     </div>
+    <q-dialog v-model="addCategoryDialog">
+        <q-card>
+            <q-card-section>
+
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 </template>

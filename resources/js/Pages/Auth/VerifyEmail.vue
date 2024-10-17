@@ -51,6 +51,8 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                     :loading="form.processing" 
                     :disabled="form.processing"
                     class="full-width q-mb-sm"
+                    rounded
+                    unelevated
                 >
                     Resend Verification Email
                 </q-btn>

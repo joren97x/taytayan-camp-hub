@@ -240,9 +240,9 @@ defineOptions({
         </div>
     </div>
 
-    <div class="bg-grey text-center text-h5" style="height: 350px;">
+    <!-- <div class="bg-grey text-center text-h5" style="height: 350px;">
         Footer
-    </div>
+    </div> -->
 </template>
 
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('facility_id');
             $table->foreignId('user_id');
-            $table->decimal('total', 8, 2);
+            $table->decimal('total');
             $table->enum('status', [
                 Booking::STATUS_CANCELLED,
                 Booking::STATUS_CHECKED_IN,

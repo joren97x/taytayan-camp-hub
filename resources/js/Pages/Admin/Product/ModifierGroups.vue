@@ -59,13 +59,13 @@ const columns = [
                 <template v-slot:top>
                     <p class="text-h6 q-pt-md">Modifier Groups</p>
                     <q-space />
-                        <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <q-input rounded outlined dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
                     <Link :href="route('admin.modifier_groups.create')">
-                        <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
+                        <q-btn class="q-ml-sm" color="primary" rounded no-caps label="Create Modifier Group" unelevated/>
                     </Link>
                 </template>
                 <template v-slot:body-cell-contains="props">
@@ -85,9 +85,9 @@ const columns = [
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route('admin.modifier_groups.edit', props.row.id)">
-                            <q-btn no-caps unelevated>Edit</q-btn>
+                            <q-btn no-caps unelevated class="text-black">Edit</q-btn>
                         </Link>
-                        <q-btn no-caps unelevated @click="showDeleteModifierGroupDialog(props.row)">Delete</q-btn>
+                        <q-btn flat no-caps unelevated color="negative" @click="showDeleteModifierGroupDialog(props.row)">Delete</q-btn>
                     </q-td>
                 </template>
             </q-table>

@@ -31,7 +31,7 @@ const columns = [
     
     <Head title="Reviews" />
     <div class="q-pa-md">
-        <q-card flat bordered>
+        <q-card flat bordered style="border-radius: 20px">
             <q-table
                 class="my-sticky-header-column-table"
                 flat

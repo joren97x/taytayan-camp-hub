@@ -28,7 +28,7 @@ const submit = () => {
     
     <Head title="New Category" />
     <div class="q-pa-md">
-        <q-card>
+        <q-card class="round-border">
             <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.categories.index')">

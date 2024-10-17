@@ -33,7 +33,8 @@ const submit = () => {
             <q-card-section>
                 <p class="text-h6 q-mb-lg">Create your account</p>
                 <q-input
-                    filled
+                    rounded
+                    outlined
                     v-model="form.email"
                     label="Email Address"
                     lazy-rules
@@ -45,7 +46,8 @@ const submit = () => {
                 <div class="row q-col-gutter-md">
                     <div class="col-6">
                         <q-input
-                            filled
+                            rounded
+                            outlined
                             v-model="form.first_name"
                             label="First Name"
                             lazy-rules
@@ -56,7 +58,8 @@ const submit = () => {
                     </div>
                     <div class="col-6">
                         <q-input
-                            filled
+                            rounded
+                            outlined
                             v-model="form.last_name"
                             label="Last Name"
                             lazy-rules
@@ -69,7 +72,8 @@ const submit = () => {
 
                 <q-input 
                     v-model="form.password" 
-                    filled 
+                    rounded
+                    outlined 
                     :type="!showPassword ? 'password' : 'text'" 
                     label="Password"
                     :error="form.errors.password ? true : false"
@@ -86,7 +90,8 @@ const submit = () => {
 
                 <q-input 
                     v-model="form.password_confirmation" 
-                    filled 
+                    rounded
+                    outlined 
                     :error="form.errors.password_confirmation ? true : false"
                     :error-message="form.errors.password_confirmation"
                     :type="!showPassword2 ? 'password' : 'text'" 

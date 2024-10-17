@@ -46,11 +46,23 @@ const submit = () => {
 const deleteUserDialog = ref(false)
 const editUserDialog = ref(false)
 const selectedUser = ref(null)
+const deleteUserForm = useForm({
+    user: null
+})
 
 const showDeleteUserDialog = (user) => {
     console.log('anyeong shawtiee')
-    selectedUser.value = user
+    deleteUserForm.user = user
     deleteUserDialog.value = true
+}
+
+const deleteUser = () => {
+    deleteUserForm.delete(route('admin.users.destroy', deleteUserForm.user.id), {
+        onSuccess: () => {
+            deleteUserDialog.value = false
+            $q.notify('User Deleted')
+        }
+    })
 }
 
 const showEditUserDialog = (user) => {
@@ -63,6 +75,7 @@ const columns = [
     { name: 'user', align: 'center', label: 'User', sortable: true },
     { name: 'email', align: 'center', label: 'Email', field: 'email', sortable: true },
     { name: 'contact', align: 'center', label: 'Contact', field: 'contact', sortable: true },
+    { name: 'email_verified_at', align: 'center', label: 'Verified', field: 'email_verified_at', sortable: true },
     { name: 'role', align: 'center', label: 'Role', field: 'role', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
@@ -95,7 +108,8 @@ const onFileChange = (file) => {
                 <!-- <template v-slot:top>
                     <p class="text-h6 q-pt-md">Modifier Groups</p>
                     <q-space />
-                        <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <q-input outlined 
+                        rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
@@ -123,42 +137,52 @@ const onFileChange = (file) => {
                 </template>
                 <template v-slot:body-cell-contact="props">
                     <q-td :props="props">
-                        {{ props.row.phone_number }}
+                        {{ props.row.phone_number ? props.row.phone_number : 'N\\A' }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-email_verified_at="props">
+                    <q-td :props="props">
+                        <q-chip
+                            :class="props.row.email_verified_at ? 'bg-green-3' : 'bg-yellow-3'"
+                        >
+                            {{ props.row.email_verified_at ? 'Verified' : 'Not Verified' }}
+                        </q-chip>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <q-btn no-caps unelevated @click="showEditUserDialog(props.row)">Edit</q-btn>
-                        <q-btn no-caps unelevated @click="showDeleteUserDialog(props.row)">Delete</q-btn>
+                        <q-btn no-caps unelevated @click="showDeleteUserDialog(props.row)" color="negative" flat>Delete</q-btn>
                         <!--  -->
                     </q-td>
                 </template>
                 <template v-slot:top>
                     <p class="text-h6 q-pt-md text-capitalize">User Management</p>
                     <q-space />
-                    <!-- <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
+                    <!-- <q-input outlined 
+                     rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input> -->
-                    <q-input filled dense label="Search by email" debounce="300" color="primary" v-model="filter">
+                    <q-input outlined rounded dense label="Search by email" debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <q-btn class="q-ml-md" no-caps color="primary" @click="newUserDialog = true" label="Create User" />
+                    <q-btn class="q-ml-md" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
 
                 </template>
             </q-table>
         </q-card>
     </div>
     <!-- {{ selectedUser }} -->
-    <DeleteUserDialog 
+    <!-- <DeleteUserDialog 
         @close="deleteUserDialog = false" 
         :user="selectedUser" 
         v-if="selectedUser" 
         :dialog="deleteUserDialog" 
-    />
+    /> -->
     <EditUserDialog 
         @close="editUserDialog = false" 
         :user="selectedUser" 
@@ -200,17 +224,19 @@ const onFileChange = (file) => {
                                 no-caps color="primary" 
                                 v-if="form.profile_pic" 
                                 @click="triggerFilePicker"
-                            >
-                                Change
-                            </q-btn>
-                            <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Add photo</q-btn>
+                                rounded 
+                                unelevated
+                                label="Change"
+                            />
+                            <q-btn no-caps color="primary" v-else @click="triggerFilePicker" rounded unelevated label="Add Photo" />
                         </q-item-label>
                     </q-item-section>
                 </q-item>
                 <div class="row q-col-gutter-md">
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.email"
                             label="Email Address"
                             lazy-rules
@@ -221,7 +247,8 @@ const onFileChange = (file) => {
                     </div>
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.phone_number"
                             label="Phone Number"
                             lazy-rules
@@ -232,7 +259,8 @@ const onFileChange = (file) => {
                     </div>
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.first_name"
                             label="First Name"
                             lazy-rules
@@ -243,7 +271,8 @@ const onFileChange = (file) => {
                     </div>
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.last_name"
                             label="Last Name"
                             lazy-rules
@@ -256,7 +285,8 @@ const onFileChange = (file) => {
 
                 <q-select 
                     v-model="form.role" 
-                    filled 
+                    outlined 
+                    rounded 
                     label="Role"
                     :options="user_roles"
                     :error="form.errors.role ? true : false"
@@ -267,7 +297,8 @@ const onFileChange = (file) => {
 
                 <q-input 
                     v-model="form.password" 
-                    filled 
+                    outlined 
+                    rounded 
                     :type="!showPassword ? 'password' : 'text'" 
                     label="Password"
                     :error="form.errors.password ? true : false"
@@ -284,7 +315,8 @@ const onFileChange = (file) => {
 
                 <q-input 
                     v-model="form.password_confirmation" 
-                    filled 
+                    outlined 
+                    rounded 
                     :error="form.errors.password_confirmation ? true : false"
                     :error-message="form.errors.password_confirmation"
                     :type="!showPassword2 ? 'password' : 'text'" 
@@ -306,6 +338,8 @@ const onFileChange = (file) => {
                     no-caps
                     class="full-width"
                     type="submit"
+                    rounded 
+                    unelevated
                     :loading="form.processing"
                     :disable="form.processing"
                 >
@@ -315,4 +349,46 @@ const onFileChange = (file) => {
             </q-form>
         </q-card>
     </q-dialog>
+    <q-dialog 
+            v-model="deleteUserDialog" 
+            persistent 
+            :maximized="$q.screen.lt.md"
+            transition-show="slide-up"
+            transition-hide="slide-down"
+        >
+            <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+                <q-card-section class="row items-center q-pb-none">
+                    <q-icon name="warning" color="negative" size="32px" />
+                    <div class="text-h6 q-ml-md">Delete User</div>
+                    <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+
+                </q-card-section>
+                <q-card-section>
+                    Are you sure you want to delete this user? All data will be permanently removed. This action cannot be undone.
+                    <q-item class="bg-negative text-white q-my-md">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${deleteUserForm.user.profile_pic}`" alt="Profile Picture" height="100px" width="100px"></q-img>
+                        </q-item-section>  
+                        <q-item-section>
+                            <q-item-label class="text-weight-bold text-subtitle1">{{ deleteUserForm.user.first_name + ' ' +  deleteUserForm.user.last_name }}</q-item-label>
+                            <q-item-label >{{ deleteUserForm.user.email }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-card-section>
+            
+                <q-card-actions align="right">
+                    <q-btn flat label="Cancel" rounded no-caps color="grey-7" v-close-popup />
+                    <q-btn 
+                        label="Delete" 
+                        rounded 
+                        no-caps 
+                        unelevated 
+                        color="negative"
+                        @click="deleteUser" 
+                        :loading="deleteUserForm.processing"
+                        :disable="deleteUserForm.processing"
+                    />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
 </template>

@@ -77,6 +77,7 @@ watch(btnToggle, () => {
                                 <q-img src="../logo.jpg" fill="cover" />
                             </q-avatar>
                             <span class="text-primary text-h6 text-weight-bolder q-ml-xs">Taytayan Camp Hub</span>
+                            {{ $page.component }}
                         </q-toolbar-title>
                     </Link>
                 </div>
@@ -111,6 +112,7 @@ watch(btnToggle, () => {
                                 no-caps 
                                 color="primary" 
                                 unelevated 
+                                rounded
                                 class="text-subtitle2 text-weight-regular"
                             >
                             <div>

@@ -19,10 +19,17 @@ const deleteCategoryForm = useForm({
     category: null
 })
 const deleteCategoryDialog = ref(false)
+const showCategoryProductsDialog = ref(false)
+const currentCategory = ref(null)
 
-function showDeleteCategoryDialog(category) {
+const showDeleteCategoryDialog = (category) => {
     deleteCategoryForm.category = category
     deleteCategoryDialog.value = true
+}
+
+const showCategoryProducts = (category) => {
+    showCategoryProductsDialog.value = true
+    currentCategory.value = category
 }
 
 const deleteCategory = () => {
@@ -55,6 +62,7 @@ const updateCategoryName = () => {
 
 const columns = [
     { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
+    { name: 'items', label: 'Items', align: 'center', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
@@ -63,86 +71,133 @@ const columns = [
 <template>
     
     <Head title="Categories" />
-        <div class="q-pa-md">
-            <q-card bordered flat>
-                <q-table
-                    class="my-sticky-header-column-table"
-                    flat
-                    title="Treats"
-                    :rows="props.categories"
-                    :columns="columns"
-                    row-key="name"
-                >
-                <template v-slot:body-cell-name="props">
-                        <q-td :props="props">
-                            {{ props.row.name }}
-                            <q-btn color="primary" size="sm" flat icon="edit" @click="showEditCategoryNameMenu(props.row)">
-                                <q-menu persistent>
-                                    <q-card bordered>
-                                        <q-form @submit.prevent="updateCategoryName()">
-                                            <q-card-section>
-                                                <div class="q-mb-sm">Edit Category Name</div>
-                                                <q-input filled v-model="editCategoryNameForm.name"/>
-                                            </q-card-section>
-                                            <q-card-actions>
-                                                <q-btn no-caps>Cancel</q-btn>
-                                                <q-btn 
-                                                    no-caps color="blue" 
-                                                    :disable="editCategoryNameForm.processing"
-                                                    :loading="editCategoryNameForm.processing"
-                                                    type="submit"
-                                                >
-                                                    Save
-                                                </q-btn>
-                                            </q-card-actions>
-                                        </q-form>
-                                    </q-card>
-                                </q-menu>
-                                </q-btn>
-                        </q-td>
-                    </template>
-                    <!-- <template v-slot:body-cell-items="props">
-                        <q-td :props="props">
-                            <span v-for="product in props.row.products" :key="product.id">
-                                {{ product.name + ', ' }}
-                            </span>
-                        </q-td>
-                    </template> -->
-                    <template v-slot:body-cell-actions="props">
-                        <q-td :props="props">
-                            <q-btn no-caps unelevated @click="showDeleteCategoryDialog(props.row)" label="Delete"/>
-                        </q-td>
-                    </template>
-                    <template v-slot:top>
-                        <p class="text-h6 q-pt-md">Categories</p>
-                        <q-space />
-                            <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
-                            <template v-slot:append>
-                                <q-icon name="search" />
-                            </template>
-                        </q-input>
-                        <Link :href="route('admin.categories.create')">
-                            <q-btn class="q-ml-sm" color="primary" no-caps label="Create Category" />
-                        </Link>
-                    </template>
-                </q-table>
-            </q-card>
-            <q-dialog v-model="deleteCategoryDialog">
-                <q-card>
-                    <q-card-section>
-                        Delete category?
-                    </q-card-section>
-                    <q-card-actions>
-                        <q-btn v-close-popup>Cancel</q-btn>
-                        <q-btn 
-                            :disable="deleteCategoryForm.processing"
-                            :loading="deleteCategoryForm.processing"
-                            @click="deleteCategory"
-                        >
-                            Delete
-                        </q-btn>
-                    </q-card-actions>
-                </q-card>
-            </q-dialog>
-        </div>
+    <div class="q-pa-md">
+        <q-card bordered flat>
+            <q-table
+                class="my-sticky-header-column-table"
+                flat
+                title="Treats"
+                :rows="props.categories"
+                :columns="columns"
+                row-key="name"
+            >
+            <template v-slot:body-cell-name="props">
+                    <q-td :props="props">
+                        {{ props.row.name }}
+                        <q-btn color="primary" size="sm" flat icon="edit" @click="showEditCategoryNameMenu(props.row)">
+                            <q-menu persistent>
+                                <q-card bordered>
+                                    <q-form @submit.prevent="updateCategoryName()">
+                                        <q-card-section>
+                                            <div class="q-mb-sm">Edit Category Name</div>
+                                            <q-input filled v-model="editCategoryNameForm.name"/>
+                                        </q-card-section>
+                                        <q-card-actions>
+                                            <q-btn no-caps>Cancel</q-btn>
+                                            <q-btn 
+                                                no-caps color="blue" 
+                                                :disable="editCategoryNameForm.processing"
+                                                :loading="editCategoryNameForm.processing"
+                                                type="submit"
+                                            >
+                                                Save
+                                            </q-btn>
+                                        </q-card-actions>
+                                    </q-form>
+                                </q-card>
+                            </q-menu>
+                            </q-btn>
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-items="props">
+                    <q-td :props="props">
+                        3 items
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <q-btn no-caps unelevated @click="showCategoryProducts(props.row)" label="View"/>
+                        <q-btn no-caps unelevated color="negative" flat @click="showDeleteCategoryDialog(props.row)" label="Delete"/>
+                    </q-td>
+                </template>
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Categories</p>
+                    <q-space />
+                        <q-input outlined rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <Link :href="route('admin.categories.create')">
+                        <q-btn class="q-ml-sm" rounded color="primary" unelevated no-caps label="Create Category" />
+                    </Link>
+                </template>
+            </q-table>
+        </q-card>
+        
+    </div>
+    <q-dialog 
+        v-model="deleteCategoryDialog"
+        :maximized="$q.screen.lt.md"    
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+            <q-card-section class="row items-center q-pb-none">
+                <q-icon name="warning" color="negative" size="32px" />
+                <div class="text-h6 q-ml-md">Delete Category</div>
+                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+            </q-card-section>
+            <q-card-section>
+                Are you sure you want to delete this category? All data will be permanently removed. This action cannot be undone.
+                <q-item class="bg-negative text-white q-my-md">
+                    <q-item-section>
+                        <q-item-label class="text-weight-bold text-subtitle1">{{ deleteCategoryForm.category.name }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn v-close-popup flat rounded no-caps label="Cancel"/>
+                <q-btn 
+                    :disable="deleteCategoryForm.processing"
+                    :loading="deleteCategoryForm.processing"
+                    @click="deleteCategory"
+                    no-caps
+                    rounded 
+                    color="negative"
+                    unelevated
+                    label="Delete"    
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+    <q-dialog 
+        v-model="showCategoryProductsDialog" 
+        :maximized="$q.screen.lt.md"    
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+            <q-card-section>
+                <div class="text-h6">{{ currentCategory.name }}</div>
+                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+            </q-card-section>
+            <q-card-section>
+                <q-list>
+                    <q-item-label header>Products Belonged To this Category</q-item-label>
+                    <q-item v-for="product in currentCategory.products">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${product.photo}`" height="70px" width="70px"/>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>{{ product.name }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <p v-if="currentCategory.products.length == 0" class="text-center q-my-md">
+                        Theres no product yet in this category....
+                    </p>
+                </q-list>
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 </template>

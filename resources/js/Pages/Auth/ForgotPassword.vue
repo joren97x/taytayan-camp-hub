@@ -27,7 +27,7 @@ const submit = () => {
     <q-form @submit="submit">
         <q-card flat>
             <Link :href="route('login')">
-                <q-btn no-caps flat color="primary">
+                <q-btn no-caps flat color="primary" rounded class="text-black q-mt-md">
                     <q-icon name="arrow_back" class="q-mr-sm"></q-icon>
                     Go back to login
                 </q-btn>
@@ -42,7 +42,8 @@ const submit = () => {
                     {{ status }}
                 </q-banner>
                 <q-input
-                    filled
+                    rounded 
+                    outlined
                     v-model="form.email"
                     label="Email"
                     lazy-rules
@@ -50,7 +51,17 @@ const submit = () => {
                     :error-message="form.errors.email"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
-                <q-btn label="Reset" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+                <q-btn 
+                    label="Reset" 
+                    :loading="form.processing" 
+                    :disable="form.processing" 
+                    no-caps 
+                    type="submit" 
+                    class="full-width" 
+                    rounded
+                    unelevated
+                    color="primary"
+                />
             </q-card-section>
 
         </q-card>

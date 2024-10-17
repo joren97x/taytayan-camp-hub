@@ -19,7 +19,7 @@ const form = useForm({
     description: props.facility.description,
     price: props.facility.price,
     guests: props.facility.guests,
-    amenities: props.facility.amenities ? JSON.parse(props.facility.amenities) : [],
+    amenities: props.facility.amenities,
 })
 
 const imagesForm = useForm({
@@ -43,33 +43,33 @@ const submitImagesForm = () => {
     })
 }
 
-const amenities = ref([])
+// const amenities = ref([])
 
-for(var i = 0; i < 10; i++) {
-    amenities.value.push(
-        {
-            id: i,
-            icon: 'style',
-            name: 'Amenity'
-        }
-    )
-}
+// for(var i = 0; i < 10; i++) {
+//     amenities.value.push(
+//         {
+//             id: i,
+//             icon: 'style',
+//             name: 'Amenity'
+//         }
+//     )
+// }
 
-function addAmenity(amenity) {
-    // if(form.amenities.find((amenity))) {
-    //     form.amenities.push(amenity)
-    // }
-    if(!form.amenities.find((el) => el.id == amenity.id)) {
-        form.amenities.push(amenity)
-    }
+// function addAmenity(amenity) {
+//     // if(form.amenities.find((amenity))) {
+//     //     form.amenities.push(amenity)
+//     // }
+//     if(!form.amenities.find((el) => el.id == amenity.id)) {
+//         form.amenities.push(amenity)
+//     }
 
-}
+// }
 
-function deleteAmenity(amenity) {
-    console.log(amenity)
-    console.log(form.amenities)
-    form.amenities = form.amenities.filter(a => a.id != amenity.id)
-}
+// function deleteAmenity(amenity) {
+//     console.log(amenity)
+//     console.log(form.amenities)
+//     form.amenities = form.amenities.filter(a => a.id != amenity.id)
+// }
 
 const facilityImagesRef = ref(null)
 const imgPreview = ref([])
@@ -113,18 +113,20 @@ const submitDeleteFacilityForm = () => {
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Facility</div>
                     <q-btn 
-                            @click="submit"
-                            no-caps 
-                            color="primary" 
-                            class="q-mr-md q-mt-md absolute-top-right"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                            label="Update"
-                        />
+                        @click="submit"
+                        no-caps 
+                        rounded 
+                        unelevated
+                        color="primary" 
+                        class="q-mr-md q-mt-md absolute-top-right"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Update"
+                    />
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
@@ -167,7 +169,7 @@ const submitDeleteFacilityForm = () => {
                             </q-item-section>
                         </q-item> -->
                         <div class="row q-col-gutter-sm">
-                            <div class="col-3 text-h6 items-center flex">
+                            <div class="col-3 text-subtitle1 text-weight-bold items-center flex">
                                 Faciliy Images
                             </div>
                             <div class="col-9 justify-end flex items-end self-end">
@@ -179,6 +181,8 @@ const submitDeleteFacilityForm = () => {
                                     :loading="imagesForm.processing"
                                     @click="submitImagesForm()"
                                     label="Save"
+                                    rounded 
+                                    unelevated
                                 />
                             </div>
                             <div class="col-2" v-for="img in facilityImages">
@@ -230,13 +234,14 @@ const submitDeleteFacilityForm = () => {
                             @update:model-value="onFileChange"
                         />
                         <q-separator class="q-my-md" />
-                        <p class="text-weight-bold text-h6">Facility Details</p>
+                        <p class="text-weight-bold text-subtitle1">Facility Details</p>
                     </div>
                     <div class="q-mx-sm q-mt-md">
                         <!-- <div>Event title</div>
                         <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Name"
                             v-model="form.name" 
                             :error="form.errors.name ? true : false"
@@ -245,11 +250,24 @@ const submitDeleteFacilityForm = () => {
                         <!-- <div>Description</div>
                         <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Description"
+                            type="textarea"
                             v-model="form.description" 
                             :error="form.errors.description ? true : false"
                             :error-message="form.errors.description"
+                        />
+                        <q-input 
+                            rounded 
+                            outlined 
+                            label="Ameneties"
+                            v-model="form.amenities" 
+                            :error="form.errors.amenities ? true : false"
+                            :error-message="form.errors.amenities"
+                            mask="#.##"
+                            fill-mask="0"
+                            reverse-fill-mask
                         />
                         <!-- <div>Date and location</div>    
                         <div>Date and time</div> -->
@@ -261,7 +279,8 @@ const submitDeleteFacilityForm = () => {
                         <p class="text-red h6">unya what if less than ang bag-o nga capacity epang delete ang ticket,,, no??</p>
                         <div>capacity = amount of tickets u want to sell</div> -->
                         <!-- <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Price"
                             type="number" 
                             v-model="form.capacity" 
@@ -274,7 +293,8 @@ const submitDeleteFacilityForm = () => {
                         <p class="text-red">unya kung e update ni ang price dire (ilisag 200) ma ilisan pod to ang price to 200 x 3 = 600</p>
                         <div>How much do you want to charge for tickets?</div> -->
                         <q-input 
-                            filled 
+                            rounded 
+                            outlined 
                             label="Price"
                             type="number" 
                             v-model="form.price" 
@@ -284,9 +304,11 @@ const submitDeleteFacilityForm = () => {
                             fill-mask="0"
                             reverse-fill-mask
                         />
+                        
                         <!-- <div>TIckets per order</div> -->
                         <q-input 
-                            filled
+                            rounded 
+                            outlined
                             type="number" 
                             label="Guests"
                             v-model="form.guests" 
@@ -295,7 +317,7 @@ const submitDeleteFacilityForm = () => {
                         />
                             
                         
-                        <q-separator class="q-my-md" />
+                        <!-- <q-separator class="q-my-md" />
                         <p class="text-weight-bold text-h6">Facility Ameneties</p>
                         <div class="row q-col-gutter-md">
                             <div class="col-3 cursor-pointer" v-for="(amenity, i) in amenities" v-if="amenities">
@@ -327,7 +349,7 @@ const submitDeleteFacilityForm = () => {
                                     </q-item>
                                 </q-card>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- <q-btn 
                             no-caps 
                             type="submit" 
@@ -344,8 +366,10 @@ const submitDeleteFacilityForm = () => {
                     <!-- <div class="q-mx-xl q-mt-md">
                         <div>Frequently Asked Questions (Optional)</div>    
                         <div>Answer questions your attendees may have about the event, like parking, accessibility and refunds.</div>
-                        <q-input filled label="Question"></q-input>
-                        <q-input filled label="Answer" type="textarea"></q-input>
+                        <q-input rounded 
+                        outlined label="Question"></q-input>
+                        <q-input rounded 
+                        outlined label="Answer" type="textarea"></q-input>
                         <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
                     </div> -->
                 <!-- </q-form> -->

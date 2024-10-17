@@ -120,11 +120,11 @@ const onFileChange = (file) => {
     
     <Head title="Edit Product" />
     <div class="q-pa-md">
-        <q-card bordered flat>
+        <q-card bordered flat style="border-radius: 20px">
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.products.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Product</div>
                     
@@ -169,10 +169,18 @@ const onFileChange = (file) => {
                                     @click="submitphotoForm()"
                                     :loading="photoForm.processing"
                                     :disable="photoForm.processing"
-                                >
-                                    Save
-                                </q-btn>
-                                <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
+                                    rounded
+                                    unelevated
+                                />
+                                <q-btn 
+                                    no-caps 
+                                    rounded 
+                                    unelevated 
+                                    color="primary" 
+                                    v-else 
+                                    @click="triggerFilePicker"
+                                    label="Change photo"
+                                />
                             </q-item-label>
                         </q-item-section>
                     </q-item>
@@ -181,7 +189,8 @@ const onFileChange = (file) => {
                     <q-input 
                         label="Name" 
                         v-model="form.name" 
-                        filled
+                        rounded 
+                        outlined
                         :error="form.errors.name ? true : false"
                         :error-message="form.errors.name"
                     />
@@ -189,14 +198,16 @@ const onFileChange = (file) => {
                     <q-input 
                         label="Description" 
                         v-model="form.description" 
-                        filled 
+                        rounded 
+                        outlined 
                         type="textarea"
                         :error="form.errors.description ? true : false"
                         :error-message="form.errors.description"
                     >
                     </q-input>
                     <q-select 
-                        filled 
+                        rounded 
+                        outlined 
                         class="q-mt-lg"
                         label="Categories" 
                         multiple
@@ -212,7 +223,8 @@ const onFileChange = (file) => {
                     >
                     </q-select>
                     <q-input 
-                        filled 
+                        rounded 
+                        outlined 
                         label="Default Price" 
                         v-model="form.price" 
                         placeholder="None" 
@@ -238,6 +250,8 @@ const onFileChange = (file) => {
                         :loading="form.processing"
                         :disable="form.processing"
                         label="Update"
+                        rounded 
+                        unelevated
                     />
                     <!-- <q-btn 
                         type="submit" 
@@ -352,13 +366,13 @@ const onFileChange = (file) => {
                     <q-btn 
                         unelevated 
                         no-caps 
+                        rounded
                         type="submit" 
+                        label="Save"
                         color="primary" 
                         :loading="addModifierGroupForm.processing"
                         :disable="addModifierGroupForm.processing"
-                    >
-                        Save
-                    </q-btn>
+                    />
                 </q-card-actions>
             </q-form>
         </q-card>
@@ -375,7 +389,7 @@ const onFileChange = (file) => {
             </q-card-section>
             <q-card-actions>
                 <q-space/>
-                <q-btn v-close-popup no-caps>Cancel</q-btn>
+                <q-btn v-close-popup no-caps rounded unelevated>Cancel</q-btn>
                 <q-btn
                     color="negative"
                     @click="submitClearModifierGroup"
@@ -383,6 +397,8 @@ const onFileChange = (file) => {
                     :disable="clearModifierGroupForm.processing"
                     label="Clear"
                     no-caps
+                    rounded
+                    unelevated
                 />
             </q-card-actions>
         </q-card>

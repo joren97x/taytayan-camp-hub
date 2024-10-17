@@ -45,7 +45,7 @@ defineProps({
     </div>
     <div class="q-ma-md">
         <div class="text-h6 q-my-md">Upcoming Events</div>
-        <div class="row q-col-gutter-lg">
+        <div class="row q-col-gutter-lg" v-if="events.length > 0">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
                 <EventCard :event="event" />
             </div>
@@ -53,11 +53,17 @@ defineProps({
                 <EventCard :event="event" />
             </div>
         </div>
+        <div v-else class="items-center flex-center flex bg-grey-3" style="height: 40vh">
+            No Events Found
+        </div>
         <div class="text-h6 q-my-md">Past Events</div>
-        <div class="row">
+        <div class="row q-col-gutter-lg" v-if="events.length > 0">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
                 <EventCard :event="event" />
             </div>
+        </div>
+        <div v-else class="items-center flex-center flex bg-grey-3" style="height: 40vh">
+            No Events Found
         </div>
     </div>
 </template>

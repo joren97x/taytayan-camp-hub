@@ -40,7 +40,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255'
         ]);
         Category::create($request->all());
-        return redirect(route('admin.category.index', absolute: false));
+        return redirect(route('admin.categories.index'));
 
     }
 

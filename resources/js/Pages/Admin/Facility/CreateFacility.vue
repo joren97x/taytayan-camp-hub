@@ -20,7 +20,9 @@ const form = useForm({
     images: [],
     guests: 1,
     price: '',
-    amenities: []
+    amenities: '',
+    rental_start: null,
+    rental_end: null,
 })
 
 const submit = () => {
@@ -32,27 +34,27 @@ const submit = () => {
     })
 }
 
-const amenities = ref([])
+// const amenities = ref([])
 
-for(var i = 0; i < 10; i++) {
-    amenities.value.push(
-        {
-            id: i,
-            icon: 'style',
-            name: 'Amenity'
-        }
-    )
-}
+// for(var i = 0; i < 10; i++) {
+//     amenities.value.push(
+//         {
+//             id: i,
+//             icon: 'style',
+//             name: 'Amenity'
+//         }
+//     )
+// }
 
-function addAmenity(amenity) {
-    if(!form.amenities.includes(amenity)) {
-        form.amenities.push(amenity)
-    }
-}
+// function addAmenity(amenity) {
+//     if(!form.amenities.includes(amenity)) {
+//         form.amenities.push(amenity)
+//     }
+// }
 
-function deleteAmenity(amenity) {
-    form.amenities = form.amenities.filter(a => a.id !== amenity.id)
-}
+// function deleteAmenity(amenity) {
+//     form.amenities = form.amenities.filter(a => a.id !== amenity.id)
+// }
 
 const handleFileAdded = (files) => {
     console.log('wtf')
@@ -75,19 +77,21 @@ const handleRemoveFile = (files) => {
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Create Facility</div>
                     <q-btn 
-                            @click="submit"
-                            no-caps 
-                            icon="save"
-                            color="primary" 
-                            class="q-mr-md q-mt-md absolute-top-right"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                            label="Save"
-                        />
+                        @click="submit"
+                        rounded 
+                        unelevated
+                        no-caps 
+                        icon="save"
+                        color="primary" 
+                        class="q-mr-md q-mt-md absolute-top-right"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Save"
+                    />
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
@@ -95,10 +99,10 @@ const handleRemoveFile = (files) => {
                 <q-form @submit="submit">
                     <!-- <div>Build Your Event Page</div>
                     <div>Add all of your event details and let attendees know what to expect</div> -->
-                    <div class="q-mx-xl q-mt-md">
+                    <div class="q-mx-md q-mt-md">
                         <div class="row q-col-gutter-sm">
-                            <div class="col-3 text-h6 items-center flex">
-                                Faciliy Images
+                            <div class="col-3 text-subtitle1 text-weight-bold items-center flex">
+                                Facility Images
                             </div>
                             <div class="col-9 justify-end flex items-end self-end">
                                 <!-- <q-btn no-caps @click="editImages = !editImages">Edit</q-btn>
@@ -110,6 +114,7 @@ const handleRemoveFile = (files) => {
                                     url="http://localhost:4444/upload"
                                     label="Upload Files"
                                     multiple
+                                    flat
                                     style="width: 100%; height: 50vh;"
                                     @added="handleFileAdded"
                                     @removed="handleRemoveFile"
@@ -126,7 +131,15 @@ const handleRemoveFile = (files) => {
                                                 Or
                                             </div>
                                             <div class=" justify-center  flex">
-                                                <q-btn label="Upload Files" @click="scope.pickFiles" v-if="scope.canAddFiles" no-caps color="primary" />
+                                                <q-btn 
+                                                    label="Upload Files" 
+                                                    unelevated 
+                                                    outline
+                                                    rounded 
+                                                    @click="scope.pickFiles" 
+                                                    v-if="scope.canAddFiles" 
+                                                    no-caps 
+                                                />
                                             </div>
                                     </div>
                                     </div>
@@ -192,7 +205,8 @@ const handleRemoveFile = (files) => {
                             <q-item-section>
                                 <q-input 
                                     type="file" 
-                                    filled 
+                                    rounded 
+                                    outlined 
                                     v-model="form.images"
                                     :error="form.errors.images ? true : false"
                                     :error-message="form.errors.images"
@@ -207,11 +221,12 @@ const handleRemoveFile = (files) => {
                         <!-- <div>Event Overview</div>     -->
                         <!-- <div>Name</div>    
                         <div>Add photos to show what your event will be about. See examples</div> -->
-                        <div class="text-h6 q-my-md">Facility Description</div>
+                        <div class="text-subtitle1 text-weight-bold q-my-md">Facility Description</div>
                         <q-input 
                             label="Name" 
                             v-model="form.name" 
-                            filled
+                            rounded 
+                            outlined
                             :error="form.errors.name ? true : false"
                             :error-message="form.errors.name"
                         />
@@ -220,10 +235,19 @@ const handleRemoveFile = (files) => {
                         <q-input 
                             label="Description" 
                             v-model="form.description" 
-                            filled 
+                            rounded 
+                            outlined 
                             type="textarea"
                             :error="form.errors.description ? true : false"
                             :error-message="form.errors.description"
+                        />
+                        <q-input 
+                            label="Amenities" 
+                            v-model="form.amenities" 
+                            rounded 
+                            outlined
+                            :error="form.errors.amenities ? true : false"
+                            :error-message="form.errors.amenities"
                         />
                     <!-- {{ form }} -->
                         <div class="row q-col-gutter-lg">
@@ -231,7 +255,8 @@ const handleRemoveFile = (files) => {
                                 <!-- <div>Price</div>
                                 <div>How much do you want to charge for tickets?</div> -->
                                 <q-input 
-                                    filled 
+                                    rounded 
+                                    outlined 
                                     label="Price" 
                                     v-model="form.price" 
                                     placeholder="None" 
@@ -251,7 +276,8 @@ const handleRemoveFile = (files) => {
                                 <!-- <div>Guests</div>
                                 <div>How much do you want to charge for tickets?</div> -->
                                 <q-input 
-                                    filled 
+                                    rounded 
+                                    outlined 
                                     label="Guests" 
                                     v-model="form.guests" 
                                     placeholder="None" 
@@ -266,9 +292,58 @@ const handleRemoveFile = (files) => {
                             </div>
                         </div>
 
-                        <div class="text-h6 q-my-md">Facility Amenities</div>
-                        <!-- <div>Amenities</div>    
-                        <div>Add photos to show what your event will be about. See examples</div> -->
+                        <div class="row q-col-gutter-md">
+                            <div class="col">
+                                <q-input 
+                                    rounded 
+                                    outlined 
+                                    mask="time" 
+                                    label="Start Time" 
+                                    :rules="['time']"
+                                    v-model="form.rental_start" 
+                                    :error="form.errors.rental_start ? true : false"
+                                    :error-message="form.errors.rental_start"
+                                >
+                                    <template v-slot:append>
+                                        <q-icon name="access_time" class="cursor-pointer">
+                                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                                <q-time v-model="form.rental_start">
+                                                    <div class="row items-center justify-end">
+                                                        <q-btn no-caps v-close-popup label="Close" color="primary" flat />
+                                                    </div>
+                                                </q-time>
+                                            </q-popup-proxy>
+                                        </q-icon>
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col">
+                                <q-input 
+                                    rounded 
+                                    outlined 
+                                    mask="time" 
+                                    label="End Time" 
+                                    :rules="['time']"
+                                    v-model="form.rental_end" 
+                                    :error="form.errors.rental_end ? true : false"
+                                    :error-message="form.errors.rental_end"
+                                >
+                                    <template v-slot:append>
+                                        <q-icon name="access_time" class="cursor-pointer">
+                                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                                <q-time v-model="form.rental_end">
+                                                    <div class="row items-center justify-end">
+                                                        <q-btn no-caps v-close-popup label="Close" color="primary" flat />
+                                                    </div>
+                                                </q-time>
+                                            </q-popup-proxy>
+                                        </q-icon>
+                                    </template>
+                                </q-input>
+                            </div>
+                        </div>
+
+                        <!-- <div class="text-h6 q-my-md">Facility Amenities</div>
                         <div class="row q-col-gutter-md">
                             <div class="col-3 cursor-pointer" v-for="(amenity, i) in amenities">
                                 <q-card  flat bordered @click="addAmenity(amenity)" :class="form.amenities.includes(amenity) ? 'bg-primary' : ''">
@@ -287,7 +362,7 @@ const handleRemoveFile = (files) => {
                                     </q-item>
                                 </q-card>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </q-form>
             </q-card-section>

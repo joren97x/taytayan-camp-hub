@@ -34,7 +34,8 @@ const submit = () => {
                         {{ status }}
                     </q-banner>
                     <q-input
-                        filled
+                        rounded
+                        outlined
                         v-model="form.password"
                         label="Password"
                         lazy-rules
@@ -42,7 +43,17 @@ const submit = () => {
                         :error-message="form.errors.password"
                         :rules="[ val => val && val.length > 0 || 'Please type something']"
                     />
-                    <q-btn label="Reset" :loading="form.processing" :disable="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+                    <q-btn 
+                        label="Reset" 
+                        :loading="form.processing" 
+                        :disable="form.processing" 
+                        no-caps 
+                        type="submit" 
+                        class="full-width" 
+                        color="primary"
+                        rounded 
+                        unelevated
+                    />
                 </q-card-section>
             </q-card>
         </q-form>

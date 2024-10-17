@@ -36,6 +36,9 @@ defineProps({
                                 </q-item-section>
                             </q-item>
                         </Link>
+                        <div v-if="conversations.length == 0" class="text-center q-my-md">
+                            You dont have any conversations...
+                        </div>
                     </q-list>
                 </q-card>
             </div>

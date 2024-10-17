@@ -46,6 +46,7 @@ const submit = () => {
                 <div class="text-h6 q-mb-lg">Password Reset</div>
 
                 <q-input
+                    rounded
                     filled
                     label="Email"
                     v-model="form.email"
@@ -56,6 +57,7 @@ const submit = () => {
                 </q-input>
                
                 <q-input
+                    rounded
                     filled
                     v-model="form.password"
                     label="New Password"
@@ -74,6 +76,7 @@ const submit = () => {
                     </template>
                 </q-input>
                 <q-input
+                    rounded
                     filled
                     v-model="form.password_confirmation"
                     label="Confirm Password"
@@ -89,7 +92,17 @@ const submit = () => {
                         />
                     </template>
                 </q-input>
-                <q-btn label="Reset Password" :loading="form.processing" :disabled="form.processing" no-caps type="submit" class="full-width" color="primary"/>
+                <q-btn 
+                    label="Reset Password" 
+                    rounded 
+                    :loading="form.processing" 
+                    :disabled="form.processing" 
+                    no-caps 
+                    type="submit" 
+                    class="full-width" 
+                    unelevated
+                    color="primary"
+                />
             </q-card-section>
 
         </q-card>

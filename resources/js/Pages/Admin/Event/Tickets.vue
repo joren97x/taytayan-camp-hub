@@ -38,9 +38,9 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Bookings</p>
+                    <p class="text-h6 q-pt-md">Tickets</p>
                     <q-space />
-                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>

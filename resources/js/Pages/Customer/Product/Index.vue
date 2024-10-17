@@ -313,10 +313,10 @@ const lorem = ref('stylestylestylestylestylestyle')
                             >
                             </iframe>
                         </div>
-                        <q-card-section>
-                            <q-item title="San vicente olango" subtitle="boang">
+                        <q-card-section class="q-pa-none q-mx-md">
+                            <q-item class="q-pa-none q-mx-none">
                                 <q-item-section avatar>
-                                    <q-icon name="signal_wifi_off" />
+                                    <q-icon name="shopping_cart" />
                                 </q-item-section>
                                 <q-item-section >
                                     <q-item-label>RJC CAFE</q-item-label>
@@ -402,7 +402,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                     <q-btn icon="arrow_forward" flat @click="scrollRight" />
                 </div>
             </div>
-            <div style="height: 30vh;" class="column bg-grey q-mt-md" v-if="filteredCategories.length <= 0">
+            <div style="height: 30vh;" class="column bg-grey-3 q-mt-md" v-if="filteredCategories.length <= 0">
                 <div class="col items-center self-center flex">
                     No Products Found
                 </div>
@@ -428,12 +428,12 @@ const lorem = ref('stylestylestylestylestylestyle')
             </div>
             
         </div>
-        <div class="q-mx-sm">
+        <div class="q-mx-sm q-mb-md">
             <div class="q-my-md">
                 <div class="text-h6">Rating and Reviews</div>
                 <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
             </div>
-            <div class="row q-col-gutter-md">
+            <div class="row q-col-gutter-md" v-if="ratings.length > 0">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
                     <q-card bordered>
                         <q-card-section>
@@ -445,6 +445,9 @@ const lorem = ref('stylestylestylestylestylestyle')
                         </q-card-section>
                     </q-card>
                 </div>
+            </div>
+            <div style="height: 100px" class="bg-grey-3 items-center justify-center flex">
+                No ratings found
             </div>
         </div>
     </div>
@@ -478,9 +481,6 @@ const lorem = ref('stylestylestylestylestylestyle')
         </q-card>
     </q-dialog>
 
-    <div style="height: 200px;" class="bg-grey q-mt-md">
-        ang footer ayaw kalimti
-    </div>
 </template>
 
 <style scoped>

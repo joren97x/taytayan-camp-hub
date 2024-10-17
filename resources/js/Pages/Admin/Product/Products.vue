@@ -4,6 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
 import { Link, Head, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+// import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -54,7 +55,7 @@ const columns = [
     <Head title="Products" />
     <div class="q-pa-md bg-grey-3" style="height: 100vh;">
         <!-- kung naa pa bay stock or wala na ug sa modifier group pod apili -->
-        <q-card flat bordered>
+        <q-card flat bordered style="border-radius: 20px">
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -92,9 +93,10 @@ const columns = [
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route(`admin.products.edit`, props.row.id)">
-                            <q-btn no-caps unelevated>Edit</q-btn>
+                            <q-btn no-caps unelevated rounded>Edit</q-btn>
                         </Link>
-                        <q-btn no-caps unelevated @click="showDeletesDialog(props.row)">Delete</q-btn>
+                        <!-- <DeleteProductDialog :product="props.row" /> -->
+                        <q-btn no-caps unelevated color="negative" flat rounded @click="showDeleteProductDialog(props.row)">Delete</q-btn>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-available="props">
@@ -114,33 +116,57 @@ const columns = [
                         :options="categoryOptions"
                     
                     /> -->
-                    <q-input filled dense label="Search..." class="q-mx-md" debounce="300" color="primary" v-model="filter">
+                    <q-input dense  label="Search..." class="q-mx-md" rounded outlined debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
                     <Link :href="route('admin.products.create')">
-                        <q-btn no-caps color="primary">Create Product</q-btn>
+                        <q-btn no-caps color="primary" rounded label="Create Product" unelevated/>
                     </Link>
                 </template>
             </q-table>
         </q-card>
-        <q-dialog v-model="deleteProductDialog">
-            <q-card>
-                <q-card-section>
-                    <p>Delete product</p>
+        <q-dialog 
+            v-model="deleteProductDialog" 
+            persistent 
+            :maximized="$q.screen.lt.md"
+            transition-show="slide-up"
+            transition-hide="slide-down"
+        >
+            <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+                <q-card-section class="row items-center q-pb-none">
+                    <q-icon name="warning" color="negative" size="32px" />
+                    <div class="text-h6 q-ml-md">Delete Product</div>
+                    <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+
                 </q-card-section>
-                <q-card-actions>
-                    <q-space/>
-                    <q-btn no-caps v-close-popup>Cancel</q-btn>
+                <q-card-section>
+                    Are you sure you want to delete this product? All data will be permanently removed. This action cannot be undone.
+                    <q-item class="bg-negative text-white q-my-md">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${deleteProductForm.product.photo}`" height="100px" width="100px"></q-img>
+                        </q-item-section>  
+                        <q-item-section>
+                            <q-item-label class="text-weight-bold text-subtitle1">{{ deleteProductForm.product.name }}</q-item-label>
+                            <q-item-label >{{ deleteProductForm.product.description }}</q-item-label>
+                            <q-item-label >{{ deleteProductForm.product.price }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-card-section>
+            
+                <q-card-actions align="right">
+                    <q-btn flat label="Cancel" rounded no-caps color="grey-7" v-close-popup />
                     <q-btn 
-                        no-caps
+                        label="Delete" 
+                        rounded 
+                        no-caps 
+                        unelevated 
+                        color="negative"
+                        @click="deleteProduct" 
                         :loading="deleteProductForm.processing"
                         :disable="deleteProductForm.processing"
-                        @click="deleteProduct"
-                    >
-                        Delete
-                    </q-btn>
+                    />
                 </q-card-actions>
             </q-card>
         </q-dialog>
