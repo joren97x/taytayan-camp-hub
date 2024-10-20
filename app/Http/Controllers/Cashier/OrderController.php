@@ -39,6 +39,27 @@ class OrderController extends Controller
         ]);
     }
 
+    public function get_orders(CartService $cartService)
+    {
+        $orders = Order::with('driver')
+        ->whereIn('status', [
+            Order::STATUS_PENDING,
+            Order::STATUS_READY_FOR_DELIVERY,
+            Order::STATUS_READY_FOR_PICKUP,
+            Order::STATUS_DELIVERING,
+            Order::STATUS_PREPARING
+        ])->with('user')->get();
+        
+        // dd($orders);
+        
+        foreach($orders as $order) {
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+            $order->cart_products = $result['cart_products'];
+            $order->subtotal = $result['subtotal'];
+        }
+        return response()->json($orders);
+    }
+
     //might turn this into a service in the future cus its used to different controllers
     public function show(string $id, CartService $cartService)
     {

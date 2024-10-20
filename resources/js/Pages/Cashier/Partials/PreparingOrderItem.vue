@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 
@@ -9,6 +9,7 @@ const props = defineProps({
     order_statuses: Object
 })
 
+const emit = defineEmits(['order_updated'])
 const dialog = ref(false)
 const orderReadyDialog = ref(false)
 const cancelOrderDialog = ref(false)
@@ -27,7 +28,7 @@ const orderForm = useForm({
 function acceptOrder() {
     acceptOrderForm.patch(`/cashier/orders/prepare-order/${props.order.id}`, {
         onSuccess: (e) => {
-            console.log(e)
+            emit('order_updated')
             dialog.value = false
             $q.notify('Order Accepted')
         }
@@ -46,7 +47,8 @@ function acceptOrder() {
 function readyOrder() {
     orderForm.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: (e) => {
-            console.log(e)
+            emit('order_updated')
+
             readyOrderDialog.value = false
             $q.notify('Order Accepted')
         }
@@ -57,7 +59,7 @@ function cancelOrder() {
     orderForm.status = 'cancelled'
     orderForm.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: (e) => {
-            console.log(e)
+            emit('order_updated')
             cancelOrderDialog.value = false
             $q.notify('Order Cancelled')
         }
@@ -68,7 +70,7 @@ function cancelOrder() {
 
 <template>
     <!-- <OrderItem :order="order" @click="dialog = true"> -->
-        <q-item :class="[order.status == 'pending' ? 'bg-blue-2' : 'bg-grey-4', 'q-my-sm']" :clickable="order.status == order_statuses.pending" v-ripple @click="dialog = true">
+        <q-item :class="[order.status == 'pending' ? 'bg-blue-2' : 'bg-grey-4', 'q-my-sm', 'rounded-borders']" :clickable="order.status == order_statuses.pending" v-ripple @click="dialog = true">
             <q-item-section>
                 <q-item-label>{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
                 <q-item-label caption lines="2">{{ order.cart_products.length }} items</q-item-label>
@@ -81,7 +83,7 @@ function cancelOrder() {
                 </q-btn> -->
             </q-item-section>
             <q-item-section side top v-else>
-                <q-btn no-caps color="primary" unelevated @click.stop="readyOrderDialog = true">
+                <q-btn no-caps color="primary" rounded unelevated @click.stop="readyOrderDialog = true">
                     Ready Order
                 </q-btn>
                 <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label>
@@ -187,6 +189,8 @@ function cancelOrder() {
                             :loading="acceptOrderForm.processing"
                             :disable="acceptOrderForm.processing"
                             @click="acceptOrder()"
+                            rounded 
+                            unelevated
                         >
                             Accept Order
                         </q-btn>
@@ -194,6 +198,7 @@ function cancelOrder() {
                             class="full-width q-my-sm" 
                             color="red" 
                             outline 
+                            rounded
                             no-caps
                             @click="cancelOrderDialog = true"
                         >
@@ -278,6 +283,8 @@ function cancelOrder() {
                     :disable="orderForm.processing"
                     @click="readyOrder()"
                     color="primary"
+                    rounded 
+                    unelevated
                 >
                     Ready
                 </q-btn>
@@ -297,6 +304,8 @@ function cancelOrder() {
                     :loading="orderForm.processing"
                     :disable="orderForm.processing"
                     @click="cancelOrder()"
+                    rounded 
+                    unelevated
                 >
                     Yes
                 </q-btn>

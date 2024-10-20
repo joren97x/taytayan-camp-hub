@@ -252,7 +252,9 @@ const lorem = ref('stylestylestylestylestylestyle')
                                     icon="pin_drop" 
                                     label="Place your address" 
                                     no-caps 
-                                    color="white" 
+                                    color="white"
+                                    rounded 
+                                    unelevated 
                                     class="full-width text-black q-my-xs"
                                 >
                                 </q-btn>   
@@ -329,7 +331,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                 </div>
             </div>
             <!-- <q-separator/> -->
-            <div class="featured-items-container q-mt-md">
+            <div class="featured-items-container q-my-md">
                 <div class="text-h6 row">
                     <div class="col">
                         Featured items
@@ -348,6 +350,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                         <FeaturedProductCard :product="product" />
                     </div>
                 </div>
+                
             </div>
             <div class="menu-header bg-white q-pt-md">
                 <div class="row">
@@ -394,6 +397,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                                 :name="category.name" 
                                 :label="category.name" 
                                 inline-label
+                                class="text-black"
                                 @click="scrollToCategory(category)" 
                             />
                         </q-tabs>
@@ -403,9 +407,9 @@ const lorem = ref('stylestylestylestylestylestyle')
                 </div>
             </div>
             <div style="height: 30vh;" class="column bg-grey-3 q-mt-md" v-if="filteredCategories.length <= 0">
-                <div class="col items-center self-center flex">
+                <q-card flat bordered class="col items-center self-center flex text-grey">
                     No Products Found
-                </div>
+                </q-card>
             
             </div>
             <div 
@@ -425,8 +429,10 @@ const lorem = ref('stylestylestylestylestylestyle')
                         <ProductCard :product="product" />
                     </div>
                 </div>
+                <q-card bordered flat v-if="category.filteredProducts.length == 0" class="text-grey bg-grey-3 justify-center items-center flex q-mt-md" style="height: 100px">
+                    No products found...
+                </q-card>
             </div>
-            
         </div>
         <div class="q-mx-sm q-mb-md">
             <div class="q-my-md">
@@ -446,9 +452,9 @@ const lorem = ref('stylestylestylestylestylestyle')
                     </q-card>
                 </div>
             </div>
-            <div style="height: 100px" class="bg-grey-3 items-center justify-center flex">
+            <q-card bordered flat style="height: 100px" class="bg-grey-3 items-center justify-center flex text-grey">
                 No ratings found
-            </div>
+            </q-card>
         </div>
     </div>
 

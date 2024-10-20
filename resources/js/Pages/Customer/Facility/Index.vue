@@ -17,8 +17,8 @@ defineProps({
 <template>
     <Head title="Facilities" />
     <div>
-        <div style="height: 40vh;" class="full-width bg-grey row justify-center">
-        </div>
+        <q-card bordered flat style="height: 40vh;" class="full-width bg-grey row justify-center">
+        </q-card>
         
         <div class="q-ma-md">
             <div class="text-h6">Lorem Ipsum</div>

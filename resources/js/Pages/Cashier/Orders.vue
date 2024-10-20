@@ -56,7 +56,27 @@ onMounted(() => {
             console.error(err)
         })
     })
+    // .listen('Product\\OrderStatusUpdated', (data) => {
+    //     console.log('data')
+    //     axios.get(route('cashier.orders.get_orders'))
+    //     .then((res) => {
+    //         orders.value = res.data
+    //     })
+    //     .catch((err) => {
+    //         console.error(err)
+    //     })
+    // })
 })
+
+const fetchOrders = () => {
+    axios.get(route('cashier.orders.get_orders'))
+        .then((res) => {
+            orders.value = res.data
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+}
 
 // axios.get(route('cashier.orders.show', 12))
 //     .then((orderData) => {
@@ -88,6 +108,7 @@ onMounted(() => {
                             :key="index"
                             :order="order" 
                             :order_statuses="order_statuses"
+                            @order_updated="fetchOrders"
                         />
                         <p v-if="preparingOrders.length == 0">
                             No orders yet...
@@ -102,6 +123,7 @@ onMounted(() => {
                             :key="index"
                             :order="order" 
                             :order_statuses="order_statuses"
+                            @order_updated="fetchOrders"
                         />
                     </q-list>
                 </div>

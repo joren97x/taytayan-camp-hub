@@ -14,6 +14,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::get('/cashier/dashboard', [ViewController::class, 'dashboard'])->name('cashier.dashboard');
     // Route::patch('/cashier/orders/{order}', [OrderController::class, 'prepare_order'])->name('cashier.nigga');
     // Route::get('/cashier/orders', [OrderController::class, 'index'])->name('cashier.orders.index');
+    Route::get('/cashier/get-orders', [OrderController::class, 'get_orders'])->name('cashier.orders.get_orders');
     Route::resource('/cashier/orders', OrderController::class)->names([
         'index' => 'cashier.orders.index',
         'show' => 'cashier.orders.show'

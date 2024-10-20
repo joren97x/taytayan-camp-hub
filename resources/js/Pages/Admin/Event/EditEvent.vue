@@ -94,6 +94,7 @@ const submitStatusForm = () => {
                             @click="changeStatusDialog = true" 
                             :label="event.status" 
                             no-caps 
+                            rounded
                         />
                         
                     </div>
@@ -140,8 +141,10 @@ const submitStatusForm = () => {
                                         :loading="coverPhotoForm.processing"
                                         :disable="coverPhotoForm.processing"
                                         label="Update"
+                                        rounded 
+                                        unelevated
                                     />
-                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker" label="Change Photo"/>
+                                    <q-btn no-caps color="primary" rounded unelevated v-else @click="triggerFilePicker" label="Change Photo"/>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
@@ -152,7 +155,8 @@ const submitStatusForm = () => {
                         <!-- <div>Event title</div>
                         <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Title"
                             v-model="form.title" 
                             :error="form.errors.title ? true : false"
@@ -161,7 +165,8 @@ const submitStatusForm = () => {
                         <!-- <div>Description</div>
                         <div>Grab people's attention with a short description about your event. Attendees will see this at the top of your event page. (255 characters max)</div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Description"
                             v-model="form.description" 
                             :error="form.errors.description ? true : false"
@@ -172,7 +177,8 @@ const submitStatusForm = () => {
                         <div class="row q-col-gutter-md">
                             <div class="col-3">
                                 <q-input 
-                                    filled 
+                                    outlined 
+                                    rounded
                                     mask="date" 
                                     label="Date" 
                                     :rules="['date']"
@@ -195,7 +201,8 @@ const submitStatusForm = () => {
                             </div>
                             <div class="col-3">
                                 <q-input 
-                                    filled 
+                                    outlined 
+                                    rounded
                                     mask="time" 
                                     label="Start Time" 
                                     :rules="['time']"
@@ -220,7 +227,8 @@ const submitStatusForm = () => {
                         <!-- <div>Location</div>
                         <div> maybe a map or what></div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Location"
                             v-model="form.location" 
                             :error="form.errors.location ? true : false"
@@ -232,7 +240,8 @@ const submitStatusForm = () => {
                         <p class="text-red h6">unya what if less than ang bag-o nga capacity epang delete ang ticket,,, no??</p>
                         <div>capacity = amount of tickets u want to sell</div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Capacity"
                             type="number" 
                             v-model="form.capacity" 
@@ -245,7 +254,8 @@ const submitStatusForm = () => {
                         <p class="text-red">unya kung e update ni ang price dire (ilisag 200) ma ilisan pod to ang price to 200 x 3 = 600</p>
                         <div>How much do you want to charge for tickets?</div> -->
                         <q-input 
-                            filled 
+                            outlined 
+                            rounded
                             label="Price"
                             type="number" 
                             v-model="form.admission_fee" 
@@ -259,7 +269,8 @@ const submitStatusForm = () => {
                         <div class="row q-col-gutter-md">
                             <div class="col-4">
                                 <q-input 
-                                    filled
+                                    outlined 
+                                    rounded
                                     type="number" 
                                     label="Minimum"
                                     v-model="form.min_ticket" 
@@ -269,7 +280,8 @@ const submitStatusForm = () => {
                             </div>
                             <div class="col-4">
                                 <q-input 
-                                    filled
+                                    outlined 
+                                    rounded
                                     type="number" 
                                     label="Maximum"
                                     v-model="form.max_ticket" 
@@ -285,6 +297,8 @@ const submitStatusForm = () => {
                             :loading="form.processing"
                             :disable="form.processing"
                             label="Update"
+                            rounded 
+                            unlevated
                         />
                         <!-- <q-btn 
                             no-caps 
@@ -301,8 +315,10 @@ const submitStatusForm = () => {
                     <!-- <div class="q-mx-xl q-mt-md">
                         <div>Frequently Asked Questions (Optional)</div>    
                         <div>Answer questions your attendees may have about the event, like parking, accessibility and refunds.</div>
-                        <q-input filled label="Question"></q-input>
-                        <q-input filled label="Answer" type="textarea"></q-input>
+                        <q-input outlined 
+                        roundedlabel="Question"></q-input>
+                        <q-input outlined 
+                        roundedlabel="Answer" type="textarea"></q-input>
                         <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
                     </div> -->
                 <!-- </q-form> -->
@@ -324,7 +340,8 @@ const submitStatusForm = () => {
                 <div>
                     Choose a status for your event. This status affects your tickets wherever they are sold online.
                 </div>
-                <q-select label="Status" class="q-mt-md" :options="event_statuses" v-model="statusForm.status" filled/>
+                <q-select label="Status" class="q-mt-md" :options="event_statuses" v-model="statusForm.status" outlined 
+                rounded/>
             </q-card-section>
             <q-card-actions class="justify-end">
                 <q-btn label="Cancel" no-caps flat v-close-popup />

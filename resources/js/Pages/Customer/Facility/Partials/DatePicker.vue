@@ -21,29 +21,40 @@ const $q = useQuasar()
 let disabled_dates = ref([])
 
 const setDates = () => {
+    console.log(date.value)
     if(date.value == null) {
         return
     }
-    let checkInDate = date.value.from
-    const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
-    console.log(diff)
-    let pwede = true
-    for(let i = 0; i < diff; i++) {
-        if(!options(checkInDate)) {
-            pwede = false
-            date.value = null
-            alert('Please choose a date that doesnt overlap')
-            break;
+    if(date.value.to || date.value.from) {
+        let checkInDate = date.value.from
+        const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
+        console.log(diff)
+        let pwede = true
+        for(let i = 0; i < diff; i++) {
+            if(!options(checkInDate)) {
+                pwede = false
+                date.value = null
+                alert('Please choose a date that doesnt overlap')
+                break;
+            }
+            checkInDate = qdate.addToDate(checkInDate, { days: 1})
         }
-        checkInDate = qdate.addToDate(checkInDate, { days: 1})
+        if(pwede) {
+            bookingDates.value.check_in = date.value.from
+            bookingDates.value.check_out = date.value.to
+            emit('setBookingDates', bookingDates.value)
+            // form.date = date.value
+            dialog.value = false
+        }
     }
-    if(pwede) {
-        bookingDates.value.check_in = date.value.from
-        bookingDates.value.check_out = date.value.to
+    else {
+        bookingDates.value.check_in = date.value
+        bookingDates.value.check_out = date.value
         emit('setBookingDates', bookingDates.value)
         // form.date = date.value
         dialog.value = false
     }
+    
 }
 
 const clearDates = () => {

@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Models\CartProduct;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -52,7 +54,12 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        
+        $product = Product::with('modifier_groups')->findOrFail($request->product_id);
+
+        $requiredModifierGroups = $product->modifier_groups()->where('required', true)->pluck('modifier_groups.id')->toArray();
+    
+        $validator = Validator::make($request->all(), [
             'product_id' => 'required|exists:products,id',
             'cart_id' => 'required|exists:carts,id',
             'quantity' => 'required|integer|min:1',
@@ -62,6 +69,35 @@ class CartController extends Controller
             'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
             'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
         ]);
+    
+        // Add custom validation for required modifier groups
+        $validator->after(function ($validator) use ($request, $requiredModifierGroups) {
+            $modifierGroupIds = collect($request->input('modifiers'))->pluck('modifier_group_id')->toArray();
+    
+            foreach ($requiredModifierGroups as $requiredGroupId) {
+                if (!in_array($requiredGroupId, $modifierGroupIds)) {
+                    $validator->errors()->add('modifiers', 'All required modifier groups must be selected.');
+                }
+            }
+        });
+    
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $validatedData = $validator->validated();
+        // dd($validatedData);
+        // dd('all good');
+        // $validatedData = $request->validate([
+        //     'product_id' => 'required|exists:products,id',
+        //     'cart_id' => 'required|exists:carts,id',
+        //     'quantity' => 'required|integer|min:1',
+        //     'special_instruction' => 'nullable|string',
+        //     'modifiers' => 'nullable|array',
+        //     'modifiers.*.modifier_group_id' => 'required_with:modifiers|exists:modifier_groups,id',
+        //     'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
+        //     'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
+        // ]);
         // Find or create the cart item
         // $cartProduct = CartProduct::updateOrCreate(
         //     [

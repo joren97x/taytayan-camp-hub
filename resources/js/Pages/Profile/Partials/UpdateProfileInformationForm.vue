@@ -49,7 +49,7 @@ const onFileChange = (file) => {
 
 <template>
     <q-form class="q-mb-md" >
-        <q-card>
+        <q-card bordered flat>
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Profile Picture</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
@@ -82,6 +82,8 @@ const onFileChange = (file) => {
                             :loading="profilePicForm.processing"
                             color="primary"
                             label="Save"
+                            rounded 
+                            unelevated
                         />
                         <q-btn 
                             no-caps 
@@ -90,6 +92,7 @@ const onFileChange = (file) => {
                             class="q-mr-md" 
                             v-else 
                             @click="triggerFilePicker" 
+                            rounded 
                             label="Change Profile Picture" 
                         />
                     </div>
@@ -98,14 +101,15 @@ const onFileChange = (file) => {
         </q-card>
     </q-form>
     <q-form @submit="form.patch(route('profile.update'))">
-        <q-card>
+        <q-card bordered flat>
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Profile Information</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
                 <div class="row q-col-gutter-md">
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.first_name"
                             label="First Name"
                             lazy-rules
@@ -116,7 +120,8 @@ const onFileChange = (file) => {
                     </div>
                     <div class="col-6">
                         <q-input
-                            filled
+                            outlined 
+                            rounded
                             v-model="form.last_name"
                             label="Last Name"
                             lazy-rules
@@ -127,7 +132,8 @@ const onFileChange = (file) => {
                     </div>
                 </div>
                 <q-input
-                    filled
+                    outlined 
+                    rounded
                     v-model="form.email"
                     label="Email Address"
                     lazy-rules
@@ -143,10 +149,26 @@ const onFileChange = (file) => {
                         method="post"
                         as="button"
                     >
-                        <q-btn outline no-caps color="primary" label="Resend Verification Email" />
+                        <q-btn 
+                            outline 
+                            no-caps 
+                            rounded 
+                            unelevated 
+                            color="primary" 
+                            label="Resend Verification Email" 
+                        />
                     </Link>
                 </q-banner>
-                <q-btn label="Save" type="submit" :loading="form.processing" :disable="form.processing" class="q-mt-sm" unelevated no-caps color="primary" />
+                <q-btn  rounded 
+                    unelevated
+                    label="Save" 
+                    type="submit" 
+                    :loading="form.processing" 
+                    :disable="form.processing"
+                    class="q-mt-sm" 
+                    no-caps 
+                    color="primary" 
+                />
             </q-card-section>
         </q-card>
     </q-form>

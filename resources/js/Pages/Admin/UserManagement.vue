@@ -5,7 +5,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import EditUserDialog from './Partials/EditUserDialog.vue'
-import DeleteUserDialog from './Partials/DeleteUserDialog.vue'
+// import DeleteUserDialog from './Partials/DeleteUserDialog.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -176,7 +176,6 @@ const onFileChange = (file) => {
             </q-table>
         </q-card>
     </div>
-    <!-- {{ selectedUser }} -->
     <!-- <DeleteUserDialog 
         @close="deleteUserDialog = false" 
         :user="selectedUser" 
@@ -189,7 +188,13 @@ const onFileChange = (file) => {
         v-if="selectedUser" 
         :dialog="editUserDialog" 
     />
-    <q-dialog v-model="newUserDialog" persistent :maximized="$q.screen.lt.md">
+    <q-dialog 
+        v-model="newUserDialog" 
+        persistent 
+        :maximized="$q.screen.lt.md" 
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
             <q-card-section class="row items-center q-pb-none">
                 <div class="text-h6">Create New User</div>

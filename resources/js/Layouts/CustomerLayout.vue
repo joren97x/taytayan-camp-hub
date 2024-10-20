@@ -69,7 +69,7 @@ watch(btnToggle, () => {
     <q-layout view="hHh lpR lfr">
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'"  style="z-index: 999;">
-            <q-toolbar class="row q-py-xs q-px-sm" style="margin: 0 auto;">
+            <q-toolbar class="row q-py-xs q-px-sm" style="margin: 0 auto; max-width: 1300px">
                 <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
                     <Link :href="route('homepage')" style="text-decoration: none;">
                         <q-toolbar-title>
@@ -77,7 +77,7 @@ watch(btnToggle, () => {
                                 <q-img src="../logo.jpg" fill="cover" />
                             </q-avatar>
                             <span class="text-primary text-h6 text-weight-bolder q-ml-xs">Taytayan Camp Hub</span>
-                            {{ $page.component }}
+                            <!-- {{ $page.component }} -->
                         </q-toolbar-title>
                     </Link>
                 </div>

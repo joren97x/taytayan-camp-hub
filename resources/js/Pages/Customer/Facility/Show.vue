@@ -4,7 +4,7 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import DatePicker from './Partials/DatePicker.vue'
 import { Link, useForm, Head } from '@inertiajs/vue3'
 import { date as qdate, useQuasar } from 'quasar'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -115,7 +115,13 @@ const book = () => {
         form.get(route('facility.checkout'))
     }
     else {
-        alert('Check in and Check out dates are required')
+        $q.notify({
+            message: `Check in and Check out dates are required`,
+            color: 'negative', // or any custom color defined in the brand config
+            textColor: 'white',
+            position: 'top'
+        })
+        // alert('Check in and Check out dates are required')
     }
 }
 
@@ -125,6 +131,19 @@ const setBookingDates = (dates) => {
     form.date.to = dates.check_out
     dialog.value = false
 }
+
+const image = [
+        'https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200',
+        // Add more images here or leave with fewer to test the repetition logic
+      ]
+const fiveImages = computed(() => {
+    let repeatedImages = [];
+    while (repeatedImages.length < 5) {
+        repeatedImages = repeatedImages.concat(images);
+    }
+    return repeatedImages.slice(0, 5);
+})
+      
 
 </script>
 
@@ -140,6 +159,7 @@ const setBookingDates = (dates) => {
             transition-prev="slide-right"
             transition-next="slide-left"
             height="280px"
+            
             class="q-pa-none q-ma-none lt-md"
         >
             <q-carousel-slide :name="index" v-for="(image, index) in images" class="q-pa-none">
@@ -159,13 +179,13 @@ const setBookingDates = (dates) => {
             </template>
         </q-carousel>
         <div class="row q-col-gutter-sm">
-            <div class="col-md-6">
-                <q-img src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200"></q-img>
+            <div class="col-md-6" style="height: 52vh;">
+                <q-img :src="`/storage/${fiveImages[0]}`" height="100%" style="position: relative"></q-img>
             </div>
             <div class="col-md-6">
                 <div class="row q-col-gutter-sm">
-                    <div class="col-md-6" v-for="n in 4">
-                        <q-img src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200"></q-img>
+                    <div class="col-md-6" v-for="image in fiveImages.slice(1, 5)" style="height: 26vh;">
+                        <q-img :src="`/storage/${image}`" height="100%" style="position: relative"></q-img>
                     </div>
                 </div>
             </div>
@@ -177,19 +197,15 @@ const setBookingDates = (dates) => {
                 <div class="lt-md q-mb-xs">
                     <div class="text-h6 text-capitalize">{{ facility.name }}</div>
                     <div class="text-subtitle1" >
-                        <q-chip 
-                            v-for="amenity in JSON.parse(facility.amenities)"
-                            :icon="amenity.icon" 
-                            :label="amenity.name"
-                        />
+                        {{ facility.amenities }}
                     </div>
                 </div>
                 <q-card>
                     <q-card-section class="q-pb-xs"> 
                         <span class="text-subtitle1">P{{ facility.price }}</span>
-                        night
+                        kada adlaw
                     </q-card-section>
-                    <q-card-section class="row q-py-none" @click="dialog = true">
+                    <q-card-section class="row q-py-none q-col-gutter-sm q-mb-sm" @click="dialog = true">
                         <!-- <q-menu v-model="dialog" persistent class="gt-sm" anchor="bottom left" self="center right"> 
                             <q-card style="width: 500px;">
                                 <q-card-section class="row justify-between">
@@ -223,7 +239,7 @@ const setBookingDates = (dates) => {
                             </q-card>
                         </q-menu> -->
                         <div class="col-6">
-                            <q-card flat bordered class="no-border-radius">
+                            <q-card flat bordered >
                                 <q-card-section>
                                     <div >Check-in</div>
                                     <div :class="['text-caption', form.date.to ? '' : 'text-red']">
@@ -234,7 +250,7 @@ const setBookingDates = (dates) => {
                             </q-card>
                         </div>
                         <div class="col-6">
-                            <q-card flat bordered class="no-border-radius">
+                            <q-card flat bordered >
                                 <q-card-section>
                                     <div >Check-out</div>
                                     <div :class="['text-caption', form.date.to ? '' : 'text-red']">
@@ -267,23 +283,21 @@ const setBookingDates = (dates) => {
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="gt-sm">
                     <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                    <q-chip 
-                        :icon="amenity.icon" 
-                        v-for="amenity in JSON.parse(facility.amenities)" 
-                        :label="amenity.name"
-                    />
+                    {{ facility.description }}
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">About This Place</div>
-                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
-                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                <div class="text-subtitle1">
+                    <ul>
+                        <li>Location: Olango Island</li>
+                        <li>Check in time: {{ facility.rental_start }}</li>
+                        <li>Check out time: {{ facility.rental_end }}</li>
+                    </ul>
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">What This Place Offers</div>
-                <div class="text-subtitle1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente natus inventore ratione tempora,
-                    ipsa nisi perspiciatis repellendus quas doloribus? Laborum, quibusdam aut sed sequi nemo porro voluptatem itaque natus cum.
+                <div class="text-subtitle1">
+                    {{ facility.amenities }}
                 </div>
             </div>
         </div>
@@ -320,6 +334,9 @@ const setBookingDates = (dates) => {
                         </q-card-section>
                     </q-card>
                 </div>
+                <q-card v-if="ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-my-md" style="height: 100px">
+                    No ratings yet...
+                </q-card>
             </div>
         </div>
         <!-- <div style="height: 700px;">

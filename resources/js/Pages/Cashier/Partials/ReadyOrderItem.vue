@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineEmits } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 
@@ -9,6 +9,7 @@ const props = defineProps({
     order_statuses: Object
 })
 
+const emit = defineEmits(['order_updated'])
 const dialog = ref(false)
 const isOrderCompleteDialog = ref(false)
 const $q = useQuasar()
@@ -20,6 +21,7 @@ const form = useForm({
 function completeOrder() {
     form.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: () => {
+            emit('order_updated')
             isOrderCompleteDialog.value = false
             $q.notify('Order marked as completed')
         }

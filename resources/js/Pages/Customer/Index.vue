@@ -5,9 +5,9 @@ import FeaturedProductCard from './Product/Partials/FeaturedProductCard.vue';
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue';
 
-defineOptions({
-    layout: CustomerLayout
-})
+// defineOptions({
+//     layout: CustomerLayout
+// })
 
 defineProps({
     products: Object
@@ -54,11 +54,43 @@ const goToRoom = (roomId) => {
 
 <template>
     <Head title="Home" />
-    <div class="hero q-py-xl bg-primary text-white text-center">
-      <h1>Welcome to Taytayan Camp Hub</h1>
-      <p class="q-mt-none">Discover events, book your stay, and enjoy local experiences.</p>
-      <q-btn unelevated color="secondary" class="q-mt-md" label="Explore Events" @click="goToEvents" />
+    <video
+        autoplay
+        muted
+        loop
+        class="q-mt-xl"
+        id="myVideo"
+        style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 80vh;
+            object-fit: cover;
+            z-index: -1;
+        "
+    >
+        <source src="taytayancamp.mp4" type="video/mp4" />
+    </video>
+  <div class="q-py-xl q-mt-xl text-white items-end flex text-center justify-center" 
+         style="
+           background: rgba(0, 0, 0, 0.5);
+           width: 100vw;
+           height: 80vh;
+         "
+    >
+      <!-- <h1 class="text-weight-bold text-center">Taytayan Camp</h1> -->
+      
+        <p style="font-size: 1.2rem;">Explore Kitesurfing in Boracay</p>
+        <q-icon name="arrow_downward" size="2.5rem" />
+      <!-- <p class="q-mt-none">
+        Discover events, book your stay, and enjoy local experiences.
+      </p> -->
+      <!-- <q-btn unelevated color="secondary" class="q-mt-md" label="Explore Events" @click="goToEvents" /> -->
     </div>
+  <CustomerLayout>
+    <!-- Transparent overlay div to let the video show through -->
+    
     <div class="q-px-lg q-py-md q-mt-xl bg-grey-2">
       <div class="row justify-around">
         <q-card class="col-12 col-md-3 q-pa-md quick-action-card" @click="goToBookings">
@@ -157,7 +189,7 @@ const goToRoom = (roomId) => {
     </div> -->
     <p class="text-center text-red q-mt-xl">designi inig human sa laing pages</p>
     <q-img src="https://avatars.githubusercontent.com/u/112835241?s=400&u=5c5ce654a02c61684c3e00d25d695ce142ede5ef&v=4"></q-img>
-
+  </CustomerLayout>
 </template>
 
 <style>

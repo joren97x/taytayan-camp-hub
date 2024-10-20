@@ -105,12 +105,13 @@ const updatePassword = () => {
         </form>
     </section> -->
     <q-form @submit="updatePassword">
-        <q-card class="q-mt-md">
+        <q-card class="q-mt-md" bordered flat>
             <q-card-section>
                 <div class="text-h6 q-mb-sm">Update Password</div>
                 <div class="q-mb-lg">Ensure your account is using a long, random password to stay secure.</div>
                 <q-input
-                    filled
+                    outlined 
+                    rounded
                     v-model="form.current_password"
                     label="Current Password"
                     lazy-rules
@@ -119,7 +120,8 @@ const updatePassword = () => {
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
                 <q-input
-                    filled
+                    outlined 
+                    rounded
                     v-model="form.password"
                     label="New Password"
                     lazy-rules
@@ -128,7 +130,8 @@ const updatePassword = () => {
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
                 <q-input
-                    filled
+                    outlined 
+                    rounded
                     v-model="form.password_confirmation"
                     label="Confirm New Password"
                     lazy-rules
@@ -136,7 +139,16 @@ const updatePassword = () => {
                     :error-message="form.errors.password_confirmation"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
-                <q-btn label="Save" :processing="form.processing" type="submit" :disabled="form.processing" unelevated no-caps color="primary" />
+                <q-btn 
+                    label="Save" 
+                    :processing="form.processing" 
+                    type="submit" 
+                    :disabled="form.processing" 
+                    unelevated 
+                    no-caps 
+                    rounded
+                    color="primary"
+                />
             </q-card-section>
         </q-card>
     </q-form>

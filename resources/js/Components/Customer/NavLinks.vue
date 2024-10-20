@@ -21,16 +21,19 @@ onMounted(() => {
     <q-list>
         
         <Link :href="route('customer.cart.index')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="inbox" />
                 </q-item-section>
-                <q-item-section>Cart {{ cartLength }} </q-item-section>
+                <q-item-section>Cart</q-item-section>
+                <q-item-section side>
+                    <q-chip>{{ cartLength }}</q-chip>
+                </q-item-section>
                 
             </q-item>
         </Link>
         <Link :href="route('customer.orders.index')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="inbox" />
                 </q-item-section>
@@ -38,7 +41,7 @@ onMounted(() => {
             </q-item>
         </Link>
         <Link :href="route('customer.bookings.index')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="manage_accounts" />
                 </q-item-section>
@@ -46,7 +49,7 @@ onMounted(() => {
             </q-item>
         </Link>
         <Link :href="route('customer.tickets.index')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="logout" />
                 </q-item-section>
@@ -64,7 +67,7 @@ onMounted(() => {
             </q-item-section>
         </q-item>
         <Link :href="route('conversations.index')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="inbox" />
                 </q-item-section>
@@ -72,7 +75,7 @@ onMounted(() => {
             </q-item>
         </Link>
         <Link :href="route('customer.profile')" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="manage_accounts" />
                 </q-item-section>
@@ -80,7 +83,7 @@ onMounted(() => {
             </q-item>
         </Link>
         <Link :href="route('logout')" method="post" class="nav-link">
-            <q-item clickable>
+            <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
                     <q-icon name="logout" />
                 </q-item-section>

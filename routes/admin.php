@@ -9,11 +9,11 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/admin/dashboard', [ViewController::class, 'dashboard'])->name('admin.dashboard');
     // Route::get('/admin/inbox', [ConversationController::class, 'index'])->name('admin.inbox');
     // Route::get('/admin/inbox/{conversation}', [ConversationController::class, 'show'])->name('admin.conversation.show');
-    Route::resource('/admin/users', UserController::class)->names([
-        'index' => 'admin.user.index',
-        'show' => 'admin.user.show',
-        'edit' => 'admin.user.edit'
-    ]);
+    // Route::resource('/admin/users', UserController::class)->names([
+    //     'index' => 'admin.user.index',
+    //     'show' => 'admin.user.show',
+    //     'edit' => 'admin.user.edit'
+    // ]);
 
     // Route::get('/admin/user-management', [UserController::class, 'index'])->name('admin.user_management');
     // Route::post('/admin/user-management', [UserController::class, 'store'])->name('admin.user_management.store');
