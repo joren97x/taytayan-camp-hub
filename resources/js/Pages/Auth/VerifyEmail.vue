@@ -35,7 +35,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
             <q-card-section>
                 <p class="text-h6 q-mb-lg">Email Verification</p>
                 <p>
-                    Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
+                    Before getting started, could you verify your email address by clicking on the link
                     we just emailed to you? If you didn't receive the email, we will gladly send you another.
                 </p>
                 <q-banner inline-actions class="text-white bg-positive q-mb-md" v-if="verificationLinkSent">
@@ -57,7 +57,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                     Resend Verification Email
                 </q-btn>
                 <Link :href="route('logout')" method="post" class="full-width" >
-                    <q-btn no-caps class="full-width" outline color="negative">Logout</q-btn>
+                    <q-btn no-caps class="full-width" outline rounded color="negative">Logout</q-btn>
                 </Link>
             </q-card-actions>
         </q-card>

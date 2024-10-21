@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Cashier\BookingController;
-use App\Http\Controllers\Cashier\ConversationController;
+// use App\Http\Controllers\Cashier\ConversationController;
 use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Cashier\TicketController;
 use App\Http\Controllers\Cashier\TicketOrderController;
 use App\Http\Controllers\Cashier\ViewController;
+use App\Http\Controllers\ConversationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
         'show' => 'cashier.orders.show'
     ]);
 
+    Route::get('/cashier/chat-user/{user}', [ViewController::class, 'show_conversation'])->name('cashier.conversations.show');
     Route::patch('/cashier/bookings/{booking}/check-in', [BookingController::class, 'check_in'])->name('cashier.bookings.check_in');
     Route::patch('/cashier/bookings/{booking}/check-out', [BookingController::class, 'check_out'])->name('cashier.bookings.check_out');
     Route::resource('/cashier/bookings', BookingController::class)->names([

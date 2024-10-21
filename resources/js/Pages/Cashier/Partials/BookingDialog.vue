@@ -1,21 +1,22 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3'
-import { useQuasar } from 'quasar'
+import { useForm, Link } from '@inertiajs/vue3'
+import { useQuasar, date } from 'quasar'
 import { defineEmits, ref } from 'vue'
 
 const emit = defineEmits(['close']) 
 const props = defineProps({
     dialog: Boolean,
-    order: Object,
+    booking: Object,
     booking_statuses: Array
 })
 
 const $q = useQuasar()
+const bookingDetailsDialog = ref(false)
 const checkInDialog = ref(false)
 const checkOutDialog = ref(false)
 const form = useForm({})
 const checkIn = () => {
-    form.patch(route('cashier.bookings.check_in', props.order.id), {
+    form.patch(route('cashier.bookings.check_in', props.booking.id), {
         onSuccess: () => {
             checkInDialog.value = false
             $q.notify('Customer Checked In')
@@ -24,7 +25,7 @@ const checkIn = () => {
 }
 
 const checkOut = () => {
-    form.patch(route('cashier.bookings.check_out', props.order.id), {
+    form.patch(route('cashier.bookings.check_out', props.booking.id), {
         onSuccess: () => {
             checkOutDialog.value = false
             $q.notify('Customer Checked Out')
@@ -32,33 +33,33 @@ const checkOut = () => {
     })
 }
 
-
 </script>
 
 <template>
     <div>
-        <q-icon name="check" class="q-mr-md" size="sm" v-if="order.status == booking_statuses.checked_in || order.status == booking_statuses.checked_out">
-            <q-tooltip>Checked-in</q-tooltip>
-        </q-icon>
-        <q-icon name="close" size="sm" v-if="order.status == booking_statuses.checked_out">
-            <q-tooltip>Checked-out</q-tooltip>
-        </q-icon>
+        <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_in || booking.status == booking_statuses.checked_out">
+            Checked-in
+        </q-chip>
+        <q-chip size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_out">
+            Checked-out
+        </q-chip>
+        
         <q-btn 
             @click="checkInDialog = true" 
             label="Check-in"
-            v-if="order.status == booking_statuses.pending || order.status == booking_statuses.confirmed"
+            v-if="booking.status == booking_statuses.pending || booking.status == booking_statuses.confirmed"
         />
         <q-btn 
             @click="checkOutDialog = true" 
             label="Check-out"
-            v-if="order.status == booking_statuses.checked_in"
+            v-if="booking.status == booking_statuses.checked_in"
         />
-        <q-chip v-if="order.status == booking_statuses.complete">Complete</q-chip>
-        <q-btn>View</q-btn>
+        <q-chip v-if="booking.status == booking_statuses.complete">Complete</q-chip>
+        <q-btn rounded color="primary" no-caps unelevated flat @click="bookingDetailsDialog = true">View</q-btn>
     </div>
     <q-dialog v-model="checkInDialog">
         <q-card>
-            {{ order }}
+            {{ booking }}
             hiii
             <q-card-section>
                 CHeck in?
@@ -89,5 +90,86 @@ const checkOut = () => {
                 />
             </q-card-actions>
         </q-card>
+    </q-dialog>
+    <q-dialog
+        v-model="bookingDetailsDialog"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :maximized="$q.screen.lt.md"
+    >
+        <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+            <q-card-actions class="justify-end lt-md">
+                <q-btn round icon="close" v-close-popup unelevated />
+            </q-card-actions>
+            <q-card-section>
+                <div class="row q-col-gutter-md">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/>
+                        <div class="text-h6">{{ booking.facility.name }}</div>
+                        <div>{{ booking.facility.description }}</div>
+                        <div>P{{ booking.facility.price }}</div>
+                        <!-- <q-btn class="full-width q-mt-md" label="View" color="primary" no-caps unelevated/> -->
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
+                        <div class="text-h6">Booking Details</div>
+                        <q-separator class="q-my-md"/>
+                        <div class="row q-col-gutter-md">
+                            
+                            <div class="col-6">
+                                <div class="text-caption">Check-in</div>
+                                <div>{{ date.formatDate(booking.check_in, 'MMMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Check-out</div>
+                                <div>{{ date.formatDate(booking.check_out, 'MMMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Guests</div>
+                                <div>{{ booking.guests }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Status</div>
+                                <div class="text-weight-bold">{{ booking.status }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Booked at</div>
+                                <div class="">{{ date.formatDate(booking.created_at, 'MMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Payment Method</div>
+                                <div>{{ booking.payment_method }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Amount</div>
+                                <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="text-h6">Guest</div>
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-avatar size="70px">
+                                            <q-img class="fit" fit="cover" :src="`/storage/${booking.user.profile_pic}`"></q-img>
+                                        </q-avatar>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ booking.user.first_name + ' ' + booking.user.last_name }}</q-item-label>
+                                        <q-item-label caption v-if="booking.user.contact_number">{{ booking.user.contact_number }}</q-item-label>
+                                        <q-item-label caption>{{ booking.user.email }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <Link :href="route('cashier.conversations.show', booking.user.id)">
+                                            <q-btn round icon="chat" color="primary"/>
+                                        </Link>
+                                    </q-item-section>
+                                </q-item>
+                            </div>
+                        </div>
+                        <!-- <q-btn label="Cancel Booking" color="negative" class="full-width" no-caps v-if="order.status == 'pending'"/> -->
+                    </div>
+                </div>
+            </q-card-section>
+        </q-card>
+            
     </q-dialog>
 </template>

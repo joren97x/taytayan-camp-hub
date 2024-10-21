@@ -66,6 +66,9 @@ class BookingController extends Controller
     public function show(string $id)
     {
         //
+        return Inertia::render('Customer/Facility/ShowBooking', [
+            'booking' => Booking::find($id)
+        ]);
     }
 
     /**

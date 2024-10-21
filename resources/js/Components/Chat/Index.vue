@@ -9,14 +9,14 @@ defineProps({
 </script>
 
 <template>
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <q-card bordered flat>
+                <q-card bordered flat style="height: 95vh;">
                     <q-list class="q-pa-sm">
                         <q-item-label header>Chats</q-item-label>
                         <Link :href="route('conversations.show', conversation.id)" v-for="conversation in conversations" >
-                            <q-item clickable>
+                            <q-item clickable class="rounded-borders">
                                 <q-item-section avatar>
                                     <q-avatar color="primary" class="text-capitalize" text-color="white">
                                         <div v-for="participant in conversation.participants">
@@ -42,7 +42,7 @@ defineProps({
                     </q-list>
                 </q-card>
             </div>
-            <div class="col-md-9 col-xs-12 col-sm-12 col-lg-9 col-xl-9 bg-grey">
+            <div class="col-md-9 col-xs-12 col-sm-12 col-lg-9 col-xl-9 bg-grey-3">
                 <div 
                     style="height: 80vh; width: 100%;" 
                     class="justify-center items-center flex text-h6 gt-sm" 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Cashier;
 
+use App\Events\Notify;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,7 +18,7 @@ class BookingController extends Controller
     {
         //
         return Inertia::render('Cashier/Bookings', [
-            'bookings' => Booking::with('facility')->get(),
+            'bookings' => Booking::with(['facility', 'user'])->get(),
             'booking_statuses' => Booking::getStatuses()
         ]);
     }
@@ -71,7 +73,18 @@ class BookingController extends Controller
     public function check_out(Request $request, string $id)
     {
         //
-        Booking::find($id)->update(['status' => Booking::STATUS_CHECKED_OUT]);
+        $booking = Booking::find($id);
+        $booking->update(['status' => Booking::STATUS_CHECKED_OUT]);
+        
+        $notification = Notification::create([
+            'user_id' => $booking->user_id,
+            'title' => 'Booking Complete',
+            'description' => 'Your booking has been completed successfully!',
+            'link' => route('customer.bookings.show', $booking->id)
+        ]);
+        // dd($notification);
+        event(new Notify($notification));
+
         return back();
     }
 

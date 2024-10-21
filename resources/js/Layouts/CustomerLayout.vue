@@ -6,8 +6,10 @@ import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import NavLinks from '@/Components/Customer/NavLinks.vue'
 import Footer from '@/Components/Footer.vue'
+import { usePage } from '@inertiajs/vue3'
 
 const $q = useQuasar()
+const page = usePage()
 const rightDrawerOpen = ref(false)
 const items = ref(null) 
 const notifications = ref([])
@@ -17,7 +19,6 @@ const sidebar = ref(false)
 const btnToggle = ref('products')
 const btnToggleLoading = ref(false)
 const notificationMenu = ref(false)
-const cartLength = ref(0)
 
 import axios from 'axios'
 
@@ -36,6 +37,15 @@ onMounted(() => {
     .catch((err) => {
         console.error(err)
     })
+
+    if(page.props.auth.user) {
+        Echo.private(`notifications.${page.props.auth.user.id}`)
+            .listen('Notify', (data) => {
+                $q.notify('NOTIFY!!')
+                console.log(data.notification)
+            })
+    }
+
 })
 
 watch(rightDrawerOpen, (newVal) => {
@@ -62,6 +72,8 @@ watch(btnToggle, () => {
         }
     })
 })
+
+
 
 </script>
 
@@ -140,21 +152,30 @@ watch(btnToggle, () => {
                                 </q-list>
                             </q-menu>
                         </q-btn>
-                        <q-btn round flat @click="sidebar = !sidebar" class="lt-md">
-                            <q-avatar size="3em" class="bg-red">
-                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                        <q-btn round flat @click="sidebar = !sidebar" class="lt-md" >
+                            <q-avatar size="3em" v-if="$page.props.auth.user.profile_pic">
+                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                            </q-avatar>
+                            <q-avatar v-else class="bg-primary text-white">
+                                {{ $page.props.auth.user.first_name[0] }}
                             </q-avatar>
                         </q-btn>
-                        <q-btn class="gt-sm" round>
-                            <q-avatar size="3em" class="bg-red">
-                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                        <q-btn class="gt-sm" round unelevated>
+                            <q-avatar size="3em" v-if="$page.props.auth.user.profile_pic">
+                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                            </q-avatar>
+                            <q-avatar v-else class="bg-primary text-white">
+                                {{ $page.props.auth.user.first_name[0] }}
                             </q-avatar>
                             <q-menu class="q-pa-sm gt-sm" style="width: 300px">
                                 <Link :href="route('customer.profile')" class="user-menu-link">
                                     <q-item>
                                         <q-item-section top avatar>
-                                            <q-avatar color="primary" text-color="white">
-                                                <img src="https://pbs.twimg.com/profile_images/1642568071046119428/xtyyRarT_400x400.jpg">
+                                            <q-avatar size="3em" class="bg-red" v-if="$page.props.auth.user.profile_pic">
+                                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                                            </q-avatar>
+                                            <q-avatar v-else class="bg-primary text-white">
+                                                {{ $page.props.auth.user.first_name[0] }}
                                             </q-avatar>
                                         </q-item-section>
                                         <q-item-section>
@@ -270,8 +291,11 @@ watch(btnToggle, () => {
                 <div  class="absolute-top" v-if="$page.props.auth.user">
                     <q-img src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
                         <div class="absolute-bottom bg-transparent">
-                            <q-avatar size="56px" class="q-mb-sm">
-                            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                            <q-avatar size="3em" v-if="$page.props.auth.user.profile_pic">
+                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                            </q-avatar>
+                            <q-avatar v-else class="bg-primary text-white">
+                                {{ $page.props.auth.user.first_name[0] }}
                             </q-avatar>
                             <div class="text-weight-bold">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</div>
                             <div>{{ $page.props.auth.user.email }}</div>

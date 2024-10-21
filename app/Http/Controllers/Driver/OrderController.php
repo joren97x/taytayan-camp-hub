@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Driver;
 use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Participant;
 use App\Services\CartService;
@@ -59,7 +60,13 @@ class OrderController extends Controller
         }
 
         event(new OrderStatusUpdated($order, true, app(CartService::class)));
-        
+        Notification::create([
+            'user_id' => $order->user_id,
+            'title' => 'Your Order Has Been Delivered',
+            'description' => 'Your order has been successfully delivered!',
+            'link' => route('customer.orders.show', $order->id),
+        ]);
+
         return redirect(route('driver.map'));
 
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Cashier;
 
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
+use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -34,14 +36,39 @@ class ViewController extends Controller
         ]);
     }
 
-    public function show_conversation(string $id) 
+    public function show_conversation(User $user) 
     {
-        return Inertia::render('Cashier/ShowChat', [
-            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->get(),
-            'conversation' => Conversation::with('participants', 'messages.user')->find($id)
-        ]);
+        // $existing_conversation = Conversation::whereHas('participants', function ($query) use ($order) {
+        //     $query->where('user_id', $order->user_id);
+        // })->whereHas('participants', function ($query) {
+        //     $query->where('user_id', auth()->id());
+        // })->first();
+
+        $existing_conversation = Conversation::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->first();
+        
+        if (!$existing_conversation) {
+
+            $conversation = Conversation::create();
+
+            Participant::create([
+                'user_id' => $user->id,
+                'conversation_id' => $conversation->id
+            ]);
+
+            Participant::create([
+                'user_id' => auth()->id(),
+                'conversation_id' => $conversation->id
+            ]);
+
+            return redirect(route('conversations.show', $conversation->id));
+        }
+
+        return redirect(route('conversations.show', $existing_conversation->id));
+
     }
 
 }

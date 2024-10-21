@@ -112,7 +112,7 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
         </q-img> -->
 
         <q-card :class="$q.screen.width > 700 ? 'q-pa-sm' : ''" :style="$q.screen.width >= 700 ? 'width: 100%; max-width: 60vw;' : ''">
-            {{ form }}
+            <!-- {{ form }} -->
             <q-form @submit="submit">
                 <div class="row q-col-gutter-md">
                     <div class="col-12 col-md-5 col-lg-5 col-xl-5 col-sm-12 col-xs-12" style="position: relative;">

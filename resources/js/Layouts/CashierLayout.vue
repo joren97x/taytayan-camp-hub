@@ -11,39 +11,11 @@ function toggleLeftDrawer () {
     leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-// Echo.private(`orders`)
-//     .listen('Product\\OrderPending', (data) => {
-//         console.log(data)
-//         $q.notify('Someone just ordered frr')
-//     })
 
 </script>
 
 <template>
     <q-layout view="lHh Lpr lFf" class="bg-white">
-        <!-- <q-header elevated>
-            <q-toolbar>
-                <q-btn
-                    flat
-                    dense
-                    round
-                    @click="toggleLeftDrawer"
-                    aria-label="Menu"
-                    icon="menu"
-                />
-        
-                <q-toolbar-title>
-                    Quasar App
-                </q-toolbar-title>
-                <q-btn-group flat>
-                <q-btn icon="dark_mode" @click="$q.dark.toggle()"></q-btn>
-                <Link :href="route('logout')" method="post">
-                    <q-btn icon="logout" flat></q-btn>
-                </Link>
-            </q-btn-group>
-            </q-toolbar>
-        </q-header> -->
-  
         <q-drawer
             v-model="leftDrawerOpen"
             show-if-above
@@ -209,7 +181,7 @@ function toggleLeftDrawer () {
         </q-drawer>
   
         <q-page-container class="bg-grey-3" style="height: 100vh">
-            <slot/>
+            <slot @close="() => { alert('hi') }"/>
         </q-page-container>
     </q-layout>
   </template>

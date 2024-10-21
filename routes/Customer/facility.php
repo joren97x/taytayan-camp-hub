@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('customer.bookings.complete');
 Route::resource('bookings', BookingController::class)->names([
     'index' => 'customer.bookings.index',
+    'show' => 'customer.bookings.show',
     'update' => 'customer.bookings.update'
 ]);
 

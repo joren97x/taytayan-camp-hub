@@ -93,9 +93,10 @@ const fetchOrders = () => {
     
     <Head title="Orders" />
    
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md0' : ''">
         <q-card bordered flat>
             <div class="text-h6 text-weight-bold q-ml-md q-pt-md">
+                <q-btn icon="menu" flat/>
                 Orders
             </div>
             <q-separator class="q-my-md" />

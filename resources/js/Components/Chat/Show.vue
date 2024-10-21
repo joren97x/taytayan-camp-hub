@@ -1,8 +1,8 @@
 <script setup>
 
 
-import { useQuasar } from 'quasar'
-import { useForm, usePage } from '@inertiajs/vue3'
+import { useQuasar, date } from 'quasar'
+import { useForm, usePage, Link } from '@inertiajs/vue3'
 // import ChatLayout from '@/Layouts/ChatLayout.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -15,25 +15,7 @@ const props = defineProps({
 })
 
 const conversation = ref(props.conversation)
-const isListening = ref(false)
 const scrollArea = ref(null)
-// const messages = currentConversation.value.messages
-
-// Watch for changes in props.conversation.messages and update messages accordingly
-// watch(() => props.conversation,
-//     (conversation) => {
-//         console.log('listen')
-//         if(isListening.value) {
-//             console.log('leave from watch')
-//             Echo.leave(`conversation.${currentConversation.value.id}`)
-//         }
-//         currentConversation.value = conversation;
-//         subscribeChannel()
-//         isListening.value = true
-//         scrollToBottom()
-//     },
-//     { immediate: true } 
-// );
 
 const $q = useQuasar()
 const $page = usePage()
@@ -100,56 +82,70 @@ onUnmounted(() => {
             </q-card-section>
         </q-card>
     </div> -->
-    <q-toolbar class="bg-white q-pa-none">
-        <!-- <q-avatar class="q-mr-md">
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-        </q-avatar>
-        {{ receiver.first_name + ' ' + receiver.last_name }} -->
-        <q-item>
-            <q-item-section avatar>
-                <q-avatar  v-if="receiver.profile_pic">
-                    <q-img :src="`/storage/${receiver.profile_pic}`"/>
-                    
-                </q-avatar>
-                <q-avatar color="primary" v-else>
-                    {{ receiver.first_name[0] }}
-                </q-avatar>
-            </q-item-section>
-            <q-item-section>
-                <q-item-label>{{ receiver.first_name + ' ' + receiver.last_name }}</q-item-label>
-                <q-item-label caption>{{ receiver.is_online }}</q-item-label>
-            </q-item-section>
-        </q-item>
-    </q-toolbar>
-    <!-- {{ currentConversation }} -->
-    <div class="bg-blue-2 q-px-sm">
-        <div v-if="conversation.messages.length > 0">
-            <q-scroll-area ref="scrollArea" style="height: 75vh; max-width: 100%;" class="">
-                <q-chat-message
-                    v-for="message in conversation.messages"
-                    name="me"
-                    avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-                    :text="[message.message]"
-                    :sent="$page.props.auth.user.id == message.user_id"
-                />
-            </q-scroll-area>
-        </div>
-        <!-- <p class="text-center" v-if="conversation == null">To start a conversation send them a message.</p> -->
-        <q-form @submit="sendMessage()">
-            <q-input label="Send a message..." filled v-model="form.message">
-                <template v-slot:append>
-                    <q-btn 
-                        icon="send" 
-                        type="submit" 
-                        unelevated 
-                        color="primary" 
-                        round
-                        @click="sendMessage()"
-                        :loading="form.processing"
-                        :disable="form.processing"
+    <q-card style="height: 95vh;" bordered flat :class="$q.screen.gt.sm ? 'q-mx-sm' : ''">
+        <q-toolbar class="bg-white q-pa-none">
+            <q-item>
+                <q-item-section avatar>
+                    <Link :href="route('conversations.index')">
+                        <q-btn round icon="arrow_back" unelevated/>
+                    </Link>
+                </q-item-section>
+                <q-item-section avatar>
+                    <q-avatar v-if="receiver.profile_pic">
+                        <q-img class="fit" fit="cover" :src="`/storage/${receiver.profile_pic}`"/>
+                    </q-avatar>
+                    <q-avatar color="primary" v-else>
+                        {{ receiver.first_name[0] }}
+                    </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label>{{ receiver.first_name + ' ' + receiver.last_name }}</q-item-label>
+                    <q-item-label caption>{{ receiver.is_online }}</q-item-label>
+                </q-item-section>
+            </q-item>
+        </q-toolbar>
+        <!-- {{ currentConversation }} -->
+        <div class="bg-white q-px-sm">
+            <div v-if="conversation.messages.length > 0">
+                <q-scroll-area ref="scrollArea" style="height: 83vh; max-width: 100%;">
+                    <q-chat-message
+                        v-for="message in conversation.messages"
+                        name="me"
+                        avatar="https://cdn.quasar.dev/img/avatar1.jpg"
+                        :text="[message.message]"
+                        :sent="$page.props.auth.user.id == message.user_id"
                     />
-                </template>
-            </q-input>
-        </q-form>
-    </div>
+                </q-scroll-area>
+            </div>
+            <div v-else style="height: 80vh" class="flex justify-center items-end text-center">
+                <div>
+                    <q-avatar size="100px" color="blue">
+                        <q-img class="fit" fit="cover" :src="`/storage/${receiver.profile_pic}`"></q-img>
+                    </q-avatar>
+                    <div class="q-mb-xl q-mt-sm">
+                        <h6 class="q-pa-none q-ma-none">John Doe</h6>
+                        <div class="text-caption">Joined on {{ date.formatDate(receiver.created_at, 'MMM D, YYYY') }}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <p class="text-center" v-if="conversation == null">To start a conversation send them a message.</p> -->
+            <q-form @submit="sendMessage()">
+                <q-input label="Send a message..." outlined rounded v-model="form.message">
+                    <template v-slot:append>
+                        <q-btn 
+                            icon="send" 
+                            type="submit" 
+                            unelevated 
+                            color="primary" 
+                            round
+                            @click="sendMessage()"
+                            :loading="form.processing"
+                            :disable="form.processing"
+                        />
+                    </template>
+                </q-input>
+            </q-form>
+        </div>
+    </q-card>
+   
 </template>
