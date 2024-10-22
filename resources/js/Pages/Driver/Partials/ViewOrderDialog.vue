@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 
 const props = defineProps({
@@ -33,7 +33,7 @@ const completeOrder = () => {
 </script>
 
 <template>
-    <q-btn no-caps color="primary" @click="dialog = !dialog" :class="$q.screen.lt.md ? 'full-width' : ''" label="Button" />
+    <q-btn no-caps color="primary" rounded unelevated @click="dialog = !dialog" :class="$q.screen.lt.md ? 'full-width' : ''" label="View Order" />
     <q-dialog 
         v-model="dialog" 
         :maximized="$q.screen.lt.md"
@@ -72,15 +72,20 @@ const completeOrder = () => {
                             </q-avatar>
                         </div> -->
                         <q-item class="q-py-none">
-                            <q-item-section>
-                                <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-                                <q-item-label>{{ order.user.phone_number }}</q-item-label>
-                                <q-item-label>{{ order.user.address }}</q-item-label>
-                            </q-item-section>
-                            <q-item-section side>
+                            <q-item-section avatar>
                                 <q-avatar size="100px" square>
                                     <q-img :src="`/storage/${order.user.profile_pic}`"/>
                                 </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
+                                <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
+                                <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                                <Link :href="route('conversations.chat_user', order.user.id)">
+                                    <q-btn round icon="message" unelevated color="primary" />
+                                </Link>
                             </q-item-section>
                         </q-item>
                     <div class="text-h6">Items</div>
@@ -137,22 +142,25 @@ const completeOrder = () => {
                             class="full-width" 
                             color="primary" 
                             no-caps
+                            rounded 
+                            unelevated
                             :loading="deliverOrderForm.processing"
                             :disable="deliverOrderForm.processing"
                             @click="deliverOrder()"
-                        >
-                            Deliver Order
-                        </q-btn>
+                            label="Deliver Order"
+                            v-if="order.status == 'ready_for_delivery'"
+                        />
                         <q-btn
                             no-caps
-                            class="full-width"
+                            class="full-width q-mt-sm"
                             :loading="completeOrderForm.processing"
                             :disable="completeOrderForm.processing"
                             @click="completeOrder()"
-
-                        >
-                            Complete Order
-                        </q-btn>
+                            rounded
+                            color="primary"
+                            v-if="order.status == 'delivering'"
+                            label="Complete Order"
+                        />
                     </div>
                 </div>
             </q-card-section>

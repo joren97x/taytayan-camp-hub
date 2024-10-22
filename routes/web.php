@@ -50,6 +50,7 @@ require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
 
 Route::post('/messages/{conversation}', [MessageController::class, 'store'])->name('messages.store');
+Route::get('/chat-user/{user}', [ConversationController::class, 'chat_user'])->name('conversations.chat_user');
 Route::resource('inbox', ConversationController::class)->names([
     'show' => 'conversations.show',
     'store' => 'conversations.store',

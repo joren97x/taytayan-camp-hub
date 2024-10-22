@@ -1,7 +1,7 @@
 import './bootstrap';
 import '../css/global.css';
 
-
+import { createPinia } from 'pinia'
 import '@quasar/extras/roboto-font/roboto-font.css'
 import '@quasar/extras/material-icons/material-icons.css'
 
@@ -23,7 +23,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-
+            .use(createPinia())
             .use(Quasar, {
                 plugins: {
                   Notify

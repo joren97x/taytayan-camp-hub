@@ -17,9 +17,8 @@ class OrderController extends Controller
     //
     public function index(CartService $cartService) 
     {
-        $orders = Order::whereIn('status', [
-            Order::STATUS_READY_FOR_DELIVERY,
-            Order::STATUS_DELIVERING
+        $orders = Order::where('status', [
+            Order::STATUS_READY_FOR_DELIVERY
         ])->with('user')->get();
 
         foreach($orders as $order) {
@@ -30,6 +29,25 @@ class OrderController extends Controller
         }
 
         return Inertia::render('Driver/Orders', ['orders' => $orders]);
+    }
+
+    public function active_deliveries(CartService $cartService)
+    {
+        $orders = Order::where('driver_id', auth()->id())
+        ->where('status', Order::STATUS_DELIVERING)
+        ->with('user')
+        ->get();
+
+        foreach($orders as $order) {
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+            $order->cart_products = $result['cart_products'];
+            $order->subtotal = $result['subtotal'];
+            // $order->customer = $order->user()->get();
+        }
+
+        return Inertia::render('Driver/ActiveDeliveries', [
+            'orders' => $orders
+        ]);
     }
 
     public function deliver(Request $request, Order $order) 
@@ -60,6 +78,7 @@ class OrderController extends Controller
         }
 
         event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        
         Notification::create([
             'user_id' => $order->user_id,
             'title' => 'Your Order Has Been Delivered',
@@ -67,7 +86,7 @@ class OrderController extends Controller
             'link' => route('customer.orders.show', $order->id),
         ]);
 
-        return redirect(route('driver.map'));
+        return redirect(route('driver.active_deliveries'));
 
     }
 

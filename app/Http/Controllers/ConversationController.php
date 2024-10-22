@@ -93,6 +93,41 @@ class ConversationController extends Controller
         ]);
     }
 
+    public function chat_user(User $user) 
+    {
+        // $existing_conversation = Conversation::whereHas('participants', function ($query) use ($order) {
+        //     $query->where('user_id', $order->user_id);
+        // })->whereHas('participants', function ($query) {
+        //     $query->where('user_id', auth()->id());
+        // })->first();
+
+        $existing_conversation = Conversation::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->first();
+        
+        if (!$existing_conversation) {
+
+            $conversation = Conversation::create();
+
+            Participant::create([
+                'user_id' => $user->id,
+                'conversation_id' => $conversation->id
+            ]);
+
+            Participant::create([
+                'user_id' => auth()->id(),
+                'conversation_id' => $conversation->id
+            ]);
+
+            return redirect(route('conversations.show', $conversation->id));
+        }
+
+        return redirect(route('conversations.show', $existing_conversation->id));
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

@@ -37,13 +37,6 @@ const checkOut = () => {
 
 <template>
     <div>
-        <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_in || booking.status == booking_statuses.checked_out">
-            Checked-in
-        </q-chip>
-        <q-chip size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_out">
-            Checked-out
-        </q-chip>
-        
         <q-btn 
             @click="checkInDialog = true" 
             label="Check-in"

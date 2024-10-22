@@ -27,7 +27,7 @@ function sendMessage() {
     form.post(route(`messages.store`, props.conversation.id), {
         onSuccess: () => {
             form.reset()
-            $q.notify('annyeong')
+            // $q.notify('annyeong')
         }
     })
 }
@@ -85,7 +85,7 @@ onUnmounted(() => {
     <q-card style="height: 95vh;" bordered flat :class="$q.screen.gt.sm ? 'q-mx-sm' : ''">
         <q-toolbar class="bg-white q-pa-none">
             <q-item>
-                <q-item-section avatar>
+                <q-item-section avatar class="lt-md">
                     <Link :href="route('conversations.index')">
                         <q-btn round icon="arrow_back" unelevated/>
                     </Link>
@@ -102,8 +102,11 @@ onUnmounted(() => {
                     <q-item-label>{{ receiver.first_name + ' ' + receiver.last_name }}</q-item-label>
                     <q-item-label caption>{{ receiver.is_online }}</q-item-label>
                 </q-item-section>
+
             </q-item>
         </q-toolbar>
+        <q-separator></q-separator>
+
         <!-- {{ currentConversation }} -->
         <div class="bg-white q-px-sm">
             <div v-if="conversation.messages.length > 0">
@@ -111,8 +114,11 @@ onUnmounted(() => {
                     <q-chat-message
                         v-for="message in conversation.messages"
                         name="me"
-                        avatar="https://cdn.quasar.dev/img/avatar1.jpg"
+                        :avatar="$page.props.auth.user.id == message.user_id ? `/storage/${$page.props.auth.user.profile_pic}` : `/storage/${message.user.profile_pic}`"
                         :text="[message.message]"
+                        :text-color="$page.props.auth.user.id == message.user_id ? 'white' : 'black'"
+                        :bg-color="$page.props.auth.user.id == message.user_id ? 'blue' : 'grey'"
+
                         :sent="$page.props.auth.user.id == message.user_id"
                     />
                 </q-scroll-area>

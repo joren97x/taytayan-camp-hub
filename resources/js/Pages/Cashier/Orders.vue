@@ -8,11 +8,13 @@ import PreparingOrderItem from '@/Pages/Cashier/Partials/PreparingOrderItem.vue'
 import ReadyOrderItem from '@/Pages/Cashier/Partials/ReadyOrderItem.vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: CashierLayout
 })
 
+const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const props = defineProps({
     orders: Object,
@@ -93,10 +95,10 @@ const fetchOrders = () => {
     
     <Head title="Orders" />
    
-    <div :class="$q.screen.gt.sm ? 'q-pa-md0' : ''">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <div class="text-h6 text-weight-bold q-ml-md q-pt-md">
-                <q-btn icon="menu" flat/>
+                <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
                 Orders
             </div>
             <q-separator class="q-my-md" />

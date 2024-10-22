@@ -1,15 +1,19 @@
 <script setup>
 
 import CashierLayout from '@/Layouts/CashierLayout.vue'
+import { useDrawerStore } from '@/Stores/DrawerStore';
 
 defineOptions({
     layout: CashierLayout
 })
 
+const drawerStore = useDrawerStore()
+
 </script>
 
 <template>
     <div class="q-pa-md">
+        <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
         <div class="text-h6">Dashboard</div>
         <q-card bordered flat>
             <q-card-section class="">

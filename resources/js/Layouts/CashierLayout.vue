@@ -3,8 +3,10 @@
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore';
 
 const $q = useQuasar()
+const drawerStore = useDrawerStore()
 const leftDrawerOpen = ref(false)
 
 function toggleLeftDrawer () {
@@ -17,7 +19,7 @@ function toggleLeftDrawer () {
 <template>
     <q-layout view="lHh Lpr lFf" class="bg-white">
         <q-drawer
-            v-model="leftDrawerOpen"
+            v-model="drawerStore.drawer"
             show-if-above
             bordered
         >
@@ -111,7 +113,7 @@ function toggleLeftDrawer () {
             <div class="absolute-bottom bg-white">
                 <q-list >
                     <Link :href="route('conversations.index')">
-                        <q-item clickable class="q-mx-sm rounded-borders">
+                        <q-item clickable class="q-mx-sm rounded-borders" :active="$page.component == 'Cashier/Inbox'" active-class="bg-primary text-white">
                             <q-item-section avatar>
                                 <q-icon name="inbox" />
                             </q-item-section>
@@ -123,16 +125,18 @@ function toggleLeftDrawer () {
                             </q-item-section> 
                         </q-item>
                     </Link>
-                    <q-item clickable>
+                    <q-item clickable :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white q-ma-sm rounded-borders">
                         <q-item-section top avatar>
-                            <q-avatar color="primary" text-color="white" icon="engineering" />
+                            <q-avatar color="primary" text-color="white">
+                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                            </q-avatar>
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>Joren Hyeung Nim</q-item-label>
-                            <q-item-label caption lines="2">Administrator</q-item-label>
+                            <q-item-label>{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</q-item-label>
+                            <q-item-label caption lines="2" :class="$page.component == 'Cashier/Profile' ? 'text-white' : 'text-black'">Cashier</q-item-label>
                         </q-item-section>
                         <q-item-section side top class="">
-                            <q-btn color="primary" icon="unfold_more" flat round>
+                            <q-btn :color="$page.component == 'Cashier/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
                                 <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
                                     <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>

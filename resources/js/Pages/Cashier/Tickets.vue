@@ -3,7 +3,8 @@
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { date } from 'quasar';
+import { date } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: CashierLayout
@@ -13,6 +14,7 @@ const props = defineProps({
     events: Object
 })
 
+const drawerStore = useDrawerStore()
 const filter = ref('')
 const columns = [
     { name: 'event', align: 'center', label: 'Event', field: 'event', sortable: true },
@@ -25,7 +27,7 @@ const columns = [
 
 <template>
     <Head  title="Tickets" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-table
                 class="my-sticky-header-column-table"
@@ -38,9 +40,10 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
+                    <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
                     <p class="text-h6 q-pt-md">Events</p>
                     <q-space />
-                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>

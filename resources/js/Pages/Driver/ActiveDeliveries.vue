@@ -1,34 +1,16 @@
 <script setup>
 
 import DriverLayout from '@/Layouts/DriverLayout.vue'
-// import ViewOrderDialog from '@/Components/Driver/ViewOrderDialog.vue'
+import { Head, Link } from '@inertiajs/vue3'
 import ViewOrderDialog from './Partials/ViewOrderDialog.vue'
-import { useQuasar } from 'quasar'
-import { ref } from 'vue'
-import axios from 'axios'
-import { Head } from '@inertiajs/vue3'
 
 defineOptions({
     layout: DriverLayout
 })
 
-const props = defineProps({
+defineProps({
     orders: Object
 })
-
-const $q = useQuasar()
-const orders = ref([])
-props.orders.forEach(order => {
-    orders.value.push(order)
-})
-
-// const columns = [
-//     { name: 'name', label: 'User', align: 'center', field: 'name', sortable: true },
-//     { name: 'items', label: 'Items', align: 'center', field: 'items', sortable: true },
-//     { name: 'payment_method', align: 'center', label: 'Payment Method', field: 'payment_method', sortable: true },
-//     { name: 'status', align: 'center', label: 'status', field: 'status', sortable: true },
-//     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
-// ]
 
 const columns = [
   { name: 'name', label: 'User', align: 'center', field: row => row.user.first_name + ' ' + row.user.last_name, sortable: true },
@@ -40,19 +22,6 @@ const columns = [
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: false },
 ];
 
-Echo.private('orders')
-    .listen('Product\\OrderReadyForDelivery', (data) => {
-        console.log(data)
-        $q.notify('yuhh new order arrived')
-        axios.get(route('driver.orders.show', data.order.id))
-        .then((orderData) => {
-            orders.value.push(orderData.data)
-        })
-        .catch((err) => {
-            console.error(err)
-        })
-    })
-
 </script>
 
 <template>
@@ -62,7 +31,7 @@ Echo.private('orders')
             <q-table
                 class="my-sticky-header-column-table"
                 flat
-                title="Orders"
+                title="Active Deliveries"
                 :rows="orders"
                 :columns="columns"
                 row-key="name"
@@ -133,7 +102,7 @@ Echo.private('orders')
                     <div class="full-width row flex-center q-gutter-sm" style="height: 70vh;">
                         <!-- <q-icon size="2em" name="shopping_cart" /> -->
                         <span>
-                            There are currently no orders, Check again later...
+                            You dont have any active deliveries... <Link :href="route('driver.orders.index')">Go To Orders</Link>
                         </span>
                     </div>
                 </template>

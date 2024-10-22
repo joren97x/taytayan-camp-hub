@@ -72,6 +72,7 @@ const columns = [
                         class="my-sticky-header-column-table"
                         flat
                         title="Recent Transactions"
+                        v-if="recent_transactions.length > 0"
                         :rows="recent_transactions"
                         :columns="columns"
                         row-key="index"
