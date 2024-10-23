@@ -71,7 +71,7 @@ const columns = [
             </q-td>
         </template>
         <template v-slot:top>
-            <p class="text-h6 q-pt-md">Recent Orders</p>
+            <div class="text-h6 ">Recent Orders</div>
             <q-space />
             <q-input filled dense label="Search..." debounce="300" color="primary" v-model="filter">
                 <template v-slot:append>

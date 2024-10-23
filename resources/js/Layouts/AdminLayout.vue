@@ -28,6 +28,10 @@ const navigation_list = [
                 value: 'products', 
                 href: 'admin.products.index', 
                 component: 'Admin/Product/Products',
+                components: [
+                    'Admin/Product/CreateProduct',
+                    'Admin/Product/EditProduct'
+                ],
                 icon: 'restaurant'
             },
             {   
@@ -35,6 +39,9 @@ const navigation_list = [
                 value: 'categories', 
                 href: 'admin.categories.index', 
                 component: 'Admin/Product/Categories' ,
+                components: [
+                    'Admin/Product/CreateCategory',
+                ],
                 icon: 'category'
             },
             {   
@@ -42,6 +49,10 @@ const navigation_list = [
                 value: 'modifier-groups', 
                 href: 'admin.modifier_groups.index', 
                 component: 'Admin/Product/ModifierGroups',
+                components: [
+                    'Admin/Product/CreateModifierGroup',
+                    'Admin/Product/EditModifierGroup',
+                ],
                 icon: 'checklist_rtl'
             },
             {   
@@ -49,13 +60,15 @@ const navigation_list = [
                 value: 'orders', 
                 href: 'admin.orders.index', 
                 component: 'Admin/Product/Orders' ,
+                components: [],
                 icon: 'shopping_cart'
             },
             {   
                 label: 'Reviews', 
                 value: 'reviews', 
                 href: 'admin.product_ratings.index', 
-                component: 'Admin/Product/Reviews' ,
+                component: 'Admin/Product/Ratings' ,
+                components: [],
                 icon: 'star_rate'
             },
         ]
@@ -69,6 +82,12 @@ const navigation_list = [
                 value: 'events', 
                 href: 'admin.events.index', 
                 component: 'Admin/Event/Events',
+                components: [
+                    'Admin/Event/CreateEvent',
+                    'Admin/Event/EditEvent',
+                    'Admin/Event/ShowEvent',
+                    'Admin/Event/Dashboard',
+                ],
                 icon: 'event'
             },
             { 
@@ -76,6 +95,7 @@ const navigation_list = [
                 value: 'tickets', 
                 href: 'admin.tickets.index', 
                 component: 'Admin/Event/Tickets',
+                components: [],
                 icon: 'confirmation_number'
             },
             // { 
@@ -96,6 +116,10 @@ const navigation_list = [
                 value: 'facility', 
                 href: 'admin.facilities.index', 
                 component: 'Admin/Facility/Facilities',
+                components: [
+                    'Admin/Facility/CreateFacility',
+                    'Admin/Facility/EditFacility',
+                ],
                 icon: 'cottage'
             },
             { 
@@ -103,15 +127,17 @@ const navigation_list = [
                 value: 'bookings', 
                 href: 'admin.bookings.index', 
                 component: 'Admin/Facility/Bookings',
+                components: [],
                 icon: 'description'
             },
-            // { 
-            //     label: 'Reviews', 
-            //     value: 'reviews', 
-            //     href: 'admin.facilities.reviews', 
-            //     component: 'Admin/Facility/Reviews',
-            //     icon: ''
-            // },
+            { 
+                label: 'Ratings', 
+                value: 'ratings', 
+                href: 'admin.facility_ratings.index', 
+                component: 'Admin/Facility/Ratings',
+                components: [],
+                icon: ''
+            },
         ]
     },
 
@@ -172,7 +198,7 @@ const navigation_list = [
                     >
                         <q-card class="q-mx-md">
                             <Link :href="route(nav.href)" v-for="nav in navigation.navigations">
-                                <q-item clickable v-ripple class="rounded-borders" :active="$page.component == nav.component" active-class="bg-primary text-white">
+                                <q-item clickable v-ripple class="rounded-borders" :active="$page.component == nav.component || nav.components.includes($page.component)" active-class="bg-primary text-white">
                                     <q-item-section avatar>
                                         <q-icon :name="nav.icon" />
                                     </q-item-section>
@@ -183,70 +209,23 @@ const navigation_list = [
                             </Link>
                         </q-card>
                     </q-expansion-item>
-                    
-                    <!-- <Link :href="route('admin.events.index')">
-                        <q-item clickable v-ripple>
+                    <Link :href="route(`admin.users.index`)">
+                        <q-item clickable v-ripple class="rounded-borders" :active="$page.component == 'Admin/UserManagement'" active-class="bg-primary text-white">
                             <q-item-section avatar>
-                                <q-icon name="star" />
+                                <q-icon name="people" />
                             </q-item-section>
-                            <q-item-section>
-                                Events
+                            <q-item-section class="text-capitalize">
+                                <!-- {{ user_role }} -->
+                                User Management
                             </q-item-section>
                         </q-item>
                     </Link>
-                    <Link :href="route('admin.facilities.index')">
-                        <q-item clickable v-ripple>
-                            <q-item-section avatar>
-                                <q-icon name="star" />
-                            </q-item-section>
-                            <q-item-section>
-                                Facilities
-                            </q-item-section>
-                        </q-item>
-                    </Link> -->
-                    <!-- <q-expansion-item icon="supervisor_account" label="User Management">
-                        <q-card class="q-mx-md"> -->
-                            <Link :href="route(`admin.users.index`)">
-                                <q-item clickable v-ripple >
-                                    <q-item-section avatar>
-                                        <q-icon name="people" />
-                                    </q-item-section>
-                                    <q-item-section class="text-capitalize">
-                                        <!-- {{ user_role }} -->
-                                        User Management
-                                    </q-item-section>
-                                </q-item>
-                            </Link>
-                    <!-- <q-item-label header class="q-pa-none q-px-md q-py-xs">Communications</q-item-label>
-                    <Link :href="route('admin.conversation.index')">
-                        <q-item clickable v-ripple>
-                            <q-item-section avatar>
-                                <q-icon name="drafts" />
-                            </q-item-section>
-                            <q-item-section>
-                                Messages
-                            </q-item-section>
-                        </q-item>
-                    </Link>
-                    <q-item-label header class="q-pa-none q-px-md q-py-xs">Settings</q-item-label>
-                    <Link :href="route('admin.profile')">
-                        <q-item clickable v-ripple>
-                            <q-item-section avatar>
-                                <q-icon name="drafts" />
-                            </q-item-section>
-                            <q-item-section>
-                                Profile
-                            </q-item-section>
-                        </q-item>
-                    </Link> -->
-                    
-                        
                 </q-list>
             </q-scroll-area>
             <div class="absolute-bottom bg-white">
                 <q-list >
                     <Link :href="route('conversations.index')">
-                        <q-item clickable class="q-mx-sm rounded-borders">
+                        <q-item clickable class="q-mx-sm rounded-borders" :active="$page.component == 'Admin/Inbox'" active-class="bg-primary text-white">
                             <q-item-section avatar>
                                 <q-icon name="inbox" />
                             </q-item-section>
@@ -259,16 +238,18 @@ const navigation_list = [
                         </q-item>
                     </Link>
                     <q-separator></q-separator>
-                    <q-item class="q-pa-md">
+                    <q-item class="q-pa-md rounded-borders q-ma-sm" :active="$page.component == 'Admin/Profile'" active-class="bg-primary text-white">
                         <q-item-section top avatar>
-                            <q-avatar color="primary" text-color="white" icon="engineering" />
+                            <q-avatar color="primary" text-color="white">
+                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" class="fit" fit="cover" />
+                            </q-avatar>
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>Joren Hyeung Nim</q-item-label>
-                            <q-item-label caption lines="2">Administrator</q-item-label>
+                            <q-item-label>{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</q-item-label>
+                            <q-item-label caption lines="2" :class="$page.component == 'Admin/Profile' ? 'text-white' : 'text-black'">Administrator</q-item-label>
                         </q-item-section>
                         <q-item-section side top class="">
-                            <q-btn color="primary" icon="unfold_more" flat round>
+                            <q-btn :color="$page.component == 'Admin/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
                                 <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
                                     <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>

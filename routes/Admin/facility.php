@@ -4,13 +4,16 @@ use App\Http\Controllers\Admin\Facility\FacilityController;
 // use App\Http\Controllers\Admin\Facility\ReservationController;
 use App\Http\Controllers\Admin\Facility\ViewController;
 use App\Http\Controllers\Admin\Facility\BookingController;
+use App\Http\Controllers\Admin\Facility\FacilityRatingController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/admin/facilities/reservations', [ReservationController::class, 'index'])->name('admin.reservations.index');
 Route::resource('/admin/bookings', BookingController::class)->names([
     'index' => 'admin.bookings.index'
 ]);
-
+Route::resource('/admin/facility/ratings', FacilityRatingController::class)->names([
+    'index' => 'admin.facility_ratings.index'
+]);
 Route::post('/admin/facilities/{facility}/update-images', [FacilityController::class, 'update_images'])->name('admin.facilities.update_images');
 Route::resource('/admin/facilities', FacilityController::class)->names([
     'index' => 'admin.facilities.index',

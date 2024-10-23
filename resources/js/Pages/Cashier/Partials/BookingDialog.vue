@@ -36,50 +36,144 @@ const checkOut = () => {
 </script>
 
 <template>
-    <div>
+    <div :class="[$q.screen.lt.md ? 'justify-end' : 'justify-center', 'flex q-mt-sm']">
+        <div class="gt-sm">
+            <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_in || booking.status == booking_statuses.checked_out">
+                Checked-in
+            </q-chip>
+            <q-chip size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_out">
+                Checked-out
+            </q-chip>
+            <q-chip v-if="booking.status == booking_statuses.complete">Complete</q-chip>
+        </div>
         <q-btn 
             @click="checkInDialog = true" 
+            no-caps
             label="Check-in"
+            rounded 
+            unelevated
+            color="primary"
             v-if="booking.status == booking_statuses.pending || booking.status == booking_statuses.confirmed"
         />
         <q-btn 
             @click="checkOutDialog = true" 
             label="Check-out"
+            no-caps
+            rounded 
+            unelevated
+            color="primary"
             v-if="booking.status == booking_statuses.checked_in"
-        />
-        <q-chip v-if="booking.status == booking_statuses.complete">Complete</q-chip>
-        <q-btn rounded color="primary" no-caps unelevated flat @click="bookingDetailsDialog = true">View</q-btn>
+        />  
+        <q-btn rounded color="primary" no-caps unelevated outline class="q-ml-sm" @click="bookingDetailsDialog = true" label="View"/>
     </div>
-    <q-dialog v-model="checkInDialog">
+    <q-dialog 
+        v-model="checkInDialog"
+        :maximized="$q.screen.lt.md"  
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"     
+    >
         <q-card>
-            {{ booking }}
-            hiii
             <q-card-section>
-                CHeck in?
+                <div class="text-subtitle1 text-weight-medium">Confirm Check-in</div>
+                Are you sure you want to check in this booking for {{ booking.facility.name }} ?
+                <div class="row">
+                    <q-item class="col-xs-12 col-sm-12">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label caption>Facility</q-item-label>
+                            <q-item-label>{{ booking.facility.name }}</q-item-label>
+                        </q-item-section>
+                        <q-item-section side>
+                            <q-item-label caption>Status</q-item-label>
+                            <q-item-label>
+                                <q-chip>{{ booking.status }}</q-chip>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="text-caption text-grey">
+                            Guest
+                        </div>
+                        {{ booking.user.first_name + ' ' + booking.user.last_name }}
+                    </div>
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="text-caption text-grey">
+                            Dates
+                        </div>
+                        {{ date.formatDate(booking.check_in, 'MMM D, YYYY') }} - {{ date.formatDate(booking.check_out, 'MMM D, YYYY') }}
+                    </div>
+                </div>
             </q-card-section>
             <q-card-actions>
-                <q-btn v-close-popup>No</q-btn>
+                <q-btn v-close-popup no-caps unelevated rounded>No</q-btn>
                 <q-btn 
                     @click="checkIn"
                     :loading="form.processing" 
                     :disable="form.processing"
                     label="Check-in"
+                    no-caps
+                    rounded
+                    color="primary"
+                    unelevated
                 />
             </q-card-actions>
         </q-card>
     </q-dialog>
-    <q-dialog v-model="checkOutDialog">
-        <q-card>
+    <q-dialog 
+        v-model="checkOutDialog"
+        :maximized="$q.screen.lt.md"  
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"    
+    >
+        <q-card class="rounded-borders">
             <q-card-section>
-                Check out?
+                <div class="text-subtitle1 text-weight-medium">Confirm Check-out</div>
+                Are you sure you want to check out this booking for {{ booking.facility.name }} ?
+                <div class="row">
+                    <q-item class="col-xs-12 col-sm-12">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label caption>Facility</q-item-label>
+                            <q-item-label>{{ booking.facility.name }}</q-item-label>
+                        </q-item-section>
+                        <q-item-section side>
+                            <q-item-label caption>Status</q-item-label>
+                            <q-item-label>
+                                <q-chip>{{ booking.status }}</q-chip>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="text-caption text-grey">
+                            Guest
+                        </div>
+                        {{ booking.user.first_name + ' ' + booking.user.last_name }}
+                    </div>
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="text-caption text-grey">
+                            Dates
+                        </div>
+                        {{ date.formatDate(booking.check_in, 'MMM D, YYYY') }} - {{ date.formatDate(booking.check_out, 'MMM D, YYYY') }}
+                    </div>
+                </div>
             </q-card-section>
-            <q-card-actions>
-                <q-btn v-close-popup>No</q-btn>
+            <q-card-actions class="justify-end">
+                <q-btn v-close-popup no-caps rounded unelevated>Cancel</q-btn>
                 <q-btn 
                     @click="checkOut"
                     :loading="form.processing" 
                     :disable="form.processing"
                     label="Check-out"
+                    no-caps
+                    rounded
+                    color="primary"
+                    unelevated
                 />
             </q-card-actions>
         </q-card>
@@ -91,8 +185,9 @@ const checkOut = () => {
         :maximized="$q.screen.lt.md"
     >
         <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="justify-end lt-md">
-                <q-btn round icon="close" v-close-popup unelevated />
+            <q-card-actions class="lt-md">
+                <div class="text-h6">Booking Details</div>
+                <q-btn round icon="close" class="absolute-top-right q-mt-xs q-mr-xs" v-close-popup unelevated />
             </q-card-actions>
             <q-card-section>
                 <div class="row q-col-gutter-md">
@@ -105,10 +200,9 @@ const checkOut = () => {
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
-                        <div class="text-h6">Booking Details</div>
-                        <q-separator class="q-my-md"/>
+                        <div class="text-h6 gt-sm">Booking Details</div>
+                        <q-separator class="q-my-md gt-sm"/>
                         <div class="row q-col-gutter-md">
-                            
                             <div class="col-6">
                                 <div class="text-caption">Check-in</div>
                                 <div>{{ date.formatDate(booking.check_in, 'MMMM D, YYYY') }}</div>

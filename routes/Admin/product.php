@@ -15,7 +15,7 @@ Route::patch('/admin/orders/update-order-status/{id}', function() {
 })->name('admin.orders.update_status');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 // Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
-Route::resource('/admin/product/reviews', ProductRatingController::class)->names([
+Route::resource('/admin/product/ratings', ProductRatingController::class)->names([
     'index' => 'admin.product_ratings.index'
 ]);
 Route::resource('/admin/products', ProductController::class)->names([

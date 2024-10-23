@@ -2,7 +2,7 @@
 
 import { Head } from '@inertiajs/vue3'
 import CashierLayout from '@/Layouts/CashierLayout.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { date } from 'quasar'
 import BookingDialog from './Partials/BookingDialog.vue'
 import { useDrawerStore } from '@/Stores/DrawerStore'
@@ -17,7 +17,8 @@ const props = defineProps({
     booking_statuses: Array
 })
 
-const filter = ref('')
+const filter = ref('all')
+const searchTerm = ref('')
 
 const columns = [
     { name: 'arriving_in', align: 'center', label: 'Arriving In', sortable: true },
@@ -31,6 +32,54 @@ const columns = [
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
+// const filteredBookings = computed(() => {
+//   if (filter.value == 'all') {
+//         console.log('hii')
+//         console.log(props.bookings)
+//         return props.bookings// Return all bookings if filter is 'all'
+//     } else {
+//         return props.bookings.filter(booking => booking.status === filter.value);
+//     }
+// });
+// console.log(filteredBookings.value)
+
+const filteredBookings = computed(() => {
+  let filtered = props.bookings;
+
+  // Apply status filter
+  if (filter.value !== 'all') {
+    filtered = filtered.filter(booking => booking.status === filter.value);
+  }
+
+  // Apply search term filter
+  if (searchTerm.value) {
+    filtered = filtered.filter(booking => {
+      const fullName = `${booking.user.first_name} ${booking.user.last_name}`.toLowerCase();
+      const email = booking.user.email.toLowerCase();
+      const facilityName = booking.facility.name.toLowerCase();
+      const search = searchTerm.value.toLowerCase();
+
+      return (
+        fullName.includes(search) ||
+        email.includes(search) ||
+        facilityName.includes(search)
+      );
+    });
+  }
+
+  return filtered;
+});
+
+const showSearch = ref(false)
+const filterBookings = ref('all')
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 5
+    // rowsNumber: xx if getting data from a server
+}
+
 </script>
 
 <template>
@@ -43,24 +92,49 @@ const columns = [
                     class="my-sticky-header-column-table"
                     flat
                     :grid="$q.screen.lt.md"
-                    title="Treats"
-                    :rows="bookings"
+                    title="Bookings"
+                    :rows="filteredBookings"
                     :columns="columns"
                     row-key="name"
-                    :filter="filter"
+                    :pagination="initialPagination"
                 >
                     <template v-slot:top>
-                        <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
-                        <p class="text-h6 q-pt-md">Bookings</p>
+                        <q-btn icon="menu" flat dense @click="drawerStore.drawer =true" class="lt-md q-mr-sm"/>
+                        <div class="text-h6">Bookings</div>
                         <q-space />
-                        <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                        <!-- <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
-                        </q-input>
-                        <!-- <Link :href="route('admin.facilities.create')">
-                            <q-btn no-caps color="primary">Create Facility</q-btn>
-                        </Link> -->
+                        </q-input> -->
+                        <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                            
+                        <q-select 
+                            :options="['all', 'pending', 'checked_in', 'checked_out', 'complete']" 
+                            v-model="filter"
+                            outlined 
+                            rounded
+                            dense
+                        >
+                        </q-select>
+                        
+                        <div class="full-width q-mt-sm" v-if="showSearch">
+                            <q-input
+                                v-model="searchTerm"
+                                rounded
+                                outlined
+                                dense
+                                label="Search using name, email or facility name..."
+                                debounce="300"
+                                class="full-width"
+                                color="primary"
+                            >
+                                <template v-slot:append>
+                                    <q-icon name="search" />
+                                </template>
+                            </q-input>
+                        </div>
+
                     </template>
                     <template v-slot:body-cell-arriving_in="props">
                         <q-td :props="props">
@@ -84,18 +158,13 @@ const columns = [
                     </template>
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="props.row.status == booking_statuses.checked_in || props.row.status == booking_statuses.checked_out">
-                                Checked-in
-                            </q-chip>
-                            <q-chip size="12px" color="green-3"v-if="props.row.status == booking_statuses.checked_out">
-                                Checked-out
-                            </q-chip>
+                            
                             <BookingDialog :booking="props.row" :booking_statuses="booking_statuses" />
                         </q-td>
                     </template>
                     <template v-slot:item="props">
                         <q-card class="col-12 q-mb-md" bordered flat>
-                            <q-card-section>
+                            <q-card-section class="q-pb-sm">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
                                         <q-item>

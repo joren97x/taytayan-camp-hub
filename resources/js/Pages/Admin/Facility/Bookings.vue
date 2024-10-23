@@ -43,7 +43,7 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Bookings</p>
+                    <div class="text-h6">Bookings</div>
                     <q-space />
                     <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>

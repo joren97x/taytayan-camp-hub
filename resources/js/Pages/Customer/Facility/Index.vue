@@ -21,7 +21,7 @@ defineProps({
         </q-card>
         
         <div class="q-ma-md">
-            <div class="text-h6">Lorem Ipsum</div>
+            <div class="text-h6">Facilities</div>
 
             <div class="row q-col-gutter-md">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for="facility in facilities">

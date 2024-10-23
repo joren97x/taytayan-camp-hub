@@ -157,7 +157,7 @@ const onFileChange = (file) => {
                     </q-td>
                 </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md text-capitalize">User Management</p>
+                    <div class="text-h6 text-capitalize">User Management</div>
                     <q-space />
                     <!-- <q-input outlined 
                      rounded dense label="Search..." debounce="300" color="primary" v-model="filter">

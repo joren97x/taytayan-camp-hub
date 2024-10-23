@@ -105,7 +105,7 @@ const columns = [
                     </q-td>
                 </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Products</p>
+                    <div class="text-h6">Products</div>
                     <q-space />
                     <!-- <q-select
                         style="width: 200px"

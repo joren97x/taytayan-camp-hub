@@ -62,9 +62,9 @@ const columns = [
                     </q-td>
                 </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Orders</p>
+                    <div class="text-h6">Orders</div>
                     <q-space />
-                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                    <q-input outlined rounded dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>

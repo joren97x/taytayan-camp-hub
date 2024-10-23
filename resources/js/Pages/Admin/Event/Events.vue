@@ -106,7 +106,7 @@ const formatTime = (timeString) => {
                     </q-td>
                 </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Events</p>
+                    <div class="text-h6">Events</div>
                     <q-space />
                     <q-input outlined dense label="Search..." rounded debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>

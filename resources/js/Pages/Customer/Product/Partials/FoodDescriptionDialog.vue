@@ -98,6 +98,12 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
   return selectedCount >= requiredQuantity;
 };
 
+const decrementQuantity = () => {
+    if(form.quantity > 1) {
+        form.quantity--
+    }
+}
+
 </script>
 
 <template>
@@ -222,7 +228,7 @@ const isMaxSelected = (modifierGroupId, requiredQuantity) => {
                                                 <div>Quantity</div>
                                             </div>
                                             <div class="col-6 justify-end items-center flex">
-                                                <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="form.quantity--"></q-btn>
+                                                <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementQuantity"></q-btn>
                                                 <span class="q-mx-md text-subtitle1">{{ form.quantity }}</span>
                                                 <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.quantity++"></q-btn>
                                             </div>

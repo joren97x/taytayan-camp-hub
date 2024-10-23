@@ -14,8 +14,10 @@ const props = defineProps({
     events: Object
 })
 
+const searchTerm = ref('')
+const showSearch = ref(false)
 const drawerStore = useDrawerStore()
-const filter = ref('')
+const filter = ref('all')
 const columns = [
     { name: 'event', align: 'center', label: 'Event', field: 'event', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'Sold', field: 'tickets_sold', sortable: true },
@@ -40,17 +42,50 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
-                    <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
+                    <!-- <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
                     <p class="text-h6 q-pt-md">Events</p>
                     <q-space />
                     <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
-                    </q-input>
-                    <!-- <Link :href="route('admin.facilities.create')">
-                        <q-btn no-caps color="primary">Create Facility</q-btn>
-                    </Link> -->
+                    </q-input> -->
+                    <q-btn icon="menu" flat dense @click="drawerStore.drawer =true" class="lt-md q-mr-sm"/>
+                    <div class="text-h6">Events</div>
+                    <q-space />
+                    <!-- <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input> -->
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                        
+                    <q-select 
+                        :options="['all', 'pending', 'checked_in', 'checked_out', 'complete']" 
+                        v-model="filter"
+                        outlined 
+                        rounded
+                        dense
+                    >
+                    </q-select>
+                    
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="searchTerm"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name, email or facility name..."
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
+
                 </template>
                 
                 <template v-slot:body-cell-event="props">

@@ -10,12 +10,26 @@ defineOptions({
     layout: CustomerLayout
 })
 
-defineProps({
+const props = defineProps({
     event: Object
 })
 
 const $q = useQuasar()
-const attendees = ref(1)
+const attendees = ref(props.event.min_ticket)
+
+const incrementTicket = () => {
+    if(attendees.value < props.event.max_ticket) {
+        attendees.value++
+    }
+}
+
+//bawal minus 0 or minus sa min tickets
+const decrementTicket = () => {
+
+    if(attendees.value <= props.event.max_ticket && attendees.value > props.event.min_ticket) {
+        attendees.value--
+    }
+}
 
 </script>
 
@@ -25,7 +39,6 @@ const attendees = ref(1)
         <!-- <div class="full-width bg-grey q-my-md rounded-borders" style="height: 50vh;"> -->
         <div class="full-width q-my-md rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
             <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
-            <!-- Foreground image (not blurred) -->
             <q-img 
                 :src="`/storage/${event.cover_photo}`"
                 class="rounded-borders content-wrapper" 
@@ -80,9 +93,9 @@ const attendees = ref(1)
                             <div>{{ event.admission_fee }}</div>
                         </div>
                         <div class="col-6 justify-end items-center flex">
-                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="attendees--"></q-btn>
+                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementTicket"/>
                             <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
-                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="attendees++"></q-btn>
+                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="incrementTicket"/>
                         </div>
                     </q-card-section>
                     <!-- <q-item>
@@ -129,77 +142,9 @@ const attendees = ref(1)
                     </Link>
                 </div>
             </q-card-section>
-                <!-- <div class="col-4 self-center"> -->
-                    
-                <!-- </div> -->
-            <!-- </div> -->
         </q-card>
 
-        <!-- <div class="row q-px-md">
-            <div :class="[$q.screen.width >= 700 ? 'col-8' : 'col-12']">
-                <div>{{ event.date }}, {{ event.start_time }}</div>
-                <div class="text-h5">{{ event.title }}</div>
-                <div>{{ event.description }}</div>
-                <div>Date And Time</div>
-                <div>{{ event.date }}, {{ event.start_time }}</div> -->
-                <!-- <div>Frequently Asked Questions</div>
-                <q-list bordered class="rounded-borders">
-                    <q-expansion-item
-                        expand-separator
-                        icon="perm_identity"
-                        label="Some uhh questions"
-                        v-for="n in 3"
-                    >
-                        <q-card>
-                        <q-card-section>
-                            some uhh answers
-                        </q-card-section>
-                        </q-card>
-                    </q-expansion-item>
-                    </q-list> -->
-                <!-- <h6>
-                    {{ $q.screen.width >= 700 }}
-                    {{ $q.platform.is.desktop }}
-                </h6>
-                <h1>bruh</h1>
-            </div>
-            
-        </div> -->
-        <!-- <q-dialog
-      v-model="dialog"
-      persistent
-      :maximized="true"
-      transition-show="slide-up"
-      transition-hide="slide-down"
-        style="height: 200px"
-    >
-      <q-card >
-        <q-bar>
-          <q-space />
-
-          <q-btn dense flat icon="close" v-close-popup>
-            <q-tooltip class="bg-white text-primary">Close</q-tooltip>
-          </q-btn>
-        </q-bar>
-
-        <q-card-section>
-          <div class="text-h6">Alert</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-            <q-item-section side>
-                <q-btn icon="remove" @click="attendees--"></q-btn>
-                {{ attendees }}
-                <q-btn icon="add" @click="attendees++"></q-btn>
-            </q-item-section>
-        </q-card-section>
-        <q-card-actions class="fixed-bottom">
-            <Link :href="route('event.checkout')" :data="{ event_id: event.id, attendees }" class="full-width">
-                <q-btn class="full-width" color="primary" no-caps>Check Out</q-btn>
-            </Link>
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
+     
     </div>
 </template>
   

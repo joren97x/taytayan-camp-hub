@@ -57,7 +57,7 @@ const columns = [
                 row-key="name"
             >
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Modifier Groups</p>
+                    <div class="text-h6">Modifier Groups</div>
                     <q-space />
                         <q-input rounded outlined dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>

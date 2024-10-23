@@ -1,6 +1,6 @@
 <script setup>
 
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 // import EventCard from '@/Components/Customer/Event/EventCard.vue'
 import EventCard from './Partials/EventCard.vue';
@@ -17,11 +17,13 @@ defineProps({
 
 <template>
     <Head  title="Events" />
-    <div class="gradient-overlay">
+    <div class="gradient-overlay" style="position: relative" v-if="events.length > 0">
+        <div class="blurred-background" :style="`background-image: url('/storage/${events[0].cover_photo}');`"></div>
         <q-img 
-            style="width: 100%; height: 50vh;"
+            style="width: 100%; height: 50vh; z-index: 100;"  
             class="rounded-borders" 
-            src="https://cdn.evbstatic.com/s3-build/fe/build/images/39ac4703250a1d0fb15911c2c5f10174-generic_1_desktop.webp"
+            :src="`/storage/${events[0].cover_photo}`"
+            fit="contain"
         >
             <div 
                 :class="['bg-transparent', $q.screen.lt.md ? ' q-pa-xs q-ma-xs' : ' q-pa-xl q-ma-md']" 
@@ -31,17 +33,27 @@ defineProps({
                     Upcoming Event
                 </div>
                 <div class=" text-h3 text-weight-bold q-mb-sm">
-                    Under The Sky Disco Party SKibidi Gyatt
+                    <!-- Under The Sky Disco Party SKibidi Gyatt -->
+                     {{ events[0].title }}
                 </div>
                 <div :class="['text-subtitle2', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
-                    Let's GO DISCO sa OLANGO this Wednesday hello annyeong
-                    The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient.
-                </div>
+                    <!-- Let's GO DISCO sa OLANGO this Wednesday hello annyeong
+                    The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient. -->
+                     {{ events[0].description }}
+                    </div>
                 <div>
-                    <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
+                    <Link :href="route('customer.events.show', events[0].id)">
+                        <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
+                    </Link>
                 </div>
             </div>
         </q-img>
+    </div>
+    <div v-else style="width: 100%; height: 50vh;" class="rounded-borders bg-grey items-center flex justify-center" >
+        <div class="text-center text-white">
+            <div class="text-h3 q-mb-md">No Upcoming Events</div>
+            <div>Check back soon for exciting new events. Stay tuned for updates!</div>
+        </div>
     </div>
     <div class="q-ma-md">
         <div class="text-h6 q-my-md">Upcoming Events</div>
@@ -90,6 +102,19 @@ defineProps({
   background: linear-gradient(to right, rgb(77, 76, 76) 20%, rgba(121, 120, 120, 0) 50%);
   pointer-events: none; /* Prevents any interaction */
   z-index: 5; /* Ensures it's behind the text but on top of the image */
+}
+
+.blurred-background {
+   /* Background image you want to blur */
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(8px); /* Apply blur effect */
+  z-index: 1; /* Keep it behind the foreground content */
 }
 
 /* Styles for the text container */

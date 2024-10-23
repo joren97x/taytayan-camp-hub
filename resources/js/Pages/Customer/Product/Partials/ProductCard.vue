@@ -10,7 +10,7 @@ const dialog = ref(false)
 
 <template>
 
-    <q-card class="my-card" flat bordered>
+    <q-card class="product-card" flat bordered>
         <div class="row">
             <div class="col-6">
                 <q-card-section>
@@ -49,13 +49,7 @@ const dialog = ref(false)
 
 <style scoped>
 
-.my-card:hover {
-    /* transform: scale(1.05); */
-  
-  /* Increase box shadow to give a lifted effect */
-  /* box-shadow: 100 100px 200px rgba(0, 0, 0, 0.911); */
-  /* border: 1px solid blue; */
-  /* Optional: change background color on hover */
+.product-card:hover {
   background-color: gainsboro;
 }
 

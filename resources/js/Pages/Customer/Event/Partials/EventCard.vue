@@ -19,41 +19,42 @@ function shareOnFacebook() {
 
 <template>
     <div class="event-card">
-        <q-card bordered flat class="rounded-borders">
-            <q-card-section horizontal>
-                <q-card-section class="text-center q-pa-none">
-                    <q-img 
-                        fill="cover" 
-                        height="200px" 
-                        width="220px" 
-                        :src="`/storage/${event.cover_photo}`"
-                    />
+        <Link :href="route('customer.events.show', event.id)">
+            <q-card bordered flat class="rounded-borders">
+                <q-card-section horizontal>
+                    <q-card-section class="text-center q-pa-none">
+                        <q-img 
+                            fill="cover" 
+                            height="200px" 
+                            width="220px" 
+                            :src="`/storage/${event.cover_photo}`"
+                        />
+                    </q-card-section>
+                    <q-card-section class="q-pa-md full-width">
+                        <q-item  class="q-pa-none">
+                            <q-item-section>
+                                <q-item-label class="text-h6">{{ event.title }}</q-item-label>
+                                <q-item-label caption class="">
+                                    {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <!-- <p class="q-mt-md ellipsis-2-lines">Let's GO DISCO sa OLANGO this Wednesday hello annyeong 🍻🍾💃🕺</p> -->
+                        <p class="q-mt-md ellipsis-2-lines">
+                            {{ event.description }}
+                        </p>
+                        <!-- {{ event }} -->
+                        
+                        <div class="absolute-bottom-right q-mb-md q-mr-md">
+                            <q-btn @click="shareOnFacebook" rounded  label="Share" no-caps icon="share" unelevated class="q-mr-xs"/>
+                            <Link :href="route('customer.events.show', event.id)">
+                                <q-btn unelevated no-caps color="primary" label="Button" rounded />
+                            </Link>
+                        </div>
+                    </q-card-section> 
                 </q-card-section>
-                <q-card-section class="q-pa-md full-width">
-                    <q-item  class="q-pa-none">
-                        <q-item-section>
-                            <q-item-label class="text-h6">{{ event.title }}</q-item-label>
-                            <q-item-label caption class="">
-                                {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
-                            </q-item-label>
-                        </q-item-section>
-                    </q-item>
-                    <!-- <p class="q-mt-md ellipsis-2-lines">Let's GO DISCO sa OLANGO this Wednesday hello annyeong 🍻🍾💃🕺</p> -->
-                    <p class="q-mt-md ellipsis-2-lines">
-                        {{ event.description }}
-                    </p>
-                    <!-- {{ event }} -->
-                    
-                    <div class="absolute-bottom-right q-mb-md q-mr-md">
-                        <q-btn @click="shareOnFacebook" label="Share" no-caps icon="share" unelevated class="q-mr-xs"/>
-                        <Link :href="route('customer.events.show', event.id)">
-                            <q-btn icon="delete" no-caps color="primary" label="Button" rounded />
-                        </Link>
-                    </div>
-                </q-card-section> 
-                
-            </q-card-section>
-        </q-card>
+            </q-card>
+        </Link>
     </div>
 </template>
 
@@ -65,6 +66,11 @@ function shareOnFacebook() {
     /* border: 1px solid #4CAF50; */
 }
 
+
+a {
+    color: black;
+    text-decoration: none;
+}
 
 .q-card, .event-card, .q-img {
     border-radius: 15px;

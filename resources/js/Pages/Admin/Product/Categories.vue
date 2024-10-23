@@ -121,7 +121,7 @@ const columns = [
                     </q-td>
                 </template>
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Categories</p>
+                    <div class="text-h6">Categories</div>
                     <q-space />
                         <q-input outlined rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>

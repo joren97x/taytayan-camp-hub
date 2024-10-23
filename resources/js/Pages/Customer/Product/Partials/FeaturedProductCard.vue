@@ -13,6 +13,7 @@ const dialog = ref(false)
     <q-card
         flat
         bordered
+        class="product-card"
     >
         <q-card-section class="q-pa-none">
             <q-img
@@ -44,3 +45,11 @@ const dialog = ref(false)
     <FoodDescriptionDialog :dialog="dialog" :product="product" @close="dialog = false" />
 
 </template>
+
+<style scoped>
+
+.product-card:hover {
+  background-color: gainsboro;
+}
+
+</style>

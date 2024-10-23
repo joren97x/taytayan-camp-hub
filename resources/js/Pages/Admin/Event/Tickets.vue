@@ -38,7 +38,7 @@ const columns = [
                 :filter="filter"
             >
                 <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Tickets</p>
+                    <div class="text-h6">Tickets</div>
                     <q-space />
                     <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
