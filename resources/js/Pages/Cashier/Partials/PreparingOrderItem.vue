@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, defineEmits } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 
 const props = defineProps({
@@ -48,7 +48,6 @@ function readyOrder() {
     orderForm.patch(route('cashier.orders.update_status', props.order.id), {
         onSuccess: (e) => {
             emit('order_updated')
-
             readyOrderDialog.value = false
             $q.notify('Order Accepted')
         }
@@ -97,8 +96,11 @@ function cancelOrder() {
         :maximized="$q.screen.lt.md"
     >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-section class="row q-col-gutter-xl">
-                
+            <q-card-actions class="justify-center">
+                <div class="text-h6 text-center">Order Details</div>
+                <q-btn icon="close" class="absolute-top-right q-mr-sm q-mt-xs" round v-close-popup flat/>
+            </q-card-actions>
+            <q-card-section class="row q-col-gutter-md">
                 <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
                     <div class="justify-between row col-12">
                         <div class="col text-h6">
@@ -106,29 +108,35 @@ function cancelOrder() {
                             <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
                         </div>
                         <div class="col text-right">
-                            <q-chip>{{ order.cart_products.length }} items</q-chip>
+                            <q-chip size="md" class="q-px-lg text-capitalize q-my-md">{{ order.mode }}</q-chip>
+                            <Link :href="route('conversations.chat_user', order.user.id)">
+                                <q-btn icon="message" color="primary" round />
+                            </Link>
                         </div>
                     </div>
                     <q-separator class="q-my-md" />
                     <q-list>
+                        <div class="text-h6">
+                            Order - {{ order.cart_products.length }} items
+                        </div>
                         <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                             <q-item-section avatar>
-                                <img :src="`/storage/${cart_product.product.photo}`" fill="contain" height="70px" width="70px"/>
+                                <img :src="`/storage/${cart_product.product.photo}`" fit="cover" height="80px" width="80px"/>
                             </q-item-section>
                             <q-item-section>
-                                <span>
-                                    <q-chip size="sm" :class="$q.dark.isActive ? 'bg-grey-9' : ''">
-                                        {{ cart_product.quantity }}
+                                <div class="text-subtitle1">
+                                    • {{ cart_product.product.name }} 
+                                    <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
+                                        {{ cart_product.quantity }} qty
                                     </q-chip>
-                                        {{ cart_product.product.name }}
-                                </span>
-                                <q-item-label v-for="(grouped_modifier, index) in cart_product.grouped_modifiers" :key="index">
+                                </div>
+                                <q-item-label v-for="(grouped_modifier, index) in cart_product.grouped_modifiers" :key="index" class="q-ml-sm">
                                     {{ grouped_modifier.modifier_group.name }}
                                     <q-item-label caption v-for="modifier in grouped_modifier.modifier_items" :key="modifier.id">
                                         {{ modifier.quantity }} - {{ modifier.modifier_item.name }} etc or should i display the price or total price
                                     </q-item-label>
                                 </q-item-label>
-                                <q-item-label v-if="cart_product.special_instruction">
+                                <q-item-label v-if="cart_product.special_instruction" class="q-ml-sm">
                                     Note: {{ cart_product.special_instruction }}
                                 </q-item-label>
                             </q-item-section>
@@ -147,22 +155,20 @@ function cancelOrder() {
                         </div>
                     </div>
                 </div>
-                <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12" v-if="order.status == 'pending'">
-                    <div class="q-pa-md" style="position: relative">
-                        <div class="text-h6 text-center q-mt-xl">Waiting Time</div>
-                        <q-btn round icon="close" v-close-popup flat class="absolute-top-right"/>
-                    </div>
+                <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12 " v-if="order.status == 'pending'">
+                    <div class="text-h6 text-center">Waiting Time</div>
                     <q-input
-                        filled
+                        outlined 
+                        rounded
                         v-model="acceptOrderForm.waiting_time"
                         label="Waiting Time In Minutes"
                         unmasked-value
                         :error="acceptOrderForm.errors.waiting_time ? true : false"
                         :error-message="acceptOrderForm.errors.waiting_time"
                     />
-                    <div class="text-center text-green">
+                    <!-- <div class="text-center text-green">
                         <q-chip size="md" class="q-px-lg text-capitalize q-my-md">{{ order.mode }}</q-chip>
-                    </div>
+                    </div> -->
                     <!-- <q-item>
                         <q-item-section>Subtotal</q-item-section>
                         <q-item-section side>
@@ -175,14 +181,14 @@ function cancelOrder() {
                             P5.00
                         </q-item-section>
                     </q-item> -->
-                    <q-separator/>
+                    <!-- <q-separator/> -->
                     <!-- <q-item class="text-h6">
                         <q-item-section>Total</q-item-section>
                         <q-item-section side>
                             {{ order.subtotal }}
                         </q-item-section>
                     </q-item> -->
-                    <div class="q-mt-md">
+                    <div class="">
                         <q-btn 
                             class="full-width" 
                             color="primary" no-caps
@@ -217,6 +223,10 @@ function cancelOrder() {
         :maximized="$q.screen.lt.md"
     >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
+            <q-card-actions class="justify-center">
+                <div class="text-h6 text-center">Order Details</div>
+                <q-btn icon="close" class="absolute-top-right q-mr-sm q-mt-xs" round v-close-popup flat/>
+            </q-card-actions>
             <q-card-section>
                 <div class="justify-between row col-12">
                     <div class="col text-h6">
@@ -224,7 +234,10 @@ function cancelOrder() {
                         <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
                     </div>
                     <div class="col text-right">
-                        <q-chip>{{ order.cart_products.length }} items</q-chip>
+                        <q-chip>{{ order.mode }}</q-chip>
+                        <Link :href="route('conversations.chat_user', order.user.id)">
+                            <q-btn icon="message" color="primary" round />
+                        </Link>
                     </div>
                 </div>
                 <q-separator class="q-my-md" />
@@ -238,25 +251,34 @@ function cancelOrder() {
                         </q-item-label>
                     </q-item-section>
                 </q-item> -->
+                <div class="text-h6">
+                    Order - {{ order.cart_products.length }} items
+                </div>
                 <q-list>
                     <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                         <q-item-section avatar>
                             <img :src="`/storage/${cart_product.product.photo}`" fill="contain" height="70px" width="70px"/>
                         </q-item-section>
                         <q-item-section>
-                            <span>
+                            <div class="text-subtitle1">
+                                • {{ cart_product.product.name }} 
+                                <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
+                                    {{ cart_product.quantity }} qty
+                                </q-chip>
+                            </div>
+                            <!-- <span>
                                 <q-chip size="sm" :class="$q.dark.isActive ? 'bg-grey-9' : ''">
                                     {{ cart_product.quantity }}
                                 </q-chip>
                                     {{ cart_product.product.name }}
-                            </span>
-                            <q-item-label v-for="(grouped_modifier, index) in cart_product.grouped_modifiers" :key="index">
+                            </span> -->
+                            <q-item-label v-for="(grouped_modifier, index) in cart_product.grouped_modifiers" :key="index" class="q-ml-sm">
                                 {{ grouped_modifier.modifier_group.name }}
-                                <q-item-label caption v-for="modifier in grouped_modifier.modifier_items" :key="modifier.id">
+                                <q-item-label caption v-for="modifier in grouped_modifier.modifier_items" :key="modifier.id" >
                                     {{ modifier.quantity }} - {{ modifier.modifier_item.name }} etc or should i display the price or total price
                                 </q-item-label>
                             </q-item-label>
-                            <q-item-label v-if="cart_product.special_instruction">
+                            <q-item-label v-if="cart_product.special_instruction" class="q-ml-sm">
                                 Note: {{ cart_product.special_instruction }}
                             </q-item-label>
                         </q-item-section>

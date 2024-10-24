@@ -129,7 +129,7 @@ onUnmounted(() => {
                         <q-img class="fit" fit="cover" :src="`/storage/${receiver.profile_pic}`"></q-img>
                     </q-avatar>
                     <div class="q-mb-xl q-mt-sm">
-                        <h6 class="q-pa-none q-ma-none">John Doe</h6>
+                        <h6 class="q-pa-none q-ma-none">{{ receiver.first_name + ' ' + receiver.last_name }}</h6>
                         <div class="text-caption">Joined on {{ date.formatDate(receiver.created_at, 'MMM D, YYYY') }}</div>
                     </div>
                 </div>

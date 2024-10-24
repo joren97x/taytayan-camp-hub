@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, onMounted, defineEmits } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 
 const props = defineProps({
@@ -117,7 +117,7 @@ function calculateSteps() {
 </script>
 
 <template>
-    <q-item :class="[order.status == 'pending' ? 'bg-blue-2' : 'bg-grey-4', 'q-my-sm']" clickable v-ripple @click="dialog = true">
+    <q-item :class="[order.status == 'pending' ? 'bg-blue-2' : 'bg-grey-4', 'q-my-sm rounded-borders']" clickable v-ripple @click="dialog = true">
         <q-item-section>
             <q-item-label>{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
             <q-item-label caption lines="2">{{ order.cart_products.length }} items</q-item-label>
@@ -141,7 +141,11 @@ function calculateSteps() {
     >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-section>
-                <q-item>
+                <div class="text-h6 text-center">Order Details</div>
+                <q-btn round icon="close" unelevated v-close-popup class="absolute-top-right q-mr-sm q-mt-sm"/>
+            </q-card-section>
+            <q-card-section>
+                <!-- <q-item>
                     <q-item-section>
                         <q-item-label class="text-h6">Order Details</q-item-label>
                         <q-item-label caption> {{ order.created_at }}
@@ -150,7 +154,7 @@ function calculateSteps() {
                     <q-item-section side>
                         <q-btn round icon="close" unelevated v-close-popup></q-btn>
                     </q-item-section>
-                </q-item>
+                </q-item> -->
                 <q-stepper
                     flat
                     v-model="step"
@@ -189,11 +193,15 @@ function calculateSteps() {
                                 <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
                             </div>
                             <div class="col text-right">
-                                <q-chip>{{ order.cart_products.length }} items</q-chip>
+                                <!-- <q-chip>{{ order.cart_products.length }} items</q-chip> -->
+                                <q-btn round icon="message" color="primary" />
                             </div>
                         </div>
                         <q-separator class="q-my-md" />
                         <q-list>
+                            <div class="text-h6">
+                                Order - {{ order.cart_products.length }} items
+                            </div>
                             <q-item v-for="(cart_product, index) in order.cart_products" :key="index">
                                 <q-item-section avatar>
                                     <img :src="`/storage/${cart_product.product.photo}`" fill="contain" height="70px" width="70px"/>
@@ -241,9 +249,28 @@ function calculateSteps() {
                                 <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
                                 <q-item-label caption>{{ order.driver.phone_number }}</q-item-label>
                             </q-item-section>
+                            <q-item-section side>
+                                <Link :href="route('conversations.chat_user', order.user.id)">
+                                    <q-btn icon="message" color="primary" round />
+                                </Link>
+                            </q-item-section>
                         </q-item>
-                        <div class="bg-grey full-width" style="height: 200px;">
-                            a map but ill try
+                        <div class="" style="height: 200px;">
+                            <!-- <q-item>
+                                <q-item-section avatar>
+                                    <q-avatar>
+                                        <q-img class="fit" fit="contain" />
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>John Doe</q-item-label>
+                                    <q-item-label caption>09123456789</q-item-label>
+                                </q-item-section>
+                                <q-item-section side>
+                                    <q-btn icon="message" round />
+                                </q-item-section>
+                            </q-item> -->
+                            <!-- a map but ill try -->
                         </div>
                         <!-- <q-item>
                             <q-item-section class="text-h6">Order Total</q-item-section>
@@ -277,7 +304,7 @@ function calculateSteps() {
                             >
                                 Accept Order
                             </q-btn> -->
-                            <q-btn class="full-width q-my-sm" color="red" outline no-caps>Cancel Order</q-btn>
+                            <!-- <q-btn class="full-width q-my-sm" color="red" outline no-caps>Cancel Order</q-btn> -->
                         </div>
                     </div>
                 </div>
@@ -301,6 +328,7 @@ function calculateSteps() {
                     </div>
                     <div class="col text-right">
                         <q-chip>{{ order.cart_products.length }} items</q-chip>
+                        <q-btn round icon="message" />
                     </div>
                 </div>
                 <q-separator class="q-my-md" />

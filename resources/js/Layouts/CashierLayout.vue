@@ -3,9 +3,11 @@
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useDrawerStore } from '@/Stores/DrawerStore';
+import { useDrawerStore } from '@/Stores/DrawerStore'
+import { useOrderStore } from '@/Stores/OrderStore'
 
 const $q = useQuasar()
+const orderStore = useOrderStore()
 const drawerStore = useDrawerStore()
 const leftDrawerOpen = ref(false)
 
@@ -63,6 +65,9 @@ function toggleLeftDrawer () {
                         <q-item-section>
                             <q-item-label>Orders</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
+                        </q-item-section>
+                        <q-item-section side>
+                            <q-chip>{{ orderStore.orders.length }}</q-chip>
                         </q-item-section>
                     </q-item>
                 </Link>
@@ -145,7 +150,7 @@ function toggleLeftDrawer () {
                                         <q-item-section>
                                             Dark Mode
                                         </q-item-section>
-                                    <q-item-section side top>
+                                        <q-item-section side top>
                                             <q-toggle v-model="$q.dark.isActive"></q-toggle>
                                         </q-item-section>
                                     </q-item>

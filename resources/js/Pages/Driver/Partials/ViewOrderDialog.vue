@@ -135,8 +135,12 @@ const completeOrder = () => {
                 </div>
                 <div class="col-4 col-xs-12 col-sm-12 col-lg-4 col-md-4 col-xl-4">
                     <div class="text-h6">Order Details</div>
-                    
-                    <div class="full-width bg-grey" style="height: 200px"></div>
+                    <!-- {{ order }} -->
+                    <div class="full-width bg-grey" style="height: 200px">
+                        Payment Method <br>
+                        Delivery Mode <br>
+                        Waiting Time
+                    </div>
                     <div class="q-mt-md">
                         <q-btn 
                             class="full-width" 
@@ -159,7 +163,7 @@ const completeOrder = () => {
                             rounded
                             color="primary"
                             v-if="order.status == 'delivering'"
-                            label="Complete Order"
+                            label="Complete Delivery"
                         />
                     </div>
                 </div>

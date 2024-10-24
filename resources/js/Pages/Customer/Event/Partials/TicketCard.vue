@@ -10,15 +10,18 @@ defineProps({
 console.log(date.formatDate(new Date, 'MMMM D, YYYY h:mm A'))
 
 const dialog = ref(false)
+
 const formatTime = (timeString) => {
     const today = new Date()
-    // const dateObj = new Date(`${today.t}T${timeString}Z`);
-    // return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
+    const dateObj = new Date(`${today.t}T${timeString}Z`)
+    console.log(dateObj)
+    return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
 }
+
 </script>
 
 <template>
-    <q-card bordered flat>
+    <q-card bordered flat class="q-mt-sm">
         <q-item @click="dialog = true" clickable>
             <q-item-section avatar class="items-center">
                 <div class="text-weight-bold text-secondary">{{ date.formatDate(ticket_order.event.date, 'MMM') }}</div>
@@ -67,34 +70,34 @@ const formatTime = (timeString) => {
                         <div class="text-h6">({{ ticket_order.ticket_order_items.length }}x) Admission</div>
                         <q-btn round :flat="$q.screen.gt.sm" v-close-popup icon="close" class="absolute-top-right q-mr-sm q-mt-sm gt-sm"/>
                         <q-separator class="q-my-md"/>
-                        <div class="text-subtitle1">Contact Information</div>
+                        <div class="text-subtitle1 text-weight-bold">Contact Information</div>
                         <div class="row">
                             <div class="col-6">
-                                <div class="text-caption">First Name</div>
+                                <div class="text-caption text-grey-9">First Name</div>
                                 <div>{{ $page.props.auth.user.first_name }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Last Name</div>
+                                <div class="text-caption text-grey-9">Last Name</div>
                                 <div>{{ $page.props.auth.user.last_name }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Email Address </div>
+                                <div class="text-caption text-grey-9">Email Address </div>
                                 <div>{{ $page.props.auth.user.email }}</div>
                             </div>
                         </div>
                         <q-separator class="q-my-md"/>
-                        <div class="text-subtitle1">Order Details</div>
+                        <div class="text-subtitle1 text-weight-bold">Order Details</div>
                         <div class="row">
                             <div class="col-6">
-                                <div class="text-caption">Price</div>
+                                <div class="text-caption text-grey-9">Price</div>
                                 <div>{{ ticket_order.amount }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Payment Method</div>
+                                <div class="text-caption text-grey-9">Payment Method</div>
                                 <div>{{ ticket_order.payment_method }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Purchased On</div>
+                                <div class="text-caption text-grey-9">Purchased On</div>
                                 <div>{{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div>
                             </div>
                         </div>

@@ -9,11 +9,13 @@ import ReadyOrderItem from '@/Pages/Cashier/Partials/ReadyOrderItem.vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 import { useDrawerStore } from '@/Stores/DrawerStore'
+import { useOrderStore } from '@/Stores/OrderStore'
 
 defineOptions({
     layout: CashierLayout
 })
 
+const orderStore = useOrderStore()
 const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const props = defineProps({
@@ -28,13 +30,16 @@ const tab = ref('preparing')
 //     orders.value.push(order)
 // });
 
-const preparingOrders = computed(() => {
-    return orders.value.filter(order => ['pending', 'preparing'].includes(order.status))
-})
+// const preparingOrders = computed(() => {
+//     // return orders.value.filter(order => ['pending', 'preparing'].includes(order.status))
+//     return orderStore.orders.filter(order => ['pending', 'preparing'].includes(order.status))
 
-const readyOrders = computed(() => {
-    return orders.value.filter(order => !['pending', 'preparing'].includes(order.status))
-})
+// })
+
+// const readyOrders = computed(() => {
+//     // return orders.value.filter(order => !['pending', 'preparing'].includes(order.status))
+//     return orderStore.orders.filter(order => !['pending', 'preparing'].includes(order.status))
+// })
 
 const order_statuses = computed(() => {
     return props.order_constants.statuses.reduce((obj, status) => {
@@ -44,6 +49,9 @@ const order_statuses = computed(() => {
 })
 
 onMounted(() => {
+
+    orderStore.getOrders()
+
     Echo.private('orders')
     .listen('Product\\OrderPending', (data) => {
         $q.notify('new order arrived')
@@ -53,6 +61,7 @@ onMounted(() => {
             // $q.notify('fetched and ykwis bruh')
             // console.log(orderData)
             orders.value.push(orderData.data)
+            orderStore.orders.push(orderData.data)
         })
         .catch((err) => {
             console.error(err)
@@ -106,14 +115,20 @@ const fetchOrders = () => {
                 <div class="col-6 q-pb-md q-px-md">
                     <p class="text-h6">Preparing</p>
                     <q-list>
-                        <PreparingOrderItem
+                        <!-- <PreparingOrderItem
                             v-for="(order, index) in preparingOrders" 
                             :key="index"
                             :order="order" 
                             :order_statuses="order_statuses"
-                            @order_updated="fetchOrders"
+                        /> -->
+                        <PreparingOrderItem
+                            v-for="(order, index) in orderStore.preparingOrders" 
+                            :key="index"
+                            :order="order" 
+                            :order_statuses="order_statuses"
+                            @order_updated="orderStore.getOrders"
                         />
-                        <p v-if="preparingOrders.length == 0">
+                        <p v-if="orderStore.preparingOrders.length == 0">
                             No orders yet...
                         </p>
                     </q-list>
@@ -121,13 +136,22 @@ const fetchOrders = () => {
                 <div class="col-6 q-pb-md q-px-md">
                     <p class="text-h6">Ready</p>
                     <q-list>
-                        <ReadyOrderItem 
+                        <!-- <ReadyOrderItem 
                             v-for="(order, index) in readyOrders" 
                             :key="index"
                             :order="order" 
                             :order_statuses="order_statuses"
-                            @order_updated="fetchOrders"
+                        /> -->
+                        <ReadyOrderItem 
+                            v-for="(order, index) in orderStore.readyOrders" 
+                            :key="index"
+                            :order="order" 
+                            :order_statuses="order_statuses"
+                            @order_updated="orderStore.getOrders"
                         />
+                        <p v-if="orderStore.readyOrders.length == 0">
+                            No orders yet...
+                        </p>
                     </q-list>
                 </div>
             </div>
@@ -142,10 +166,10 @@ const fetchOrders = () => {
                         narrow-indicator
                     >
                         <q-tab name="preparing" no-caps class="q-px-lg" label="Preparing">
-                            <q-badge color="red" floating>4</q-badge>
+                            <q-badge color="red" floating>{{ orderStore.preparingOrders.length }}</q-badge>
                         </q-tab>
                         <q-tab name="ready" no-caps label="Ready" class="q-px-lg">
-                            <q-badge color="red" floating>2</q-badge>
+                            <q-badge color="red" floating>{{ orderStore.readyOrders.length }}</q-badge>
                         </q-tab>
                     </q-tabs>
                     <q-separator />
@@ -155,12 +179,12 @@ const fetchOrders = () => {
                         <q-tab-panel name="preparing">
                             <q-list>
                                 <PreparingOrderItem
-                                    v-for="(order, index) in preparingOrders" 
+                                    v-for="(order, index) in orderStore.preparingOrders" 
                                     :key="index"
                                     :order="order" 
                                     :order_statuses="order_statuses"
                                 />
-                                <p v-if="preparingOrders.length == 0" class="text-center">
+                                <p v-if="orderStore.preparingOrders.length == 0" class="text-center">
                                     No orders yet...
                                 </p>
                             </q-list>
@@ -168,12 +192,12 @@ const fetchOrders = () => {
                         <q-tab-panel name="ready">
                             <q-list>
                                 <ReadyOrderItem 
-                                    v-for="(order, index) in readyOrders" 
+                                    v-for="(order, index) in orderStore.readyOrders" 
                                     :key="index"
                                     :order="order" 
                                     :order_statuses="order_statuses"
                                 />
-                                <p v-if="readyOrders.length == 0" class="text-center">
+                                <p v-if="orderStore.readyOrders.length == 0" class="text-center">
                                     No orders yet...
                                 </p>
                             </q-list>

@@ -140,10 +140,13 @@ const addAttendee = () => {
                                             <q-input 
                                                 label="Full Name" 
                                                 v-model="form.ticket_holders[index].name" 
-                                                filled
+                                                outlined 
+                                                rounded
                                                 :error="!!form.errors[`ticket_holders.${index}.name`]"
-                                                :error-message="form.errors[`ticket_holders.${index}.name`]"
+                                                error-message="Name is required"
                                             />
+                                            <!-- :error-message="form.errors[`ticket_holders.${index}.name`]" -->
+
                                         </div>
                                     </div>
                                     <!-- <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn> -->
@@ -190,7 +193,7 @@ const addAttendee = () => {
                                         </q-item>
                                     </q-card>
                                 </q-list>
-                                <div class="text-h6 q-my-md">Lorem, ipsum dolor.</div>
+                                <!-- <div class="text-h6 q-my-md">Event</div>
                                 <q-item>
                                     <q-item-section avatar>
                                         <q-img
@@ -207,7 +210,7 @@ const addAttendee = () => {
                                         <q-item-label>{{ event.price * attendees }}</q-item-label>
                                         <q-item-label>{{ attendees }}</q-item-label>
                                     </q-item-section>
-                                </q-item>
+                                </q-item> -->
                             </q-card-section>
                         </q-card>
                     </div>
@@ -216,7 +219,7 @@ const addAttendee = () => {
                             <q-card-section>
                                 <div class="text-h6">Order Summary</div>
                                 <q-separator class="q-my-sm"/>
-                                <div>{{ event.date }} - {{ event.start_time }}</div>
+                                <!-- <div>{{ event.date }} - {{ event.start_time }}</div> -->
                                 <div class="row">
                                     <div class=" col">{{ form.attendees }} Admission / eTicket</div>
                                     <div class=" col text-right">{{ form.amount }}</div>
