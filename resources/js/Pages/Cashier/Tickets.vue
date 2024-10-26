@@ -2,7 +2,7 @@
 
 import CashierLayout from '@/Layouts/CashierLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { date } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 
@@ -15,9 +15,9 @@ const props = defineProps({
 })
 
 const searchTerm = ref('')
+const filter = ref('all')
 const showSearch = ref(false)
 const drawerStore = useDrawerStore()
-const filter = ref('all')
 const columns = [
     { name: 'event', align: 'center', label: 'Event', field: 'event', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'Sold', field: 'tickets_sold', sortable: true },
@@ -25,6 +25,45 @@ const columns = [
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
 ]
+
+
+const filteredEvents = computed(() => {
+  let filtered = props.events;
+    console.log('hi')
+  // Apply status filter
+  if (filter.value !== 'all') {
+    filtered = filtered.filter(event => event.status === filter.value);
+    console.log('hi')
+
+  }
+
+  // Apply search term filter
+  if (searchTerm.value) {
+    filtered = filtered.filter(event => {
+      const fullName = `${event.user.first_name} ${event.user.last_name}`.toLowerCase();
+      const email = event.user.email.toLowerCase();
+      const eventName = event.event.name.toLowerCase();
+      const search = searchTerm.value.toLowerCase();
+
+      return (
+        fullName.includes(search) ||
+        email.includes(search) ||
+        eventName.includes(search)
+      );
+    });
+  }
+
+  return filtered;
+});
+
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 5
+    // rowsNumber: xx if getting data from a server
+}
+
 </script>
 
 <template>
@@ -36,10 +75,11 @@ const columns = [
                 flat
                 :grid="$q.screen.lt.md"
                 title="Treats"
-                :rows="events"
+                :rows="filteredEvents"
                 :columns="columns"
                 row-key="name"
-                :filter="filter"
+                :pagination="initialPagination"
+
             >
                 <template v-slot:top>
                     <!-- <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
@@ -61,7 +101,7 @@ const columns = [
                     <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
                         
                     <q-select 
-                        :options="['all', 'pending', 'checked_in', 'checked_out', 'complete']" 
+                        :options="['all', 'on_sale', 'cancelled', 'event_ended']" 
                         v-model="filter"
                         outlined 
                         rounded
@@ -121,7 +161,7 @@ const columns = [
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <Link :href="route('cashier.events.check_in', props.row.id)">
-                            <q-btn no-caps unelevated color="primary">button</q-btn>
+                            <q-btn no-caps unelevated color="primary"  rounded label="View Event" />
                         </Link>
                     </q-td>
                 </template>
@@ -129,17 +169,30 @@ const columns = [
                     <q-card class="col-12 q-mb-md" bordered flat>
                         <q-card-section>
                             <div class="row">
-                                <div class="col-xs-6 col-sm-6">
+                                <div class="col-xs-12 col-sm-12">
                                     <div class="text-caption text-grey">
                                         Event
                                     </div>
-                                    {{ props.row.name }}
+                                    <q-item>
+                                        <q-item-section avatar class="items-center">
+                                            <div class="text-weight-bold text-secondary">{{ date.formatDate(props.row.date, 'MMM') }}</div>
+                                            <div>{{ date.formatDate(props.row.date, 'D') }}</div>
+                                        </q-item-section>
+                                        <q-item-section avatar>
+                                            <q-img :src="`/storage/${props.row.cover_photo}`" height="60px" width="60px" class="rounded-borders" />
+                                        </q-item-section>
+                                        <q-item-section class="items-start">
+                                            <q-item-label>{{ props.row.title }}</q-item-label>
+                                            <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  props.row.start_time}}</q-item-label>
+                                        </q-item-section>
+                                    </q-item>
                                 </div>
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
                                         Sold
                                     </div>
-                                    {{ props.row.sold }}
+                                    {{ props.row.tickets_sold + ' / ' + props.row.capacity }}
+                                    <q-linear-progress :value="props.row.tickets_sold / props.row.capacity" class="q-mt-xs" size="5px" />
                                 </div>
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
@@ -154,11 +207,11 @@ const columns = [
                                     {{ props.row.status }}
                                 </div>
                                 <div class="col-xs-12 col-sm-12">
-                                    <div class="text-caption text-grey">
+                                    <!-- <div class="text-caption text-grey">
                                         Actions
-                                    </div>
-                                    <Link :href="route('cashier.events.check_in', props.row.id)">
-                                        <q-btn label="Button" color="primary" />
+                                    </div> -->
+                                    <Link :href="route('cashier.events.check_in', props.row.id)" class="q-mt-sm">
+                                        <q-btn label="Button" color="primary" rounded unelevated />
                                     </Link>
                                 </div>
                             </div>

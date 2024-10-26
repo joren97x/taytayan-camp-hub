@@ -15,6 +15,12 @@ function toggleLeftDrawer () {
     leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
+const components = [
+    'Cashier/Tickets',
+    'Cashier/EventCheckIn',
+    'Cashier/VerifyTicketOrder'
+]
+
 
 </script>
 
@@ -72,7 +78,7 @@ function toggleLeftDrawer () {
                     </q-item>
                 </Link>
                 <Link :href="route('cashier.tickets.index')">
-                    <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Tickets'" active-class="bg-primary text-white">
+                    <q-item clickable class="rounded-borders" :active="components.includes($page.component)" active-class="bg-primary text-white">
                         <q-item-section avatar>
                             <q-icon name="confirmation_number" />
                         </q-item-section>

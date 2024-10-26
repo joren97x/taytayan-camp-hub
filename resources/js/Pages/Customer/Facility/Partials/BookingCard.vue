@@ -13,6 +13,9 @@ const rateDialog = ref(false)
 const dialog = ref(false)
 const completeBookingDialog = ref(false)
 const completeBookingForm = useForm({})
+const images = JSON.parse(props.booking.facility.images)
+const slide = ref(0)
+
 const ratingForm = useForm({
     rating: 0,
     review: ''
@@ -40,64 +43,24 @@ const submitRatingForm = () => {
 
 <template>
     <q-card bordered flat>
-        <q-item @click="dialog = true" clickable>
+        <q-item @click="dialog = true" clickable :class="$q.screen.lt.md ? 'q-pa-none' : ''">
             <q-item-section avatar>
-                <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" height="100px" width="200px" class="rounded-borders" />
+                <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" height="100px" :width="$q.screen.lt.md ? '100px' : '200px'" class="rounded-borders" />
             </q-item-section>
-            <q-item-section top>
+            <q-item-section top :class="$q.screen.lt.md ? ' q-py-md' : ''">
                 <q-item-label class="text-subtitle1">{{ booking.facility.name }}</q-item-label>
                 <q-item-label caption>{{ date.formatDate(booking.check_in, 'MMM D, YYYY') + ' - ' + date.formatDate(booking.check_out, 'MMM D, YYYY')}}</q-item-label>
                 <q-item-label caption>P{{ booking.total }}</q-item-label>
             </q-item-section>
             <q-item-section side top>
-                {{ booking.status }}
+                <div  class="q-pt-sm q-pr-sm">
+                    <q-chip size="12px">
+                        {{ booking.status }}
+                    </q-chip>
+                </div>
             </q-item-section>
         </q-item>
     </q-card>
-    <!-- <div>
-        <q-card class="q-mb-md">
-        <q-card-section>
-          <div class="row justify-between">
-            <div>
-              <div><strong>Facility:</strong> {{ booking.facility.name }}</div>
-              <div><strong>Description:</strong> {{ booking.facility.description }}</div>
-              <div><strong>Guests Allowed:</strong> {{ booking.facility.guests }}</div>
-              <div><strong>Booked Guests:</strong> {{ booking.guests }}</div>
-              <div><strong>Total Price:</strong> {{ booking.total }} USD</div>
-            </div>
-            
-            <div>
-              <q-icon name="event" /> <strong>Check-in:</strong> {{ booking.check_in }}<br />
-              <q-icon name="event" /> <strong>Check-out:</strong> {{ booking.check_out }}
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-section>
-          <q-img
-            v-for="(image, i) in JSON.parse(booking.facility.images)"
-            :key="i"
-            :src="`/storage/${image}`"
-            class="q-mr-sm"
-            style="max-width: 100px; height: 80px;"
-          />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-chip color="orange" outline>{{ booking.status }}</q-chip>
-          <q-btn color="primary" label="View Order" @click="viewOrder(booking)" />
-          <q-btn v-if="booking.status == 'checked_out'" 
-                 color="green" 
-                 label="Complete Order wf" 
-                 @click="completeBooking()"
-                 :loading="completeBookingForm.processing"
-                 :disable="completeBookingForm.processing"
-                 />
-        </q-card-actions>
-        
-      </q-card>
-    </div> -->
-
     <q-dialog
         v-model="dialog"
         transition-show="slide-up"
@@ -105,15 +68,41 @@ const submitRatingForm = () => {
         :maximized="$q.screen.lt.md"
     >
         <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="justify-end lt-md">
+            <q-card-actions class="justify-between lt-md">
+                <div class="text-h6">
+                    Booking Details
+                </div>
                 <q-btn round icon="close" v-close-popup unelevated />
             </q-card-actions>
-            <q-card-section>
+            <q-card-section class="q-py-none">
                 <div class="row q-col-gutter-md">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/>
+                        <q-carousel
+                            v-model="slide"
+                            transition-prev="slide-right"
+                            transition-next="slide-left"
+                            animated
+                            swipeable
+                            navigation
+                            arrows
+                            height="280px"
+                        >
+                            <q-carousel-slide id="carousel-container" :name="index" class="q-pa-none" v-for="(image, index) in images">
+                                <q-img 
+                                    class="fit"
+                                    :src="`/storage/${image}`"
+                                />
+                            </q-carousel-slide>
+                            
+                            <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+                                <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
+                                <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
+                            </template>
+                        </q-carousel>
+                        <!-- <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/> -->
                         <div class="text-h6">{{ booking.facility.name }}</div>
-                        Olango Island
+                        <div>{{ booking.facility.amenities }}</div>
+                        <!-- Olango Island -->
                         <!-- <q-btn class="full-width q-mt-md" label="View" color="primary" no-caps unelevated/> -->
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -151,7 +140,9 @@ const submitRatingForm = () => {
                             @click="completeBooking()"
                             :loading="completeBookingForm.processing"
                             :disable="completeBookingForm.processing"
+                            rounded
                         />
+                        <q-btn class="full-width" label="Contact Admin" no-caps color="primary" rounded />
                         <!-- <q-btn label="Cancel Booking" color="negative" class="full-width" no-caps v-if="order.status == 'pending'"/> -->
                     </div>
                 </div>

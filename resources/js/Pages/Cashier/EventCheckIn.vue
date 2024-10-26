@@ -4,8 +4,9 @@ import CashierLayout from '@/Layouts/CashierLayout.vue'
 import { ref, computed } from 'vue'
 import EventCheckinDialog from './Partials/EventCheckinDialog.vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
-import { useQuasar } from 'quasar'
-import { router } from '@inertiajs/vue3'
+import { useQuasar, date } from 'quasar'
+import { router, Link } from '@inertiajs/vue3'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: CashierLayout
@@ -16,6 +17,7 @@ const props = defineProps({
     tickets: Object
 })
 
+const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const filter = ref('')
 const columns = [
@@ -81,15 +83,25 @@ async function onCameraReady() {
 //   error.value = ''
 }
 
+const cameraError = (err) => {
+    console.log(err)
+}
+
 </script>
 
 <template>
     
-    {{ checkedIn.length }}
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card class="q-mb-md" bordered flat>
             <q-card-section>
-                <q-btn label="Go Back" no-caps icon="arrow_back" flat class="q-pa-none" />
+                <!-- <Link :href="route('cashier.tickets.index')">
+                    <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
+                </Link> -->
+                <div class="flex items-center">
+                    <q-btn rounded @click="drawerStore.toggle" no-caps class="lt-md" icon="menu" flat />
+                    <div class="text-h6">Check-in</div>
+                </div>
+
                 <q-btn 
                     label="Scan Qr Code" 
                     no-caps 
@@ -97,8 +109,22 @@ async function onCameraReady() {
                     color="primary" 
                     class="absolute-top-right q-mt-md q-mr-md" 
                     @click="showScanner = true"
+                    rounded 
+                    unelevated
                 />
-                <div class="text-h6">Check-in</div>
+                <q-item class="q-my-sm">
+                    <q-item-section avatar class="items-center">
+                        <div class="text-weight-bold text-secondary">{{ date.formatDate(event.date, 'MMM') }}</div>
+                        <div>{{ date.formatDate(event.date, 'D') }}</div>
+                    </q-item-section>
+                    <q-item-section avatar>
+                        <q-img :src="`/storage/${event.cover_photo}`" height="60px" width="60px" class="rounded-borders" />
+                    </q-item-section>
+                    <q-item-section class="items-start">
+                        <q-item-label class="text-weight-bold">{{ event.title }}</q-item-label>
+                        <q-item-label caption>{{ date.formatDate(event.date, 'MMM D, YYYY') + ' at ' +  event.start_time}}</q-item-label>
+                    </q-item-section>
+                </q-item>
                 <div>Check in attendees using their name or email</div>
                 <div class="row items-center flex">
                     <div class="col-10"><q-linear-progress :value="checkedIn.length / tickets.length" /></div>
@@ -122,7 +148,7 @@ async function onCameraReady() {
                 <template v-slot:top>
                     <p class="text-h6 q-pt-md">Attendees</p>
                     <q-space />
-                    <q-input filled dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
@@ -141,11 +167,17 @@ async function onCameraReady() {
                         <EventCheckinDialog :ticket="props.row" />
                     </q-td>
                 </template>
+                <template v-slot:no-data>
+                    <div class="full-width row flex-center q-gutter-sm text-grey" style="height: 50vh">
+                        No Attendees Found. Check again later...
+                    </div>
+                </template>
             </q-table>
         </q-card>
     </div>
     <q-dialog v-model="showScanner" persistent>
       <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
+        <!-- <q-card flat class="q-pa-md" :style="$q.screen.gt.sm ? 'max-width: 90%; max-height: 90%;' : 'max-width: 90%; max-height: 90%;'"> -->
         <q-card-actions class="justify-end">
             <q-btn icon="close" flat round dense @click="showScanner = false"/>
         </q-card-actions>
@@ -153,7 +185,8 @@ async function onCameraReady() {
             @decode="onDecode" 
             @init="onInit" 
             @detect="onDetect"
-             @camera-on="onCameraReady"
+            @error="cameraError"
+            @camera-on="onCameraReady"
         />
         <q-spinner v-if="loading" />
       </q-card>

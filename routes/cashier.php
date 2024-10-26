@@ -33,6 +33,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
 
     // Route::get('/cashier/events/{event}', [TicketOrderController::class, 'dashboard'])->name('cashier.events.dashboard');
     Route::get('/cashier/events/check-in/{event}', [TicketOrderController::class, 'check_in'])->name('cashier.events.check_in');
+    Route::patch('/cashier/tickets/undo/{ticket}', [TicketController::class, 'undo'])->name('cashier.tickets.undo');
     // Route::get('/cashier/tickets', [TicketOrderController::class, 'index'])->name('cashier.tickets.index');
     Route::resource('/cashier/tickets', TicketController::class)->names([
         'index' => 'cashier.tickets.index',

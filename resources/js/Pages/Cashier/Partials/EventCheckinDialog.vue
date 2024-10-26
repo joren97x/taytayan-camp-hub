@@ -21,6 +21,14 @@ const checkIn = () => {
     })
 }
 
+const undo = () => {
+    form.patch(route('cashier.tickets.undo', props.ticket.id), {
+        onSuccess: () => {
+            
+        }
+    })
+}
+
 const checkOut = () => {
     form.patch(route('cashier.tickets.check_out', props.ticket.id), {
         onSuccess: () => {
@@ -34,8 +42,29 @@ const checkOut = () => {
 </script>
 
 <template>
-    <div>
-        <q-btn no-caps color="primary" unelevated @click="checkInDialog = true">Check-in</q-btn>
+    <div :class="$q.screen.lt.md ? 'q-mt-md' : ''">
+        <q-btn 
+            no-caps 
+            color="primary" 
+            unelevated 
+            @click="checkIn"
+            label="Check-in"
+            rounded
+            :loading="form.processing"
+            :disable="form.processing"
+            v-if="ticket.status != 'used'"
+        />
+        <q-btn 
+            round 
+            icon="check" 
+            color="primary" 
+            unelevated 
+            size="sm"
+            v-else
+            @click="undo"
+            :loading="form.processing"
+            :disable="form.processing"
+        />
     </div>
     <q-dialog v-model="checkInDialog">
         <q-card>

@@ -19,6 +19,14 @@ class TicketController extends Controller
         return back();
     }
 
+    public function undo(Ticket $ticket)
+    {
+        $ticket->update([
+            'status' => Ticket::STATUS_SOLD
+        ]);
+        return back();
+    }
+
     public function index()
     {
         return Inertia::render('Cashier/Tickets', [

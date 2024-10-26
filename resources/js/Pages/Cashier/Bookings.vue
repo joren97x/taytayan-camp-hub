@@ -71,7 +71,6 @@ const filteredBookings = computed(() => {
 });
 
 const showSearch = ref(false)
-const filterBookings = ref('all')
 const initialPagination = {
     sortBy: 'desc',
     descending: false,

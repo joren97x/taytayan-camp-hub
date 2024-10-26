@@ -330,6 +330,7 @@ const submitStatusForm = () => {
         transition-hide="slide-down"
         :maximized="$q.screen.lt.md"
         v-model="changeStatusDialog"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
         <q-card>
             <q-card-section>
@@ -353,6 +354,7 @@ const submitStatusForm = () => {
                     :loading="statusForm.processing"
                     :disable="statusForm.processing"
                     unelevated 
+                    rounded
                 />
             </q-card-actions>
         </q-card>

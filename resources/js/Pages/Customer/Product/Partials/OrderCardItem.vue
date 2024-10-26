@@ -2,6 +2,7 @@
 import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { onMounted, ref } from 'vue'
+import OrderedItems from '@/Components/OrderedItems.vue'
 // import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
@@ -191,16 +192,17 @@ Echo.private(`orders.${order.value.id}`)
         transition-hide="slide-down"
     >   
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-section>
-                <p class="text-h6">Order Details</p>
-                <q-separator/>
-                <q-btn 
-                    icon="close" 
-                    v-close-popup
-                    round
-                    class="absolute-top-right q-mt-sm q-mr-sm"
-                    unelevated
-                />
+            <q-card-actions class="justify-between">
+                <div class="text-h6">Order Details</div>
+                    <q-btn  
+                        icon="close" 
+                        v-close-popup
+                        round
+                        class="absolute-top-right"
+                        unelevated
+                    />
+            </q-card-actions>
+            <q-card-section class="q-py-none">
                 <q-stepper
                     flat
                     v-model="step"
@@ -210,6 +212,7 @@ Echo.private(`orders.${order.value.id}`)
                     alternative-labels
                     active-icon="hourglass_top"
                     :vertical="$q.screen.lt.md"
+                    class="q-pa-none"
                 >
                     <div class="text-h6">Status</div>
                     <q-step
@@ -234,59 +237,18 @@ Echo.private(`orders.${order.value.id}`)
                 <div class="text-h6">Items</div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                        <!-- <FoodCardItem :item="product" /> -->
-                        <q-item v-for="item in order.cart_products">
-                            <q-item-section avatar>
-                                <q-img 
-                                    :src="`/storage/${item.product.photo}`"
-                                    height="70px"
-                                    width="70px"
-                                    fit="contain"
-                                    class="q-mx-md"
-                                />
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label>
-                                    {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
-                                </q-item-label>
-                                <template 
-                                    v-for="(modifier, index) in item.grouped_modifiers" 
-                                    :key="index"
-                                >
-                                    <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
-                                    <q-item-label 
-                                        caption 
-                                        v-for="(modifier_item, index) in modifier.modifier_items" 
-                                        :key="index"
-                                    >
-                                        {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
-                                    </q-item-label>
-                                    
-                                </template>
-                                <q-item-label caption v-if="item.special_instruction">
-                                    Note: {{ item.special_instruction }}
-                                </q-item-label>
-                            </q-item-section>
-                            <q-item-section side>
-                                P{{ item.total }}
-                            </q-item-section>
-                        </q-item>
-                        <q-separator/>
-                        <div class="row">
-                            <q-space/>
-                            <div class="q-mt-md q-mr-md text-subtitle1">
-                                <span class="q-mr-md">Subtotal</span> P{{ order.subtotal }}
-                            </div>
-                        </div>
+                        elow
+                        <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                         <div style="height: 250px; position: relative" class="full-width bg-grey-3">
+                            wat
                             <div v-if="order.driver">
                                 <!-- {{ order.driver }} -->
                                 <q-item class="bg-grey">
                                     <q-item-section avatar>
                                         <q-avatar color="secondary">
-                                            <q-img :src="`/storage/${order.driver.profile_pic}`" v-if="order.driver.profile_pic"/>
+                                            <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
                                             <div v-else>{{ order.driver.first_name[0] }}</div>
                                         </q-avatar>
                                     </q-item-section>
@@ -295,7 +257,7 @@ Echo.private(`orders.${order.value.id}`)
                                         <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
-                                {{ order }}
+                                <!-- {{ order }} -->
                             </div>
                         </div>
                         <Link :href="route('product.checkout', { cart_id: order.cart_id })">
