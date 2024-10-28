@@ -1,13 +1,16 @@
 <script setup>
 
 import { ref, watch, onMounted } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import NavLinks from '@/Components/Customer/NavLinks.vue'
 import Footer from '@/Components/Footer.vue'
 import { usePage } from '@inertiajs/vue3'
+import NotificationItem from './Partials/NotificationItem.vue'
+import { useNotificationStore } from '@/Stores/NotificationStore'
 
+const notificationStore = useNotificationStore()
 const $q = useQuasar()
 const page = usePage()
 const rightDrawerOpen = ref(false)
@@ -24,19 +27,19 @@ import axios from 'axios'
 
 onMounted(() => {
 
-    axios.get(route('customer.notifications'))
-    .then((res) => {
-        // console.log(res)
-        res.data.notifications.forEach(el => {
-            notifications.value.push(el)
-            if(!el.is_read) {
-                notification_badge.value++
-            }
-        })
-    })
-    .catch((err) => {
-        console.error(err)
-    })
+    // axios.get(route('customer.notifications'))
+    // .then((res) => {
+    //     // console.log(res)
+    //     res.data.notifications.forEach(el => {
+    //         notifications.value.push(el)
+    //         if(!el.is_read) {
+    //             notification_badge.value++
+    //         }
+    //     })
+    // })
+    // .catch((err) => {
+    //     console.error(err)
+    // })
 
     if(page.props.auth.user) {
         Echo.private(`notifications.${page.props.auth.user.id}`)
@@ -72,7 +75,6 @@ watch(btnToggle, () => {
         }
     })
 })
-
 
 
 </script>
@@ -137,18 +139,15 @@ watch(btnToggle, () => {
                         <q-btn icon="close" v-else unelevated @click="drawer = false" class="lt-md" />
                     </div>
                     <div v-else>
-                        
                         <!-- <q-btn flat icon="search" round></q-btn> -->
                         <q-btn flat dense round class="q-mr-md gt-sm">
                             <q-icon size="2em" name="notifications" />
                             <!-- uncomment soon -->
-                            <!-- <q-badge color="red" floating>{{ notification_badge }}</q-badge> -->
-                            <q-menu fit>
-                                <q-list style="min-width: 400px">
+                            <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">{{ notificationStore.unreadCount }}</q-badge>
+                            <q-menu @show="notificationStore.readNotifications()">
+                                <q-list style="max-width: 500px; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
                                     <q-item class="text-h6">Notifications</q-item>
-                                    <q-item clickable v-for="notification in notifications" :class="!notification.is_clicked ? 'bg-grey-4' : ''">
-                                        <q-item-section>{{ notification }}</q-item-section>
-                                    </q-item>
+                                    <NotificationItem :notification="notification" v-for="notification in notificationStore.notifications" />
                                 </q-list>
                             </q-menu>
                         </q-btn>
@@ -414,6 +413,8 @@ watch(btnToggle, () => {
     margin: 0 auto;
     /* padding: 0 16px;  */
 }
+
+
   
 .navlink {
     text-decoration: none;
@@ -439,5 +440,7 @@ watch(btnToggle, () => {
 .slide-down-active {
   transition: transform 0.3s ease;
 }
+
+
 
 </style>

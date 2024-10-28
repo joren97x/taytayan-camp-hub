@@ -16,7 +16,8 @@ export const useOrderStore = defineStore('orders', () => {
         return orders.value.filter(order => !['pending', 'preparing'].includes(order.status))
     })
 
-    function getOrders() {
+    const getOrders = () => {
+        console.log('goo')
         axios.get(route('cashier.orders.get_orders'))
         .then((res) => {
             orders.value = res.data
@@ -25,6 +26,19 @@ export const useOrderStore = defineStore('orders', () => {
             console.error(err)
         })
     }
+
+    Echo.private('orders')
+    .listen('Product\\OrderStatusUpdated', (data) => {
+        console.log('data')
+        axios.get(route('cashier.orders.get_orders'))
+        .then((res) => {
+            alert('from order store')
+            orders.value = res.data
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    })
   
     return { orders, getOrders, readyOrders, preparingOrders }
   })

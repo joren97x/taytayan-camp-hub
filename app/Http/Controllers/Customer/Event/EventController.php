@@ -16,7 +16,7 @@ class EventController extends Controller
     {
         //
         return Inertia::render('Customer/Event/Index', [
-            'events' => Event::all()
+            'events' => Event::get()
         ]);
     }
 

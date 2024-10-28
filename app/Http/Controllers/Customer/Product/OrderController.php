@@ -129,4 +129,22 @@ class OrderController extends Controller
         return back();
     }
 
+    public function show(string $id, CartService $cartService)
+    {
+
+        $order = Order::with('user')->find($id);
+
+        if($order->user_id != auth()->id()) {
+            abort(404);
+        }
+
+        $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+        $order->cart_products = $result['cart_products'];
+        $order->subtotal = $result['subtotal'];
+        
+        return Inertia::render('Customer/Product/ShowOrder', [
+            'order' => $order
+        ]);
+    }
+
 }

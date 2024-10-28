@@ -6,6 +6,7 @@ use App\Http\Middleware\CustomerMiddleware;
 use App\Http\Middleware\DriverMiddleware;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\UpgradeToHttpsUnderNgrok;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->web(append: [
             HandleInertiaRequests::class,
+            UpgradeToHttpsUnderNgrok::class,
         ]);
 
         $middleware->alias([

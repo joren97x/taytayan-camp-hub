@@ -74,7 +74,7 @@ const submitRatingForm = () => {
                 </div>
                 <q-btn round icon="close" v-close-popup unelevated />
             </q-card-actions>
-            <q-card-section class="q-py-none">
+            <q-card-section :class="$q.screen.lt.md ? 'q-py-none' : ''">
                 <div class="row q-col-gutter-md">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <q-carousel
@@ -108,7 +108,7 @@ const submitRatingForm = () => {
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
                         <div class="text-h6">Booking Details</div>
-                        <q-separator class="q-my-md"/>
+                        <!-- <q-separator class="q-my-md"/> -->
                         <div class="row q-col-gutter-md">
                             <div class="col-6">
                                 <div class="text-caption">Check-in</div>
@@ -142,7 +142,9 @@ const submitRatingForm = () => {
                             :disable="completeBookingForm.processing"
                             rounded
                         />
-                        <q-btn class="full-width" label="Contact Admin" no-caps color="primary" rounded />
+                        <Link :href="route('conversations.chat_user', 1)">
+                            <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
+                        </Link>
                         <!-- <q-btn label="Cancel Booking" color="negative" class="full-width" no-caps v-if="order.status == 'pending'"/> -->
                     </div>
                 </div>

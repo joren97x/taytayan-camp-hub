@@ -1,7 +1,7 @@
 <script setup>
 
 import { Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 import { useOrderStore } from '@/Stores/OrderStore'
@@ -20,6 +20,11 @@ const components = [
     'Cashier/EventCheckIn',
     'Cashier/VerifyTicketOrder'
 ]
+
+onMounted(() => {
+    console.log('hii')
+    orderStore.getOrders()
+})
 
 
 </script>

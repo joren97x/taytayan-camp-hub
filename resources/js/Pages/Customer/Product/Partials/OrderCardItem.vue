@@ -237,12 +237,10 @@ Echo.private(`orders.${order.value.id}`)
                 <div class="text-h6">Items</div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                        elow
                         <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                         <div style="height: 250px; position: relative" class="full-width bg-grey-3">
-                            wat
                             <div v-if="order.driver">
                                 <!-- {{ order.driver }} -->
                                 <q-item class="bg-grey">

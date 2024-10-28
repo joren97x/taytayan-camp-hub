@@ -101,6 +101,8 @@ class ConversationController extends Controller
         //     $query->where('user_id', auth()->id());
         // })->first();
 
+        // dd($user);
+
         $existing_conversation = Conversation::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->whereHas('participants', function ($query) {

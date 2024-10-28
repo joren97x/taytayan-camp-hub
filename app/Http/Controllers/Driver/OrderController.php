@@ -104,7 +104,11 @@ class OrderController extends Controller
     {
         $order = Order::with('user')->find($id);
 
-        $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+        // $result = $cartService->getCartLineItemsAndSubtotal(false, $order->cart_id);
+        // $order->cart_products = $result['cart_products'];
+        // $order->subtotal = $result['subtotal'];
+
+        $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
         $order->cart_products = $result['cart_products'];
         $order->subtotal = $result['subtotal'];
 

@@ -34,7 +34,7 @@ class OrderController extends Controller
         }
 
         return Inertia::render('Cashier/Orders', [
-            'orders' => $orders,
+            // 'orders' => $orders,
             'order_constants' => Order::getConstants()
         ]);
     }
@@ -74,8 +74,8 @@ class OrderController extends Controller
 
     public function update_status(string $id, Request $request, CartService $cartService) 
     {
+
         $order = Order::find($id);
-        // dd($order);
   
         $request->validate([
             'status' => 'required'
@@ -86,7 +86,11 @@ class OrderController extends Controller
         $order->update();
 
         // dd($order);
-        event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        // event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        event(new OrderStatusUpdated($order));
+        if($order->mode == 'delivery') {
+            event(new OrderReadyForDelivery($order));
+        }
 
         // switch($request->status) {
         //     case Order::STATUS_PREPARING:
@@ -128,7 +132,8 @@ class OrderController extends Controller
         $order->waiting_time = $local_time->addMinutes((int)$request->waiting_time);
         $order->status = $request->status;
         $order->update();
-        event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        // event(new OrderStatusUpdated($order, true, app(CartService::class)));
+        event(new OrderStatusUpdated($order));
 
         return back();
     }   

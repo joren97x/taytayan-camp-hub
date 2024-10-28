@@ -37,7 +37,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified', 'customer'])->group(function () {
 
     Route::put('/add-address', [CustomerController::class, 'add_address'])->name('add-address');
-    Route::get('/customer-notifications', [NotificationController::class, 'index'])->name('customer.notifications');
+    Route::put('/notifications/read', [NotificationController::class, 'read_notifications'])->name('customer.notifications.read_notifications');
+    Route::put('/notifications/click', [NotificationController::class, 'click'])->name('customer.notifications.click');
+    Route::resource('/notifications', NotificationController::class)->names([
+        'index' => 'customer.notifications.index',
+        'destroy' => 'customer.notifications.destroy',
+        'update' => 'customer.notifications.update'
+    ]);
     Route::get('/profile', [ViewController::class, 'profile'])->name('customer.profile');
     require __DIR__.'/Customer/product.php';
     require __DIR__.'/Customer/event.php';

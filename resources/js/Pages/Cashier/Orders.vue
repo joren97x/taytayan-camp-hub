@@ -50,22 +50,23 @@ const order_statuses = computed(() => {
 
 onMounted(() => {
 
-    orderStore.getOrders()
+    // orderStore.getOrders()
 
     Echo.private('orders')
     .listen('Product\\OrderPending', (data) => {
         $q.notify('new order arrived')
+        orderStore.getOrders()
         console.log(data)
-        axios.get(route('cashier.orders.show', data.order.id))
-        .then((orderData) => {
-            // $q.notify('fetched and ykwis bruh')
-            // console.log(orderData)
-            orders.value.push(orderData.data)
-            orderStore.orders.push(orderData.data)
-        })
-        .catch((err) => {
-            console.error(err)
-        })
+        // axios.get(route('cashier.orders.show', data.order.id))
+        // .then((orderData) => {
+        //     // $q.notify('fetched and ykwis bruh')
+        //     // console.log(orderData)
+        //     orders.value.push(orderData.data)
+        //     orderStore.orders.push(orderData.data)
+        // })
+        // .catch((err) => {
+        //     console.error(err)
+        // })
     })
     // .listen('Product\\OrderStatusUpdated', (data) => {
     //     console.log('data')
@@ -80,13 +81,7 @@ onMounted(() => {
 })
 
 const fetchOrders = () => {
-    axios.get(route('cashier.orders.get_orders'))
-        .then((res) => {
-            orders.value = res.data
-        })
-        .catch((err) => {
-            console.error(err)
-        })
+    alert('go fetch nigga')
 }
 
 // axios.get(route('cashier.orders.show', 12))
@@ -125,8 +120,8 @@ const fetchOrders = () => {
                             v-for="(order, index) in orderStore.preparingOrders" 
                             :key="index"
                             :order="order" 
+                            @order_updated="orderStore.getOrders()"
                             :order_statuses="order_statuses"
-                            @order_updated="orderStore.getOrders"
                         />
                         <p v-if="orderStore.preparingOrders.length == 0">
                             No orders yet...
@@ -146,8 +141,8 @@ const fetchOrders = () => {
                             v-for="(order, index) in orderStore.readyOrders" 
                             :key="index"
                             :order="order" 
+                            @order_updated="orderStore.getOrders()"
                             :order_statuses="order_statuses"
-                            @order_updated="orderStore.getOrders"
                         />
                         <p v-if="orderStore.readyOrders.length == 0">
                             No orders yet...
@@ -182,6 +177,7 @@ const fetchOrders = () => {
                                     v-for="(order, index) in orderStore.preparingOrders" 
                                     :key="index"
                                     :order="order" 
+                                    @order_updated="orderStore.getOrders()"
                                     :order_statuses="order_statuses"
                                 />
                                 <p v-if="orderStore.preparingOrders.length == 0" class="text-center">
@@ -195,6 +191,7 @@ const fetchOrders = () => {
                                     v-for="(order, index) in orderStore.readyOrders" 
                                     :key="index"
                                     :order="order" 
+                                    @order_updated="orderStore.getOrders()"
                                     :order_statuses="order_statuses"
                                 />
                                 <p v-if="orderStore.readyOrders.length == 0" class="text-center">

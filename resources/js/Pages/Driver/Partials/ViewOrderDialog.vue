@@ -3,6 +3,7 @@
 import { ref } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import OrderedItems from '@/Components/OrderedItems.vue'
 
 const props = defineProps({
     order: Object
@@ -51,87 +52,25 @@ const completeOrder = () => {
             <q-card-section class="row q-col-gutter-md">
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                     <div class="text-h6">Customer</div>
-                        <!-- <div class="row" style="position: relative">
-                            <div class="col-6">
-                                Name
-                            </div>
-                            <div class="col-6">
-                                Contact Number
-                            </div>
-                            <div class="col-6">
-                                Address
-                            </div>
-                            <div class="col-6">
-                                Payment Method
-                            </div>
-                            <div class="col-6">
-                                Address
-                            </div>
-                            <q-avatar size="100px" square class="absolute-top-right">
+                    <q-item class="q-py-none">
+                        <q-item-section avatar>
+                            <q-avatar size="100px" square>
                                 <q-img :src="`/storage/${order.user.profile_pic}`"/>
                             </q-avatar>
-                        </div> -->
-                        <q-item class="q-py-none">
-                            <q-item-section avatar>
-                                <q-avatar size="100px" square>
-                                    <q-img :src="`/storage/${order.user.profile_pic}`"/>
-                                </q-avatar>
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-                                <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
-                                <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
-                            </q-item-section>
-                            <q-item-section side>
-                                <Link :href="route('conversations.chat_user', order.user.id)">
-                                    <q-btn round icon="message" unelevated color="primary" />
-                                </Link>
-                            </q-item-section>
-                        </q-item>
-                    <div class="text-h6">Items</div>
-                    <q-item v-for="item in order.cart_products">
-                        <q-item-section avatar>
-                            <q-img 
-                                :src="`/storage/${item.product.photo}`"
-                                height="70px"
-                                width="70px"
-                                fit="contain"
-                                class="q-mx-md"
-                            />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>
-                                {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
-                            </q-item-label>
-                            <template 
-                                v-for="(modifier, index) in item.grouped_modifiers" 
-                                :key="index"
-                            >
-                                <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
-                                <q-item-label 
-                                    caption 
-                                    v-for="(modifier_item, index) in modifier.modifier_items" 
-                                    :key="index"
-                                >
-                                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
-                                </q-item-label>
-                                
-                            </template>
-                            <q-item-label caption v-if="item.special_instruction">
-                                Note: {{ item.special_instruction }}
-                            </q-item-label>
+                            <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
+                            <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
+                            <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
-                            P{{ item.total }}
+                            <Link :href="route('conversations.chat_user', order.user.id)">
+                                <q-btn round icon="message" unelevated color="primary" />
+                            </Link>
                         </q-item-section>
                     </q-item>
-                    <q-separator/>
-                    <div class="row">
-                        <q-space/>
-                        <div class="q-mt-md q-mr-md text-subtitle1">
-                            <span class="q-mr-md">Subtotal</span> P{{ order.subtotal }}
-                        </div>
-                    </div>
+                    <div class="text-h6">Items</div>
+                    <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />  
                 </div>
                 <div class="col-4 col-xs-12 col-sm-12 col-lg-4 col-md-4 col-xl-4">
                     <div class="text-h6">Order Details</div>

@@ -22,13 +22,14 @@ class OrderStatusUpdated implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(Order $order, $includeDetails, CartService $cartService)
+    // public function __construct(Order $order, $includeDetails, CartService $cartService)
+    public function __construct(Order $order)
     {
         //
         // dd($order);
         $this->order = $order;
-        $this->includeDetails = $includeDetails;
-        $this->cartService = $cartService;
+        // $this->includeDetails = $includeDetails;
+        // $this->cartService = $cartService;
         // Conditionally load relations only when needed
        
     }
@@ -45,35 +46,31 @@ class OrderStatusUpdated implements ShouldBroadcast
         ];
     }
 
-    public function broadcastWith(): array
-    {
-        $data = [
-            'id' => $this->order->id,
-            'user_id' => $this->order->user_id,
-            'cart_id' => $this->order->cart_id,
-            'waiting_time' => $this->order->waiting_time,
-            'status' => $this->order->status,
-            'payment_method' => $this->order->payment_method,
-            'mode' => $this->order->mode,
-            'completed_at' => $this->order->completed_at,
-            'deleted_at' => $this->order->deleted_at,
-            'created_at' => $this->order->created_at,
-            'updated_at' => $this->order->updated_at,
-            'joren' => 'joreennn'
-        ];
+    // public function broadcastWith(): array
+    // {
+    //     $data = [
+    //         'id' => $this->order->id,
+    //         'user_id' => $this->order->user_id,
+    //         'cart_id' => $this->order->cart_id,
+    //         'waiting_time' => $this->order->waiting_time,
+    //         'status' => $this->order->status,
+    //         'payment_method' => $this->order->payment_method,
+    //         'mode' => $this->order->mode,
+    //         'completed_at' => $this->order->completed_at,
+    //         'deleted_at' => $this->order->deleted_at,
+    //         'created_at' => $this->order->created_at,
+    //         'updated_at' => $this->order->updated_at,
+    //         'joren' => 'joreennn'
+    //     ];
      
-        // Conditionally add cart_products and subtotal
-        if ($this->includeDetails) {
+    //     if ($this->includeDetails) {
 
-            $result = $this->cartService->getCartLineItemsAndSubtotal($this->order->cart_id);
-            $data['cart_products'] = $result['cart_products'];
-            $data['subtotal'] = $result['subtotal'];
+    //         $result = $this->cartService->getCartLineItemsAndSubtotal($this->order->cart_id);
+    //         $data['cart_products'] = $result['cart_products'];
+    //         $data['subtotal'] = $result['subtotal'];
+    //     }
 
-            // $data['cart_products'] = $this->order->cart_products;
-            // $data['subtotal'] = $this->order->subtotal;
-        }
-
-        return ['order' => $data];
-    }
+    //     return ['order' => $data];
+    // }
 
 }

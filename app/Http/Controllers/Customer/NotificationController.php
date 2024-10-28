@@ -15,4 +15,48 @@ class NotificationController extends Controller
             'notifications' => Notification::where('user_id', $request->user()->id)->get()
         ]);
     }
+
+    public function update(Notification $notification)
+    {
+        // dd('bruh');
+        $notification->update([
+            // 'is_read' => !$notification->is_read,
+            'is_clicked' => !$notification->is_clicked
+        ]);
+
+        return back();
+
+    }
+
+    public function destroy(Notification $notification, Request $request)
+    {
+        // dd($notification);
+        $notification->delete();
+
+        return back();
+    }
+
+    public function read_notifications()
+    {
+        Notification::where('is_read', false)
+        ->where('user_id', auth()->id())
+        ->update([
+            'is_read' => true
+        ]);
+
+        return response()->json(200);
+    }
+
+    public function click(Notification $notification)
+    {
+        // dd('bruh');
+        $notification->update([
+            // 'is_read' => !$notification->is_read,
+            'is_clicked' => true
+        ]);
+
+        return back();
+
+    }
+
 }
