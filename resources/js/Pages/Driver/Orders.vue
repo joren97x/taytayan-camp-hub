@@ -51,6 +51,8 @@ Echo.private('orders')
         .catch((err) => {
             console.error(err)
         })
+
+        
     })
 
 </script>

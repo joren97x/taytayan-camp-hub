@@ -137,7 +137,8 @@ const goToRoom = (roomId) => {
           :key="room.id"
           class="col-12 col-md-4 q-pa-md"
         >
-          <q-img :src="room.image" class="q-mb-md" style="height: 150px;" />
+          <!-- <q-img :src="room.image" class="q-mb-md" style="height: 150px;" /> -->
+           <div class="bg-grey" style="height: 150px; width: 100%;"></div>
           <h6>{{ room.name }}</h6>
           <p>{{ room.description }}</p>
           <q-btn flat color="primary" @click="goToRoom(room.id)" label="View Room" />

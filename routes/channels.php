@@ -17,6 +17,10 @@ Broadcast::channel('notifications.{id}', function (User $user, $user_id) {
     return $user->id == $user_id;
 });
 
+// Broadcast::channel('notifications', function (User $user, $user_id) {
+//     return $user->id == $user_id;
+// });
+
 Broadcast::channel('orders', function(User $user) {
     // ang maka listen ra ani kay ang cashier ug driver
     return true;

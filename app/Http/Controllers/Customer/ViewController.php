@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Conversation;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\TicketOrder;
 use App\Models\User;
+use App\Services\CartService;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,9 +24,105 @@ class ViewController extends Controller
         ]);
     }
 
-    public function profile(Request $request)
+    public function profile(Request $request, CartService $cartService)
     {
+
+        $active_orders = Order::with('driver')
+        ->whereIn('status', [
+            Order::STATUS_PENDING,
+            Order::STATUS_READY_FOR_DELIVERY,
+            Order::STATUS_DELIVERED,
+            Order::STATUS_READY_FOR_PICKUP,
+            Order::STATUS_DELIVERING,
+            Order::STATUS_PREPARING,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+        $past_orders = Order::with('driver')
+        ->whereIn('status', [
+            Order::STATUS_CANCELLED,
+            Order::STATUS_COMPLETED,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+        $orders = collect([$active_orders, $past_orders]);
+
+        $orders->each(function($order_list) use ($cartService) {
+            foreach ($order_list as $order) {
+                // Get cart products and subtotal
+                $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+                $order->cart_products = $result['cart_products'];
+                $order->subtotal = $result['subtotal'];
+
+                // Fetch conversation between user and driver if a driver is assigned
+                if ($order->driver) {
+                    $order->conversation_id = Conversation::with('participants')
+                        ->whereHas('participants', function ($query) {
+                            $query->where('user_id', auth()->id());
+                        })
+                        ->whereHas('participants', function ($query) use ($order) {
+                            $query->where('user_id', $order->driver_id);
+                        })
+                        ->first();
+                }
+            }
+        });
+
+        $active_bookings = Booking::with('facility')->whereIn('status', [
+            Booking::STATUS_CHECKED_IN,
+            Booking::STATUS_CONFIRMED,
+            Booking::STATUS_PENDING,
+            Booking::STATUS_CHECKED_OUT,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+        $past_bookings = Booking::with('facility')->whereIn('status', [
+            Booking::STATUS_CANCELLED,
+            Booking::STATUS_COMPLETE,
+        ])
+        ->where('user_id', auth()->id())
+        ->get();
+
+
+        $today = Carbon::today();
+        $active_ticket_orders = TicketOrder::with([
+            'event', 
+            'ticket_order_items', 
+            'ticket_order_items.ticket.ticket_holder',
+        ])
+        ->whereHas('event', function($query) use ($today) {
+            $query->where('date', '>=', $today);
+        })
+        ->where('user_id', auth()->id())
+        ->get();
+
+        $past_ticket_orders = TicketOrder::with([
+            'event', 
+            'ticket_order_items', 
+            'ticket_order_items.ticket.ticket_holder',
+        ])
+        ->whereHas('event', function($query) use ($today) {
+            $query->where('date', '<', $today);
+        })
+        ->where('user_id', auth()->id())
+        ->get();
+
         return Inertia::render('Customer/Profile', [
+            'active_orders' => $active_orders,
+            'past_orders' => $past_orders,
+            'active_bookings' => $active_bookings,
+            'past_bookings' => $past_bookings,
+            'active_ticket_orders' =>  $active_ticket_orders,
+            'past_ticket_orders' =>  $past_ticket_orders,
+        ]);
+    }
+
+    public function edit_profile(Request $request)
+    {
+        return Inertia::render('Customer/EditProfile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);

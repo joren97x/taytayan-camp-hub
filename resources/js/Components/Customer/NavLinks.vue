@@ -3,8 +3,11 @@
 import { Link } from '@inertiajs/vue3'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
 
 const cartLength = ref(0)
+const page = usePage()
 
 onMounted(() => {
     axios.get(route('customer.cart.length'))
@@ -16,6 +19,17 @@ onMounted(() => {
         console.error(err)
     })
 })
+
+
+const logout = ()=> {
+    router.post(route('logout'), {}, {
+        onBefore: () => {
+            console.log('bruh')
+            Echo.leave(`notifications.${page.props.auth.user.id}`)
+        }
+    })
+}
+
 </script>
 <template>
     <q-list>
@@ -51,7 +65,7 @@ onMounted(() => {
         <Link :href="route('customer.tickets.index')" class="nav-link">
             <q-item clickable class="rounded-borders">
                 <q-item-section avatar>
-                    <q-icon name="logout" />
+                    <q-icon name="check" />
                 </q-item-section>
                 <q-item-section>Tickets</q-item-section>
             </q-item>
@@ -82,14 +96,14 @@ onMounted(() => {
                 <q-item-section>Profile</q-item-section>
             </q-item>
         </Link>
-        <Link :href="route('logout')" method="post" class="nav-link">
-            <q-item clickable class="rounded-borders">
+        <!-- <Link :href="route('logout')" method="post" class="nav-link"> -->
+            <q-item clickable class="rounded-borders" @click="logout()">
                 <q-item-section avatar>
                     <q-icon name="logout" />
                 </q-item-section>
                 <q-item-section>Logout</q-item-section>
             </q-item>
-        </Link>
+        <!-- </Link> -->
     </q-list>
 </template>
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Customer\CustomerController;
+// use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Driver\OrderController;
 use App\Http\Controllers\Driver\ViewController;
 use Illuminate\Support\Facades\Route;

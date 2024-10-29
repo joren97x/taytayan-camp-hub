@@ -1,7 +1,7 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import OrderCardItem from './Partials/OrderCardItem.vue'
+import Orders from '../Partials/Orders.vue';
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
@@ -11,8 +11,7 @@ defineOptions({
 
 defineProps({
     active_orders: Object,
-    past_orders: Object,
-    order_constants: Object
+    past_orders: Object
 })
 
 const showPastOrders = ref(false)
@@ -26,27 +25,7 @@ const showPastOrders = ref(false)
             <q-card-section>
                 <div class="row reverse justify-center">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <div class="text-h6">Orders</div>
-                        <OrderCardItem v-for="order in active_orders" :order="order"/>
-                        <div v-show="active_orders.length <= 0">
-                            <div class="flex items-center justify-center" style="height: 100px;">
-                                <q-icon name="confirmation_number" size="50px"/>
-                            </div>
-                            <div class="text-subtitle1 text-center">No Upcoming Orders</div>
-                        </div>
-                        <div class="flex justify-center q-mt-md">
-                                <q-btn label="See Past Orders" @click="showPastOrders = !showPastOrders" no-caps flat  color="primary"/>
-                            </div>
-                        <div v-show="showPastOrders">
-                            <div class="text-h6 q-mt-md">Past Orders</div>
-                            <OrderCardItem v-for="order in past_orders" :order="order"/>
-                            <div v-show="past_orders.length <= 0">
-                                <div class="flex items-center justify-center" style="height: 100px;">
-                                    <q-icon name="confirmation_number" size="50px"/>
-                                </div>
-                                <div class="text-subtitle1 text-center">No Past Orders</div>
-                            </div>
-                        </div>
+                        <Orders :active_orders="active_orders" :past_orders="past_orders" />
                     </div>
                 </div>
             </q-card-section>

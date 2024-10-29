@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 const page = usePage()
@@ -8,13 +8,31 @@ export const useNotificationStore = defineStore('notifications', () => {
 
     const notifications = ref([])
     const unreadCount = computed(() => {
-        return notifications.value.filter(notification => !notification.is_read).length;
-    });
+        return notifications.value.filter(notification => !notification.is_read).length
+    })
 
     onMounted(() => {
         console.log('from on mounted notifications store')
-        fetchNotifications()
+        if(page.props.auth.user) {
+            fetchNotifications()
+            initializeNotificationListener()
+        }
     })
+
+    watch(() => page.props.auth.user, (newUser, oldUser) => {
+        if (newUser && !oldUser) {
+            fetchNotifications()
+            initializeNotificationListener()
+        }
+    })
+
+    const initializeNotificationListener = () => {
+        Echo.private(`notifications.${page.props.auth.user.id}`)
+            .listen('Notify', (data) => {
+                notifications.value.unshift(data.notification)
+                console.log('New notification received:', data.notification)
+            })
+    }
 
     const fetchNotifications = () => {
         // notifications.value = []
@@ -46,18 +64,5 @@ export const useNotificationStore = defineStore('notifications', () => {
         })
     }
 
-    // Echo.private('orders')
-    // .listen('Product\\OrderStatusUpdated', (data) => {
-    //     console.log('data')
-    //     axios.get(route('cashier.orders.get_orders'))
-    //     .then((res) => {
-    //         alert('from order store')
-    //         orders.value = res.data
-    //     })
-    //     .catch((err) => {
-    //         console.error(err)
-    //     })
-    // })
-  
     return { notifications, unreadCount, readNotifications, fetchNotifications }
   })

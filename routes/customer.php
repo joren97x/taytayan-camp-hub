@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
 
     Route::put('/add-address', [CustomerController::class, 'add_address'])->name('add-address');
     Route::put('/notifications/read', [NotificationController::class, 'read_notifications'])->name('customer.notifications.read_notifications');
-    Route::put('/notifications/click', [NotificationController::class, 'click'])->name('customer.notifications.click');
+    Route::put('/notifications/click/{notification}', [NotificationController::class, 'click'])->name('customer.notifications.click');
     Route::resource('/notifications', NotificationController::class)->names([
         'index' => 'customer.notifications.index',
         'destroy' => 'customer.notifications.destroy',

@@ -1,6 +1,6 @@
 <script setup>
 import { Link, useForm, router } from '@inertiajs/vue3'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 import { useNotificationStore } from '@/Stores/NotificationStore'
 
 const notificationStore = useNotificationStore()
@@ -53,7 +53,7 @@ const onClick = () => {
         clickable 
         :class="[
             notification.is_clicked ? 'read' : '',
-            'q-py-md notif rounded-borders']
+            'q-py-md notif rounded-borders full-width']
         "
         @click="onClick()"
     >
@@ -63,8 +63,9 @@ const onClick = () => {
             </q-avatar>
         </q-item-section>
         <q-item-section>
-            <q-item-label> {{ notification.title }}</q-item-label>
+            <q-item-label> {{ notification.id }} {{ notification.title }}</q-item-label>
             <q-item-label caption>{{ notification.description }}</q-item-label>
+            <q-item-label caption>{{ date.formatDate(notification.created_at, 'MMM D, YYYY') }}</q-item-label>
         </q-item-section>
         <q-item-section side>
             <q-item-label>
@@ -94,7 +95,6 @@ const onClick = () => {
             </q-item-label>
         </q-item-section>
     </q-item>
-<!-- </Link> -->
 </template>
 
 <style scoped>

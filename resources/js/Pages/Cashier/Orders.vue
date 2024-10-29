@@ -57,16 +57,6 @@ onMounted(() => {
         $q.notify('new order arrived')
         orderStore.getOrders()
         console.log(data)
-        // axios.get(route('cashier.orders.show', data.order.id))
-        // .then((orderData) => {
-        //     // $q.notify('fetched and ykwis bruh')
-        //     // console.log(orderData)
-        //     orders.value.push(orderData.data)
-        //     orderStore.orders.push(orderData.data)
-        // })
-        // .catch((err) => {
-        //     console.error(err)
-        // })
     })
     // .listen('Product\\OrderStatusUpdated', (data) => {
     //     console.log('data')
@@ -79,10 +69,6 @@ onMounted(() => {
     //     })
     // })
 })
-
-const fetchOrders = () => {
-    alert('go fetch nigga')
-}
 
 // axios.get(route('cashier.orders.show', 12))
 //     .then((orderData) => {

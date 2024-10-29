@@ -15,8 +15,6 @@ const $q = useQuasar()
 const page = usePage()
 const rightDrawerOpen = ref(false)
 const items = ref(null) 
-const notifications = ref([])
-const notification_badge = ref(0)
 const drawer = ref(false)
 const sidebar = ref(false)
 const btnToggle = ref('products')
@@ -42,11 +40,15 @@ onMounted(() => {
     // })
 
     if(page.props.auth.user) {
-        Echo.private(`notifications.${page.props.auth.user.id}`)
-            .listen('Notify', (data) => {
-                $q.notify('NOTIFY!!')
-                console.log(data.notification)
-            })
+        // Echo.private(`notifications.${page.props.auth.user.id}`, )
+        // .listen('Notify', (data) => {
+        //     console.log('isud sa notifycaoiotns')
+        //     // notifications.value.push(data)
+        //     notificationStore.notifications.push(data)
+        //     $q.notify('notification checkkkk')
+        //     // orderStore.getOrders()
+        //     console.log(data)
+        // })
     }
 
 })
@@ -144,8 +146,8 @@ watch(btnToggle, () => {
                             <q-icon size="2em" name="notifications" />
                             <!-- uncomment soon -->
                             <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">{{ notificationStore.unreadCount }}</q-badge>
-                            <q-menu @show="notificationStore.readNotifications()">
-                                <q-list style="max-width: 500px; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
+                            <q-menu @show="notificationStore.readNotifications()" class="gt-sm">
+                                <q-list style="max-width: 100vw; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
                                     <q-item class="text-h6">Notifications</q-item>
                                     <NotificationItem :notification="notification" v-for="notification in notificationStore.notifications" />
                                 </q-list>
@@ -284,6 +286,9 @@ watch(btnToggle, () => {
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>Notifications</q-item-section>
+                        <q-item-section side>
+                            <q-chip floating v-if="notificationStore.unreadCount > 0">{{ notificationStore.unreadCount }}</q-chip>
+                        </q-item-section>
                     </q-item>
                 </q-scroll-area>
 
@@ -380,21 +385,13 @@ watch(btnToggle, () => {
                 class="lt-md"      
                 transition-show="slide-up"
                 transition-hide="slide-down"
+                @show="notificationStore.readNotifications()"
             >
                 <q-card>
-                    <q-card-section>
-                        <div class="text-h6">Notifications</div>
-                        <q-list>
-                            <q-item v-for="n in 5" class="q-pa-none q-ma-none">
-                                <q-item-section avatar>
-                                    <q-avatar color="primary">
-                                        {{ n }}
-                                    </q-avatar>
-                                </q-item-section>
-                                <q-item-section>Notification {{ n }}</q-item-section>
-                            </q-item>
-                        </q-list>
-                    </q-card-section>
+                    <q-list style="max-width: 100vw; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
+                        <q-item class="text-h6">Notifications</q-item>
+                        <NotificationItem @click="notificationMenu = false" :notification="notification" v-for="notification in notificationStore.notifications" />
+                    </q-list>
                     <q-card-actions  class="absolute-top-right">
                         <q-btn icon="close" v-close-popup round unelevated></q-btn>
                     </q-card-actions>

@@ -12,7 +12,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         return response()->json([
-            'notifications' => Notification::where('user_id', $request->user()->id)->get()
+            'notifications' => Notification::where('user_id', $request->user()->id)->latest()->get()
         ]);
     }
 
@@ -49,14 +49,11 @@ class NotificationController extends Controller
 
     public function click(Notification $notification)
     {
-        // dd('bruh');
-        $notification->update([
+        $h = $notification->update([
             // 'is_read' => !$notification->is_read,
             'is_clicked' => true
         ]);
-
         return back();
-
     }
 
 }
