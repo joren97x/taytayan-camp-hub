@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
         'update' => 'customer.notifications.update'
     ]);
     Route::get('/profile', [ViewController::class, 'profile'])->name('customer.profile');
+    Route::get('/profile/edit', [ViewController::class, 'edit_profile'])->name('customer.edit_profile');
     require __DIR__.'/Customer/product.php';
     require __DIR__.'/Customer/event.php';
     require __DIR__.'/Customer/facility.php';

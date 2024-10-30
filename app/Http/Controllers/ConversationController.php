@@ -19,9 +19,9 @@ class ConversationController extends Controller
     {
         // dd(auth()->user());
         return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox', [
-            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->get()
+            // 'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+            //     $query->where('user_id', auth()->id());
+            // })->get()
         ]);
         //
         // return response()->json([
@@ -37,6 +37,26 @@ class ConversationController extends Controller
 
     }
 
+    public function get_conversations()
+    {
+        $conversations = Conversation::with('participants')->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+            })->get();
+
+        return response()->json([
+            'conversations' => $conversations
+        ]);
+    }
+
+    public function get_conversation($id)
+    {
+        return response()->json([
+            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->get(),
+            'conversation' => Conversation::with('participants', 'messages.user')->find($id)
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -86,10 +106,10 @@ class ConversationController extends Controller
     public function show(string $id)
     {
         return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat', [
-            'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->get(),
-            'conversation' => Conversation::with('participants', 'messages.user')->find($id)
+            // 'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
+            //     $query->where('user_id', auth()->id());
+            // })->get(),
+            // 'conversation' => Conversation::with('participants', 'messages.user')->find($id)
         ]);
     }
 

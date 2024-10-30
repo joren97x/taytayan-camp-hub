@@ -1,71 +1,89 @@
 <script setup>
 
-import { Link, usePage } from '@inertiajs/vue3'
-import { ref, computed } from 'vue'
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import CashierLayout from '@/Layouts/CashierLayout.vue'
-import DriverLayout from '@/Layouts/DriverLayout.vue'
-import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { useDrawerStore } from '@/Stores/DrawerStore';
+import { Link, usePage, Head } from '@inertiajs/vue3'
+import { useDrawerStore } from '@/Stores/DrawerStore'
+import { useQuasar } from 'quasar'
+import ChatItem from './ChatItem.vue'
+import { ref } from 'vue'
+import { useConversationStore } from '@/Stores/ConversationStore'
 
-
-defineProps({
+const props = defineProps({
     conversations: Object
 })
 
+const conversationStore = useConversationStore()
 const drawerStore = useDrawerStore()
-const page = usePage()
-// const drawer = ref(false)
+const $page = usePage()
+const $q = useQuasar()
+const conversations = ref(props.conversations)
 
-// const layoutComponent = computed(() => {
-//     switch (page.props.auth.user.role) {
-//         case 'admin':
-//             return AdminLayout
-//         case 'cashier':
-//             return CashierLayout
-//         case 'driver':
-//             return DriverLayout
-//         case 'customer':
-//             return CustomerLayout
-//         default:
-//             return CustomerLayout // Fallback to customer layout or any default layout
-//     }
-// })
+// Echo.private(`users.online`)
+//     .listen('UserStatusUpdated', (data) => {
+//         console.log(data)
+//         conversations.value.map((convo) => {
+//             convo.participants.find((user) => {
+//                 if(user.id == data.user.id) {
+//                     user.is_online = !user.is_online
+//                 }
+//             })
+//         })
+//         $q.notify('Users Status Updated')
+//     })
 
 </script>
 
 <template>
     <!-- <component :is="layoutComponent"> -->
+        <Head title="Inbox" />
         <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <q-card bordered flat style="height: 95vh;">
+                        <q-card-actions class="lt-md">
+                            <q-btn 
+                                icon="menu" 
+                                class="lt-md" 
+                                flat 
+                                @click="drawerStore.drawer = true" 
+                                v-if="$page.props.auth.user.role == 'cashier'"
+                            />
+                            <div class="text-h6 q-ml-sm">Chats</div>
+                        </q-card-actions>
                         <q-list class="q-pa-sm">
                             <!-- {{ layoutComponent }} -->
-                            <q-btn icon="menu" class="lt-md" flat @click="drawerStore.drawer = true"/>
-                            <div>Chats</div>
-                            <Link :href="route('conversations.show', conversation.id)" v-for="conversation in conversations" >
-                                <q-item clickable class="rounded-borders">
+                            <!-- <q-btn icon="menu" class="lt-md" flat @click="drawerStore.drawer = true"/> -->
+                            <div class="text-h6 q-ml-sm q-mt-sm gt-sm">Chats</div>
+                            <ChatItem v-for="conversation in conversationStore.conversations" :conversation="conversation" />
+                            <!-- <Link :href="route('conversations.show', conversation.id)" v-for="conversation in conversations" >
+                                <q-item 
+                                    clickable 
+                                    class="rounded-borders" 
+                                    :active="$page.url[$page.url.length-1] == conversation.id" 
+                                    active-class="bg-grey text-white"
+                                >
                                     <q-item-section avatar>
-                                        <q-avatar color="primary" class="text-capitalize" text-color="white">
-                                            <div v-for="participant in conversation.participants">
-                                                <div v-if="participant.id != $page.props.auth.user.id">
-                                                    {{ participant.first_name[0] }}
-                                                </div>
+                                        <div v-for="participant in conversation.participants">
+                                            <div v-if="participant.id != $page.props.auth.user.id">
+                                                <q-avatar color="primary" class="text-capitalize" text-color="white">
+                                                    <q-img v-if="participant.profile_pic" :src="`/storage/${participant.profile_pic}`" class="fit" fit="cover"></q-img>
+                                                    <div v-else>{{ participant.first_name[0] }}</div>
+                                                </q-avatar>
                                             </div>
-                                        </q-avatar>
+                                        </div>
                                     </q-item-section>
                                     <q-item-section>
-                                        <!-- {{ conversation.user.first_name + ' ' + conversation.user.last_name }} -->
                                         <div v-for="participant in conversation.participants">
                                             <div v-if="participant.id != $page.props.auth.user.id">
                                                 {{ participant.first_name + ' ' + participant.last_name }}
                                             </div>
                                         </div>
                                     </q-item-section>
+                                    <q-item-section side>
+                                        <q-icon name="circle" color="green" size="10px"/>
+                                    </q-item-section>
                                 </q-item>
-                            </Link>
-                            <div v-if="conversations.length == 0" class="text-center q-my-md">
+                            </Link> -->
+                            <div v-if="conversationStore.conversations.length == 0" class="text-center q-my-md">
                                 You dont have any conversations...
                             </div>
                         </q-list>
@@ -92,3 +110,12 @@ const page = usePage()
         </div>
     <!-- </component> -->
 </template>
+
+<style scoped>
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+</style>

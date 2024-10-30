@@ -2,42 +2,43 @@
 
 
 import { useQuasar, date } from 'quasar'
-import { useForm, usePage, Link } from '@inertiajs/vue3'
+import { useForm, usePage, Link, Head } from '@inertiajs/vue3'
 // import ChatLayout from '@/Layouts/ChatLayout.vue'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useConversationStore } from '@/Stores/ConversationStore';
 
 // defineOptions({
 //     layout: ChatLayout
 // })
 
-const props = defineProps({
-    conversation: Object
-})
-
-const conversation = ref(props.conversation)
+const conversationStore = useConversationStore()
 const scrollArea = ref(null)
-
 const $q = useQuasar()
 const $page = usePage()
 const form = useForm({
     message: ''
 })
 
+
+onBeforeMount(() => {
+    conversationStore.fetchConversation($page.url[$page.url.length-1])
+})
+
+
 function sendMessage() {
-    form.post(route(`messages.store`, props.conversation.id), {
+    form.post(route(`messages.store`, conversationStore.conversation.id), {
         onSuccess: () => {
             form.reset()
+            scrollToBottom()
             // $q.notify('annyeong')
         }
     })
 }
 
-function addMessage(message) {
-    // console.log('helo?')
-    // console.log(currentConversation.value)
-    conversation.value.messages.push(message)
-    scrollToBottom()
-}
+// function addMessage(message) {
+//     conversation.value.messages.push(message)
+//     scrollToBottom()
+// }
 
 function scrollToBottom() {
     if (scrollArea.value) {
@@ -46,35 +47,23 @@ function scrollToBottom() {
         // Scroll to the bottom
         scrollArea.value.setScrollPosition('vertical', contentHeight, 500);
     }
-};
-
-const receiver = computed(() => {
-    return props.conversation.participants.find((participant) => participant.id != $page.props.auth.user.id)
-})
+}
 
 onMounted(() => {
-    console.log('listen from onmounted')
-    subscribeChannel()
+    // console.log(conversationStore.conversation)
+    // conversationStore.initializeConversationListener()
     scrollToBottom()
 })
 
-function subscribeChannel() {
-    Echo.private(`conversation.${props.conversation.id}`)
-    .listen('MessageSent', (data) => {
-        $q.notify('someone sent a message')
-        console.log(data)
-        addMessage(data.message)
-    })
-}
-
 onUnmounted(() => {
-    console.log('leave')
-    Echo.leave(`conversation.${props.conversation.id}`)
+    Echo.leave(`conversation.${conversationStore.conversation.id}`)
+    Echo.leave(`users.online.${conversationStore.receiver.id}`)
 })
 
 </script>
 
 <template>
+    <Head :title="conversationStore.receiver?.first_name + ' ' + conversationStore.receiver?.last_name" />
     <!-- <div class="q-pa-md">
         <q-card bordered flat>
             <q-card-section>
@@ -91,16 +80,24 @@ onUnmounted(() => {
                     </Link>
                 </q-item-section>
                 <q-item-section avatar>
-                    <q-avatar v-if="receiver.profile_pic">
-                        <q-img class="fit" fit="cover" :src="`/storage/${receiver.profile_pic}`"/>
+                    <q-avatar v-if="conversationStore.receiver?.profile_pic">
+                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`"/>
                     </q-avatar>
                     <q-avatar color="primary" v-else>
-                        {{ receiver.first_name[0] }}
+                        {{ conversationStore.receiver?.first_name[0] }}
                     </q-avatar>
                 </q-item-section>
                 <q-item-section>
-                    <q-item-label>{{ receiver.first_name + ' ' + receiver.last_name }}</q-item-label>
-                    <q-item-label caption>{{ receiver.is_online }}</q-item-label>
+                    <q-item-label>{{ conversationStore.receiver?.first_name + ' ' + conversationStore.receiver?.last_name }}</q-item-label>
+                    <q-item-label caption>
+                        <div v-if="conversationStore.receiver?.is_online">
+                            <q-icon name="circle" color="green"/>
+                            Active now
+                        </div>
+                        <div v-else>
+                            umm                            
+                        </div>
+                    </q-item-label>
                 </q-item-section>
 
             </q-item>
@@ -109,16 +106,15 @@ onUnmounted(() => {
 
         <!-- {{ currentConversation }} -->
         <div class="bg-white q-px-sm">
-            <div v-if="conversation.messages.length > 0">
+            <div v-if="conversationStore.conversation?.messages?.length > 0">
                 <q-scroll-area ref="scrollArea" style="height: 83vh; max-width: 100%;">
                     <q-chat-message
-                        v-for="message in conversation.messages"
+                        v-for="message in conversationStore.conversation.messages"
                         name="me"
-                        :avatar="$page.props.auth.user.id == message.user_id ? `/storage/${$page.props.auth.user.profile_pic}` : `/storage/${message.user.profile_pic}`"
+                        :avatar="$page.props.auth.user.id == message.user_id ? `/storage/${$page.props.auth.user.profile_pic}` : `/storage/${conversationStore.receiver?.profile_pic}`"
                         :text="[message.message]"
                         :text-color="$page.props.auth.user.id == message.user_id ? 'white' : 'black'"
                         :bg-color="$page.props.auth.user.id == message.user_id ? 'blue' : 'grey'"
-
                         :sent="$page.props.auth.user.id == message.user_id"
                     />
                 </q-scroll-area>
@@ -126,11 +122,11 @@ onUnmounted(() => {
             <div v-else style="height: 80vh" class="flex justify-center items-end text-center">
                 <div>
                     <q-avatar size="100px" color="blue">
-                        <q-img class="fit" fit="cover" :src="`/storage/${receiver.profile_pic}`"></q-img>
+                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`"></q-img>
                     </q-avatar>
                     <div class="q-mb-xl q-mt-sm">
-                        <h6 class="q-pa-none q-ma-none">{{ receiver.first_name + ' ' + receiver.last_name }}</h6>
-                        <div class="text-caption">Joined on {{ date.formatDate(receiver.created_at, 'MMM D, YYYY') }}</div>
+                        <h6 class="q-pa-none q-ma-none">{{ conversationStore.receiver?.first_name + ' ' + conversationStore.receiver?.last_name }}</h6>
+                        <div class="text-caption">Joined on {{ date.formatDate(conversationStore.receiver?.created_at, 'MMM D, YYYY') }}</div>
                     </div>
                 </div>
             </div>

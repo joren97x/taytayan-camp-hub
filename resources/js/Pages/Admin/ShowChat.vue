@@ -16,7 +16,8 @@ defineProps({
 </script>
 
 <template>
-    <Index :conversations="conversations">
+     <Index :conversations="conversations" v-if="$q.screen.gt.sm">
         <Show :conversation="conversation" />
     </Index>
+    <Show :conversation="conversation" v-else />
 </template>

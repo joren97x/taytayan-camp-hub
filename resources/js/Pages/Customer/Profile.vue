@@ -28,10 +28,10 @@ const tab = ref('mails')
 
     <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
         <div class="row justify-center">
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <q-item>
                     <q-item-section avatar>
-                        <q-avatar size="80px">
+                        <q-avatar >
                             <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" />
                         </q-avatar>
                     </q-item-section>
@@ -40,16 +40,16 @@ const tab = ref('mails')
                         <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
                     </q-item-section>
                 </q-item>
-                <div class="row q-col-gutter-md">
-                    <div class="col-6">
+                <!-- <div class="row q-col-gutter-md">
+                    <div class="col-2">
                         <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
                     </div>
-                    <div class="col-6">
+                    <div class="col-2">
                         <q-btn label="Edit Profile" no-caps unelevated rounded outline color="primary" class="full-width" />
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
                 <q-card>
                     <q-tabs
                     v-model="tab"
@@ -58,6 +58,7 @@ const tab = ref('mails')
                     active-color="primary"
                     indicator-color="primary"
                     align="justify"
+                
                     narrow-indicator
                     >
                     <q-tab name="mails" label="Mails" />

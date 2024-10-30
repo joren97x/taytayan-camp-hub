@@ -441,7 +441,7 @@ const lorem = ref('stylestylestylestylestylestyle')
             </div>
             <div class="row q-col-gutter-md" v-if="ratings.length > 0">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
-                    <q-card bordered>
+                    <q-card bordered flat>
                         <q-card-section>
                             <span class="text-subtitle1">{{ rating.user.first_name + ' ' + rating.user.last_name }}</span>
                             <br>
@@ -452,7 +452,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                     </q-card>
                 </div>
             </div>
-            <q-card bordered flat style="height: 100px" class="bg-grey-3 items-center justify-center flex text-grey">
+            <q-card bordered flat style="height: 100px" class="bg-grey-3 items-center justify-center flex text-grey" v-if="ratings.length == 0">
                 No ratings found
             </q-card>
         </div>

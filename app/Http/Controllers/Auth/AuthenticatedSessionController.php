@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -36,6 +37,9 @@ class AuthenticatedSessionController extends Controller
         // if($request->user()->role == 'admin') {
         //     return redirect()->intended(route('admin.dashboard', absolute: false));
         // }
+        $request->user()->update(['is_online' => true]);
+        event(new UserStatusUpdated($request->user()));
+
         switch($request->user()->role) {
             case 'customer':
                 return redirect()->intended(route('home', absolute: false));
@@ -59,6 +63,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $request->user()->update(['is_online' => false]);
+        event(new UserStatusUpdated($request->user()));
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

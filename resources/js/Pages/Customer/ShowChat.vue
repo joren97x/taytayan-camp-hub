@@ -8,16 +8,16 @@ defineOptions({
     layout: CustomerLayout
 })
 
-defineProps({
-    conversations: Object,
-    conversation: Object
-})
+// defineProps({
+//     conversations: Object,
+//     conversation: Object
+// })
 
 </script>
 
 <template>
-    <Index :conversations="conversations" v-if="$q.screen.gt.sm">
-        <Show :conversation="conversation" />
+    <Index v-if="$q.screen.gt.sm">
+        <Show  />
     </Index>
-    <Show :conversation="conversation" v-else/>
+    <Show v-else/>
 </template>
