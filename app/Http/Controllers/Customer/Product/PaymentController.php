@@ -7,6 +7,7 @@ use App\Models\Cart;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CartProduct;
 use App\Models\Order;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Log;
@@ -21,6 +22,8 @@ class PaymentController extends Controller
         // dd($checkout_session);
         // dd($request->get('cart_id'));
         $cart = Cart::find($request->cart_id);
+        
+        // dd($cart_products);
         
         $order = Order::create([
             'user_id' => auth()->id(),
@@ -37,20 +40,26 @@ class PaymentController extends Controller
             ]);
         }
 
-        $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
-        $order->cart_products = $result['cart_products'];
-        $order->subtotal = $result['subtotal'];
+        // $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+        // $order->cart_products = $result['cart_products'];
+        // $order->subtotal = $result['subtotal'];
 
-        Log::info($order);
+        // Log::info($order);
         event(new OrderPending($order));
 
         // if ang cart kay active mag create bag-o then e inactive dayun!!!
         if($cart->status) {
-            Cart::create([
+            $new_cart = Cart::create([
                 'user_id' => auth()->id()
             ]);
             $cart->status = false;
             $cart->update();
+
+            $cart_product_ids = array_column($request->cart_products, 'id');
+            $cart_products = CartProduct::where('cart_id', $cart->id)
+            ->whereNotIn('id', $cart_product_ids)
+            ->update(['cart_id' => $new_cart->id]);
+            
         }
       
         return redirect(route('customer.orders.index'));
@@ -58,6 +67,7 @@ class PaymentController extends Controller
 
     public function pay(Request $request, CartService $cartService) 
     {
+        // dd($request);
 
         if($request->payment_method != 'right_now') {
             // return $this->success($request->payment_method, $request->cart_id, $request->mode, $cartService);
@@ -68,27 +78,26 @@ class PaymentController extends Controller
         $cart = Cart::find($request->cart_id);
         // dd($cart);
         $line_items = [];
-        $subtotal = 0;
+        // $subtotal = 0;
         // Fetch cart products with related product and modifiers
-        $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
-
-        foreach($cart_products as $cart_product) {
-            foreach($cart_product->modifiers as $modifier) {
-                $modifier->total = $modifier->quantity * $modifier->modifier_item->price;
-                $cart_product->product->price += $modifier->total;
-            }
-            $cart_product->total = $cart_product->quantity * $cart_product->product->price;
+        // $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
+        foreach($request->cart_products as $cart_product) {
+            // foreach($cart_product->modifiers as $modifier) {
+            //     $modifier->total = $modifier->quantity * $modifier->modifier_item->price;
+            //     $cart_product->product->price += $modifier->total;
+            // }
+            // $cart_product->total = $cart_product->quantity * $cart_product->product->price;
             $line_items[] = [
-                'name' => $cart_product->product->name,
-                'quantity' => $cart_product->quantity,
-                'amount' => (double)$cart_product->product->price * 100,
+                'name' => $cart_product['product']['name'],
+                'quantity' => $cart_product['quantity'],
+                'amount' => (double)$cart_product['total'] * 100,
                 'currency' => 'PHP',
-                'description' => $cart_product->product->description,
+                'description' => $cart_product['product']['description'],
                 'images' => [
                     'https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
                 ],
             ];
-            $subtotal += $cart_product->total;
+            // $subtotal += $cart_product->total;
         }
 
         $checkout = Paymongo::checkout()->create([

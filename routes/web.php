@@ -26,9 +26,9 @@ Route::get('/', function () {
 
 // Route::get('/home', [ViewController::class, 'home'])->name('home');
 
-Route::get('/events', function() {
-    return Inertia::render('Customer/Event/Index');
-})->name('events');
+// Route::get('/events', function() {
+//     return Inertia::render('Customer/Event/Index');
+// })->name('events');
 
 Route::middleware(['auth', 'customer'])->group(function () {
     Route::get('/home', [ViewController::class, 'home'])->name('home');

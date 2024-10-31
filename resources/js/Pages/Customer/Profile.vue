@@ -1,7 +1,7 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import Orders from './Partials/Orders.vue'
 import Bookings from './Partials/Bookings.vue'
@@ -20,18 +20,18 @@ defineProps({
     past_ticket_orders: Object
 })
 
-const tab = ref('mails')
+const tab = ref('orders')
 </script>
 
 <template>
     <Head title="Profile" />
 
     <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
-        <div class="row justify-center">
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+        <div class="row q-col-gutter-md">
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <q-item>
                     <q-item-section avatar>
-                        <q-avatar >
+                        <q-avatar size="80px">
                             <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" />
                         </q-avatar>
                     </q-item-section>
@@ -40,49 +40,54 @@ const tab = ref('mails')
                         <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
                     </q-item-section>
                 </q-item>
-                <!-- <div class="row q-col-gutter-md">
-                    <div class="col-2">
-                        <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
+                <div class="row q-col-gutter-sm q-mb-md">
+                    <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <Link :href="route('customer.edit_profile')">
+                            <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
+                        </Link>
                     </div>
-                    <div class="col-2">
-                        <q-btn label="Edit Profile" no-caps unelevated rounded outline color="primary" class="full-width" />
+                    <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" class="full-width" />
                     </div>
-                </div> -->
+                </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <q-card>
                     <q-tabs
-                    v-model="tab"
-                    dense
-                    class="text-grey"
-                    active-color="primary"
-                    indicator-color="primary"
-                    align="justify"
-                
-                    narrow-indicator
+                        v-model="tab"
+                        dense
+                        class="text-grey"
+                        active-color="primary"
+                        indicator-color="primary"
+                        align="justify"
+                        no-caps
+                        narrow-indicator
                     >
-                    <q-tab name="mails" label="Mails" />
-                    <q-tab name="alarms" label="Alarms" />
-                    <q-tab name="movies" label="Movies" />
+                        <q-tab name="orders" label="Orders" />
+                        <q-tab name="bookings" label="Bookings" />
+                        <q-tab name="tickets" label="Tickets" />
                     </q-tabs>
 
                     <q-separator />
 
                     <q-tab-panels v-model="tab" animated>
-                    <q-tab-panel name="mails">
-                        <div class="text-h6">Mails</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </q-tab-panel>
+                        <q-tab-panel name="orders">
+                            <Orders :active_orders="active_orders" :past_orders="past_orders" />
+                            <!-- <div class="text-h6">Orders</div>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
+                        </q-tab-panel>
 
-                    <q-tab-panel name="alarms">
-                        <div class="text-h6">Alarms</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </q-tab-panel>
+                        <q-tab-panel name="bookings">
+                            <Bookings :active_bookings="active_bookings" :past_bookings="past_bookings" />
+                            <!-- <div class="text-h6">bookings</div>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
+                        </q-tab-panel>
 
-                    <q-tab-panel name="movies">
-                        <div class="text-h6">Movies</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </q-tab-panel>
+                        <q-tab-panel name="tickets">
+                            <Tickets :active_ticket_orders="active_ticket_orders" :past_ticket_orders="past_ticket_orders" />
+                            <!-- <div class="text-h6">Tickets</div>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
+                        </q-tab-panel>
                     </q-tab-panels>
                 </q-card>
                 <!-- <Orders :active_orders="active_orders" :past_orders="past_orders" />

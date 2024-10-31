@@ -22,7 +22,7 @@ class CartController extends Controller
         $result = $cartService->getCartLineItemsAndSubtotal($cart->id);
 
         return Inertia::render('Customer/Product/Cart', [
-            'items'=> $result['cart_products'], 
+            'cart_products'=> $result['cart_products'], 
             'subtotal' => $result['subtotal'],
             'google_maps_api_key' => config('app.google_maps_api_key'),
             'cart' => $cart
@@ -157,7 +157,12 @@ class CartController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $validated_data = $request->validate([
+
+        $product = Product::with('modifier_groups')->findOrFail($request->product_id);
+
+        $requiredModifierGroups = $product->modifier_groups()->where('required', true)->pluck('modifier_groups.id')->toArray();
+    
+        $validator = Validator::make($request->all(), [
             'product_id' => 'required|exists:products,id',
             'cart_id' => 'required|exists:carts,id',
             'quantity' => 'required|integer|min:1',
@@ -167,6 +172,34 @@ class CartController extends Controller
             'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
             'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
         ]);
+    
+        // Add custom validation for required modifier groups
+        $validator->after(function ($validator) use ($request, $requiredModifierGroups) {
+            $modifierGroupIds = collect($request->input('modifiers'))->pluck('modifier_group_id')->toArray();
+    
+            foreach ($requiredModifierGroups as $requiredGroupId) {
+                if (!in_array($requiredGroupId, $modifierGroupIds)) {
+                    $validator->errors()->add('modifiers', 'All required modifier groups must be selected.');
+                }
+            }
+        });
+    
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $validated_data = $validator->validated();
+
+        // $validated_data = $request->validate([
+        //     'product_id' => 'required|exists:products,id',
+        //     'cart_id' => 'required|exists:carts,id',
+        //     'quantity' => 'required|integer|min:1',
+        //     'special_instruction' => 'nullable|string',
+        //     'modifiers' => 'nullable|array',
+        //     'modifiers.*.modifier_group_id' => 'required_with:modifiers|exists:modifier_groups,id',
+        //     'modifiers.*.modifier_item_id' => 'required_with:modifiers|exists:modifier_items,id',
+        //     'modifiers.*.quantity' => 'required_with:modifiers|integer|min:1'
+        // ]);
 
         $cart_product = CartProduct::find($id);
 

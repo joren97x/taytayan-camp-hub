@@ -45,6 +45,17 @@ const submit = () => {
         onSuccess: () => {
             emit('close')
             $q.notify('Food Updated')
+        },
+        onError: (error) => {
+            if(error.modifiers) {
+                $q.notify({
+                    message: `Required fields must be selected`,
+                    color: 'negative', // or any custom color defined in the brand config
+                    textColor: 'white',
+                    position: 'top'
+                })
+            }
+            console.log(error)
         }
     })
 }

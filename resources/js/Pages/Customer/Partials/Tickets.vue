@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref } from 'vue'
-import OrderCardItem from '../Product/Partials/OrderCardItem.vue'
+import TicketCard from '../Event/Partials/TicketCard.vue'
 
 defineProps({
     active_ticket_orders: Object,
@@ -15,7 +15,7 @@ const showPastTicketOrders = ref(false)
 <template>
     <div class="text-h6">Tickets</div>
         <TicketCard v-for="ticket_order in active_ticket_orders" :ticket_order="ticket_order"/>
-        <div v-show="active_ticket_orders.length <= 0">
+        <div v-show="active_ticket_orders.length == 0">
             <div class="flex items-center justify-center" style="height: 100px;">
                 <q-icon name="confirmation_number" size="50px"/>
             </div>

@@ -13,7 +13,6 @@ defineOptions({
 const props = defineProps({
     facility: Object,
     reserved_dates: Object,
-    ratings: Object
 })
 
 const $q = useQuasar()
@@ -159,7 +158,6 @@ const fiveImages = computed(() => {
             transition-prev="slide-right"
             transition-next="slide-left"
             height="280px"
-            
             class="q-pa-none q-ma-none lt-md"
         >
             <q-carousel-slide :name="index" v-for="(image, index) in images" class="q-pa-none">
@@ -178,7 +176,7 @@ const fiveImages = computed(() => {
                 </q-carousel-control>
             </template>
         </q-carousel>
-        <div class="row q-col-gutter-sm">
+        <div class="row q-col-gutter-sm gt-sm">
             <div class="col-md-6" style="height: 52vh;">
                 <q-img :src="`/storage/${fiveImages[0]}`" height="100%" style="position: relative"></q-img>
             </div>
@@ -194,10 +192,15 @@ const fiveImages = computed(() => {
     <div class="q-ma-md">
         <div :class="['row q-col-gutter-md', $q.screen.lt.md ? '' : 'reverse']">
             <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
-                <div class="lt-md q-mb-xs">
-                    <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                    <div class="text-subtitle1" >
-                        {{ facility.amenities }}
+                <div class="lt-md q-mb-xs justify-between flex">
+                    <div>
+                        <div class="text-h6 text-capitalize">{{ facility.name }}</div>
+                        <div class="text-subtitle1" >
+                            {{ facility.amenities }}
+                        </div>
+                    </div>
+                    <div>
+                        Star
                     </div>
                 </div>
                 <q-card>
@@ -281,9 +284,16 @@ const fiveImages = computed(() => {
                 </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <div class="gt-sm">
-                    <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                    {{ facility.description }}
+                <div class="gt-sm justify-between flex">
+                    <div>
+                        <div class="text-h6 text-capitalize">{{ facility.name }}</div>
+                        <div class="text-subtitle1" >
+                            {{ facility.amenities }}
+                        </div>
+                    </div>
+                    <div>
+                        <q-icon name="star"/>
+                    </div>
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">About This Place</div>
@@ -305,7 +315,7 @@ const fiveImages = computed(() => {
         <div class="col-12">
             <div class="text-h6 q-mb-md">Ratings and Reviews</div>
             <div class="row q-col-gutter-md">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in facility.facility_ratings">
                     <q-card bordered flat>
                         <q-card-section class="row q-py-sm">
                             <div class="col-8">
@@ -314,9 +324,11 @@ const fiveImages = computed(() => {
                                         <q-avatar class="bg-secondary">
                                                 <q-img 
                                                     v-if="rating.user.profile_pic"
-                                                    :src="`/storage/${rating.user.prfile_pic}`"
+                                                    :src="`/storage/${rating.user.profile_pic}`"
+                                                    class="fit"
+                                                    fit="cover"
                                                 />
-                                                <span v-else>{{ rating.user.first_name[0] }}</span>
+                                                <div v-else>{{ rating.user.first_name[0] }}</div>
                                             </q-avatar>
                                     </q-item-section>
                                     <q-item-section>
@@ -334,7 +346,7 @@ const fiveImages = computed(() => {
                         </q-card-section>
                     </q-card>
                 </div>
-                <q-card v-if="ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-my-md" style="height: 100px">
+                <q-card v-if="facility.facility_ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-my-md" style="height: 100px">
                     No ratings yet...
                 </q-card>
             </div>

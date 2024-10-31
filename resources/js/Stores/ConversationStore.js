@@ -20,7 +20,7 @@ export const useConversationStore = defineStore('conversations', () => {
         if($page.props.auth.user) {
             console.log('FETCH CONVO 1')
             fetchConversations()
-            fetchConversation($page.url[$page.url.length-1])
+            // fetchConversation($page.url[$page.url.length-1])
             initializeConversationsListener()
         }
     })

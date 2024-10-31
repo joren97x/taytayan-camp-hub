@@ -116,8 +116,7 @@ class OrderController extends Controller
 
         return Inertia::render('Customer/Product/Orders', [
             'active_orders' => $active_orders,
-            'past_orders' => $past_orders,
-            'order_constants' => Order::getConstants()
+            'past_orders' => $past_orders
         ]);
 
     }

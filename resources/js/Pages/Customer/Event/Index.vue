@@ -10,19 +10,20 @@ defineOptions({
 })
 
 defineProps({
-    events: Object
+    upcoming_events: Object,
+    past_events: Object,
 })
 
 </script>
 
 <template>
     <Head  title="Events" />
-    <div class="gradient-overlay" style="position: relative" v-if="events.length > 0">
-        <div class="blurred-background" :style="`background-image: url('/storage/${events[0].cover_photo}');`"></div>
+    <div class="gradient-overlay" style="position: relative" v-if="upcoming_events.length > 0">
+        <div class="blurred-background" :style="`background-image: url('/storage/${upcoming_events[0].cover_photo}');`"></div>
         <q-img 
             style="width: 100%; height: 50vh; z-index: 100;"  
             class="rounded-borders" 
-            :src="`/storage/${events[0].cover_photo}`"
+            :src="`/storage/${upcoming_events[0].cover_photo}`"
             fit="contain"
         >
             <div 
@@ -34,15 +35,15 @@ defineProps({
                 </div>
                 <div class=" text-h3 text-weight-bold q-mb-sm">
                     <!-- Under The Sky Disco Party SKibidi Gyatt -->
-                     {{ events[0].title }}
+                     {{ upcoming_events[0].title }}
                 </div>
                 <div :class="['text-subtitle2', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
                     <!-- Let's GO DISCO sa OLANGO this Wednesday hello annyeong
                     The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient. -->
-                     {{ events[0].description }}
+                     {{ upcoming_events[0].description }}
                     </div>
                 <div>
-                    <Link :href="route('customer.events.show', events[0].id)">
+                    <Link :href="route('customer.events.show', upcoming_events[0].id)">
                         <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
                     </Link>
                 </div>
@@ -57,20 +58,20 @@ defineProps({
     </div>
     <div class="q-ma-md">
         <div class="text-h6 q-my-md">Upcoming Events</div>
-        <div class="row q-col-gutter-lg" v-if="events.length > 0">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
+        <div class="row q-col-gutter-lg" v-if="upcoming_events.length > 0">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in upcoming_events">
                 <EventCard :event="event" />
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
+            <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
                 <EventCard :event="event" />
-            </div>
+            </div> -->
         </div>
         <q-card bordered flat v-else class="items-center flex-center flex bg-grey-3 text-grey" style="height: 40vh">
             No Events Found
         </q-card>
         <div class="text-h6 q-my-md">Past Events</div>
-        <div class="row q-col-gutter-lg" v-if="events.length > 0">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
+        <div class="row q-col-gutter-lg" v-if="past_events.length > 0">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in past_events">
                 <EventCard :event="event" />
             </div>
         </div>

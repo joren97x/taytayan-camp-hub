@@ -116,17 +116,7 @@ const submitDeleteFacilityForm = () => {
                         <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Facility</div>
-                    <q-btn 
-                        @click="submit"
-                        no-caps 
-                        rounded 
-                        unelevated
-                        color="primary" 
-                        class="q-mr-md q-mt-md absolute-top-right"
-                        :loading="form.processing"
-                        :disable="form.processing"
-                        label="Update"
-                    />
+                    
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
@@ -187,32 +177,32 @@ const submitDeleteFacilityForm = () => {
                             </div>
                             <div class="col-2" v-for="img in facilityImages">
                                 <q-card 
-                                    style="height: 100px; width: 100%" 
+                                    style="height: 130px; width: 100%" 
                                     bordered 
                                 >
                                     <q-img 
                                         :src="`/storage/${img}`" 
                                         style="width: 100%; height: 100%;" 
-                                        fit="fill"
+                                        fit="cover"
                                     />
                                 </q-card>
                             </div>
                             <div class="col-2" v-if="imgPreview.length > 0" v-for="img in imgPreview">
                                 <q-card 
-                                    style="height: 100px; width: 100%" 
+                                    style="height: 130px; width: 100%" 
                                     bordered 
                                     @click="handleRemoveImage(img)"
                                 >
                                     <q-img 
                                         :src="img" 
                                         style="width: 100%; height: 100%;" 
-                                        fit="fill"
+                                        fit="cover"
                                     />
                                 </q-card>
                             </div>
                             <div class="col-2">
                                 <q-card 
-                                    style="height: 100px; width: 100%" 
+                                    style="height: 130px; width: 100%" 
                                     bordered 
                                     :flat="!editImages"
                                     @click="triggerFilePicker"
@@ -265,9 +255,6 @@ const submitDeleteFacilityForm = () => {
                             v-model="form.amenities" 
                             :error="form.errors.amenities ? true : false"
                             :error-message="form.errors.amenities"
-                            mask="#.##"
-                            fill-mask="0"
-                            reverse-fill-mask
                         />
                         <!-- <div>Date and location</div>    
                         <div>Date and time</div> -->
@@ -373,6 +360,16 @@ const submitDeleteFacilityForm = () => {
                         <q-btn class="full-width" color="primary" no-caps>Add question</q-btn>
                     </div> -->
                 <!-- </q-form> -->
+                <q-btn 
+                        @click="submit"
+                        no-caps 
+                        rounded 
+                        unelevated
+                        color="primary" 
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Update"
+                    />
             </q-card-section>
         </q-card>
     </div>

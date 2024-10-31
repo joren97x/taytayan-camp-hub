@@ -8,7 +8,7 @@ import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 const props = defineProps({
     cart_id: Number,
     order_constants: Object,
-    items: Object,
+    cart_products: Object,
     subtotal: Number,
     google_maps_api_key: Object,
 })
@@ -98,7 +98,7 @@ console.log(page.props)
 
 const mode = ref('delivery')
 const form = useForm({
-    items: props.items,
+    cart_products: props.cart_products,
     payment_method: 'right_now',
     mode: 'delivery',
     cart_id: props.cart_id
@@ -280,14 +280,14 @@ watch(mode, () => {
                                 <q-item class="q-mt-md">
                                     <q-item-section class="text-h6">Order Summary</q-item-section>
                                     <q-item-section side>
-                                        <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ items.length }} items</q-chip>
+                                        <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ cart_products.length }} items</q-chip>
                                     </q-item-section>
                                 </q-item>
                                 <q-list>
-                                    <q-item v-for="(item, index) in items" :key="index">
+                                    <q-item v-for="(cart_product, index) in cart_products" :key="index">
                                         <q-item-section avatar>
                                             <q-img 
-                                                :src="`/storage/${item.product.photo}`"
+                                                :src="`/storage/${cart_product.product.photo}`"
                                                 height="70px"
                                                 width="70px"
                                                 fit="contain"
@@ -296,10 +296,10 @@ watch(mode, () => {
                                         </q-item-section>
                                         <q-item-section>
                                             <q-item-label>
-                                                {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
+                                                {{ cart_product.product.name }} ({{ cart_product.product.price }}) - {{ cart_product.quantity }} pcs
                                             </q-item-label>
                                             <template 
-                                                v-for="(modifier, index) in item.grouped_modifiers" 
+                                                v-for="(modifier, index) in cart_product.grouped_modifiers" 
                                                 :key="index"
                                             >
                                                 <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
@@ -312,12 +312,12 @@ watch(mode, () => {
                                                 </q-item-label>
                                                 
                                             </template>
-                                            <q-item-label caption v-if="item.special_instruction">
-                                                Note: {{ item.special_instruction }}
+                                            <q-item-label caption v-if="cart_product.special_instruction">
+                                                Note: {{ cart_product.special_instruction }}
                                             </q-item-label>
                                         </q-item-section>
                                         <q-item-section side>
-                                            P{{ item.total }}
+                                            P{{ cart_product.total }}
                                         </q-item-section>
                                     </q-item>
                                 </q-list>

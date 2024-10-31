@@ -20,9 +20,10 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('Customer/Product/Index', [
-            'categories' => Category::with('products.modifier_groups.modifier_items')->get(),
-            'products' => Product::with('modifier_groups.modifier_items')->get(),
-            'featured_products' => Product::with('modifier_groups.modifier_items')->where('is_featured', true)->get(),
+            'categories' => Category::with(['products' => function ($query) {
+                $query->where('available', true);
+            }, 'products.modifier_groups.modifier_items'])->get(),
+            'featured_products' => Product::with('modifier_groups.modifier_items')->where('is_featured', true)->where('available', true)->get(),
             'google_maps_api_key' => config('app.google_maps_api_key'),
             'ratings' => ProductRating::with('user')->get()
         ]);

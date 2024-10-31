@@ -44,7 +44,7 @@ class FacilityController extends Controller
     public function show(string $id)
     {
         //
-        $facility = Facility::find($id);
+        $facility = Facility::with('facility_ratings.user')->find($id);
 
         $reserved_dates = Booking::where('facility_id', $facility->id)
         ->where('status', '!=', Booking::STATUS_CANCELLED)  
@@ -52,9 +52,8 @@ class FacilityController extends Controller
         ->get();
 
         return Inertia::render('Customer/Facility/Show', [
-            'facility' => Facility::find($id),
+            'facility' => $facility,
             'reserved_dates' => $reserved_dates,
-            'ratings' => FacilityRating::with('user')->where('facility_id', $facility->id)->get()
         ]);
     }
 

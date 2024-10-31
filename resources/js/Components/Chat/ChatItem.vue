@@ -3,7 +3,7 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { usePage, router } from '@inertiajs/vue3'
-import { useConversationStore } from '@/Stores/ConversationStore';
+import { useConversationStore } from '@/Stores/ConversationStore'
 
 const conversationStore = useConversationStore()
 const props = defineProps({ conversation: Object })

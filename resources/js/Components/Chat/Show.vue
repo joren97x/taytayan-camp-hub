@@ -95,7 +95,7 @@ onUnmounted(() => {
                             Active now
                         </div>
                         <div v-else>
-                            umm                            
+                            Offline                            
                         </div>
                     </q-item-label>
                 </q-item-section>

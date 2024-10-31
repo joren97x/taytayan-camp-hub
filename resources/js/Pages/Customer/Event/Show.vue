@@ -114,9 +114,11 @@ const decrementTicket = () => {
                         </q-item-section>
                     </q-item> -->
                     <q-card-actions>
+                        {{ date.getDateDiff(event.date, new Date(), 'minutes') > 0 ? 'on sale' : 'past' }}
                         <Link :href="route('event.checkout')" class="full-width" :data="{ event_id: event.id, attendees }">
-                            <q-btn class="full-width" rounded color="primary" no-caps>Check Out</q-btn>
+                            <q-btn class="full-width" rounded color="primary" no-caps label="Check Out"/>
                         </Link>
+                            <q-btn class="full-width" rounded color="primary" no-caps label="Event Ended"/>
                     </q-card-actions>
                 </q-card>
             </div>

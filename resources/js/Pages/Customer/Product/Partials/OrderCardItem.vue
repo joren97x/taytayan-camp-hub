@@ -10,6 +10,10 @@ const $q = useQuasar()
 const viewOrderDialog = ref(false)
 const rateDialog = ref(false)
 const completeOrderForm = useForm({})
+const reorderForm = useForm({
+    cart_id: props.order.cart_id,
+    cart_products: props.order.cart_products.map(cart_product => cart_product.id)
+})
 const ratingForm = useForm({
     rating: 0,
     review: ''
@@ -138,6 +142,10 @@ Echo.private(`orders.${order.value.id}`)
         //     console.error(err)
         // })
     })
+
+const reorder = () => {
+    reorderForm.get(route('customer.checkout'))
+}
 // const date1 = new Date(2017, 4, 12) April 12 2017
 // const date2 = new Date(2017, 3, 8)  March 8 2017
 // const unit = 'days'
@@ -258,9 +266,7 @@ Echo.private(`orders.${order.value.id}`)
                                 <!-- {{ order }} -->
                             </div>
                         </div>
-                        <Link :href="route('product.checkout', { cart_id: order.cart_id })">
-                            <q-btn class="full-width q-mt-sm" label="Reorder" color="primary" no-caps unelevated />
-                        </Link>
+                        <q-btn class="full-width q-mt-sm" @click="reorder()" label="Reorder" color="primary" no-caps unelevated v-if="order.status == 'completed' || order.status == 'cancelled'" />
                         <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver">
                             <q-btn class="full-width q-mt-sm" no-caps label="Message Driver"/>
                         </Link>

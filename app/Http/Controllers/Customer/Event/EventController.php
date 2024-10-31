@@ -15,8 +15,23 @@ class EventController extends Controller
     public function index()
     {
         //
+        $currentDateTime = now();
+        // dd($currentDateTime->toDateString());
         return Inertia::render('Customer/Event/Index', [
-            'events' => Event::get()
+            'upcoming_events' => Event::where('date', '>', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('date', '=', $currentDateTime->toDateString())
+                        ->where('start_time', '>', $currentDateTime->toTimeString());
+                })
+                ->where('status', Event::STATUS_ON_SALE)
+                ->get(),
+
+            'past_events' => Event::where('date', '<', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('date', '=', $currentDateTime->toDateString())
+                        ->where('start_time', '<', $currentDateTime->toTimeString());
+                })
+                ->get(),
         ]);
     }
 

@@ -16,7 +16,7 @@ defineOptions({
 })
 
 const props = defineProps({
-    items: Object,
+    cart_products: Object,
     subtotal: Number,
     google_maps_api_key: String,
     cart: Object
@@ -29,6 +29,15 @@ const page = usePage()
 const $q = useQuasar()
 
 const isAdressSet = () => {
+    
+}
+const selectedRows = ref([]);
+const form = useForm({
+    cart_id: props.cart.id,
+    cart_products: []
+})
+
+const submit = () => {
     if(page.props.auth.user.email_verified_at == null) {
         return router.visit(route('verification.notice'))
     }
@@ -36,118 +45,26 @@ const isAdressSet = () => {
         showNewAddressDialog.value = true
     }
     else {
-        router.visit(route('product.checkout'), {
-            data: {
-                cart_id: props.cart.id
+        // router.visit(route('product.checkout'), {
+        //     data: {
+        //         cart_id: props.cart.id
+        //     }
+        // })
+        form.get(route('customer.checkout'), {
+            onSuccess: () => {
+                $q.notify('Address Successfully Set')
+            },
+            onError: () => {
+                $q.notify({
+                    message: `You have not selected any items for checkout`,
+                    color: 'negative', // or any custom color defined in the brand config
+                    textColor: 'white',
+                    position: 'top'
+                })
             }
         })
     }
-}
-
-const form = useForm({
-    phone_number: page.props.auth.user.phone_number,
-    address: page.props.auth.user.address,
-    address_coordinates: {
-        lat: null,
-        lng: null
-    }
-})
-
-const submit = () => {
-    form.put(route('add-address'), {
-        onSuccess: () => {
-            $q.notify('Address Successfully Set')
-        }
-    })
-}
-
-const placeInput = ref(null)
-const loader = initializeLoader(props.google_maps_api_key)
-let olangoBounds = ref(null)
-
-const initializeAutocomplete = async () => {
-    console.log("annyeong")
-    const Places = await loader.importLibrary('places')
-    olangoBounds.value = new google.maps.LatLngBounds(
-        new google.maps.LatLng(10.2150, 124.0100),  // South-west corner
-        new google.maps.LatLng(10.2700, 124.0600)   // North-east corner
-    )
-    await nextTick()
-
-    const inputElement = placeInput.value.$el.querySelector('input')
-    const autocomplete = new Places.Autocomplete(inputElement, {
-        bounds: olangoBounds.value,
-        componentRestrictions: { country: 'ph' }
-    })
-
-    console.log(autocomplete)
-    autocomplete.addListener('place_changed', (e) => {
-        const place = autocomplete.getPlace()
-        if (isPlaceInOlango(place)) {
-            form.address = place.formatted_address;
-            form.address_coordinates.lat = place.geometry.location.lat();
-            form.address_coordinates.lng = place.geometry.location.lng();
-            map();
-        } else {
-            alert('Please select a location within Olango Island, Lapu-Lapu, Philippines.');
-        } 
-        // form.address = place.formatted_address
-        // form.address_coordinates.lat = place.geometry.location.lat()
-        // form.address_coordinates.lng = place.geometry.location.lng()
-        // map()
-    })
-
-}
-
-const isPlaceInOlango = (place) => {
-  return olangoBounds.value.contains(place.geometry.location);
-}
-
-async function map() {
-    const { Map, InfoWindow } = await loader.importLibrary('maps')
-    const { AdvancedMarkerElement } = await loader.importLibrary('marker')
-
-    const map = new Map(document.getElementById('map'), {
-        center: form.address_coordinates,
-        zoom: 17,
-        mapId: '4504f8b37365c3d0',
-    })
-
-    const infoWindow = new InfoWindow()
-    const draggableMarker = new AdvancedMarkerElement({
-        map,
-        position: form.address_coordinates,
-        gmpDraggable: true,
-        title: 'This marker is draggable.',
-    })
-
-    const content = `
-            <div class="text-weight-bold text-center text-subtitle1">Yo joren you can actually move this marker</div>
-            <div class="text-subtitle2">waitt frr?</div>
-        `
-        // infoWindow.close()
-        infoWindow.setContent(content)
-        infoWindow.open(map, draggableMarker)
-
-    draggableMarker.addListener('dragend', (event) => {
-        const position = draggableMarker.position
-
-
-        if (!olangoBounds.value.contains(position)) {
-            alert('The marker must be within Olango Island, Lapu-Lapu, Philippines.');
-            draggableMarker.position = new google.maps.LatLng(form.address_coordinates.lat, form.address_coordinates.lng)
-        } else {
-            form.address_coordinates.lat = position.lat
-            form.address_coordinates.lng = position.lng
-            const content = `
-                <div class="text-weight-bold text-center text-subtitle1">Your address is here</div>
-                <div class="text-subtitle2">Please check your map location is correct</div>
-            `;
-            infoWindow.setContent(content);
-            infoWindow.open(map, draggableMarker);
-        }
-
-    })
+    
 }
 
 const deleteCartItemForm = useForm({})
@@ -180,12 +97,23 @@ function showEditCartItemDialog(cartItem) {
 
 const columns = [
     { name: 'photo', label: '', align: 'center', field: 'photo', sortable: true },
-    { name: 'item', label: 'Item', align: 'center', field: 'item', sortable: true },
+    { name: 'item', label: 'Items', align: 'center', field: 'item', sortable: true },
     { name: 'quantity', align: 'center', label: 'Quantity', field: 'quantity', sortable: true },
     { name: 'total', align: 'center', label: 'Total', field: 'total', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
+const onSelection = (selection) => {
+    if (selection.added) {
+        // Add selected IDs to cart_products
+        const addedIds = selection.rows.map(row => row.id);
+        form.cart_products = [...form.cart_products, ...addedIds];
+    } else {
+        // Remove unselected IDs from cart_products
+        const removedIds = selection.rows.map(row => row.id);
+        form.cart_products = form.cart_products.filter(id => !removedIds.includes(id));
+    }
+};
 </script>
 
 <template>
@@ -198,20 +126,24 @@ const columns = [
         :google_maps_api_key="google_maps_api_key" 
         v-if="$page.props.auth.user"
     />
+    <!-- {{ form }} -->
     <div class="row">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
-                class="my-sticky-header-column-table q-mx-md"
+                class="my-sticky-header-column-table"
                 bordered
                 flat
-                :rows="items"
+                :rows="cart_products"
                 :columns="columns"
-                row-key="name"
+                row-key="id"
+                selection="multiple"
+                v-model:selected="selectedRows"
+                @selection="onSelection"
             >
                 <template v-slot:top>
                     <span class="text-h6">Cart</span> 
                     <q-space/>
-                    <span class="text-subtitle1">{{ items.length }} items</span>
+                    <span class="text-subtitle1">{{ cart_products.length }} items</span>
                 </template>
                 <template v-slot:body-cell-photo="props">
                     <q-td :props="props">
@@ -297,7 +229,7 @@ const columns = [
                 <q-card-section vertical>
                     <q-separator class="q-mb-sm"></q-separator>
                     <!-- <Link :href="route('product-checkout')"> -->
-                        <q-btn color="primary" @click="isAdressSet" class="full-width" no-caps rounded>Go To Checkout</q-btn>
+                        <q-btn color="primary" @click="submit()" class="full-width" no-caps rounded label="Go To Checkout"/>
                     <!-- </Link> -->
                 </q-card-section>
             </q-card>

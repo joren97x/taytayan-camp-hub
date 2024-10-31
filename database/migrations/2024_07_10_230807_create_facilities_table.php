@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('amenities')->nullable();
             $table->time('rental_start')->nullable();
             $table->time('rental_end')->nullable();
+            $table->boolean('available')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
