@@ -41,15 +41,26 @@ const submitModifierGroupForm = () => {
     
     <Head title="New Modifiers Groups" />
     <q-form @submit="submitModifierGroupForm">
-        <div class="q-pa-md">
+        <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
             <q-card bordered flat style="border-radius: 20px">
                 <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                     <div class="row flex justify-center bg-white">
-                        <Link :href="route('admin.products.index')">
-                            <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
+                        <Link :href="route('admin.modifier_groups.index')">
+                            <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                         </Link>
                         <div class="text-h6">Create Modifier Group</div>
-                        <CreateModifierItemDialog />
+                        <!-- <CreateModifierItemDialog /> -->
+                        <q-btn 
+                            no-caps 
+                            color="primary" 
+                            class="q-mr-sm absolute-top-right q-mt-md"
+                            rounded 
+                            unelevated
+                            type="submit"
+                            :loading="modifierGroupForm.processing"
+                            :disable="modifierGroupForm.processing"
+                            label="Save"    
+                        />
                     </div>
                     <q-separator class="q-mt-md"/>
                 </q-card-section>
@@ -79,9 +90,10 @@ const submitModifierGroupForm = () => {
                         :error="modifierGroupForm.errors.items ? true : false"
                         :error-message="modifierGroupForm.errors.items"
                     />
+                    <CreateModifierItemDialog />
                     <br>
-                    <div>
-                        max quantity
+                    <div class="q-mt-md">
+                        <!-- max quantity -->
                         <q-input
                             rounded 
                             outlined
@@ -92,7 +104,7 @@ const submitModifierGroupForm = () => {
                             :error-message="modifierGroupForm.errors.max_quantity"
                         >
                         </q-input>
-                        required quantity
+                        <!-- required quantity -->
                         <q-input
                             rounded 
                             outlined
@@ -111,17 +123,7 @@ const submitModifierGroupForm = () => {
                         :error-message="modifierGroupForm.errors.required"
                     />
                     <br>
-                    <q-btn 
-                        no-caps 
-                        color="primary" 
-                        class="q-mr-sm"
-                        rounded 
-                        unelevated
-                        type="submit"
-                        :loading="modifierGroupForm.processing"
-                        :disable="modifierGroupForm.processing"
-                        label="Save"    
-                    />
+                    
                 </q-card-section>
             </q-card>
             <!-- <div class="row">

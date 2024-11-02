@@ -85,6 +85,12 @@ async function onCameraReady() {
 
 const cameraError = (err) => {
     console.log(err)
+    $q.notify({
+        message: `Something went wrong`,
+        color: 'negative', // or any custom color defined in the brand config
+        textColor: 'white',
+        position: 'top'
+    })
 }
 
 </script>

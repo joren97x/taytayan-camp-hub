@@ -31,8 +31,11 @@ const tab = ref('orders')
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <q-item>
                     <q-item-section avatar>
-                        <q-avatar size="80px">
-                            <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" />
+                        <q-avatar size="80px" color="primary" class="text-white">
+                            <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" v-if="$page.props.auth.user.profile_pic" />
+                            <div v-else>
+                                {{ $page.props.auth.user.first_name[0] }}
+                            </div>
                         </q-avatar>
                     </q-item-section>
                     <q-item-section>

@@ -26,6 +26,7 @@ const columns = [
     
     <Head title="Reviews" />
     <div class="q-pa-md text-h6">{{ event.title }}</div>
+    <h1>DELETE THIS PAGEs</h1>
     <div class="row q-pa-md q-col-gutter-md">
         <div class="col-4">
             <q-card>

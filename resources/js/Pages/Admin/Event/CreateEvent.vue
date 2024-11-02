@@ -49,18 +49,17 @@ const onFileChange = (file) => {
 <template>
     
     <Head title="Create Event" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Create Event</div>
                     <q-btn 
                         @click="submit"
                         no-caps 
-                        icon="save"
                         color="primary" 
                         class="q-mr-md q-mt-md absolute-top-right"
                         :loading="form.processing"
@@ -82,7 +81,7 @@ const onFileChange = (file) => {
                     <q-separator class="q-my-md" /> -->
                     <div class="">
                         <p class="text-weight-bold text-h6">Event Cover Photo</p>
-                        <div class=" q-mx-xl q-my-md rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
+                        <div class=" q-my-md rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
                             
                             <div class="justify-center text-subtitle1 items-center flex full-height bg-grey-4" v-if="!imgPreview">
                                 <!-- <q-icon name="image" class="q-mr-md" size="lg"/> -->
@@ -197,7 +196,7 @@ const onFileChange = (file) => {
                         <!-- <div>Date and location</div>    
                         <div>Date and time</div> -->
                         <div class="row q-col-gutter-md">
-                            <div class="col-3">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     rounded 
                                     outlined 
@@ -221,7 +220,7 @@ const onFileChange = (file) => {
                                     </template>
                                 </q-input>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     rounded 
                                     outlined 
@@ -283,7 +282,7 @@ const onFileChange = (file) => {
                         />
                         <div>TIckets per order</div>
                         <div class="row q-col-gutter-md">
-                            <div class="col-4">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     rounded 
                                     outlined
@@ -294,7 +293,7 @@ const onFileChange = (file) => {
                                     :error-message="form.errors.min_ticket"
                                 />
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     rounded 
                                     outlined

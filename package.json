@@ -24,6 +24,7 @@
     "dependencies": {
         "@googlemaps/js-api-loader": "^1.16.6",
         "@quasar/extras": "^1.16.11",
+        "date-fns": "^4.1.0",
         "pinia": "^2.2.4",
         "quasar": "^2.15.4",
         "vue-qrcode-reader": "^5.5.11",

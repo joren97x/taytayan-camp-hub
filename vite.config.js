@@ -7,16 +7,16 @@ import path from 'path';
 
 export default defineConfig({
     // uncomment if 
-    // server: {
-    //     host: '0.0.0.0', // This makes the Vite dev server accessible on all network interfaces
-    //     port: 5173, // The port Vite runs on
-    //     hmr: {
-    //     // sa wifi ip address
-    //       host: '192.168.1.17' // Use your laptop’s local IP here
-    //     // piso wifi nga ip address
-    //     //   host: '10.0.20.1' // Use your laptop’s local IP here
-    //     }
-    // }, 
+    server: {
+        host: '0.0.0.0', // This makes the Vite dev server accessible on all network interfaces
+        port: 5173, // The port Vite runs on
+        hmr: {
+        // sa wifi ip address
+          host: '192.168.1.23' // Use your laptop’s local IP here
+        // piso wifi nga ip address
+        //   host: '10.0.20.1' // Use your laptop’s local IP here
+        }
+    }, 
     
     // uncomment if
     plugins: [

@@ -3,6 +3,7 @@
 import { ref, defineEmits } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
+import { formatDistance } from 'date-fns'
 import OrderedItems from '@/Components/OrderedItems.vue'
 
 const props = defineProps({
@@ -83,7 +84,8 @@ function cancelOrder() {
             </q-item-section>
             <q-item-section side top v-if="order_statuses.pending == order.status">
                 New
-                <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label>
+                <!-- <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label> -->
+                <q-item-label caption>{{ formatDistance(new Date(), order.created_at) }} ago</q-item-label>
                 <!-- <q-btn no-caps color="primary" @click.stop="isOrderReadyDialog = true">
                     View Order
                 </q-btn> -->
@@ -92,7 +94,8 @@ function cancelOrder() {
                 <q-btn no-caps color="primary" rounded unelevated @click.stop="readyOrderDialog = true">
                     Ready Order
                 </q-btn>
-                <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label>
+                <q-item-label caption>{{ formatDistance(new Date(), order.created_at) }} ago</q-item-label>
+                <!-- <q-item-label caption>{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</q-item-label> -->
             </q-item-section> 
         </q-item>
 <!-- </OrderItem> -->
@@ -109,18 +112,39 @@ function cancelOrder() {
             </q-card-actions>
             <q-card-section class="row q-col-gutter-md">
                 <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
-                    <div class="justify-between row col-12">
-                        <div class="col text-h6">
-                            {{ order.user.first_name + ' ' + order.user.last_name }}
-                            <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
-                        </div>
+                    <!-- <div class="justify-between row col-12">
+                        <div class="col"> -->
+                            <div class="text-h6">Customer</div>
+                            <q-item class="q-py-none">
+                                <q-item-section avatar>
+                                    <q-avatar size="100px" class="text-white" color="primary">
+                                        <q-img :src="`/storage/${order.user.profile_pic}`" v-if="order.user.profile_pic"/>
+                                        <div v-else>
+                                            {{ order.user.first_name[0] }}
+                                        </div>
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
+                                    <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
+                                    <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
+                                </q-item-section>
+                                <q-item-section side>
+                                    <Link :href="route('conversations.chat_user', order.user.id)">
+                                        <q-btn round icon="message" unelevated color="primary" />
+                                    </Link>
+                                </q-item-section>
+                            </q-item>
+                            <!-- {{ order.user.first_name + ' ' + order.user.last_name }}
+                            <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div> -->
+                        <!-- </div>
                         <div class="col text-right">
                             <q-chip size="md" class="q-px-lg text-capitalize q-my-md">{{ order.mode }}</q-chip>
                             <Link :href="route('conversations.chat_user', order.user.id)">
                                 <q-btn icon="message" color="primary" round />
                             </Link>
                         </div>
-                    </div>
+                    </div> -->
                     <q-separator class="q-my-md" />
                     <!-- <q-list> -->
                         <div class="text-h6">
@@ -182,7 +206,7 @@ function cancelOrder() {
                 <div class="justify-between row col-12">
                     <div class="col text-h6">
                         {{ order.user.first_name + ' ' + order.user.last_name }}
-                        <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
+                    <div class="text-caption">{{ formatDistance(new Date(), order.created_at) }} ago</div>
                     </div>
                     <div class="col text-right">
                         <q-chip>{{ order.mode }}</q-chip>

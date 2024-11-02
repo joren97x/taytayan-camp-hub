@@ -25,7 +25,7 @@ const columns = [
 </script>
 
 <template>
-    <q-card bordered flat class="q-ma-md">
+    <q-card bordered flat :class="$q.screen.gt.sm ? 'q-ma-md' : ''">
         <q-card-section>
             <div class="text-h6">Event Dashboard</div>
             <q-card bordered flat >

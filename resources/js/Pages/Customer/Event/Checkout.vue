@@ -4,6 +4,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
 import { useQuasar, date } from 'quasar'
+import { parse, format } from 'date-fns'
 
 const props = defineProps({
     order_constants: Object,
@@ -15,6 +16,7 @@ const $q = useQuasar()
 const page = usePage()
 const attendees = ref(props.attendees)
 const admission_fee = ref(props.event.admission_fee)
+const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date()), 'h a');
 const form = useForm({
     attendees: props.attendees,
     event_id: props.event.id,
@@ -110,7 +112,7 @@ const addAttendee = () => {
                                     </q-item-section>
                                     <q-item-section class="text-subtitle1">
                                         {{ event.title }}
-                                        <q-item-label caption>{{ date.formatDate(event.date, 'MMMM D, YYYY') }}</q-item-label>
+                                        <q-item-label caption>{{ date.formatDate(event.date, 'MMMM D, YYYY') }} - {{ formattedTime }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
                                 <q-item>

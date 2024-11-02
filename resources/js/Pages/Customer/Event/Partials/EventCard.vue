@@ -1,8 +1,9 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
 import { date } from 'quasar'
+import { parse, format } from 'date-fns';
 
-defineProps({ event: Object })
+const props = defineProps({ event: Object })
 
 const page = usePage()
 const url = page.url
@@ -14,6 +15,7 @@ function shareOnFacebook() {
     // window.open(facebookShareUrl, '_blank');
 }
 
+const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date()), 'h a');
 
 </script>
 
@@ -36,6 +38,7 @@ function shareOnFacebook() {
                                 <q-item-label class="text-h6">{{ event.title }}</q-item-label>
                                 <q-item-label caption class="">
                                     {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
+                                    {{ formattedTime }}
                                 </q-item-label>
                             </q-item-section>
                         </q-item>

@@ -57,8 +57,11 @@ const slide = ref(0)
                 <Link :href="route('customer.facilities.show', facility.id)">
                     <q-card-section class="q-py-xs q-px-md">
                         <div class="text-h6">{{ facility.name }}</div>
-                        <div>{{ facility.amenities }}</div>
+                        <div class="ellipsis-2-lines">{{ facility.amenities }}</div>
                         <div>P{{ facility.price }}</div>
+                        <div class="absolute-top-right q-mt-sm q-mr-sm">
+                            <q-icon name="star" color="orange" size="xs"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
+                        </div>
                     </q-card-section>
                 </Link>
             </q-card>

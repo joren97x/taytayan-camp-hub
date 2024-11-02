@@ -14,8 +14,9 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('admin.modifier_items.store'), {
-        onFinish: () => form.reset('name', 'price'),
+        onFinish: () => form.reset(),
         onSuccess: () => {
+            form.reset()
             $q.notify('Modifier Item Successfully Added')
             dialog.value = false
         }
@@ -30,18 +31,24 @@ const submit = () => {
         no-caps 
         rounded
         color="primary" 
-        class="q-mr-sm q-mt-md absolute-top-right" 
         outline
         label="New Modifier Item"    
     />
-    <q-dialog v-model="dialog" position="right" full-height>
+    <q-dialog 
+        v-model="dialog" 
+        full-height
+        :maximized="$q.screen.lt.md"    
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'right'"
+    >
         <q-card style="width: 500px">
             <q-form @submit="submit">
                 <q-card-section class="row items-center no-wrap">
                         <div class="text-weight-bold text-subtitle1">New Item</div>
                         <q-space />
                         
-                        <q-btn flat round icon="close" />
+                        <q-btn flat round icon="close" v-close-popup/>
                 </q-card-section>
                 <q-card-section>
                     <q-input 
@@ -71,6 +78,9 @@ const submit = () => {
                         v-model="form.price"
                         :error="form.errors.price ? true : false"
                         :error-message="form.errors.price"
+                        mask="#.##"
+                        fill-mask="0"
+                        reverse-fill-mask
                     >
                         <template v-slot:prepend>
                             <q-icon name="attach_money" />

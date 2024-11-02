@@ -119,12 +119,12 @@ const onFileChange = (file) => {
 <template>
     
     <Head title="Edit Product" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat style="border-radius: 20px">
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.products.index')">
-                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-mt-md text-black" :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Product</div>
                     
@@ -331,6 +331,7 @@ const onFileChange = (file) => {
     <q-dialog 
         v-model="addModifierGroupDialog"
         transition-show="slide-up"
+            :position="$q.screen.lt.md ? 'bottom' : 'standard'"
         transition-hide="slide-down"
         :maximized="$q.screen.lt.md"
     >
@@ -381,11 +382,13 @@ const onFileChange = (file) => {
         v-model="clearModifierGroupDialog"
         transition-show="slide-up"
         transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
         :maximized="$q.screen.lt.md"
     >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
             <q-card-section>
-                Clear modifier groups?
+                <div class="text-h6">Clear Modifier Group</div>
+                Are you sure you want to clear modifier groups?
             </q-card-section>
             <q-card-actions>
                 <q-space/>

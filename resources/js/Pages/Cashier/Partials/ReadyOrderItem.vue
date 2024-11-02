@@ -198,8 +198,11 @@ function calculateSteps() {
                         <div class="text-h6">Customer</div>
                         <q-item class="q-py-none">
                         <q-item-section avatar>
-                            <q-avatar size="100px" square>
-                                <q-img :src="`/storage/${order.user.profile_pic}`"/>
+                            <q-avatar size="100px" class="text-white" color="primary">
+                                <q-img :src="`/storage/${order.user.profile_pic}`" v-if="order.user.profile_pic"/>
+                                <div v-else>
+                                    {{ order.user.first_name[0] }}
+                                </div>
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>

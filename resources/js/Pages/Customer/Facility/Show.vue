@@ -25,86 +25,6 @@ const form = useForm({
     guests: 1
 })
 
-// onMounted(() => {
-//     processReservedDates()
-// })
-
-// const date = ref(null)
-// let disabled_dates = ref([])
-
-// watch(date, () => {
-//     if(date.value == null) {
-//         return
-//     }
-//     let checkInDate = date.value.from
-//     const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
-//     console.log(diff)
-//     let pwede = true
-//     for(let i = 0; i < diff; i++) {
-//         if(!options(checkInDate)) {
-//             pwede = false
-//             date.value = null
-//             alert('Please choose a date that doesnt overlap')
-//             break;
-//             console.log('dili pwede')
-//         }
-//             checkInDate = qdate.addToDate(checkInDate, { days: 1})
-//     }
-//     if(pwede) {
-//         form.date = date.value
-//     }
-// })
-
-// const setDates = () => {
-//     if(date.value == null) {
-//         return
-//     }
-//     let checkInDate = date.value.from
-//     const diff = qdate.getDateDiff(date.value.to, date.value.from, 'days') + 1
-//     console.log(diff)
-//     let pwede = true
-//     for(let i = 0; i < diff; i++) {
-//         if(!options(checkInDate)) {
-//             pwede = false
-//             date.value = null
-//             alert('Please choose a date that doesnt overlap')
-//             break;
-//         }
-//         checkInDate = qdate.addToDate(checkInDate, { days: 1})
-//     }
-//     if(pwede) {
-//         form.date = date.value
-//         dialog.value = false
-//     }
-// }
-
-// const clearDates = () => {
-//     date.value = null
-//     form.date.from = ''
-//     form.date.to = ''
-// }
-
-// function processReservedDates() {
-//     if (props.reserved_dates) {
-//         for (let i = 0; i < props.reserved_dates.length; i++) {
-//             let checkInDate = props.reserved_dates[i].check_in
-//             const checkOutDate = props.reserved_dates[i].check_out
-
-//             disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
-//             const diff = qdate.getDateDiff(checkOutDate, checkInDate, 'days')
-//             for(let j = 0; j < diff; j++) {
-//                 checkInDate = qdate.addToDate(checkInDate, { days: 1})
-//                 disabled_dates.value.push(qdate.formatDate(checkInDate, 'YYYY-MM-DD'))
-//             }
-//         }
-//     }
-// }
-
-// function options(date) {
-//     const formattedIncomingDate = qdate.formatDate(new Date(date), 'YYYY-MM-DD');
-//     return !disabled_dates.value.includes(formattedIncomingDate);
-// }
-
 const images = JSON.parse(props.facility.images)
 const slide = ref(0)
 const dialog = ref(false)
@@ -131,10 +51,6 @@ const setBookingDates = (dates) => {
     dialog.value = false
 }
 
-const image = [
-        'https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/b5c4cb28-b158-4a85-8612-004117ac45ee.jpeg?im_w=1200',
-        // Add more images here or leave with fewer to test the repetition logic
-      ]
 const fiveImages = computed(() => {
     let repeatedImages = [];
     while (repeatedImages.length < 5) {
@@ -142,8 +58,18 @@ const fiveImages = computed(() => {
     }
     return repeatedImages.slice(0, 5);
 })
-      
 
+const incrementGuests = () => {
+    if(form.guests < props.facility.guests) {
+        form.guests++
+    }
+}
+
+const decrementGuests = () => {
+    if(form.guests > 1 && form.guests <= props.facility.guests) {
+        form.guests--
+    }
+}
 </script>
 
 <template>
@@ -271,9 +197,9 @@ const fiveImages = computed(() => {
                                     <div>Guests</div>
                                 </div>
                                 <div class="col-6 justify-end items-center flex">
-                                    <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="form.guests--"></q-btn>
+                                    <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementGuests()"></q-btn>
                                     <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
-                                    <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
+                                    <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="incrementGuests()"></q-btn>
                                 </div>
                             </q-card-section>
                         </q-card>
@@ -287,17 +213,17 @@ const fiveImages = computed(() => {
                 <div class="gt-sm justify-between flex">
                     <div>
                         <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                        <div class="text-subtitle1" >
+                        <div class="" >
                             {{ facility.amenities }}
                         </div>
                     </div>
-                    <div>
-                        <q-icon name="star"/>
+                    <div class="text-subtitle1 q-mt-xs q-mr-xs">
+                        <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                     </div>
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">About This Place</div>
-                <div class="text-subtitle1">
+                <div class="">
                     <ul>
                         <li>Location: Olango Island</li>
                         <li>Check in time: {{ facility.rental_start }}</li>
@@ -306,7 +232,7 @@ const fiveImages = computed(() => {
                 </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">What This Place Offers</div>
-                <div class="text-subtitle1">
+                <div class="">
                     {{ facility.amenities }}
                 </div>
             </div>

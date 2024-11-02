@@ -3,7 +3,9 @@
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
+const drawerStore = useDrawerStore()
 const leftDrawerOpen = ref(false)
 const $q = useQuasar()
 // onMounted(() => {
@@ -148,7 +150,7 @@ const navigation_list = [
 
 <template>
     <q-layout view="lHh LpR lFf">
-        <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+        <q-drawer show-if-above v-model="drawerStore.drawer" side="left" bordered>
             <q-img 
                 class="absolute-top" 
                 src="/taytayan.jpg"

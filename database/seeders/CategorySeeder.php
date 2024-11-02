@@ -23,15 +23,11 @@ class CategorySeeder extends Seeder
         ];
         
         foreach($dummy_categories as $item) {
-            $category = Category::create([
-                'name' => $item
-            ]);
-
-            CategoryProduct::create([
-                'category_id' => $category->id,
-                'product_id' => fake()->numberBetween(1, 10)
-            ]);
-
+            Category::create([ 'name' => $item]);
+            // CategoryProduct::create([
+            //     'category_id' => $category->id,
+            //     'product_id' => fake()->numberBetween(1, 10)
+            // ]);
         }
 
     }

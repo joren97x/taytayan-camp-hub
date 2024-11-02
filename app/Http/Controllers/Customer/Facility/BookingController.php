@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer\Facility;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,6 +17,7 @@ class BookingController extends Controller
     public function index()
     {
         
+        // dd(User::where('role', 'cashier')->orderBy('updated_at', 'desc')->first());
         $active_bookings = Booking::with('facility')->whereIn('status', [
             Booking::STATUS_CHECKED_IN,
             Booking::STATUS_CONFIRMED,

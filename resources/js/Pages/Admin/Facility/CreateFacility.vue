@@ -72,12 +72,12 @@ const handleRemoveFile = (files) => {
 <template>
     
     <Head title="Create Facility" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Create Facility</div>
                     <q-btn 
@@ -85,9 +85,8 @@ const handleRemoveFile = (files) => {
                         rounded 
                         unelevated
                         no-caps 
-                        icon="save"
                         color="primary" 
-                        class="q-mr-md q-mt-md absolute-top-right"
+                        class="q-mr-sm q-mt-md absolute-top-right"
                         :loading="form.processing"
                         :disable="form.processing"
                         label="Save"
@@ -99,15 +98,13 @@ const handleRemoveFile = (files) => {
                 <q-form @submit="submit">
                     <!-- <div>Build Your Event Page</div>
                     <div>Add all of your event details and let attendees know what to expect</div> -->
-                    <div class="q-mx-md q-mt-md">
-                        <div class="row q-col-gutter-sm">
-                            <div class="col-3 text-subtitle1 text-weight-bold items-center flex">
+                    <div class="x">
+                        <div class="text-subtitle1 text-weight-bold">
                                 Facility Images
                             </div>
-                            <div class="col-9 justify-end flex items-end self-end">
-                                <!-- <q-btn no-caps @click="editImages = !editImages">Edit</q-btn>
-                                <q-btn no-caps>Add</q-btn> -->
-                            </div>
+                        <div class="row q-col-gutter-sm">
+                            
+                            
                             <!-- {{ form }} -->
                             <div class="col-12">
                                 <q-uploader

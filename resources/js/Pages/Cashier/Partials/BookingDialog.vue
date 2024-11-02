@@ -2,6 +2,7 @@
 import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { defineEmits, ref } from 'vue'
+import Bookings from '../Bookings.vue';
 
 const emit = defineEmits(['close']) 
 const props = defineProps({
@@ -194,8 +195,7 @@ const checkOut = () => {
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/>
                         <div class="text-h6">{{ booking.facility.name }}</div>
-                        <div>{{ booking.facility.description }}</div>
-                        <div>P{{ booking.facility.price }}</div>
+                        <!-- <div>P{{ booking.facility.price }}</div> -->
                         <!-- <q-btn class="full-width q-mt-md" label="View" color="primary" no-caps unelevated/> -->
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -235,8 +235,11 @@ const checkOut = () => {
                                 <div class="text-h6">Guest</div>
                                 <q-item>
                                     <q-item-section avatar>
-                                        <q-avatar size="70px">
-                                            <q-img class="fit" fit="cover" :src="`/storage/${booking.user.profile_pic}`"></q-img>
+                                        <q-avatar size="70px" color="primary" class="text-white">
+                                            <q-img class="fit" fit="cover" :src="`/storage/${booking.user.profile_pic}`" v-if="booking.user.profile_pic"/>
+                                            <div v-else>
+                                                {{ booking.user.first_name[0] }}
+                                            </div>
                                         </q-avatar>
                                     </q-item-section>
                                     <q-item-section>

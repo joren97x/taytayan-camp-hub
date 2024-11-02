@@ -22,7 +22,13 @@ class PaymentController extends Controller
     public function success(Request $request) 
     {
         // dd($request);
+
         $event = Event::find($request->query('event_id'));
+        $payment_session = session('payment_session');
+
+        if (!$payment_session) {
+            abort(404);
+        }
 
         $ticket_order = TicketOrder::create([
             'user_id' => $request->query('user_id'),
@@ -71,6 +77,8 @@ class PaymentController extends Controller
         $ticket_order->qr_code_path = $qr_code_path;
         $ticket_order->save();
 
+        session()->forget('payment_session');
+
         return redirect(route('customer.tickets.index'));
     }
 
@@ -95,6 +103,7 @@ class PaymentController extends Controller
         // dd($request->all());
 
         if($request->payment_method == 'walk_in') {
+            session(['payment_session' => true]);
             return redirect(route('event.checkout.success') . '?' . http_build_query($request->all()));
         }
         
@@ -151,6 +160,7 @@ class PaymentController extends Controller
             ]
         ]);
 
+        session(['payment_session' => true]);
         session(['checkout_id' => $checkout->id]);
 
         return Inertia::location($checkout->checkout_url);

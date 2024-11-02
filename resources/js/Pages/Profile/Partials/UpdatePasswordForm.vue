@@ -115,6 +115,7 @@ const updatePassword = () => {
                     v-model="form.current_password"
                     label="Current Password"
                     lazy-rules
+                    type="password"
                     :error="form.errors.current_password ? true : false"
                     :error-message="form.errors.current_password"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
@@ -125,8 +126,9 @@ const updatePassword = () => {
                     v-model="form.password"
                     label="New Password"
                     lazy-rules
+                    type="password"
                     :error="form.password ? true : false"
-                    :error-message="form.password"
+                    :error-message="form.errors.password"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"
                 />
                 <q-input
@@ -135,6 +137,7 @@ const updatePassword = () => {
                     v-model="form.password_confirmation"
                     label="Confirm New Password"
                     lazy-rules
+                    type="password"
                     :error="form.errors.password_confirmation ? true : false"
                     :error-message="form.errors.password_confirmation"
                     :rules="[ val => val && val.length > 0 || 'Please type something']"

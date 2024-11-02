@@ -4,6 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
 import { Link, Head, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 // import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
 
 defineOptions({
@@ -16,15 +17,15 @@ const props = defineProps({
 })
 
 const $q = useQuasar()
-const categoryOptions = props.categories.map(category => category.name)
-const category = ref('')
+const drawerStore = useDrawerStore()
+const showSearch = ref(false)
 const filter = ref('')
 const deleteProductDialog = ref(false)
 const deleteProductForm = useForm({
     product: null
 })
 
-function showDeleteProductDialog(product) {
+const showDeleteProductDialog = (product) => {
     deleteProductForm.product = product
     deleteProductDialog.value = true
 }
@@ -53,18 +54,45 @@ const columns = [
 <template>
     
     <Head title="Products" />
-    <div class="q-pa-md bg-grey-3" style="height: 100vh;">
+    <div :class="`bg-grey-3 ${$q.screen.gt.sm ? 'q-pa-md' : ''}`" style="height: 100vh;">
         <!-- kung naa pa bay stock or wala na ug sa modifier group pod apili -->
         <q-card flat bordered style="border-radius: 20px">
             <q-table
                 class="my-sticky-header-column-table"
                 flat
                 title="Treats"
-                :rows="props.products"
+                :rows="products"
                 :columns="columns"
                 row-key="name"
                 :filter="filter"
+                :grid="$q.screen.lt.md"
             >
+                <template v-slot:top>
+                    <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
+                    <div class="text-h6">Products</div>
+                    <q-space />
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    
+                    <Link :href="route('admin.products.create')">
+                        <q-btn class="q-ml-sm" no-caps color="primary" rounded unelevated label="Create Product"/>
+                    </Link>
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="filter"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name"
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
+                </template>
                 <template v-slot:body-cell-name="props">
                     <q-td :props="props" style="width: 200px;">
                         <q-item class="q-pa-none">
@@ -104,26 +132,37 @@ const columns = [
                         {{ props.row.available ? 'Yes' : 'No' }}
                     </q-td>
                 </template>
-                <template v-slot:top>
-                    <div class="text-h6">Products</div>
-                    <q-space />
-                    <!-- <q-select
-                        style="width: 200px"
-                        label="Category"
-                        filled
-                        dense
-                        v-model="category"
-                        :options="categoryOptions"
-                    
-                    /> -->
-                    <q-input dense  label="Search..." class="q-mx-md" rounded outlined debounce="300" color="primary" v-model="filter">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                    <Link :href="route('admin.products.create')">
-                        <q-btn no-caps color="primary" rounded label="Create Product" unelevated/>
-                    </Link>
+                <template v-slot:item="props">
+                    <div class="col-12 q-mb-sm">
+                        <q-card class="q-mx-sm" bordered flat>
+                            <q-card-section>
+                                <q-item class="q-pa-none">
+                                    <q-item-section avatar>
+                                        <q-img :src="`/storage/${props.row.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
+                                    </q-item-section>
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.name }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.description }}</q-item-label>
+                                        <q-item-label caption >P{{ props.row.price }}</q-item-label>
+                                        <q-btn icon="more_horiz" class="absolute-top-right z-top text-black" flat color="white" round>
+                                            <q-menu>
+                                                <q-list style="min-width: 100px">
+                                                    <Link :href="route(`admin.products.edit`, props.row.id)">
+                                                        <q-item clickable>
+                                                            <q-item-section>Edit</q-item-section>
+                                                        </q-item>
+                                                    </Link>
+                                                    <q-item clickable @click="showDeleteProductDialog(props.row)">
+                                                        <q-item-section>Delete</q-item-section>
+                                                    </q-item>
+                                                </q-list>
+                                            </q-menu>
+                                        </q-btn>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
+                    </div>
                 </template>
             </q-table>
         </q-card>
@@ -132,6 +171,7 @@ const columns = [
             persistent 
             :maximized="$q.screen.lt.md"
             transition-show="slide-up"
+            :position="$q.screen.lt.md ? 'bottom' : 'standard'"
             transition-hide="slide-down"
         >
             <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
@@ -143,7 +183,7 @@ const columns = [
                 </q-card-section>
                 <q-card-section>
                     Are you sure you want to delete this product? All data will be permanently removed. This action cannot be undone.
-                    <q-item class="bg-negative text-white q-my-md">
+                    <q-item class="bg-negative text-white q-my-md rounded-borders">
                         <q-item-section avatar>
                             <q-img :src="`/storage/${deleteProductForm.product.photo}`" height="100px" width="100px"></q-img>
                         </q-item-section>  
@@ -172,3 +212,12 @@ const columns = [
         </q-dialog>
     </div>
 </template>
+
+<style scoped>
+
+a {
+    text-decoration: none;
+    color: black
+}
+
+</style>

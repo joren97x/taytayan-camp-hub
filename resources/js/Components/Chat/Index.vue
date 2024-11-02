@@ -1,10 +1,9 @@
 <script setup>
 
-import { Link, usePage, Head } from '@inertiajs/vue3'
+import { usePage, Head } from '@inertiajs/vue3'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 import { useQuasar } from 'quasar'
 import ChatItem from './ChatItem.vue'
-import { ref } from 'vue'
 import { useConversationStore } from '@/Stores/ConversationStore'
 
 const props = defineProps({
@@ -15,7 +14,6 @@ const conversationStore = useConversationStore()
 const drawerStore = useDrawerStore()
 const $page = usePage()
 const $q = useQuasar()
-const conversations = ref(props.conversations)
 
 // Echo.private(`users.online`)
 //     .listen('UserStatusUpdated', (data) => {

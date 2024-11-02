@@ -5,6 +5,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { ref } from 'vue'
 import { useQuasar, date } from 'quasar'
+import { parse, format } from 'date-fns'
 
 defineOptions({
     layout: CustomerLayout
@@ -16,6 +17,7 @@ const props = defineProps({
 
 const $q = useQuasar()
 const attendees = ref(props.event.min_ticket)
+const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date()), 'h a');
 
 const incrementTicket = () => {
     if(attendees.value < props.event.max_ticket) {
@@ -67,7 +69,7 @@ const decrementTicket = () => {
                             <q-icon name="event" />
                         </q-item-section>
                         <q-item-section>
-                            {{ date.formatDate(event.date, 'dddd, MMMM D') }} - {{ event.start_time }} PM <span class="text-red text-caption">PM and AM (fix)</span>
+                            {{ date.formatDate(event.date, 'dddd, MMMM D') }} - {{ formattedTime }}
                         </q-item-section>
                     </q-item>
                 </div>
@@ -114,11 +116,17 @@ const decrementTicket = () => {
                         </q-item-section>
                     </q-item> -->
                     <q-card-actions>
-                        {{ date.getDateDiff(event.date, new Date(), 'minutes') > 0 ? 'on sale' : 'past' }}
-                        <Link :href="route('event.checkout')" class="full-width" :data="{ event_id: event.id, attendees }">
+                        <!-- {{ date.getDateDiff(event.date, new Date()) >= 0 ? 'on sale' : 'past' }}
+                        {{ date.getDateDiff(event.date, new Date()) }} -->
+                        <Link 
+                            :href="route('event.checkout')" 
+                            class="full-width" 
+                            :data="{ event_id: event.id, attendees }" 
+                            v-if="date.getDateDiff(event.date, new Date()) >= 0"
+                        >
                             <q-btn class="full-width" rounded color="primary" no-caps label="Check Out"/>
                         </Link>
-                            <q-btn class="full-width" rounded color="primary" no-caps label="Event Ended"/>
+                        <q-btn class="full-width" v-else disable rounded color="primary" no-caps label="Event Ended"/>
                     </q-card-actions>
                 </q-card>
             </div>

@@ -5,6 +5,7 @@ import { Head, Link } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import { date } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
+import { parse, format } from 'date-fns'
 
 defineOptions({
     layout: CashierLayout
@@ -29,25 +30,18 @@ const columns = [
 
 const filteredEvents = computed(() => {
   let filtered = props.events;
-    console.log('hi')
   // Apply status filter
   if (filter.value !== 'all') {
     filtered = filtered.filter(event => event.status === filter.value);
-    console.log('hi')
-
   }
 
   // Apply search term filter
   if (searchTerm.value) {
     filtered = filtered.filter(event => {
-      const fullName = `${event.user.first_name} ${event.user.last_name}`.toLowerCase();
-      const email = event.user.email.toLowerCase();
-      const eventName = event.event.name.toLowerCase();
+      const eventName = event.title.toLowerCase();
       const search = searchTerm.value.toLowerCase();
 
       return (
-        fullName.includes(search) ||
-        email.includes(search) ||
         eventName.includes(search)
       );
     });
@@ -64,6 +58,11 @@ const initialPagination = {
     // rowsNumber: xx if getting data from a server
 }
 
+const formatTime = (time) => {
+    return format(parse(time, 'HH:mm:ss', new Date()), 'h a');
+}
+
+
 </script>
 
 <template>
@@ -74,7 +73,6 @@ const initialPagination = {
                 class="my-sticky-header-column-table"
                 flat
                 :grid="$q.screen.lt.md"
-                title="Treats"
                 :rows="filteredEvents"
                 :columns="columns"
                 row-key="name"
@@ -82,24 +80,11 @@ const initialPagination = {
 
             >
                 <template v-slot:top>
-                    <!-- <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
-                    <p class="text-h6 q-pt-md">Events</p>
-                    <q-space />
-                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input> -->
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer =true" class="lt-md q-mr-sm"/>
                     <div class="text-h6">Events</div>
                     <q-space />
-                    <!-- <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input> -->
                     <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
-                        
+                    
                     <q-select 
                         :options="['all', 'on_sale', 'cancelled', 'event_ended']" 
                         v-model="filter"
@@ -108,7 +93,6 @@ const initialPagination = {
                         dense
                     >
                     </q-select>
-                    
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
                             v-model="searchTerm"
@@ -125,7 +109,6 @@ const initialPagination = {
                             </template>
                         </q-input>
                     </div>
-
                 </template>
                 
                 <template v-slot:body-cell-event="props">
@@ -168,7 +151,7 @@ const initialPagination = {
                 <template v-slot:item="props">
                     <q-card class="col-12 q-mb-md" bordered flat>
                         <q-card-section>
-                            <div class="row">
+                            <div class="row q-col-gutter-x-md">
                                 <div class="col-xs-12 col-sm-12">
                                     <div class="text-caption text-grey">
                                         Event
@@ -183,7 +166,7 @@ const initialPagination = {
                                         </q-item-section>
                                         <q-item-section class="items-start">
                                             <q-item-label>{{ props.row.title }}</q-item-label>
-                                            <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  props.row.start_time}}</q-item-label>
+                                            <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  formatTime(props.row.start_time) }}</q-item-label>
                                         </q-item-section>
                                     </q-item>
                                 </div>
@@ -191,8 +174,8 @@ const initialPagination = {
                                     <div class="text-caption text-grey">
                                         Sold
                                     </div>
-                                    {{ props.row.tickets_sold + ' / ' + props.row.capacity }}
                                     <q-linear-progress :value="props.row.tickets_sold / props.row.capacity" class="q-mt-xs" size="5px" />
+                                    {{ props.row.tickets_sold + ' / ' + props.row.capacity }}
                                 </div>
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
@@ -200,18 +183,18 @@ const initialPagination = {
                                     </div>
                                     {{ props.row.tickets_sold * props.row.admission_fee }}
                                 </div>
-                                <div class="col-xs-6 col-sm-6">
+                                <!-- <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
                                         Status
                                     </div>
                                     {{ props.row.status }}
-                                </div>
-                                <div class="col-xs-12 col-sm-12">
+                                </div> -->
+                                <div class="col-xs-12 col-sm-12 q-mt-sm">
                                     <!-- <div class="text-caption text-grey">
                                         Actions
                                     </div> -->
-                                    <Link :href="route('cashier.events.check_in', props.row.id)" class="q-mt-sm">
-                                        <q-btn label="Button" color="primary" rounded unelevated />
+                                    <Link :href="route('cashier.events.check_in', props.row.id)" class="full-width">
+                                        <q-btn label="Button" color="primary" rounded unelevated class="full-width"/>
                                     </Link>
                                 </div>
                             </div>

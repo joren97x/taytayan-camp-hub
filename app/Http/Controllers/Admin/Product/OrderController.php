@@ -36,7 +36,7 @@ class OrderController extends Controller
 
         return Inertia::render('Admin/Product/Orders', [
             'orders' => $orders,
-            'order_constants' => Order::getConstants()
+            'order_statuses' => Order::getConstants()
         ]);
     }
 

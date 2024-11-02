@@ -77,12 +77,12 @@ const submitStatusForm = () => {
 <template>
     
     <Head title="Edit Event" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div class="row flex justify-center bg-white">
                     <Link :href="route('admin.events.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md " :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Event</div>
                     <div class="q-mr-md q-mt-md absolute-top-right">
@@ -92,7 +92,7 @@ const submitStatusForm = () => {
                             class="q-mr-sm"
                             color="primary"
                             @click="changeStatusDialog = true" 
-                            :label="event.status" 
+                            :label="$q.screen.gt.sm ? event.status : ''" 
                             no-caps 
                             rounded
                         />
@@ -175,7 +175,7 @@ const submitStatusForm = () => {
                         <!-- <div>Date and location</div>    
                         <div>Date and time</div> -->
                         <div class="row q-col-gutter-md">
-                            <div class="col-3">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     outlined 
                                     rounded
@@ -199,7 +199,7 @@ const submitStatusForm = () => {
                                     </template>
                                 </q-input>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     outlined 
                                     rounded
@@ -267,7 +267,7 @@ const submitStatusForm = () => {
                         />
                         <div>TIckets per order</div>
                         <div class="row q-col-gutter-md">
-                            <div class="col-4">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     outlined 
                                     rounded
@@ -278,7 +278,7 @@ const submitStatusForm = () => {
                                     :error-message="form.errors.min_ticket"
                                 />
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-3 col-xl-3 col-lg-3 col-xs-6 col-sm-6">
                                 <q-input 
                                     outlined 
                                     rounded

@@ -81,9 +81,9 @@ onUnmounted(() => {
                 </q-item-section>
                 <q-item-section avatar>
                     <q-avatar v-if="conversationStore.receiver?.profile_pic">
-                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`"/>
+                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`" v-if="conversationStore.receiver?.profile_pic"/>
                     </q-avatar>
-                    <q-avatar color="primary" v-else>
+                    <q-avatar color="primary" class="text-white" v-else>
                         {{ conversationStore.receiver?.first_name[0] }}
                     </q-avatar>
                 </q-item-section>
@@ -116,13 +116,31 @@ onUnmounted(() => {
                         :text-color="$page.props.auth.user.id == message.user_id ? 'white' : 'black'"
                         :bg-color="$page.props.auth.user.id == message.user_id ? 'blue' : 'grey'"
                         :sent="$page.props.auth.user.id == message.user_id"
-                    />
+                    >
+                        <template v-slot:avatar>
+                            <q-avatar color="primary" v-if="$page.props.auth.user.id == message.user_id">
+                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`" v-if="$page.props.auth.user.profile_pic"/>
+                                <div v-else class="text-white">
+                                    {{ $page.props.auth.user.first_name[0] }}
+                                </div>
+                            </q-avatar>
+                            <q-avatar color="primary" v-else>
+                                <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`" v-if="conversationStore.receiver?.profile_pic"/>
+                                <div v-else class="text-white">
+                                    {{ conversationStore.receiver?.first_name[0] }}
+                                </div>
+                            </q-avatar>
+                        </template>
+                    </q-chat-message>
                 </q-scroll-area>
             </div>
             <div v-else style="height: 80vh" class="flex justify-center items-end text-center">
                 <div>
-                    <q-avatar size="100px" color="blue">
-                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`"></q-img>
+                    <q-avatar size="100px" color="primary">
+                        <q-img class="fit" fit="cover" :src="`/storage/${conversationStore.receiver?.profile_pic}`" v-if="conversationStore.receiver?.profile_pic"/>
+                        <div v-else class="text-white">
+                            {{ conversationStore.receiver?.first_name[0] }}
+                        </div>
                     </q-avatar>
                     <div class="q-mb-xl q-mt-sm">
                         <h6 class="q-pa-none q-ma-none">{{ conversationStore.receiver?.first_name + ' ' + conversationStore.receiver?.last_name }}</h6>

@@ -15,7 +15,8 @@ class BookingController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Facility/Bookings', [
-            'bookings' => Booking::with('facility')->get()
+            'bookings' => Booking::with(['facility', 'user'])->get(),
+            'statuses' => Booking::getStatuses()
         ]);
     }
 

@@ -20,6 +20,7 @@ const form = useForm({
     price: props.facility.price,
     guests: props.facility.guests,
     amenities: props.facility.amenities,
+    available: props.facility.available ? true : false
 })
 
 const imagesForm = useForm({
@@ -108,74 +109,38 @@ const submitDeleteFacilityForm = () => {
 <template>
     
     <Head title="Edit Event" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Edit Facility</div>
-                    
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
             <q-card-section>
-                <!-- <q-form @submit="submit"> -->
-                    <!-- <div class="row justify-between" style="z-index: 400;">
-                        <div class="text-h6 text-center col-12" style="position: relative">
-                            <Link :href="route('admin.facilities.index')">
-                                <q-btn icon="arrow_back" label="Go Back" flat no-caps class="absolute-left"/>
-                            </Link>
-                            Edit Facility
-                            <q-btn icon="delete" @click="deleteFacilityDialog = true" unelevated class="absolute-right" label="Delete" no-caps color="negative" />
+                    <div>
+                        <div class="text-subtitle1 text-weight-bold items-center flex q-mb-md" style="position: relative">
+                            Facility Images
+                            <q-btn 
+                                no-caps 
+                                v-if="imgPreview.length > 0" 
+                                color="primary"
+                                :disable="imagesForm.processing"
+                                :loading="imagesForm.processing"
+                                @click="submitImagesForm()"
+                                label="Save"
+                                rounded 
+                                unelevated
+                                class="absolute-top-right"
+                            />
                         </div>
-                    </div>
-                    <q-separator class="q-my-md" /> -->
-                    <div class="q-mt-md">
-                        <!-- <p class="text-weight-bold text-h6">Facility Images</p>
-                        <q-item class="q-my-md">
-                            <q-item-section avatar>
-                                <q-img 
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTym_mmZPWEJQnh9tUlH6IApysMxsFSdQifnw&s" 
-                                    style="width: 100px; height: 100px;" 
-                                />
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label>Photos can help customers decide what to order and can increase sale.</q-item-label>
-                                <q-item-label caption>File requirement: JPG, PNG</q-item-label>
-                                <q-item-label>
-                                    <q-btn 
-                                        no-caps color="primary" 
-                                        v-if="imagesForm.images" 
-                                        @click="submitImagesForm"
-                                        :loading="imagesForm.processing"
-                                        :disable="imagesForm.processing"
-                                    >
-                                        Save
-                                    </q-btn>
-                                    <q-btn no-caps color="primary" v-else @click="triggerFilePicker">Change photo</q-btn>
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item> -->
+                        
                         <div class="row q-col-gutter-sm">
-                            <div class="col-3 text-subtitle1 text-weight-bold items-center flex">
-                                Faciliy Images
-                            </div>
-                            <div class="col-9 justify-end flex items-end self-end">
-                                <q-btn 
-                                    no-caps 
-                                    v-if="imgPreview.length > 0" 
-                                    color="primary"
-                                    :disable="imagesForm.processing"
-                                    :loading="imagesForm.processing"
-                                    @click="submitImagesForm()"
-                                    label="Save"
-                                    rounded 
-                                    unelevated
-                                />
-                            </div>
-                            <div class="col-2" v-for="img in facilityImages">
+                              
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-xs-4" v-for="img in facilityImages">
                                 <q-card 
                                     style="height: 130px; width: 100%" 
                                     bordered 
@@ -187,7 +152,7 @@ const submitDeleteFacilityForm = () => {
                                     />
                                 </q-card>
                             </div>
-                            <div class="col-2" v-if="imgPreview.length > 0" v-for="img in imgPreview">
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-xs-4" v-if="imgPreview.length > 0" v-for="img in imgPreview">
                                 <q-card 
                                     style="height: 130px; width: 100%" 
                                     bordered 
@@ -200,7 +165,7 @@ const submitDeleteFacilityForm = () => {
                                     />
                                 </q-card>
                             </div>
-                            <div class="col-2">
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-xs-4">
                                 <q-card 
                                     style="height: 130px; width: 100%" 
                                     bordered 
@@ -303,6 +268,7 @@ const submitDeleteFacilityForm = () => {
                             :error-message="form.errors.guests"
                         />
                             
+                        <q-checkbox v-model="form.available" label="Available" />
                         
                         <!-- <q-separator class="q-my-md" />
                         <p class="text-weight-bold text-h6">Facility Ameneties</p>

@@ -49,12 +49,12 @@ const addCategoryDialog = ref(false)
 <template>
     
     <Head title="New Milktea" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card flat bordered>
-            <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
+            <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.products.index')">
-                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-ml-md q-mt-md text-black" label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" rounded flat class="absolute-top-left q-mt-md text-black" :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Create Product</div>
                     <q-btn 
@@ -75,7 +75,6 @@ const addCategoryDialog = ref(false)
                 <q-form @submit="submit">
                     <!-- <div>Build Your Event Page</div>
                     <div>Add all of your event details and let attendees know what to expect</div> -->
-                    <div class="q-mx-md q-mt-md">
                         <!-- <div>Add product photo</div>    
                         <div>Photos can help customers decide what to order and can increase sale.</div> -->
                         <p class="text-subtitle1 text-weight-bold">Product photo</p>
@@ -182,7 +181,6 @@ const addCategoryDialog = ref(false)
                                 <q-icon name="attach_money" />
                             </template>
                         </q-input>
-                    </div>
                 </q-form>
             </q-card-section>
         </q-card>

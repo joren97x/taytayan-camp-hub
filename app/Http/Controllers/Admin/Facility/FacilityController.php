@@ -101,6 +101,7 @@ class FacilityController extends Controller
             'description' => 'required',
             'price' => 'required',
             'guests' => 'required',
+            'available' => 'required',
             'amenities' => 'required'
         ]);
 
@@ -109,10 +110,11 @@ class FacilityController extends Controller
         $facility->description = $request->description;
         $facility->price = $request->price;
         $facility->guests = $request->guests;
+        $facility->available = $request->available;
         $facility->amenities = json_encode($request->amenities);
         $facility->save();
 
-        return back();
+        return redirect(route('admin.facilities.index'));
 
     }
 

@@ -22,16 +22,14 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         // DO NOT CHANGE THE ORDER, WILL RUIN SOMETHING IF CHANGED
 
-        $directories = ['events', 'facilities', 'products'];
-        $dummy_file = public_path('images/dummy_image.jpg');
+        // $directories = ['events', 'facilities', 'products'];
+        // $dummy_file = public_path('images/dummy_image.jpg');
 
-        foreach($directories as $d) {
-            Storage::makeDirectory('public/' . $d);
-            $destination_path = 'public/' . $d .'/dummy_image.jpg';
-            
-            Storage::put($destination_path, File::get($dummy_file));
-
-        }
+        // foreach($directories as $d) {
+        //     Storage::makeDirectory('public/' . $d);
+        //     $destination_path = 'public/' . $d .'/dummy_image.jpg';
+        //     Storage::put($destination_path, File::get($dummy_file));
+        // }
 
         Storage::makeDirectory('public/events');
         Storage::makeDirectory('public/products');
@@ -39,13 +37,13 @@ class DatabaseSeeder extends Seeder
 
         $destination_path = 'public/events/dummy_image.jpg';
 
-        $this->call(ModifierItemSeeder::class);
-        $this->call(ModifierGroupSeeder::class);
-        $this->call(ProductSeeder::class);
+        // $this->call(ModifierItemSeeder::class);
+        // $this->call(ModifierGroupSeeder::class);
+        // $this->call(ProductSeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(EventSeeder::class);
-        $this->call(FacilitySeeder::class);
-        $this->call(ConversationSeeder::class);
+        // $this->call(EventSeeder::class);
+        // $this->call(FacilitySeeder::class);
+        // $this->call(ConversationSeeder::class);
 
         //admin account
         User::factory()->create([
@@ -53,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Hanni',
             'last_name' => 'Pham',
             'role' => 'admin',
-            'password' => Hash::make('jorenjoren')
+            'password' => Hash::make('asdasd')
         ]);
         //cashier account
         User::factory()->create([
@@ -61,7 +59,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Chaewon',
             'last_name' => 'Maganda',
             'role' => 'cashier',
-            'password' => Hash::make('jorenjoren')
+            'password' => Hash::make('asdasd')
         ]);
         //driver account
         User::factory()->create([
@@ -69,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Daniel',
             'last_name' => 'Caesar',
             'role' => 'driver',
-            'password' => Hash::make('jorenjoren')
+            'password' => Hash::make('asdasd')
         ]);
         //customer account :)
         $user = User::factory()->create([
@@ -77,7 +75,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Joren',
             'last_name' => 'Sumagang',
             'role' => 'customer',
-            'password' => Hash::make('jorenjoren')
+            'password' => Hash::make('asdasd')
         ]);
 
         

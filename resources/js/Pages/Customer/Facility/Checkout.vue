@@ -9,6 +9,7 @@ const dialog = ref(false)
 const props = defineProps({
     facility: Object,
     date: Array,
+    guests: Number,
     reservation_constants: Object,
     reserved_dates: Object
 })
@@ -16,7 +17,7 @@ const props = defineProps({
 const form = useForm({
     payment_method: 'right_now',
     total: props.facility.price,
-    guests: 1,
+    guests: props.guests,
     check_in: props.date.from,
     check_out: props.date.to,
     facility_id: props.facility.id
@@ -35,6 +36,18 @@ const setBookingDates = (dates) => {
     form.check_out = dates.check_out
     dialog.value = false
     form.total = props.facility.price * (date.getDateDiff(form.check_out, form.check_in, 'days'))
+}
+
+const incrementGuests = () => {
+    if(form.guests < props.facility.guests) {
+        form.guests++
+    }
+}
+
+const decrementGuests = () => {
+    if(form.guests > 1 && form.guests <= props.facility.guests) {
+        form.guests--
+    }
 }
 
 </script>
@@ -58,6 +71,7 @@ const setBookingDates = (dates) => {
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <q-card flat bordered>
+                            {{ date.getDateDiff(form.check_out, form.check_in, 'days') }}
                             <q-card-section>
                                 <div class="text-h6 text-center">Checkout</div>
                                 <q-separator class="q-my-md"/>
@@ -65,7 +79,7 @@ const setBookingDates = (dates) => {
                                 <q-item>
                                     <q-item-section>
                                         <q-item-label>Dates</q-item-label>
-                                        <q-item-label caption>{{ form.check_in }} - {{ form.check_out }}</q-item-label>
+                                        <q-item-label caption>{{ date.formatDate(form.check_in, 'MMMM D, YYYY') }} - {{ date.formatDate(form.check_out, 'MMMM D, YYYY') }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-chip @click="dialog = true" clickable>Edit</q-chip>
@@ -79,9 +93,9 @@ const setBookingDates = (dates) => {
                                     <q-item-section side>
                                         Max {{ facility.guests }}
                                         <div class="col-6 justify-end items-center flex">
-                                            <q-btn icon="remove" size="xs" round unelevated class="bg-grey-4" @click="form.guests--"></q-btn>
+                                            <q-btn icon="remove" size="xs" round unelevated class="bg-grey-4" @click="decrementGuests()"></q-btn>
                                             <span class="q-mx-md">{{ form.guests }}</span>
-                                            <q-btn icon="add" size="xs" round unelevated class="bg-grey-4" @click="form.guests++"></q-btn>
+                                            <q-btn icon="add" size="xs" round unelevated class="bg-grey-4" @click="incrementGuests()"></q-btn>
                                         </div>
                                         <!-- <q-chip>Edit</q-chip> -->
                                     </q-item-section>
@@ -135,12 +149,19 @@ const setBookingDates = (dates) => {
                                         <q-img 
                                             height="100px"
                                             width="100px"
+                                            class="rounded-borders"
                                             src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/7789a5cc-f7cb-4238-ad5d-f1d71e36365c.jpeg?aki_policy=large"
                                         ></q-img>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>{{ facility.name }}</q-item-label>
-                                        <q-item-label caption>{{ facility.name }}</q-item-label>
+                                        <q-item-label caption>{{ facility.description }}</q-item-label>
+                                        <q-item-label>P{{ facility.price }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side top>
+                                        <div>
+                                            <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
+                                        </div>
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>

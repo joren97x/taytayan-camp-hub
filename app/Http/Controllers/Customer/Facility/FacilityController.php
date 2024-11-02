@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Facility;
 use App\Models\FacilityRating;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class FacilityController extends Controller
@@ -18,7 +19,11 @@ class FacilityController extends Controller
     {
         //
         return Inertia::render('Customer/Facility/Index', [
-            'facilities' => Facility::get()
+            'facilities' => Facility::where('available', true)
+            ->withCount(['facility_ratings as average_rating' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get()
         ]);
     }
 
@@ -44,7 +49,11 @@ class FacilityController extends Controller
     public function show(string $id)
     {
         //
-        $facility = Facility::with('facility_ratings.user')->find($id);
+        $facility = Facility::with('facility_ratings.user')
+        ->withCount(['facility_ratings as average_rating' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }])
+        ->find($id);
 
         $reserved_dates = Booking::where('facility_id', $facility->id)
         ->where('status', '!=', Booking::STATUS_CANCELLED)  

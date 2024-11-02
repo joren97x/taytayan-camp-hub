@@ -27,23 +27,24 @@ const submit = () => {
 <template>
     
     <Head title="New Category" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card class="round-border">
             <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
                     <Link :href="route('admin.categories.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md " label="Go Back" no-caps/>
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md " rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                     </Link>
                     <div class="text-h6">Create Category</div>
                     <q-btn 
-                            @click="submit"
-                            no-caps 
-                            color="primary" 
-                            class="q-mr-md q-mt-md absolute-top-right"
-                            :loading="form.processing"
-                            :disable="form.processing"
-                            label="Save"
-                        />
+                        @click="submit"
+                        no-caps 
+                        color="primary" 
+                        class="q-mr-md q-mt-md absolute-top-right"
+                        :loading="form.processing"
+                        :disable="form.processing"
+                        label="Save"
+                        rounded
+                    />
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
@@ -52,7 +53,8 @@ const submit = () => {
                     label="Name" 
                     :error="form.errors.name ? true : false"  
                     v-model="form.name" 
-                    filled
+                    rounded 
+                    outlined
                     :error-message="form.errors.name"
                 />
             </q-card-section>

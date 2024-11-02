@@ -16,7 +16,7 @@ const dialog = ref(false)
                 <q-card-section>
                     <div class="text-subtitle1 ellipsis"> {{ product.name }} </div>
                     <div class="text-regular">P{{ product.price }} </div>
-                    <div class="text-caption text-grey ellipsis-2-lines">
+                    <div class="text-caption text-grey ellipsis-3-lines">
                         {{ product.description }}
                     </div>
                 </q-card-section>

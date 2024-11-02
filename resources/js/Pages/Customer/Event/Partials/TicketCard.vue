@@ -2,6 +2,7 @@
 
 import { date } from 'quasar'
 import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
 defineProps({
     ticket_order: Object
@@ -58,9 +59,12 @@ const formatTime = (timeString) => {
                                 <div>
                                     {{ date.formatDate(ticket_order.event.date, 'ddd, MMM D') }}
                                 </div>
-                                <div>
+                                <div class="q-mb-sm">
                                     {{ ticket_order.event.location }}
                                 </div>
+                                <Link :href="route('conversations.chat_cashier')" >
+                                    <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
+                                </Link>
                                 <!-- <q-btn label="View QR Code" class="full-width q-my-sm" no-caps color="primary" unelevated/>
                                 <div class="text-center">Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div> -->
                             </q-card-section>

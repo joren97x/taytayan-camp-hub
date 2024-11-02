@@ -17,9 +17,9 @@ const props = defineProps({
     categories: Object,
     featured_products: Object,
     google_maps_api_key: String,
-    ratings: Object
+    ratings: Object,
+    rating_stats: Object
 })
-const overAllRating = ref(4)
 // const slide = ref(1)
 // const currentCategory = ref(null)
 
@@ -163,7 +163,7 @@ const filteredCategories = computed(() => {
 
 const slide = ref('style')
 const lorem = ref('stylestylestylestylestylestyle')
-
+const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
 </script>
 
 <template>
@@ -214,7 +214,7 @@ const lorem = ref('stylestylestylestylestylestyle')
                     <p :class="[$q.screen.lt.md ? 'text-center' : '']">
                         <span class="text-h4 text-weight-bold">RJC Cafe</span>
                         <br>
-                        <span><q-icon name="star"></q-icon>4.6 • (6)</span>
+                        <span><q-icon name="star"></q-icon>{{ overAllRating }} • ({{ rating_stats.rating_count }})</span>
                         <br>
                         <span>San Vicente, Olango Island</span>
                     </p>
@@ -255,42 +255,44 @@ const lorem = ref('stylestylestylestylestylestyle')
                         </q-banner>
                     </div>
 
-                    <div class="row justify-between q-mt-md q-mb-sm">
-                        <div class="text-h6">
-                            Rating and Reviews
+                    <div v-if="ratings.length > 0">
+                        <div class="row justify-between q-mt-md q-mb-sm">
+                            <div class="text-h6">
+                                Rating and Reviews
+                            </div>
+                            <!-- <div class="">
+                                <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
+                            </div> -->
                         </div>
-                        <!-- <div class="">
-                            <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
-                        </div> -->
-                    </div>
-                    <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
-                        <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
-                            <q-card class="q-py-md" style="max-height: 600px; height: 115px">
-                                <q-card-section class="q-pa-none text-center">
-                                    <div class="text-h5">4.8</div>
-                                    <div class="column items-center">
-                                        <q-rating size="xs" v-model="overAllRating" />
-                                    </div>
-                                    6 Ratings
-                                </q-card-section>
-                            </q-card>
+                        <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
+                            <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
+                                <q-card class="q-py-md" style="max-height: 600px; height: 115px">
+                                    <q-card-section class="q-pa-none text-center">
+                                        <div class="text-h5">{{ overAllRating }}</div>
+                                        <div class="column items-center">
+                                            <q-rating size="xs" v-model="overAllRating" />
+                                        </div>
+                                        {{ rating_stats.rating_count }} Ratings
+                                    </q-card-section>
+                                </q-card>
+                            </div>
+                            <div 
+                                class="col-5 col-xs-7 col-sm-7 col-md-4 col-lg-4 col-xl-4"
+                                v-for="(rating, i) in ratings"
+                                :key="rating.id"
+                            >
+                                <q-card style="max-height: 600px; height: 115px">
+                                    <q-card-section class="q-pb-none ellipsis-2-lines">
+                                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
+                                    </q-card-section>
+                                    <q-card-actions class="q-pt-sm">
+                                        <q-rating/>
+                                        • Lissa H. • 02/01/23
+                                    </q-card-actions>
+                                </q-card>
+                            </div>
+                            
                         </div>
-                        <div 
-                            class="col-5 col-xs-7 col-sm-7 col-md-4 col-lg-4 col-xl-4"
-                            v-for="(review, i) in 10"
-                            :key="review.id"
-                        >
-                            <q-card style="max-height: 600px; height: 115px">
-                                <q-card-section class="q-pb-none ellipsis-2-lines">
-                                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
-                                </q-card-section>
-                                <q-card-actions class="q-pt-sm">
-                                    <q-rating/>
-                                    • Lissa H. • 02/01/23
-                                </q-card-actions>
-                            </q-card>
-                        </div>
-                        
                     </div>
                 </div>
                 <div class="col-4 gt-sm">
@@ -433,7 +435,7 @@ const lorem = ref('stylestylestylestylestylestyle')
         <div class="q-mx-sm q-mb-md">
             <div class="q-my-md">
                 <div class="text-h6">Rating and Reviews</div>
-                <div><q-icon name="star"></q-icon> 4.7 • 110+ Ratings • 3 Reviews</div>
+                <div><q-icon name="star"></q-icon> {{ overAllRating }} • {{ rating_stats.rating_count }} Ratings</div>
             </div>
             <div class="row q-col-gutter-md" v-if="ratings.length > 0">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">

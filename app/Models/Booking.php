@@ -32,11 +32,11 @@ class Booking extends Model
     public static function getStatuses()
     {
         return [
-            self::STATUS_PENDING => self::STATUS_PENDING,
-            self::STATUS_CANCELLED => self::STATUS_CANCELLED,
-            self::STATUS_CHECKED_IN => self::STATUS_CHECKED_IN,
-            self::STATUS_CHECKED_OUT => self::STATUS_CHECKED_OUT,
-            self::STATUS_CONFIRMED => self::STATUS_CONFIRMED,
+            self::STATUS_PENDING,
+            self::STATUS_CANCELLED,
+            self::STATUS_CHECKED_IN,
+            self::STATUS_CHECKED_OUT,
+            self::STATUS_CONFIRMED,
         ];
     }
 

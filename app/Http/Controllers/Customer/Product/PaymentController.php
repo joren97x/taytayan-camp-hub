@@ -22,8 +22,12 @@ class PaymentController extends Controller
         // dd($checkout_session);
         // dd($request->get('cart_id'));
         $cart = Cart::find($request->cart_id);
+        $payment_session = session('payment_session');
         
         // dd($cart_products);
+        if (!$payment_session) {
+            abort(404);
+        }
         
         $order = Order::create([
             'user_id' => auth()->id(),
@@ -61,6 +65,8 @@ class PaymentController extends Controller
             ->update(['cart_id' => $new_cart->id]);
             
         }
+        
+        session()->forget('payment_session');
       
         return redirect(route('customer.orders.index'));
     }
@@ -70,6 +76,7 @@ class PaymentController extends Controller
         // dd($request);
 
         if($request->payment_method != 'right_now') {
+            session(['payment_session' => true]);
             // return $this->success($request->payment_method, $request->cart_id, $request->mode, $cartService);
             // return $this->success($request->mode, $request->payment_method, $request->cart_id, $cartService);
             return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
@@ -128,6 +135,7 @@ class PaymentController extends Controller
             ]
         ]);
 
+        session(['payment_session' => true]);
         session(['checkout_id' => $checkout->id]);
 
         return Inertia::location($checkout->checkout_url);

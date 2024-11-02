@@ -7,17 +7,19 @@ import { router } from '@inertiajs/vue3'
 import { usePage } from '@inertiajs/vue3'
 
 const cartLength = ref(0)
-const page = usePage()
+const $page = usePage()
 
 onMounted(() => {
-    axios.get(route('customer.cart.length'))
-    .then((res) => {
-        console.log(res)
-        cartLength.value = res.data.cart_length
-    })
-    .catch((err) => {
-        console.error(err)
-    })
+    if($page.props.auth.user) {
+        axios.get(route('customer.cart.length'))
+        .then((res) => {
+            console.log(res)
+            cartLength.value = res.data.cart_length
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    }
 })
 
 
@@ -25,7 +27,7 @@ const logout = ()=> {
     router.post(route('logout'), {}, {
         onBefore: () => {
             console.log('bruh')
-            Echo.leave(`notifications.${page.props.auth.user.id}`)
+            Echo.leave(`notifications.${$page.props.auth.user.id}`)
         }
     })
 }

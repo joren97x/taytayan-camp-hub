@@ -150,6 +150,42 @@ class ConversationController extends Controller
 
     }
 
+    public function chat_cashier() 
+    {
+
+        $active_recent_cashier = User::where('role', 'cashier')->where('is_online', true)->first();
+        if (!$active_recent_cashier) {
+            $active_recent_cashier = User::where('role', 'cashier')->latest('updated_at')->first();
+        }
+
+
+        $existing_conversation = Conversation::whereHas('participants', function ($query) use ($active_recent_cashier) {
+            $query->where('user_id', $active_recent_cashier->id);
+        })->whereHas('participants', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->first();
+        
+        if (!$existing_conversation) {
+
+            $conversation = Conversation::create();
+
+            Participant::create([
+                'user_id' => $active_recent_cashier->id,
+                'conversation_id' => $conversation->id
+            ]);
+
+            Participant::create([
+                'user_id' => auth()->id(),
+                'conversation_id' => $conversation->id
+            ]);
+
+            return redirect(route('conversations.show', $conversation->id));
+        }
+
+        return redirect(route('conversations.show', $existing_conversation->id));
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

@@ -53,30 +53,30 @@ onMounted(() => {
 
 })
 
-watch(rightDrawerOpen, (newVal) => {
-    if (newVal) {
-        try {
-            router.get('/cart/items', {}, {
-            onSuccess: (res) => {
-                items.value = res.props.items.cart_products
-            }
-        })
-        } catch (error) {
-            console.error('Error fetching cart items:', error)
-        }
-    }
-})
+// watch(rightDrawerOpen, (newVal) => {
+//     if (newVal) {
+//         try {
+//             router.get('/cart/items', {}, {
+//             onSuccess: (res) => {
+//                 items.value = res.props.items.cart_products
+//             }
+//         })
+//         } catch (error) {
+//             console.error('Error fetching cart items:', error)
+//         }
+//     }
+// })
 
-watch(btnToggle, () => {
-    router.visit(route(`customer.${btnToggle.value}.index`), {
-        onStart: () => {
-            btnToggleLoading.value = true
-        },
-        onFinish: () => {
-            btnToggleLoading.value = false
-        }
-    })
-})
+// watch(btnToggle, () => {
+//     router.visit(route(`customer.${btnToggle.value}.index`), {
+//         onStart: () => {
+//             btnToggleLoading.value = true
+//         },
+//         onFinish: () => {
+//             btnToggleLoading.value = false
+//         }
+//     })
+// })
 
 
 </script>

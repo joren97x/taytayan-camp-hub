@@ -5,11 +5,15 @@ import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: AdminLayout
 })
 
+const drawerStore = useDrawerStore()
+const showSearch = ref(false)
+const filter = ref('')
 const $q = useQuasar()
 const props = defineProps({
     categories: Object
@@ -71,7 +75,7 @@ const columns = [
 <template>
     
     <Head title="Categories" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-table
                 class="my-sticky-header-column-table"
@@ -80,7 +84,47 @@ const columns = [
                 :rows="props.categories"
                 :columns="columns"
                 row-key="name"
+                :grid="$q.screen.lt.md"
+                :filter="filter"
             >
+                <template v-slot:top>
+                    <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
+                    <div class="text-h6">Categories</div>
+                    <q-space />
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    
+                    <Link :href="route('admin.categories.create')">
+                        <q-btn class="q-ml-sm" no-caps color="primary" rounded unelevated label="Create Category"/>
+                    </Link>
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="filter"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name"
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
+                </template>
+                <!-- <template v-slot:top>
+                    <div class="text-h6">Categories</div>
+                    <q-space />
+                        <q-input outlined rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <Link :href="route('admin.categories.create')">
+                        <q-btn class="q-ml-sm" rounded color="primary" unelevated no-caps label="Create Category" />
+                    </Link>
+                </template> -->
             <template v-slot:body-cell-name="props">
                     <q-td :props="props">
                         {{ props.row.name }}
@@ -111,7 +155,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-items="props">
                     <q-td :props="props">
-                        3 items
+                        {{ props.row.products.length }} items
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -120,17 +164,31 @@ const columns = [
                         <q-btn no-caps unelevated color="negative" flat @click="showDeleteCategoryDialog(props.row)" label="Delete"/>
                     </q-td>
                 </template>
-                <template v-slot:top>
-                    <div class="text-h6">Categories</div>
-                    <q-space />
-                        <q-input outlined rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                    <Link :href="route('admin.categories.create')">
-                        <q-btn class="q-ml-sm" rounded color="primary" unelevated no-caps label="Create Category" />
-                    </Link>
+                <template v-slot:item="props">
+                    <div  class="col-12 q-mb-sm">
+                        <q-card bordered flat class="q-mx-sm">
+                            <q-card-section>
+                                <q-item class="q-pa-none">
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.name }}</q-item-label>
+                                        <q-item-label caption>{{ props.row.products.length }} items</q-item-label>
+                                        <q-btn icon="more_horiz" class="absolute-top-right text-black" flat color="white" round>
+                                            <q-menu>
+                                                <q-list style="min-width: 100px">
+                                                    <q-item clickable @click="showCategoryProducts(props.row)">
+                                                        <q-item-section>View</q-item-section>
+                                                    </q-item>
+                                                    <q-item clickable @click="showDeleteCategoryDialog(props.row)">
+                                                        <q-item-section>Delete</q-item-section>
+                                                    </q-item>
+                                                </q-list>
+                                            </q-menu>
+                                        </q-btn>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
+                    </div>
                 </template>
             </q-table>
         </q-card>
@@ -141,7 +199,8 @@ const columns = [
         :maximized="$q.screen.lt.md"    
         transition-show="slide-up"
         transition-hide="slide-down"
-    >
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
+        >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-section class="row items-center q-pb-none">
                 <q-icon name="warning" color="negative" size="32px" />
@@ -150,7 +209,7 @@ const columns = [
             </q-card-section>
             <q-card-section>
                 Are you sure you want to delete this category? All data will be permanently removed. This action cannot be undone.
-                <q-item class="bg-negative text-white q-my-md">
+                <q-item class="bg-negative text-white q-my-md rounded-borders">
                     <q-item-section>
                         <q-item-label class="text-weight-bold text-subtitle1">{{ deleteCategoryForm.category.name }}</q-item-label>
                     </q-item-section>
@@ -176,7 +235,8 @@ const columns = [
         :maximized="$q.screen.lt.md"    
         transition-show="slide-up"
         transition-hide="slide-down"
-    >
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
+        >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-section>
                 <div class="text-h6">{{ currentCategory.name }}</div>

@@ -59,7 +59,7 @@ const onFileChange = (file) => {
                         <q-avatar size="100px" v-if="$page.props.auth.user.profile_pic || imgPreview">
                             <q-img class="fit" fit="cover" :src="imgPreview ? imgPreview : `/storage/${$page.props.auth.user.profile_pic}`" />
                         </q-avatar>
-                        <q-avatar color="grey" v-else size="100px">
+                        <q-avatar color="primary" class="text-white" v-else size="100px">
                             {{ $page.props.auth.user.first_name[0] }}
                         </q-avatar>
                     </div>

@@ -26,17 +26,13 @@ Route::resource('products', ProductController::class)->names([
 ]);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/cart-length', [CartController::class, 'length'])->name('customer.cart.length');
     Route::resource('/cart', CartController::class)->names([
         'index' => 'customer.cart.index',
         'store' => 'customer.cart.store',
         'destroy' => 'customer.cart.destroy',
         'update' => 'customer.cart.update'
     ]);
-});
-
-Route::middleware(['auth', 'verified', 'customer'])->group(function () {
-
-    Route::put('/add-address', [CustomerController::class, 'add_address'])->name('add-address');
     Route::put('/notifications/read', [NotificationController::class, 'read_notifications'])->name('customer.notifications.read_notifications');
     Route::put('/notifications/click/{notification}', [NotificationController::class, 'click'])->name('customer.notifications.click');
     Route::resource('/notifications', NotificationController::class)->names([
@@ -44,6 +40,11 @@ Route::middleware(['auth', 'verified', 'customer'])->group(function () {
         'destroy' => 'customer.notifications.destroy',
         'update' => 'customer.notifications.update'
     ]);
+});
+
+Route::middleware(['auth', 'verified', 'customer'])->group(function () {
+
+    Route::put('/add-address', [CustomerController::class, 'add_address'])->name('add-address');
     Route::get('/profile', [ViewController::class, 'profile'])->name('customer.profile');
     Route::get('/profile/edit', [ViewController::class, 'edit_profile'])->name('customer.edit_profile');
     require __DIR__.'/Customer/product.php';

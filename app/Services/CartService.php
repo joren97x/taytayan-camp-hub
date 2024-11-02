@@ -22,8 +22,14 @@ class CartService
         $subtotal = 0;
 
         // Fetch cart products with related product and modifiers
-        $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
+        // $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
+        $cart_products = $cart->cart_products()
+        ->with(['product' => function($query) {
+            $query->withTrashed();
+        }, 'modifiers.modifier_item', 'modifiers.modifier_group'])
+        ->get();
 
+        // dd($cart_products);
         foreach($cart_products as $cart_product) {
             foreach($cart_product->modifiers as $modifier) {
                 $modifier->total = $modifier->quantity * $modifier->modifier_item->price;

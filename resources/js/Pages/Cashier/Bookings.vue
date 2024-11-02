@@ -157,7 +157,6 @@ const initialPagination = {
                     </template>
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            
                             <BookingDialog :booking="props.row" :booking_statuses="booking_statuses" />
                         </q-td>
                     </template>

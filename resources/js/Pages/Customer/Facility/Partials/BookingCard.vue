@@ -142,7 +142,7 @@ const submitRatingForm = () => {
                             :disable="completeBookingForm.processing"
                             rounded
                         />
-                        <Link :href="route('conversations.chat_user', 1)">
+                        <Link :href="route('conversations.chat_cashier')">
                             <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
                         </Link>
                         <!-- <q-btn label="Cancel Booking" color="negative" class="full-width" no-caps v-if="order.status == 'pending'"/> -->

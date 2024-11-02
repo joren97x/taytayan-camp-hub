@@ -5,7 +5,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import EditUserDialog from './Partials/EditUserDialog.vue'
-// import DeleteUserDialog from './Partials/DeleteUserDialog.vue'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: AdminLayout
@@ -17,7 +17,9 @@ defineProps({
     user_roles: Object
 })
 
+const drawerStore = useDrawerStore()
 const filter = ref('')
+const showSearch = ref(false)
 const $q = useQuasar()
 const showPassword = ref(false)
 const showPassword2 = ref(false)
@@ -91,11 +93,19 @@ const onFileChange = (file) => {
     imgPreview.value = URL.createObjectURL(file)
 }
 
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 10
+    // rowsNumber: xx if getting data from a server
+}
+
 </script>
 
 <template>
     <Head title="User Management" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-table
                 class="my-sticky-header-column-table"
@@ -104,20 +114,34 @@ const onFileChange = (file) => {
                 :columns="columns"
                 row-key="name"
                 :filter="filter"
+                :pagination="initialPagination"
             >
-                <!-- <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Modifier Groups</p>
+                <template v-slot:top>
+                    <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
+                    <div class="text-h6">User Management</div>
                     <q-space />
-                        <q-input outlined 
-                        rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                    <Link :href="route('admin.modifier_groups.create')">
-                        <q-btn class="q-ml-sm" color="primary" no-caps label="Create Modifier Group" />
-                    </Link>
-                </template> -->
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    
+                    <!-- <Link :href="route('admin.facilities.create')"> -->
+                        <q-btn class="q-ml-sm" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
+                    <!-- </Link> -->
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="filter"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name"
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
+                </template>
                 <template v-slot:body-cell-user="props">
                     <q-td :props="props">
                         <q-item class="q-pa-none">
@@ -156,15 +180,9 @@ const onFileChange = (file) => {
                         <!--  -->
                     </q-td>
                 </template>
-                <template v-slot:top>
+                <!-- <template v-slot:top>
                     <div class="text-h6 text-capitalize">User Management</div>
                     <q-space />
-                    <!-- <q-input outlined 
-                     rounded dense label="Search..." debounce="300" color="primary" v-model="filter">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input> -->
                     <q-input outlined rounded dense label="Search by email" debounce="300" color="primary" v-model="filter">
                         <template v-slot:append>
                             <q-icon name="search" />
@@ -172,6 +190,41 @@ const onFileChange = (file) => {
                     </q-input>
                     <q-btn class="q-ml-md" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
 
+                </template> -->
+                <template v-slot:item="props">
+                    <div class="col-12 q-mb-sm">
+                        <q-card class="q-mx-sm" bordered flat>
+                            <q-card-section>
+                                <q-item class="q-pa-none">
+                                    <q-item-section avatar>
+                                        <q-img :src="`/storage/${props.row.profile_pic}`" fit="contain" height="60px" width="60px" class="rounded-borders" v-if="props.row.profile_pic" />
+                                        <div v-else>
+                                            {{ props.row.first_name[0] }}
+                                        </div>
+                                    </q-item-section>
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.name }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.description }}</q-item-label>
+                                        <q-item-label caption >P{{ props.row.price }}</q-item-label>
+                                        <q-btn icon="more_horiz" class="absolute-top-right z-top text-black" flat color="white" round>
+                                            <q-menu>
+                                                <q-list style="min-width: 100px">
+                                                    <Link :href="route(`admin.facilities.edit`, props.row.id)">
+                                                        <q-item clickable>
+                                                            <q-item-section>Edit</q-item-section>
+                                                        </q-item>
+                                                    </Link>
+                                                    <q-item clickable @click="showDeleteFacilityDialog(props.row)">
+                                                        <q-item-section>Delete</q-item-section>
+                                                    </q-item>
+                                                </q-list>
+                                            </q-menu>
+                                        </q-btn>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
+                    </div>
                 </template>
             </q-table>
         </q-card>

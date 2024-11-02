@@ -38,26 +38,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-profile-pic', [ProfileController::class, 'update_profile_pic'])->name('profile.update_profile_pic');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //idk about these two
+    Route::get('/conversations/get-users-with-convo', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
+    Route::get('/conversations/get-users', [ConversationController::class, 'get_users'])->name('conversations.get_users');
+
+    Route::post('/messages/{conversation}', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/chat-user/{user}', [ConversationController::class, 'chat_user'])->name('conversations.chat_user');
+    Route::get('/chat-cashier', [ConversationController::class, 'chat_cashier'])->name('conversations.chat_cashier');
+    Route::get('/inbox/get-conversations', [ConversationController::class, 'get_conversations'])->name('conversations.get_conversations');
+    Route::get('/inbox/get-conversations/{id}', [ConversationController::class, 'get_conversation'])->name('conversations.get_conversation');
+    Route::resource('inbox', ConversationController::class)->names([
+        'show' => 'conversations.show',
+        'store' => 'conversations.store',
+        'index' => 'conversations.index'
+    ]);
+
 });
 
-Route::get('/conversations/get-users-with-convo', [ConversationController::class, 'get_users_with_convo'])->name('conversations.get_users_with_convo');
-Route::get('/conversations/get-users', [ConversationController::class, 'get_users'])->name('conversations.get_users');
 
 require __DIR__.'/admin.php';
 require __DIR__.'/customer.php';
 require __DIR__.'/driver.php';
 require __DIR__.'/cashier.php';
 require __DIR__.'/auth.php';
-
-Route::post('/messages/{conversation}', [MessageController::class, 'store'])->name('messages.store');
-Route::get('/chat-user/{user}', [ConversationController::class, 'chat_user'])->name('conversations.chat_user');
-Route::get('/inbox/get-conversations', [ConversationController::class, 'get_conversations'])->name('conversations.get_conversations');
-Route::get('/inbox/get-conversations/{id}', [ConversationController::class, 'get_conversation'])->name('conversations.get_conversation');
-Route::resource('inbox', ConversationController::class)->names([
-    'show' => 'conversations.show',
-    'store' => 'conversations.store',
-    'index' => 'conversations.index'
-]);
 
 
 Route::get('/test', function() {
