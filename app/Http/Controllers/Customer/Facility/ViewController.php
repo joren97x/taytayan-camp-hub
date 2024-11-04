@@ -18,7 +18,8 @@ class ViewController extends Controller
         $facility = Facility::withCount(['facility_ratings as average_rating' => function ($query) {
             $query->select(DB::raw('coalesce(avg(rating), 0)'));
         }])->
-        find($request->facility_id);
+        findOrFail($request->facility_id);
+
 
         $reserved_dates = Booking::where('facility_id', $facility->id)
         ->where('status', '!=', Booking::STATUS_CANCELLED)  

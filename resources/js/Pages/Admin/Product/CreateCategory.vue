@@ -89,3 +89,10 @@ const submit = () => {
         </q-form>
     </div> -->
 </template>
+
+<style scoped>
+a {
+    text-decoration: none;
+    color: black;
+}
+</style>

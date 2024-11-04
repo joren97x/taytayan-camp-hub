@@ -11,7 +11,6 @@ const $q = useQuasar()
 const props = defineProps({ dialog: Boolean, cart_item: Object })
 const show = computed(() => props.dialog)
 
-console.log(props)
 const form = useForm({
     product_id: null,
     cart_id: page.props.auth.cart_id,
@@ -20,26 +19,51 @@ const form = useForm({
     modifiers: []
 })
 
-const handleItemSelection = (modifierGroupId, modifierItemId) => {
-    const index = form.modifiers.findIndex(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
-    if (index === -1) {
-        form.modifiers.push({
-            modifier_group_id: modifierGroupId,
-            modifier_item_id: modifierItemId,
-            quantity: 1 // You can manage quantity if needed
-        });
-    } else {
-        form.modifiers.splice(index, 1); // Remove the modifier if already selected
+const handleItemSelection = (modifierGroupId, modifierItemId, requiredQuantity) => {
+  if (requiredQuantity === 1) {
+    // If required_quantity is 1, replace the current selection
+    form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
+
+    form.modifiers.push({
+      modifier_group_id: modifierGroupId,
+      modifier_item_id: modifierItemId,
+      quantity: 1
+    });
+  } else {
+    // For checkboxes (required_quantity > 1), allow multiple selections
+    const selectedCount = form.modifiers.filter(modifier => modifier.modifier_group_id === modifierGroupId).length;
+
+    if (isSelected(modifierGroupId, modifierItemId)) {
+      // Remove the modifier if it's already selected (toggle off)
+      form.modifiers = form.modifiers.filter(
+        modifier => !(modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId)
+      );
+    } else if (selectedCount < requiredQuantity) {
+      // Add the modifier if it's not selected and under the limit
+      form.modifiers.push({
+        modifier_group_id: modifierGroupId,
+        modifier_item_id: modifierItemId,
+        quantity: 1
+      });
     }
-}
-
-
-
-
-const isSelected = (modifierGroupId, modifierItemId) => {
-    return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
+  }
 };
 
+const isSelected = (modifierGroupId, modifierItemId) => {
+  return form.modifiers.some(modifier => modifier.modifier_group_id === modifierGroupId && modifier.modifier_item_id === modifierItemId);
+};
+
+// Get the selected radio item (for required_quantity === 1)
+const getSelectedItem = (modifierGroupId) => {
+  const selected = form.modifiers.find(modifier => modifier.modifier_group_id === modifierGroupId);
+  return selected ? selected.modifier_item_id : null;
+};
+
+// Limit checkbox selections when required_quantity > 1
+const isMaxSelected = (modifierGroupId, requiredQuantity) => {
+  const selectedCount = form.modifiers.filter(modifier => modifier.modifier_group_id === modifierGroupId).length;
+  return selectedCount >= requiredQuantity;
+};
 const submit = () => {
     form.put(route('customer.cart.update', props.cart_item.id), {
         onSuccess: () => {
@@ -97,6 +121,18 @@ function onDialogShow() {
 
    
 }
+
+const handleRadioSelection = (modifierGroupId, modifierItemId) => {
+  // Remove any previously selected item for this modifier group
+    form.modifiers = form.modifiers.filter(modifier => modifier.modifier_group_id !== modifierGroupId);
+    
+    // Add the newly selected item
+    form.modifiers.push({
+        modifier_group_id: modifierGroupId,
+        modifier_item_id: modifierItemId,
+        quantity: 1
+    });
+};
 
 </script>
 
@@ -156,18 +192,28 @@ function onDialogShow() {
                                     v-ripple
                                     v-for="modifier_item in modifier_group.modifier_items"
                                     :key="modifier_item.id"
-                                    @click="handleItemSelection(modifier_group.id, modifier_item.id)"
-
+                                    @click="handleItemSelection(modifier_group.id, modifier_item.id, modifier_group.required_quantity)"
                                 >
                                     <q-item-section>
                                         <q-item-label>{{ modifier_item.name }}</q-item-label>
                                         <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
+                                        <q-radio 
+                                            v-if="modifier_group.required_quantity === 1"
+                                            color="primary"
+                                            :model-value="getSelectedItem(modifier_group.id)"
+                                            :val="modifier_item.id"
+                                            @update:model-value="selected => handleRadioSelection(modifier_group.id, modifier_item.id)"
+                                        />
+
+                                        <!-- Use q-checkbox when required_quantity is greater than 1 -->
                                         <q-checkbox
-                                            color="secondary"
+                                            v-else
+                                            color="primary"
+                                            :disable="isMaxSelected(modifier_group.id, modifier_group.required_quantity) && !isSelected(modifier_group.id, modifier_item.id)"
                                             :model-value="isSelected(modifier_group.id, modifier_item.id)"
-                                            @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id)"
+                                            @update:model-value="checked => handleItemSelection(modifier_group.id, modifier_item.id, modifier_group.required_quantity)"
                                         />
                                     </q-item-section>
                                 </q-item>

@@ -108,7 +108,6 @@ const initialPagination = {
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-table
-                class="my-sticky-header-column-table"
                 flat
                 :rows="users"
                 :columns="columns"
@@ -121,10 +120,7 @@ const initialPagination = {
                     <div class="text-h6">User Management</div>
                     <q-space />
                     <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
-                    
-                    <!-- <Link :href="route('admin.facilities.create')"> -->
-                        <q-btn class="q-ml-sm" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
-                    <!-- </Link> -->
+                    <q-btn class="q-ml-sm" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
                             v-model="filter"

@@ -39,22 +39,35 @@ class ModifierGroupController extends Controller
     public function store(Request $request)
     {
         //
+       
         $request->validate([
             'name' => 'required|string|max:255',
-            'items' => 'required',
+            'modifier_items' => 'required|array|min:1',
+            'required_quantity' => 'required|numeric|min:1', // Ensures required_quantity is at least 1
+            'max_quantity' => 'required|numeric|min:1',
         ]);
 
-        $modifier_group = ModifierGroup::create($request->all());
+        $modifier_group = ModifierGroup::create([
+            'name' => $request->name,
+            'required' => $request->required,
+            'required_quantity' => $request->required_quantity,
+            'max_quantity' => $request->max_quantity
+        ]);
 
-        foreach ($request->items as $item) {
+        foreach ($request->modifier_items as $item) {
+            $modifier_item = ModifierItem::create([
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'price' => $item['price']
+            ]);
+    
             ModifierGroupItem::create([
                 'modifier_group_id' => $modifier_group->id,
-                'modifier_item_id' => $item
+                'modifier_item_id' => $modifier_item->id
             ]);
         }
 
         return redirect(route('admin.modifier_groups.index', absolute: false));
-
 
     }
 

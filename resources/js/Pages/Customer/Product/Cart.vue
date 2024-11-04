@@ -82,11 +82,7 @@ function deleteCartItem(id) {
 
 function updateCartItemQuantity(id, operation) {
     updateCartItemQuantityForm.operation = operation
-    updateCartItemQuantityForm.put(route('customer.cart.update_cart_item_quantity', id), {
-        onSuccess: () => {
-            $q.notify('basta gi addan nimo shag quantity')
-        }
-    })
+    updateCartItemQuantityForm.put(route('customer.cart.update_cart_item_quantity', id))
 }
 
 function showEditCartItemDialog(cartItem) {
@@ -102,6 +98,14 @@ const columns = [
     { name: 'total', align: 'center', label: 'Total', field: 'total', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
+
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: props.cart_products.length
+    // rowsNumber: xx if getting data from a server
+}
 
 const onSelection = (selection) => {
     if (selection.added) {
@@ -130,7 +134,6 @@ const onSelection = (selection) => {
     <div class="row">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
-                class="my-sticky-header-column-table"
                 bordered
                 flat
                 :rows="cart_products"
@@ -139,6 +142,7 @@ const onSelection = (selection) => {
                 selection="multiple"
                 v-model:selected="selectedRows"
                 @selection="onSelection"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <span class="text-h6">Cart</span> 
@@ -152,22 +156,14 @@ const onSelection = (selection) => {
                 </template>
                 <template v-slot:body-cell-item="props">
                     <q-td :props="props" class="text-left">
-                        {{ props.row.product.name }} ({{ props.row.product.price }})
-                        <template 
-                            v-for="(modifier, index) in props.row.grouped_modifiers" 
-                            :key="index"
-                        >
+                        <div class="text-weight-bold">{{ props.row.product.name }}</div>
+                        <template v-for="(modifier, index) in props.row.grouped_modifiers" :key="index">
                             <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
-                            <q-item-label 
-                                caption 
-                                v-for="(modifier_item, index) in modifier.modifier_items" 
-                                :key="index"
-                            >
-                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
+                            <q-item-label caption v-for="(modifier_item, index) in modifier.modifier_items" :key="index">
+                            {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
                             </q-item-label>
-                            
                         </template>
-                        <q-item-label caption v-if="props.row.special_instruction">
+                        <q-item-label caption v-if="props.row.special_instruction" class="text-grey-7">
                             Note: {{ props.row.special_instruction }}
                         </q-item-label>
                     </q-td>
@@ -181,12 +177,12 @@ const onSelection = (selection) => {
                 </template>
                 <template v-slot:body-cell-total="props">
                     <q-td :props="props">
-                        P{{ props.row.total }}
+                        <span class="text-weight-medium">P{{ props.row.total }}</span>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)">Edit</q-btn>
+                        <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)" color="primary" flat>Edit</q-btn>
                         <q-btn no-caps 
                             unelevated color="red" flat 
                             
@@ -204,7 +200,7 @@ const onSelection = (selection) => {
             </q-table>
         </div>
         <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-            <q-card bordered flat :class="['q-mx-md', $q.screen.lt.md ? 'q-mt-md' : '']">
+            <q-card bordered flat :class="['q-mx-md sticky', $q.screen.lt.md ? 'q-mt-md' : '']" style="position: sticky; top: 60px;">
                 <q-card-section>
                     <div class="text-h6">Order Summary</div>
                     <q-separator></q-separator>

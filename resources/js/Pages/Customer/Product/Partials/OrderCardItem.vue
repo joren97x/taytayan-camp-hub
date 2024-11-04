@@ -156,21 +156,14 @@ const reorder = () => {
 <template>
     <q-card bordered flat class="q-my-sm">
         <q-item clickable  @click="viewOrderDialog = true">
-            <q-item-section avatar>
-                    <!-- {{ order }} -->
-                    <div style="height: 100px; width: 200px;" class="row">
-                        <div class="col-6" v-for="cart_product in order.cart_products">
-                            <q-img :src="`../storage/${cart_product.product.photo}`" fit="contain" height="50px" width="100px"></q-img>
-                        </div>
-                    </div>
-            </q-item-section>
             <q-item-section top>
                 <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
                 <div class="ellipsi-2-lines">
                     <!-- <span v-for="(p, index) in order.cart_products">
                         {{ p.product.name }}, 
                     </span> -->
-                    {{ date.formatDate(order.created_at, 'MMMM D, YYYY') }}
+                    {{ order.id }}
+                    <!-- {{ date.formatDate(order.created_at, 'MMMM D, YYYY') }} -->
                 </div>
                 <q-item-label caption>
                     {{ order.cart_products.length }} items - P{{ order.subtotal }}
@@ -242,7 +235,6 @@ const reorder = () => {
                         v-else
                     />
                 </q-stepper>
-                <div class="text-h6">Items</div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                         <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        

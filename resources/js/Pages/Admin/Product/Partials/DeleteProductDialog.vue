@@ -47,7 +47,7 @@ const deleteProduct = () => {
             </q-card-section>
             <q-card-section>
                 Are you sure you want to delete this product? All data will be permanently removed. This action cannot be undone.
-                <q-item class="bg-negative text-white q-my-md">
+                <q-item class="bg-negative text-white q-my-md rounded-borders">
                     <q-item-section avatar>
                         <q-img :src="`/storage/${product.photo}`" height="100px" width="100px"></q-img>
                     </q-item-section>  

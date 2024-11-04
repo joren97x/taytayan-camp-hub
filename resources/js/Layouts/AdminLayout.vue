@@ -243,7 +243,10 @@ const navigation_list = [
                     <q-item class="q-pa-md rounded-borders q-ma-sm" :active="$page.component == 'Admin/Profile'" active-class="bg-primary text-white">
                         <q-item-section top avatar>
                             <q-avatar color="primary" text-color="white">
-                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" class="fit" fit="cover" />
+                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" v-if="$page.props.auth.user.profile_pic" class="fit" fit="cover" />
+                                <div v-else>
+                                    {{ $page.props.auth.user.first_name[0] }}
+                                </div>
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>

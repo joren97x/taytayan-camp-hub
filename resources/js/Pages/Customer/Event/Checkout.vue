@@ -110,7 +110,7 @@ const addAttendee = () => {
                                     <q-item-section avatar>
                                         <q-icon name="event"></q-icon>
                                     </q-item-section>
-                                    <q-item-section class="text-subtitle1">
+                                    <q-item-section>
                                         {{ event.title }}
                                         <q-item-label caption>{{ date.formatDate(event.date, 'MMMM D, YYYY') }} - {{ formattedTime }}</q-item-label>
                                     </q-item-section>
@@ -119,7 +119,7 @@ const addAttendee = () => {
                                     <q-item-section avatar>
                                         <q-icon name="location_on"></q-icon>
                                     </q-item-section>
-                                    <q-item-section class="text-subtitle1">
+                                    <q-item-section>
                                         {{ event.location }}
                                         <q-item-label caption>Event Location</q-item-label>
                                     </q-item-section>
@@ -131,7 +131,7 @@ const addAttendee = () => {
                                     </div>
                                     <div class="row q-col-gutter-sm">
                                         <div class="col-6" v-for="(attendee, index) in form.ticket_holders">
-                                            <div class="text-subtitle1 q-ml-sm">Ticket {{ index + 1 }}</div>
+                                            <div class="q-ml-md">Ticket {{ index + 1 }}</div>
                                             <!-- <div class="row items-center q-pa-none">
                                                 <div class="col-6">
                                                 </div>
@@ -222,14 +222,14 @@ const addAttendee = () => {
                                 <div class="text-h6">Order Summary</div>
                                 <q-separator class="q-my-sm"/>
                                 <!-- <div>{{ event.date }} - {{ event.start_time }}</div> -->
-                                <div class="row">
-                                    <div class=" col">{{ form.attendees }} Admission / eTicket</div>
-                                    <div class=" col text-right">{{ form.amount }}</div>
+                                <div class="row text-weight-medium">
+                                    <div class=" col">{{ form.attendees }} Admission or eTicket</div>
+                                    <div class=" col text-right">P{{ form.amount }}</div>
                                 </div>
-                                <div class="row text-h6">
+                                <!-- <div class="row text-h6">
                                     <div class=" col">Total</div>
                                     <div class=" col text-right">{{ form.amount }}</div>
-                                </div>
+                                </div> -->
                             </q-card-section>
                             <q-card-actions>
                                 <q-btn class="full-width" no-caps rounded color="primary" @click="submit">Checkout</q-btn>

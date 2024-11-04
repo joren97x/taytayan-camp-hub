@@ -355,9 +355,9 @@ const onFileChange = (file) => {
                         </template>
                         <template v-slot:body-cell-options="props">
                             <q-td :props="props">
-                                <span v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
-                                    {{ modifier_item.name + ', ' }}
-                                </span>
+                                <q-chip v-for="modifier_item in props.row.modifier_items" :key="modifier_item.id">
+                                    {{ modifier_item.name }}
+                                </q-chip>
                             </q-td>
                         </template>
                     </q-table>

@@ -17,9 +17,9 @@ const form = useForm({
     description: '',
     date: '2024/06/30',
     start_time: '06:00',
-    location: '',
+    location: 'RJC Cafe Olango Island',
     capacity: 10,
-    admission_fee: 100.00,
+    admission_fee: '',
     min_ticket: 1,
     max_ticket: 5,
     faqs: []
@@ -53,8 +53,8 @@ const onFileChange = (file) => {
         <q-card>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                 <div  class="row flex justify-center bg-white">
-                    <Link :href="route('admin.facilities.index')">
-                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
+                    <Link :href="route('admin.events.index')">
+                        <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps rounded/>
                     </Link>
                     <div class="text-h6">Create Event</div>
                     <q-btn 
@@ -168,9 +168,8 @@ const onFileChange = (file) => {
                             />
                         </div>
                     </div> -->
-                    <q-separator class="q-my-md" />
                     <div class="text-h6">Event Details</div>
-                    <div class="q-mx-md q-mt-md">
+                    <div>
                         <!-- <div>Event Overview</div>    
                         <div>Event title</div>
                         <div>Be clear and descriptive with a title that tells people what your event is about.</div> -->
@@ -271,8 +270,7 @@ const onFileChange = (file) => {
                         <q-input 
                             rounded 
                             outlined 
-                            label="Price"
-                            type="number" 
+                            label="Admission Fee"
                             v-model="form.admission_fee" 
                             :error="form.errors.admission_fee ? true : false"
                             :error-message="form.errors.admission_fee"

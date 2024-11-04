@@ -5,6 +5,7 @@ import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { useOrderStore } from '@/Stores/OrderStore'
 import OrderedItems from '@/Components/OrderedItems.vue'
+import { formatDistance } from 'date-fns'
 
 const props = defineProps({
     order: Object,
@@ -129,15 +130,15 @@ function calculateSteps() {
     <q-item :class="[order.status == 'pending' ? 'bg-blue-2' : 'bg-grey-4', 'q-my-sm rounded-borders']" clickable v-ripple @click="dialog = true">
         <q-item-section>
             <q-item-label>{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-            {{ getDeliveryTitle(order.status) }}
+            <!-- {{ getDeliveryTitle(order.status) }} -->
             <q-item-label caption lines="2">{{ order.cart_products.length }} items</q-item-label>
         </q-item-section>
         <q-item-section v-if="order_statuses.ready_for_pickup == order.status" top side>
-            <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
+            <div class="text-caption">{{ formatDistance(new Date(), order.created_at) }} ago</div>
             <q-btn no-caps color="primary" @click.stop="isOrderCompleteDialog = true" rounded unelevated>Complete</q-btn>
         </q-item-section>
         <q-item-section side top v-else>
-            <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
+            <div class="text-caption">{{ formatDistance(new Date(), order.created_at) }} ago</div>
         </q-item-section>
     </q-item>
 
@@ -197,25 +198,25 @@ function calculateSteps() {
                     <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
                         <div class="text-h6">Customer</div>
                         <q-item class="q-py-none">
-                        <q-item-section avatar>
-                            <q-avatar size="100px" class="text-white" color="primary">
-                                <q-img :src="`/storage/${order.user.profile_pic}`" v-if="order.user.profile_pic"/>
-                                <div v-else>
-                                    {{ order.user.first_name[0] }}
-                                </div>
-                            </q-avatar>
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-                            <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
-                            <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
-                        </q-item-section>
-                        <q-item-section side>
-                            <Link :href="route('conversations.chat_user', order.user.id)">
-                                <q-btn round icon="message" unelevated color="primary" />
-                            </Link>
-                        </q-item-section>
-                    </q-item>
+                            <q-item-section avatar>
+                                <q-avatar size="100px" class="text-white" color="primary">
+                                    <q-img :src="`/storage/${order.user.profile_pic}`" v-if="order.user.profile_pic"/>
+                                    <div v-else>
+                                        {{ order.user.first_name[0] }}
+                                    </div>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
+                                <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
+                                <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                                <Link :href="route('conversations.chat_user', order.user.id)">
+                                    <q-btn round icon="message" unelevated color="primary" />
+                                </Link>
+                            </q-item-section>
+                        </q-item>
                         <q-separator class="q-my-md" />
                         <div class="text-h6">
                             Order - {{ order.cart_products.length }} items

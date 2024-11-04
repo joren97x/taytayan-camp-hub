@@ -1,6 +1,6 @@
 <script setup>
 
-import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import CustomerLayout from '@/Layouts/CustomerLayout2.vue'
 import FeaturedProductCard from './Product/Partials/FeaturedProductCard.vue';
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue';

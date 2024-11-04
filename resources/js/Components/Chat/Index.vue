@@ -43,7 +43,7 @@ const $q = useQuasar()
                                 class="lt-md" 
                                 flat 
                                 @click="drawerStore.drawer = true" 
-                                v-if="$page.props.auth.user.role == 'cashier'"
+                                v-if="$page.props.auth.user.role == 'cashier' || $page.props.auth.user.role == 'admin'"
                             />
                             <div class="text-h6 q-ml-sm">Chats</div>
                         </q-card-actions>

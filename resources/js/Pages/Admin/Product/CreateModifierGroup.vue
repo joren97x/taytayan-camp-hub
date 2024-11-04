@@ -1,31 +1,23 @@
 <script setup>
 
 import { Head, useForm, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import CreateModifierItemDialog from './Partials/CreateModifierItemDialog.vue'
+import ModifierItemCard from './Partials/ModifierItemCard.vue'
 
-defineOptions({
-    layout: AdminLayout
-})
-
-const props = defineProps({
-    modifier_items: Object
-})
+defineOptions({ layout: AdminLayout })
+const props = defineProps({ modifier_items: Object })
 
 const modifierGroupForm = useForm({
     name: '',
     required: false,
-    items: null,
     required_quantity: 1,
-    max_quantity: 1
+    max_quantity: 1,
+    modifier_items: []
 })
 
 const $q = useQuasar()
-const item = ref(null)
-const dialog = ref(false)
-
 const submitModifierGroupForm = () => {
     modifierGroupForm.post(route('admin.modifier_groups.store'), {
         onFinish: () => modifierGroupForm.reset('name', 'required', 'required_quantity', 'max_quantity', 'items'),
@@ -33,6 +25,14 @@ const submitModifierGroupForm = () => {
             $q.notify('Modifier Group Successfully Added')
         }
     })
+}
+const onModifierItemCreated = (data) => {
+    console.log(data)
+    modifierGroupForm.modifier_items.push(data)
+}
+
+const onModifierItemDeleted = (index) => {
+    modifierGroupForm.modifier_items.splice(index, 1)
 }
 
 </script>
@@ -73,8 +73,7 @@ const submitModifierGroupForm = () => {
                         rounded 
                         outlined
                     />
-                    {{ item }}
-                    <q-select 
+                    <!-- <q-select 
                         rounded 
                         outlined 
                         emit-value
@@ -89,9 +88,9 @@ const submitModifierGroupForm = () => {
                         :options-html="true"
                         :error="modifierGroupForm.errors.items ? true : false"
                         :error-message="modifierGroupForm.errors.items"
-                    />
-                    <CreateModifierItemDialog />
-                    <br>
+                    /> -->
+                    <!-- <CreateModifierItemDialog /> -->
+                    <!-- <br> -->
                     <div class="q-mt-md">
                         <!-- max quantity -->
                         <q-input
@@ -123,7 +122,19 @@ const submitModifierGroupForm = () => {
                         :error-message="modifierGroupForm.errors.required"
                     />
                     <br>
-                    
+                    <div class="q-mb-md">
+                        <div :class="`${$q.screen.gt.sm ? '' : 'justify-between'} row q-mb-sm`">
+                            <div class="text-h6 q-mr-md">Modifier Items</div>
+                            <CreateModifierItemDialog @created="onModifierItemCreated"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <q-list>
+                                    <ModifierItemCard @delete="onModifierItemDeleted(index)" :modifier_item="modifier_item" v-for="(modifier_item, index) in modifierGroupForm.modifier_items" />
+                                </q-list>
+                            </div>
+                        </div>
+                    </div>
                 </q-card-section>
             </q-card>
             <!-- <div class="row">

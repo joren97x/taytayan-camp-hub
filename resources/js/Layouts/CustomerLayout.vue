@@ -86,20 +86,34 @@ onMounted(() => {
 
         <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'"  style="z-index: 999;">
             <q-toolbar class="row q-py-xs q-px-sm" style="margin: 0 auto; max-width: 1300px">
-                <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1">
-                    <Link :href="route('homepage')" style="text-decoration: none;">
-                        <q-toolbar-title>
-                            <q-avatar size="50px">
+                <!-- <div class="col-1 flex items-start justify-start col-md-3 col-lg-3 col-xl-3 col-sm-1 col-xs-1"> -->
+                    
+                    <q-avatar size="">
                                 <q-img src="../logo.jpg" fill="cover" />
                             </q-avatar>
-                            <span class="text-primary text-h6 text-weight-bolder q-ml-xs">Taytayan Camp Hub</span>
+                        <q-toolbar-title>
+                    <Link :href="route('homepage')" style="text-decoration: none;">
+
+                            <span class="text-primary text-h6 text-weight-bolder q-ml-xs">Taytayan CAMP</span>
                             <!-- {{ $page.component }} -->
-                        </q-toolbar-title>
                     </Link>
-                </div>
-                <div class="flex items-center justify-center col-md-6 col-lg-6 col-xl-6 gt-sm">
+
+                        </q-toolbar-title>
+                        <q-tabs v-model="tab" shrink>
+                        <q-tab name="tab1" label="Tab 1" />
+                        <q-tab name="tab2" label="Tab 2" />
+                        <q-tab name="tab3" label="Tab 3" />
+                    </q-tabs>
+                <!-- </div> -->
+                <!-- <div class="flex items-center justify-start col-md-6 col-lg-6 col-xl-6 gt-sm"> -->
                     <!-- {{ $q.screen.gt.xs }} -->
-                    <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
+                    
+                    <q-input v-model="searchQuery" class="q-m" dense placeholder="Search..." @input="search" outlined rounded>
+                        <template v-slot:append>
+                            <q-icon name="search"/>
+                        </template>
+                    </q-input>
+                    <!-- <Link :href="route('customer.products.index')" class="text-subtitle2 navlink q-mr-xl">
                         <q-avatar square size="md">
                             <q-img fit="contain" src="/product_icon2.png"/>
                         </q-avatar>
@@ -116,8 +130,8 @@ onMounted(() => {
                             <q-img fit="contain" src="/facility_icon2.png"/>
                         </q-avatar>
                         Facilities
-                    </Link>
-                </div>
+                    </Link> -->
+                <!-- </div> -->
                 <div class="col-1 flex items-end justify-end col-md-3 col-lg-3 col-xl-3 col-sm-11 col-xs-11">
                     <div v-if="!$page.props.auth.user">
                         <Link :href="route('register')" class=" q-mr-md navlink text-primary gt-xs">
@@ -142,18 +156,8 @@ onMounted(() => {
                     </div>
                     <div v-else>
                         <!-- <q-btn flat icon="search" round></q-btn> -->
-                        <q-btn flat dense round class="q-mr-md gt-sm">
-                            <q-icon size="2em" name="notifications" />
-                            <!-- uncomment soon -->
-                            <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">{{ notificationStore.unreadCount }}</q-badge>
-                            <q-menu @show="notificationStore.readNotifications()" class="gt-sm">
-                                <q-list style="max-width: 100vw; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
-                                    <q-item class="text-h6">Notifications</q-item>
-                                    <NotificationItem :notification="notification" v-for="notification in notificationStore.notifications" />
-                                </q-list>
-                            </q-menu>
-                        </q-btn>
-                        <q-btn round flat @click="sidebar = !sidebar" class="lt-md" >
+                        
+                        <q-btn round flat @click="sidebar = !sidebar" class="lt-md">
                             <q-avatar size="3em" v-if="$page.props.auth.user.profile_pic">
                                 <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
                             </q-avatar>
@@ -161,13 +165,14 @@ onMounted(() => {
                                 {{ $page.props.auth.user.first_name[0] }}
                             </q-avatar>
                         </q-btn>
-                        <q-btn class="gt-sm" round unelevated>
+                        <q-btn class="gt-sm q-px-none" flat unelevated no-caps>
                             <q-avatar size="3em" v-if="$page.props.auth.user.profile_pic">
                                 <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
                             </q-avatar>
                             <q-avatar v-else class="bg-primary text-white">
                                 {{ $page.props.auth.user.first_name[0] }}
                             </q-avatar>
+                            <span class="q-ml-sm">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</span>
                             <q-menu class="q-pa-sm gt-sm" style="width: 300px">
                                 <Link :href="route('customer.profile')" class="user-menu-link">
                                     <q-item>
@@ -187,6 +192,17 @@ onMounted(() => {
                                 </Link>
                                 <q-separator />
                                 <NavLinks/>
+                            </q-menu>
+                        </q-btn>
+                        <q-btn flat dense round class="q-mr-md gt-sm">
+                            <q-icon size="2em" name="notifications" />
+                            <!-- uncomment soon -->
+                            <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">{{ notificationStore.unreadCount }}</q-badge>
+                            <q-menu @show="notificationStore.readNotifications()" class="gt-sm">
+                                <q-list style="max-width: 100vw; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
+                                    <q-item class="text-h6">Notifications</q-item>
+                                    <NotificationItem :notification="notification" v-for="notification in notificationStore.notifications" />
+                                </q-list>
                             </q-menu>
                         </q-btn>
                     </div>
@@ -315,6 +331,20 @@ onMounted(() => {
                 <slot/>
                 <Footer class="content-wrapper"/>
             </div>
+            <q-page-sticky position="bottom-right" :offset="[18, 18]">
+                <q-btn round icon="message" size="xl">
+                    <q-menu anchor="top left" self="bottom right" >
+                        <q-card style="max-width: 450px; width: 450px; height: 500px">
+                            <q-item clickable>
+                                <q-item-section>New tab</q-item-section>
+                            </q-item>
+                            <q-item clickable>
+                                <q-item-section>New incognito tab</q-item-section>
+                            </q-item>
+                        </q-card>
+                    </q-menu>
+                </q-btn>
+            </q-page-sticky>
         </q-page-container>
         <q-footer reveal elevated class="lt-md" v-show="false" style="z-index: 998;">
             <q-toolbar class="row bg-white q-pa-none q-ma-none">
@@ -399,6 +429,7 @@ onMounted(() => {
             </q-dialog>
         </q-footer>
         <!-- <Footer/> -->
+        
     </q-layout>
 </template>
 

@@ -48,7 +48,7 @@ const addCategoryDialog = ref(false)
 
 <template>
     
-    <Head title="New Milktea" />
+    <Head title="Create Product" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card flat bordered>
             <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md bg-white">

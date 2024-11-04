@@ -111,7 +111,7 @@ const columns = [
                                 </q-item-section>
                                 <q-item-section class="items-start">
                                     <q-item-label>{{ props.row.title }}</q-item-label>
-                                    <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  props.row.start_time}}</q-item-label>
+                                    <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  formatTime(props.row.start_time) }}</q-item-label>
                                 </q-item-section>
                             </q-item>
                         </Link>
@@ -125,7 +125,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-gross="props">
                     <q-td :props="props">
-                        {{ props.row.tickets_sold * props.row.admission_fee }}
+                        P{{ props.row.tickets_sold * props.row.admission_fee }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

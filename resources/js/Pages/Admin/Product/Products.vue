@@ -40,6 +40,14 @@ const deleteProduct = () => {
     })
 }
 
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 10
+    // rowsNumber: xx if getting data from a server
+}
+
 const columns = [
 //   { name: 'photo', label: 'Photo', align: 'center', field: 'photo', sortable: true },
   { name: 'name', align: 'center', label: 'Product', field: 'name', sortable: true },
@@ -66,6 +74,7 @@ const columns = [
                 row-key="name"
                 :filter="filter"
                 :grid="$q.screen.lt.md"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>

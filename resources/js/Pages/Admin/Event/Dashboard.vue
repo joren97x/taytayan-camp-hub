@@ -1,8 +1,12 @@
 <script setup>
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { date } from 'quasar'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+// import EventCheckinDialog from './Partials/EventCheckinDialog.vue'
+import { QrcodeStream } from 'vue-qrcode-reader'
+import { useQuasar, date } from 'quasar'
+import { router, Link } from '@inertiajs/vue3'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
     layout: AdminLayout
@@ -10,86 +14,201 @@ defineOptions({
 
 const props = defineProps({
     event: Object,
-    ticket_orders: Object
+    tickets: Object
 })
 
+const drawerStore = useDrawerStore()
+const $q = useQuasar()
 const filter = ref('')
 const columns = [
-    { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
-    { name: 'quantity', align: 'center', label: 'Quantity', field: 'quantity', sortable: true },
-    { name: 'amount', align: 'center', label: 'Price', field: 'amount', sortable: true },
+    { name: 'attendee', align: 'center', label: 'Attendee Name', field: 'attendee', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
-    { name: 'created_at', align: 'center', label: 'Date', field: 'created_at', sortable: true },
+    { name: 'checked_in', align: 'center', label: 'Checked in', field: 'checked_in', sortable: true },
     { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
 ]
+const checkedIn = computed(() => {
+    return props.tickets.filter((tix) => tix.status == 'used') 
+})
+
+const showScanner = ref(false)
+const loading = ref(false)
+
+const onDecode = (result) => {
+    $q.notify('helo its decoded')
+    showScanner.value = false;
+    loading.value = false;
+    // Do something with the QR code result
+    console.log('QR Code Result:', result);
+    // You can display it, use it, or redirect the user based on the result.
+}
+
+const onInit = (promise) => {
+    promise.then(() => {
+        this.loading = false;
+    }).catch((error) => {
+    console.error(error);
+        this.loading = false;
+        this.showScanner = false;
+    });
+}
+
+const onDetect = (detectedCodes) => {
+    $q.notify('detecented?')
+    console.log(detectedCodes)
+    router.visit(detectedCodes[0].rawValue)
+}
+
+const selectedConstraints = ref({ facingMode: 'environment' })
+const defaultConstraintOptions = [
+  { label: 'rear camera', constraints: { facingMode: 'environment' } },
+  { label: 'front camera', constraints: { facingMode: 'user' } }
+]
+const constraintOptions = ref(defaultConstraintOptions)
+
+async function onCameraReady() {
+  // NOTE: on iOS we can't invoke `enumerateDevices` before the user has given
+  // camera access permission. `QrcodeStream` internally takes care of
+  // requesting the permissions. The `camera-on` event should guarantee that this
+  // has happened.
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  const videoDevices = devices.filter(({ kind }) => kind === 'videoinput')
+
+  constraintOptions.value = [
+    ...defaultConstraintOptions,
+    ...videoDevices.map(({ deviceId, label }) => ({
+      label: `${label} (ID: ${deviceId})`,
+      constraints: { deviceId }
+    }))
+  ]
+
+//   error.value = ''
+}
+
+const cameraError = (err) => {
+    console.log(err)
+    $q.notify({
+        message: `Something went wrong`,
+        color: 'negative', // or any custom color defined in the brand config
+        textColor: 'white',
+        position: 'top'
+    })
+}
+
 </script>
 
 <template>
-    <q-card bordered flat :class="$q.screen.gt.sm ? 'q-ma-md' : ''">
-        <q-card-section>
-            <div class="text-h6">Event Dashboard</div>
-            <q-card bordered flat >
-                <q-item>
+    
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
+        <q-card class="q-mb-md" bordered flat>
+            <q-card-section>
+                <div class="flex justify-center items-center">
+                    <Link :href="route('admin.tickets.index')" class="absolute-left q-mt-sm">
+                        <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
+                    </Link>
+                    <div class="">
+                        <!-- <q-btn rounded @click="drawerStore.toggle" no-caps class="lt-md" icon="menu" flat /> -->
+                        <div class="text-h6">Event Dashboard</div>
+                    </div>
+                </div>
+
+                <!-- <q-btn 
+                    label="Scan Qr Code" 
+                    no-caps 
+                    icon="qr_code" 
+                    color="primary" 
+                    class="absolute-top-right q-mt-md q-mr-md" 
+                    @click="showScanner = true"
+                    rounded 
+                    unelevated
+                /> -->
+                <q-item class="q-my-sm">
                     <q-item-section avatar class="items-center">
                         <div class="text-weight-bold text-secondary">{{ date.formatDate(event.date, 'MMM') }}</div>
                         <div>{{ date.formatDate(event.date, 'D') }}</div>
                     </q-item-section>
                     <q-item-section avatar>
-                        <q-img :src="`/storage/${event.cover_photo}`" height="70px" width="70px" class="rounded-borders" />
+                        <q-img :src="`/storage/${event.cover_photo}`" height="60px" width="60px" class="rounded-borders" />
                     </q-item-section>
                     <q-item-section class="items-start">
-                        <q-item-label class="text-subtitle1">{{ event.title }}</q-item-label>
+                        <q-item-label class="text-weight-bold">{{ event.title }}</q-item-label>
                         <q-item-label caption>{{ date.formatDate(event.date, 'MMM D, YYYY') + ' at ' +  event.start_time}}</q-item-label>
                     </q-item-section>
                 </q-item>
-            </q-card>
-            <div class="row q-my-xs q-col-gutter-md">
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                    <q-card bordered flat class="q-pa-xl">
-                        <q-card-section>
-                            errmm what the sigma
-                        </q-card-section>
-                    </q-card>
+                <div>Check in attendees using their name or email</div>
+                <div class="row items-center flex">
+                    <div class="col-10"><q-linear-progress :value="checkedIn.length / tickets.length" /></div>
+                    <div class="col-2 text-center text-subtitle1">
+                        {{ checkedIn.length }} / {{ tickets.length }}
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                    <q-card bordered flat class="q-pa-xl">
-                        <q-card-section>
-                            tyshii
-                        </q-card-section>
-                    </q-card>
-                </div>
-            </div>
-            <div class="text-h6 q-my-md">Recent Orders</div>
+            </q-card-section>
+        </q-card>
+        <q-card bordered flat>
             <q-table
                 class="my-sticky-header-column-table"
                 flat
                 :grid="$q.screen.lt.md"
-                :rows="ticket_orders"
+                title="Treats"
+                :rows="tickets"
                 :columns="columns"
                 row-key="name"
                 :filter="filter"
             >
-                <template v-slot:body-cell-name="props">
-                    <q-td :props="props">
-                        {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
-                    </q-td>
+                <template v-slot:top>
+                    <p class="text-h6 q-pt-md">Attendees</p>
+                    <q-space />
+                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                    <!-- <Link :href="route('admin.facilities.create')">
+                        <q-btn no-caps color="primary">Create Facility</q-btn>
+                    </Link> -->
                 </template>
-                <template v-slot:body-cell-quantity="props">
+                <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
-                        {{ props.row.ticket_order_items.length }}
-                    </q-td>
-                </template>
-                <template v-slot:body-cell-created_at="props">
-                    <q-td :props="props">
-                        {{ date.formatDate(props.row.created_at, 'MMM D, YYYY') }}
+                        {{ props.row.ticket_holder.name }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated color="primary">button</q-btn>
+                        <EventCheckinDialog :ticket="props.row" />
                     </q-td>
                 </template>
+                <template v-slot:body-cell-checked_in="props">
+                    <q-td :props="props">
+                        <q-chip v-if="props.row.status == 'used'" color="green-3">Checked-in</q-chip>
+                        <q-chip v-else>Pending</q-chip>
+                    </q-td>
+                </template>
+                <template v-slot:no-data>
+                    <div class="full-width row flex-center q-gutter-sm text-grey" style="height: 50vh">
+                        No Attendees Found. Check again later...
+                    </div>
+                </template>
             </q-table>
-        </q-card-section>
-    </q-card>
+        </q-card>
+    </div>
+    <!-- <q-dialog v-model="showScanner" persistent>
+      <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
+        <q-card-actions class="justify-end">
+            <q-btn icon="close" flat round dense @click="showScanner = false"/>
+        </q-card-actions>
+        <qrcode-stream 
+            @decode="onDecode" 
+            @init="onInit" 
+            @detect="onDetect"
+            @error="cameraError"
+            @camera-on="onCameraReady"
+        />
+        <q-spinner v-if="loading" />
+      </q-card>
+    </q-dialog> -->
 </template>
+
+<style scoped>
+a {
+    color: black;
+}
+</style>

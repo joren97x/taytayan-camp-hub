@@ -29,7 +29,7 @@ return new class extends Migration
                 User::ROLE_DRIVER
             ])->default(User::ROLE_CUSTOMER);
             $table->string('password');
-            $table->timestamp('is_online')->nullable();
+            $table->boolean('is_online')->default(false);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

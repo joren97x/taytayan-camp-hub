@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('modifier_group_id');
             $table->foreignId('modifier_item_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

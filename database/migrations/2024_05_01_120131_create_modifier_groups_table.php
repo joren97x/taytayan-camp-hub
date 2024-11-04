@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('required')->default(false);
             $table->integer('required_quantity')->default(1);
             $table->integer('max_quantity')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

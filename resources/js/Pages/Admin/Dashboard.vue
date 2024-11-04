@@ -2,15 +2,15 @@
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Head, Link } from '@inertiajs/vue3'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
-defineOptions({
-    layout: AdminLayout
-})
+defineOptions({ layout: AdminLayout })
 
 defineProps({
     recent_transactions: Object
 })
 
+const drawerStore = useDrawerStore()
 const columns = [
     { name: 'type', label: 'type', align: 'center', field: 'type', sortable: true },
     { name: 'user', label: 'user', align: 'center', field: 'user', sortable: true },
@@ -24,9 +24,11 @@ const columns = [
 
 <template>
     <Head title="Dashboard" />
-    <div class="q-pa-md">
-        <div class="text-h6 q-mb-md"> Dashboard </div>
-        
+    <!-- <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
+        <div class="flex">
+            <q-btn icon="menu" @click="drawerStore.drawer = true" flat/>
+            <div class="text-h6"> Dashboard </div>
+        </div>
         <div class="row q-col-gutter-md ">
             <div class="col-3">
                 <q-card borderd>
@@ -58,7 +60,7 @@ const columns = [
             <div class="col-3">
                 <q-card borderd>
                     <q-card-section>
-                        <div class="text-subtitle1">Users Registered</div>
+                        <div class="text-subtitle1">Active Orders</div>
                         <div class="text-h6">P800.00</div>
                         <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
                     </q-card-section>
@@ -98,5 +100,5 @@ const columns = [
             </div>
         </div>
     </div>
-    {{ user_chart }}
+    {{ user_chart }} -->
 </template>

@@ -59,6 +59,7 @@ const columns = [
                 :rows="props.modifier_groups"
                 :columns="columns"
                 row-key="name"
+                :filter="filter"
                 :grid="$q.screen.lt.md"
             >
                 <template v-slot:top>
@@ -101,9 +102,9 @@ const columns = [
                 </template> -->
                 <template v-slot:body-cell-contains="props">
                     <q-td :props="props">
-                        <span v-for="(modifier_item, index) in props.row.modifier_items" :key="modifier_item.id">
-                            {{ modifier_item.name + (index == props.row.modifier_items.length - 1 ? '' : ', ') }}
-                        </span>
+                        <q-chip v-for="(modifier_item, index) in props.row.modifier_items" :key="modifier_item.id">
+                            {{ modifier_item.name }}
+                        </q-chip>
                     </q-td>
                 </template>
                 <!-- <template v-slot:body-cell-productsUsing="props">
@@ -190,7 +191,14 @@ const columns = [
                     Are you sure you want to delete this modifier group? All data will be permanently removed. This action cannot be undone.
                     <q-item class="bg-negative text-white q-my-md rounded-borders">
                         <q-item-section>
-                            <q-item-label class="text-weight-bold text-subtitle1">{{ deleteModifierGroupForm.modifier_group.name }}</q-item-label>
+                            <q-item-label class="text-weight-bold text-subtitle1">
+                                {{ deleteModifierGroupForm.modifier_group.name }}
+                                <br>
+                                <q-chip v-for="(modifier_item, index) in deleteModifierGroupForm.modifier_group.modifier_items" :key="modifier_item.id">
+                                    {{ modifier_item.name }}
+                                </q-chip>
+                            </q-item-label>
+                               
                         </q-item-section>
                     </q-item>
                 </q-card-section>

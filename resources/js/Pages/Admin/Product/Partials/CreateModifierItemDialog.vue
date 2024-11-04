@@ -2,11 +2,14 @@
 
 import { useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 
+const emit = defineEmits(['created'])
+const props = defineProps({ modifier_group_id: Number })
 const $q = useQuasar()
 const dialog = ref(false)
 const form = useForm({
+    modifier_group_id: props.modifier_group_id,
     name: '',
     description: '',
     price: 0.00
@@ -14,8 +17,8 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('admin.modifier_items.store'), {
-        onFinish: () => form.reset(),
         onSuccess: () => {
+            emit('created', form.data())
             form.reset()
             $q.notify('Modifier Item Successfully Added')
             dialog.value = false
@@ -47,7 +50,6 @@ const submit = () => {
                 <q-card-section class="row items-center no-wrap">
                         <div class="text-weight-bold text-subtitle1">New Item</div>
                         <q-space />
-                        
                         <q-btn flat round icon="close" v-close-popup/>
                 </q-card-section>
                 <q-card-section>
@@ -72,7 +74,7 @@ const submit = () => {
                     <q-input 
                         rounded 
                         outlined 
-                        label="Default Price" 
+                        label="Additional Price" 
                         placeholder="None" 
                         class="q-mt-md"
                         v-model="form.price"

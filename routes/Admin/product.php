@@ -49,5 +49,7 @@ Route::resource('/admin/categories', CategoryController::class)->names([
 ]);
 
 Route::resource('/admin/modifier-items', ModifierItemController::class)->names([
-    'store' => 'admin.modifier_items.store'
+    'store' => 'admin.modifier_items.store',
+    'update' => 'admin.modifier_items.update',
+    'destroy' => 'admin.modifier_items.destroy',
 ]);

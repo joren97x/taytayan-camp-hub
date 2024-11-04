@@ -5,6 +5,7 @@ import { ref, onMounted, watch } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import CreateModifierItemDialog from './Partials/CreateModifierItemDialog.vue'
+import ModifierItemCard from './Partials/ModifierItemCard.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -55,15 +56,14 @@ watch(selected, (modifier_item) => {
 <template>
     
     <Head title="Edit Modifier Group" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-card-section style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">
                     <div  class="row flex justify-center bg-white">
                         <Link :href="route('admin.modifier_groups.index')">
-                            <q-btn icon="arrow_back" flat class="absolute-top-left q-ml-md q-mt-md text-black" rounded label="Go Back" no-caps/>
+                            <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-md text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
                         </Link>
                         <div class="text-h6">Edit Modifier Group</div>
-                        <CreateModifierItemDialog class="absolute-"/>
                     </div>
                     <q-separator class="q-mt-md"/>
                 </q-card-section>
@@ -121,7 +121,7 @@ watch(selected, (modifier_item) => {
                     outlined
                 />
                 {{ item }}
-                <q-select 
+                <!-- <q-select 
                     rounded 
                     outlined 
                     emit-value
@@ -137,9 +137,8 @@ watch(selected, (modifier_item) => {
                     :options-html="true"
                     :error="form.errors.modifier_items ? true : false"
                     :error-message="form.errors.modifier_items"
-                />
+                /> -->
                 
-                <br>
                 <div>
                     <q-input
                         rounded 
@@ -171,13 +170,14 @@ watch(selected, (modifier_item) => {
                     @click="submit"
                     no-caps 
                     color="primary" 
-                    class="q-mr-md q-mt-md"
+                    class="q-mr-md"
                     :loading="form.processing"
                     :disable="form.processing"
                     label="Update"
                     rounded
                     unelevated
                 />
+                <q-separator class="q-my-md"/>
                 <!-- <q-card-actions>
                         <q-btn 
                             no-caps 
@@ -190,6 +190,19 @@ watch(selected, (modifier_item) => {
                             Save
                         </q-btn>
                     </q-card-actions> -->
+                <div class="q-mb-md">
+                    <div :class="`${$q.screen.gt.sm ? '' : 'justify-between'} row q-mb-sm`">
+                        <div class="text-h6 q-mr-md">Modifier Items</div>
+                        <CreateModifierItemDialog :modifier_group_id="modifier_group.id"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <q-list>
+                                <ModifierItemCard :modifier_item="modifier_item" v-for="modifier_item in props.modifier_group.modifier_items" />
+                            </q-list>
+                        </div>
+                    </div>
+                </div>
             </q-card-section>
         </q-card>
     </div>

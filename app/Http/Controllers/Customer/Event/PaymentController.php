@@ -21,10 +21,10 @@ class PaymentController extends Controller
     //
     public function success(Request $request) 
     {
-        // dd($request);
 
         $event = Event::find($request->query('event_id'));
         $payment_session = session('payment_session');
+        // dd($payment_session);
 
         if (!$payment_session) {
             abort(404);
@@ -39,9 +39,11 @@ class PaymentController extends Controller
         
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
-            $ticket_order->payment_method = $checkout_session->payment_method_used;
+            // $ticket_order->payment_method = $checkout_session->payment_method_used;
             // $ticket_order->status = TicketOrder::STATUS_COMPLETED;
-            $ticket_order->save();
+            $ticket_order->update([
+                'payment_method' => $checkout_session->payment_method_used
+            ]);
         }
 
         foreach($request->query('ticket_holders') as $ticket_holder) {
@@ -100,39 +102,23 @@ class PaymentController extends Controller
             'ticket_holders.*.name' => 'required|string|max:255',
         ]);
 
-        // dd($request->all());
-
         if($request->payment_method == 'walk_in') {
             session(['payment_session' => true]);
             return redirect(route('event.checkout.success') . '?' . http_build_query($request->all()));
         }
         
-        // $cart = Cart::where('user_id', auth()->id())->where('status', true)->firstOrFail();
-        // $line_items = [];
-        // $subtotal = 0;
-        // // Fetch cart products with related product and modifiers
-        // $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
-
-        // foreach($cart_products as $cart_product) {
-        //     foreach($cart_product->modifiers as $modifier) {
-        //         $modifier->total = $modifier->quantity * $modifier->modifier_item->price;
-        //         $cart_product->product->price += $modifier->total;
-        //     }
-        //     $cart_product->total = $cart_product->quantity * $cart_product->product->price;
-            $line_items = [
-                [
-                    'name' => $event->title . " ticket",
-                    'quantity' => (int)$request->attendees,
-                    'amount' => (double)$event->admission_fee * 100,
-                    'currency' => 'PHP',
-                    'description' => "uhh basta description, e change lang or what in the future",
-                    'images' => [
-                        'https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-                    ],
-                ]
-            ];
-        //     $subtotal += $cart_product->total;
-        // }
+        $line_items = [
+            [
+                'name' => $event->title . " ticket",
+                'quantity' => (int)$request->attendees,
+                'amount' => (double)$event->admission_fee * 100,
+                'currency' => 'PHP',
+                'description' => "uhh basta description, e change lang or what in the future",
+                'images' => [
+                    'https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
+                ],
+            ]
+        ];
         
         $checkout = Paymongo::checkout()->create([
             'cancel_url' => route('customer.events.index'),

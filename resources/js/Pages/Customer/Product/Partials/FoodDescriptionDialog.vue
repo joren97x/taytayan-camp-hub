@@ -23,6 +23,7 @@ const submit = () => {
             console.log(e)
             $q.notify(props.product.name + ' Added To Cart')
             emit('close')
+            form.reset('modifiers', 'quantity', 'special_instruction')
         },
         onError: (error) => {
             if(error.modifiers) {
@@ -210,7 +211,7 @@ const decrementQuantity = () => {
                                 </q-item>
                             </q-list>
                         </div>
-                        <div class="q-mx-md">
+                        <div :class="`q-mx-md ${$q.screen.lt.md ? 'q-mb-xl' : ''}`">
                             <q-item class="q-pa-none">
                                 <q-item-section class="text-h6">
                                     Special instructions

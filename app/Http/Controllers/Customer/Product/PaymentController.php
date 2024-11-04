@@ -74,6 +74,7 @@ class PaymentController extends Controller
     public function pay(Request $request, CartService $cartService) 
     {
         // dd($request);
+        // dd($request->cart_products);
 
         if($request->payment_method != 'right_now') {
             session(['payment_session' => true]);
@@ -83,29 +84,35 @@ class PaymentController extends Controller
         }
 
         $cart = Cart::find($request->cart_id);
-        // dd($cart);
         $line_items = [];
-        // $subtotal = 0;
-        // Fetch cart products with related product and modifiers
-        // $cart_products = $cart->cart_products()->with(['product', 'modifiers.modifier_item', 'modifiers.modifier_group'])->get();
+        
         foreach($request->cart_products as $cart_product) {
-            // foreach($cart_product->modifiers as $modifier) {
-            //     $modifier->total = $modifier->quantity * $modifier->modifier_item->price;
-            //     $cart_product->product->price += $modifier->total;
-            // }
-            // $cart_product->total = $cart_product->quantity * $cart_product->product->price;
+            // Calculate the base price with modifiers without multiplying by quantity
+            $base_price = (double)$cart_product['product']['price'];
+            $modifiers_total = 0;
+        
+            // Add up the price of each modifier
+            if (isset($cart_product['modifiers'])) {
+                foreach($cart_product['modifiers'] as $modifier) {
+                    $modifiers_total += (double)$modifier['modifier_item']['price'];
+                }
+            }
+        
+            // Set the amount as the base price + modifiers total (no quantity)
             $line_items[] = [
                 'name' => $cart_product['product']['name'],
                 'quantity' => $cart_product['quantity'],
-                'amount' => (double)$cart_product['total'] * 100,
+                'amount' => ($base_price + $modifiers_total) * 100, // Amount in cents
                 'currency' => 'PHP',
                 'description' => $cart_product['product']['description'],
                 'images' => [
                     'https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
                 ],
             ];
-            // $subtotal += $cart_product->total;
         }
+
+        // dd($line_items);
+
 
         $checkout = Paymongo::checkout()->create([
             'cancel_url' => route('customer.cart.index'),

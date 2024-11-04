@@ -34,9 +34,10 @@ class EventController extends Controller
 
     public function dashboard(Event $event)
     {
+        $tickets = Ticket::with('ticket_holder')->where('event_id', $event->id)->whereIn('status', [Ticket::STATUS_SOLD, Ticket::STATUS_USED])->get();
         return Inertia::render('Admin/Event/Dashboard', [
             'event' => $event,
-            'ticket_orders' => TicketOrder::with('user', 'ticket_order_items')->where('event_id', $event->id)->get()
+            'tickets' => $tickets
         ]);
     }
 

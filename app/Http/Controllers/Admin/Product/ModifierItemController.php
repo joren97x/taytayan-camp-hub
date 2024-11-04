@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\ModifierGroupItem;
 use App\Models\ModifierItem;
 use Illuminate\Http\Request;
 
@@ -35,13 +36,23 @@ class ModifierItemController extends Controller
             'price' => 'required'
         ]);
 
+        if(!$request->modifier_group_id) {
+            return back();
+        }
+
         //e update if ge update na nimo ang database kay nalimtan ang description OK
         // ModifierItem::create($request->all());
-        ModifierItem::create([
+        $modifier_item = ModifierItem::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price
         ]);
+
+        ModifierGroupItem::create([
+            'modifier_group_id' => $request->modifier_group_id,
+            'modifier_item_id' => $modifier_item->id
+        ]);
+
         return back();
     }
 
@@ -67,6 +78,13 @@ class ModifierItemController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $modifier_item = ModifierItem::find($id);
+        $modifier_item->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price
+        ]);
+        return back();
     }
 
     /**
@@ -75,5 +93,7 @@ class ModifierItemController extends Controller
     public function destroy(string $id)
     {
         //
+        ModifierItem::destroy($id);
+        return back();
     }
 }

@@ -35,8 +35,6 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('public/products');
         Storage::makeDirectory('public/facilities');
 
-        $destination_path = 'public/events/dummy_image.jpg';
-
         // $this->call(ModifierItemSeeder::class);
         // $this->call(ModifierGroupSeeder::class);
         // $this->call(ProductSeeder::class);
@@ -77,7 +75,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'customer',
             'password' => Hash::make('asdasd')
         ]);
-
         
         Cart::create([
             'user_id' => $user->id

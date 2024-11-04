@@ -16,18 +16,17 @@ class CategorySeeder extends Seeder
     {
         //
         $dummy_categories = [
-            'Milktea',
-            'Fruit Tea',
-            'Smoothie',
-            'Fruit shake'
+            'Milk Tea',
+            'Frappe',
+            'Halo-Halo',
+            'Fruit Shake',
+            'Fresh Lemonade',
+            'Go To Foods',
+            'Appetizers'
         ];
         
         foreach($dummy_categories as $item) {
             Category::create([ 'name' => $item]);
-            // CategoryProduct::create([
-            //     'category_id' => $category->id,
-            //     'product_id' => fake()->numberBetween(1, 10)
-            // ]);
         }
 
     }

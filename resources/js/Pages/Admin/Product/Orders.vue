@@ -129,7 +129,7 @@ const showOrderDialog = (order) => {
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps color="primary">View Order</q-btn>
+                        <q-btn no-caps color="primary" rounded label="View Order"/>
                     </q-td>
                 </template>
                 <template v-slot:item="props">

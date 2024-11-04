@@ -2,7 +2,8 @@
 
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineProps({
     mustVerifyEmail: {
@@ -13,6 +14,7 @@ defineProps({
     },
 });
 
+const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const user = usePage().props.auth.user;
 
@@ -52,6 +54,15 @@ const onFileChange = (file) => {
     <q-form class="q-mb-md" >
         <q-card bordered flat>
             <q-card-section>
+                <div class="flex justify-center q-mb-md" style="position: relative" v-if="$page.props.auth.user.role == 'cashier' || $page.props.auth.user.role == 'admin'">
+                    <q-btn 
+                        icon="menu" 
+                        class="lt-md absolute-left" 
+                        flat 
+                        @click="drawerStore.drawer = true" 
+                    />
+                    <div class="text-h6">Edit Profile</div>
+                </div>
                 <div class="text-h6 q-mb-sm">Profile Picture</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
                 <div class="row q-col-gutter-md ">

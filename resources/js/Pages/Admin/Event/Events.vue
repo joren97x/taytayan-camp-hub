@@ -43,7 +43,6 @@ const formatTime = (time) => {
 
 const columns = [
     { name: 'event', label: 'Event', align: 'center', field: 'event', sortable: true },
-    { name: 'date', label: 'Date', align: 'center', field: 'date', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'Tickets Sold', field: 'tickets_sold', sortable: true },
     // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
@@ -75,6 +74,24 @@ const filteredEvents = computed(() => {
   return filtered;
 });
 
+const formatStatus = (status) => {
+    const formatted = {
+        all: 'All Events',
+        event_ended: 'Event Ended',
+        cancelled: 'Cancelled',
+        on_sale: 'On Sale'
+    };
+    return formatted[status] || status;
+}
+
+const getStatusColor = (status) => {
+    const colors = {
+        cancelled: 'red-3',
+        on_sale: 'green-3',
+        event_ended: 'grey'
+    }
+    return colors[status]
+}
 
 </script>
 
@@ -102,8 +119,7 @@ const filteredEvents = computed(() => {
                         outlined 
                         rounded
                         dense
-                    >
-                    </q-select>
+                    />
                     <Link :href="route('admin.events.create')">
                         <q-btn class="q-ml-sm" no-caps color="primary" rounded unelevated label="Create Event"/>
                     </Link>
@@ -124,27 +140,34 @@ const filteredEvents = computed(() => {
                         </q-input>
                     </div>
                 </template>
+                <template v-slot:body-cell-status="props">
+                    <q-td :props="props">
+                        <q-chip :color="getStatusColor(props.row.status)">{{ formatStatus(props.row.status) }}</q-chip>
+                    </q-td>
+                </template>
                 <template v-slot:body-cell-event="props">
                     <q-td :props="props">
                         <q-item class="q-pa-none">
+                            <q-item-section avatar class="items-center">
+                                <div class="text-weight-bold text-secondary">{{ date.formatDate(props.row.date, 'MMM') }}</div>
+                                <div>{{ date.formatDate(props.row.date, 'D') }}</div>
+                            </q-item-section>
                             <q-item-section avatar>
-                                <q-img :src="`/storage/${props.row.cover_photo}`" style="width: 50px; height: 50px;" />
+                                <q-img :src="`/storage/${props.row.cover_photo}`" style="width: 90px; height: 70px;" class="rounded-borders"/>
                             </q-item-section>
                             <q-item-section class="text-start text-left">
                                 <q-item-label>
                                     {{ props.row.title }}
                                 </q-item-label>
                                 <q-item-label caption>
-                                    {{ props.row.date }}
+                                    {{ date.formatDate(props.row.date, 'MMMM D, YYYY') }} at
+                                    {{ formatTime(props.row.start_time) }}
+                                </q-item-label>
+                                <q-item-label caption>
+                                    {{ props.row.location }}
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
-                    </q-td>
-                </template>
-                <template v-slot:body-cell-date="props">
-                    <q-td :props="props">
-                        {{ date.formatDate(props.row.date, 'MMMM D, YYYY') }} at
-                        {{ formatTime(props.row.start_time) }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

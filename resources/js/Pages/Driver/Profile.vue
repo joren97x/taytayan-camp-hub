@@ -13,7 +13,7 @@ defineOptions({
 </script>
 
 <template>
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <UpdateProfileInformationForm/>
         <UpdatePasswordForm/>
     </div>

@@ -1,7 +1,8 @@
 <script setup>
 
 import CashierLayout from '@/Layouts/CashierLayout.vue'
-import { useDrawerStore } from '@/Stores/DrawerStore';
+import { useDrawerStore } from '@/Stores/DrawerStore'
+import { Head } from '@inertiajs/vue3'
 
 defineOptions({
     layout: CashierLayout
@@ -12,7 +13,8 @@ const drawerStore = useDrawerStore()
 </script>
 
 <template>
-    <div class="q-pa-md">
+    <Head title="Dashboard" />
+    <!-- <div class="q-pa-md">
         <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
         <div class="text-h6">Dashboard</div>
         <q-card bordered flat>
@@ -26,5 +28,5 @@ const drawerStore = useDrawerStore()
                 </div>
             </q-card-section>
         </q-card>
-    </div>
+    </div> -->
 </template>

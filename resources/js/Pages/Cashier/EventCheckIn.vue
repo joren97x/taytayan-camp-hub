@@ -159,7 +159,7 @@ const cameraError = (err) => {
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <!-- <Link :href="route('admin.facilities.create')">
+                    <!-- <Link :href="route('admin.facilities.create')">f
                         <q-btn no-caps color="primary">Create Facility</q-btn>
                     </Link> -->
                 </template>
@@ -184,7 +184,8 @@ const cameraError = (err) => {
     <q-dialog v-model="showScanner" persistent>
       <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
         <!-- <q-card flat class="q-pa-md" :style="$q.screen.gt.sm ? 'max-width: 90%; max-height: 90%;' : 'max-width: 90%; max-height: 90%;'"> -->
-        <q-card-actions class="justify-end">
+        <q-card-actions class="justify-between">
+            <div class="text-h6">Scan Qr Code</div>
             <q-btn icon="close" flat round dense @click="showScanner = false"/>
         </q-card-actions>
         <qrcode-stream 

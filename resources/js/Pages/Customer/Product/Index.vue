@@ -50,7 +50,6 @@ const categoryRefs = ref({});
 const menuHeight = ref(0);  
 
 const scrollToCategory = (category) => {
-    console.log('clicked')
     categoryMenu.value = false
     setTimeout(() => {
         const element = categoryRefs.value[category.id];
@@ -60,8 +59,6 @@ const scrollToCategory = (category) => {
             const offset = element.getBoundingClientRect().top + window.pageYOffset - menuHeight.value - 150;
             window.scrollTo({ top: offset, behavior: 'smooth' });
         }
-        
-        console.log(element);
     }, 150);
   
 };
@@ -463,11 +460,11 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
         transition-hide="slide-down"
         maximized
         v-if="$q.screen.lt.sm"
+        position="bottom"
     >
-        <q-card style="margin-top: 30%;">
+        <q-card>
             <q-card-section>
-                <div class="text-center">Lorem idivsum dolor sit amet.</div>
-                <div class="text-center">Lorem idivsum dolor sit amet.</div>
+                <div class="text-start text-h6">Categories</div>
                 <q-list>
                     <q-item 
                         v-for="category in props.categories" 
@@ -480,7 +477,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                 </q-list>
             </q-card-section>
             <q-card-actions class="fixed-bottom">
-                <q-btn v-close-popup color="primary" no-caps class="full-width">Close</q-btn>
+                <q-btn v-close-popup color="primary" rounded no-caps class="full-width">Close</q-btn>
             </q-card-actions>
         </q-card>
     </q-dialog>

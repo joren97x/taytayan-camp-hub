@@ -86,7 +86,7 @@ onMounted(() => {
     <Head title="Orders" />
    
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
-        <q-card bordered flat>
+        <q-card bordered flat  style="height: 90vh">
             <div class="text-h6 text-weight-bold q-ml-md q-pt-md">
                 <q-btn icon="menu" flat @click="drawerStore.drawer =true" class="lt-md"/>
                 Orders

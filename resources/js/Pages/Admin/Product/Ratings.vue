@@ -3,16 +3,14 @@
 import { Head } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
+import { useDrawerStore } from '@/Stores/DrawerStore';
 
-defineOptions({
-    layout: AdminLayout
-})
+defineOptions({ layout: AdminLayout })
+defineProps({ ratings: Object })
 
-defineProps({
-    ratings: Object
-})
-
+const drawerStore = useDrawerStore()
 const filter = ref('')
+const showSearch = ref(false)
 
 const columns = [
     { name: 'user', label: 'User', align: 'center', field: 'user', sortable: true },
@@ -27,10 +25,9 @@ const columns = [
 <template>
     
     <Head title="Reviews" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat style="border-radius: 20px">
             <q-table
-                class="my-sticky-header-column-table"
                 flat
                 title="Treats"
                 :rows="ratings"
@@ -38,6 +35,28 @@ const columns = [
                 row-key="name"
                 :filter="filter"
             >
+                <template v-slot:top>
+                    <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
+                    <div class="text-h6">Ratings</div>
+                    <q-space />
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="filter"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name"
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
+                </template>
                 <template v-slot:body-cell-user="props">
                     <q-td :props="props">
                         {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
@@ -53,15 +72,6 @@ const columns = [
                         <q-btn no-caps color="primary">Button</q-btn>
                         <q-btn no-caps color="red" icon="delete" class="q-ml-sm"></q-btn>
                     </q-td>
-                </template>
-                <template v-slot:top>
-                    <div class="text-h6">Rating and Reviews</div>
-                    <q-space />
-                    <q-input outlined rounded dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
                 </template>
             </q-table>
         </q-card>

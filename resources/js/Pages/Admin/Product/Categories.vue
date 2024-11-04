@@ -134,18 +134,19 @@ const columns = [
                                     <q-form @submit.prevent="updateCategoryName()">
                                         <q-card-section>
                                             <div class="q-mb-sm">Edit Category Name</div>
-                                            <q-input filled v-model="editCategoryNameForm.name"/>
+                                            <q-input rounded outlined v-model="editCategoryNameForm.name"/>
                                         </q-card-section>
                                         <q-card-actions>
-                                            <q-btn no-caps>Cancel</q-btn>
+                                            <q-btn no-caps rounded flat>Cancel</q-btn>
                                             <q-btn 
                                                 no-caps color="blue" 
                                                 :disable="editCategoryNameForm.processing"
                                                 :loading="editCategoryNameForm.processing"
                                                 type="submit"
-                                            >
-                                                Save
-                                            </q-btn>
+                                                label="Update"
+                                                rounded
+                                                unelevated
+                                            />
                                         </q-card-actions>
                                     </q-form>
                                 </q-card>

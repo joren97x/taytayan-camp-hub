@@ -51,6 +51,7 @@ class OrderController extends Controller
             Order::STATUS_PREPARING,
         ])
         ->where('user_id', auth()->id())
+        ->withTrashed()
         ->get();
 
         $past_orders = Order::with('driver')
@@ -59,6 +60,7 @@ class OrderController extends Controller
             Order::STATUS_COMPLETED,
         ])
         ->where('user_id', auth()->id())
+        ->withTrashed()
         ->get();
 
         $orders = collect([$active_orders, $past_orders]);

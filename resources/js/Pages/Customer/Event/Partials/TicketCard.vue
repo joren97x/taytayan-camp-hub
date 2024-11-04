@@ -3,21 +3,22 @@
 import { date } from 'quasar'
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { parse, format } from 'date-fns'
 
-defineProps({
+const props = defineProps({
     ticket_order: Object
 })
 
-console.log(date.formatDate(new Date, 'MMMM D, YYYY h:mm A'))
+const formattedTime = format(parse(props.ticket_order.event.start_time, 'HH:mm:ss', new Date()), 'h a');
 
 const dialog = ref(false)
 
-const formatTime = (timeString) => {
-    const today = new Date()
-    const dateObj = new Date(`${today.t}T${timeString}Z`)
-    console.log(dateObj)
-    return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
-}
+// const formatTime = (timeString) => {
+//     const today = new Date()
+//     const dateObj = new Date(`${today.t}T${timeString}Z`)
+//     console.log(dateObj)
+//     return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
+// }
 
 </script>
 
@@ -33,8 +34,8 @@ const formatTime = (timeString) => {
             </q-item-section>
             <q-item-section top>
                 <q-item-label class="text-subtitle1">{{ ticket_order.event.title }}</q-item-label>
-                <q-item-label caption>{{ date.formatDate(ticket_order.event.date, 'MMM D, YYYY') + ' at ' +  formatTime(ticket_order.event.start_time) }}</q-item-label>
-                <q-item-label caption>Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}(₱839.92) </q-item-label>
+                <q-item-label caption>{{ date.formatDate(ticket_order.event.date, 'MMM D, YYYY') + ' at ' + formattedTime }}</q-item-label>
+                <q-item-label caption>Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}(₱{{ ticket_order.amount }}) </q-item-label>
             </q-item-section>
         </q-item>
     </q-card>
@@ -104,12 +105,30 @@ const formatTime = (timeString) => {
                                 <div class="text-caption text-grey-9">Purchased On</div>
                                 <div>{{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div>
                             </div>
+                            <div class="col-12 q-mt-md">
+                                <div class="text-weight-bold">Attendees</div>
+                                <div class="row">
+                                    <div v-for="ticket_holder in ticket_order.ticket_order_items" class="col-6">
+                                        <q-item clickable class="rounded-borders">
+                                            <q-item-section avatar>
+                                                <q-avatar color="primary" text-color="white">
+                                                    {{ ticket_holder.ticket.ticket_holder.name[0] }}
+                                                </q-avatar>
+                                            </q-item-section>
+                                            <q-item-section>
+                                                {{ ticket_holder.ticket.ticket_holder.name }}
+                                            </q-item-section>
+                                        </q-item>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
                         <q-separator class="q-my-md" />
                         <div class="row">
                             <div class="col-12">
                                 <div :class="$q.screen.lt.md ? 'text-center' : ''">
-                                    Qr COde
+                                    Qr Code
                                     <a :href="`/storage/${ticket_order.qr_code_path}`" class="q-ml-sm" download>Download Qr</a>
                                 </div>
                                 <div :class="$q.screen.lt.md ? ' flex justify-center' : ''">
