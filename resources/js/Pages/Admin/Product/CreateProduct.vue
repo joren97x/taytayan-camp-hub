@@ -18,7 +18,7 @@ const form = useForm({
     name: '',
     description: '',
     photo: null,
-    price: '',
+    price: '0',
     categories: null
 })
 

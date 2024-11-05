@@ -12,13 +12,13 @@ const showPastOrders = ref(false)
 </script>
 
 <template>
-    <div class="text-h6">Active Orders</div>
+    <!-- <div class="text-h6">Active Orders</div> -->
     <OrderCardItem v-for="order in active_orders" :order="order"/>
     <div v-show="active_orders.length <= 0">
         <div class="flex items-center justify-center" style="height: 100px;">
             <q-icon name="confirmation_number" size="50px"/>
         </div>
-        <div class="text-subtitle1 text-center">No Upcoming Orders</div>
+        <div class="text-subtitle1 text-center">No Active Orders</div>
     </div>
     <div class="flex justify-center q-mt-md">
         <q-btn label="See Past Orders" @click="showPastOrders = !showPastOrders" no-caps flat v-show="!showPastOrders" color="primary"/>

@@ -13,7 +13,7 @@ const showPastTicketOrders = ref(false)
 </script>
 
 <template>
-    <div class="text-h6">Tickets</div>
+    <!-- <div class="text-h6">Tickets</div> -->
         <TicketCard v-for="ticket_order in active_ticket_orders" :ticket_order="ticket_order"/>
         <div v-show="active_ticket_orders.length == 0">
             <div class="flex items-center justify-center" style="height: 100px;">

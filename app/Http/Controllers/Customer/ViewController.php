@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Conversation;
+use App\Models\Event;
+use App\Models\Facility;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\TicketOrder;
@@ -21,6 +23,25 @@ class ViewController extends Controller
     public function home() {
         return Inertia::render('Customer/Index', [
             'products' => Product::with('modifier_groups.modifier_items')->get()
+        ]);
+    }
+
+    public function search(string $query = null)
+    {
+        if(!$query) {
+            return Inertia::render('Customer/Search');
+        }
+
+        $products = Product::where('name', 'LIKE', "%$query%")->orWhere('description', 'LIKE', "%$query%")
+        ->with('modifier_groups.modifier_items')
+        ->get();
+        $events = Event::where('title', 'LIKE', "%$query%")->orWhere('location', 'LIKE', "%$query%")->get();
+        $facilities = Facility::where('name', 'LIKE', "%$query%")->orWhere('amenities', 'LIKE', "%$query%")->get();
+
+        return Inertia::render('Customer/Search', [
+            'products' => $products,
+            'events' => $events,
+            'facilities' => $facilities
         ]);
     }
 

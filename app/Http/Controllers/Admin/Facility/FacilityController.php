@@ -43,6 +43,7 @@ class FacilityController extends Controller
             'guests' => 'required',
             'amenities' => 'required',
             'price' => 'required',
+            'location' => 'required',
             'rental_start' => 'required',
             'rental_end' => 'required',
         ]);
@@ -59,6 +60,7 @@ class FacilityController extends Controller
             'guests' => $request->guests,
             'images' => json_encode($image_paths),
             'amenities' => $request->amenities,
+            'location' => $request->location,
             'price' => $request->price,
             'rental_start' => $request->rental_start,
             'rental_end' => $request->rental_end,
@@ -102,6 +104,7 @@ class FacilityController extends Controller
             'price' => 'required',
             'guests' => 'required',
             'available' => 'required',
+            'location' => 'required',
             'amenities' => 'required'
         ]);
 
@@ -110,6 +113,7 @@ class FacilityController extends Controller
         $facility->description = $request->description;
         $facility->price = $request->price;
         $facility->guests = $request->guests;
+        $facility->location = $request->location;
         $facility->available = $request->available;
         $facility->amenities = json_encode($request->amenities);
         $facility->save();

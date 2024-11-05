@@ -27,39 +27,49 @@ const tab = ref('orders')
     <Head title="Profile" />
 
     <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
-        <div class="row q-col-gutter-md">
-            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-avatar size="80px" color="primary" class="text-white">
-                            <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" v-if="$page.props.auth.user.profile_pic" />
-                            <div v-else>
-                                {{ $page.props.auth.user.first_name[0] }}
+        <div class="row q-col-gutter-md q-mt-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <q-card bordered flat class="full-width">
+                    <q-card-section>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-avatar size="80px" color="primary" class="text-white">
+                                    <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" v-if="$page.props.auth.user.profile_pic" />
+                                    <div v-else>
+                                        {{ $page.props.auth.user.first_name[0] }}
+                                    </div>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label class="text-h6">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</q-item-label>
+                                <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
+                                <q-item-label>
+                                    <Link :href="route('customer.edit_profile')">
+                                        <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="q-mr-sm" icon="edit_square"/>
+                                    </Link>
+                                <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" icon="inbox"/>
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <!-- <div class="row q-col-gutter-sm q-mb-md">
+                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <Link :href="route('customer.edit_profile')">
+                                    <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
+                                </Link>
                             </div>
-                        </q-avatar>
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label class="text-h6">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</q-item-label>
-                        <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-                <div class="row q-col-gutter-sm q-mb-md">
-                    <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <Link :href="route('customer.edit_profile')">
-                            <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
-                        </Link>
-                    </div>
-                    <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" class="full-width" />
-                    </div>
-                </div>
+                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" class="full-width" />
+                            </div>
+                        </div> -->
+                    </q-card-section>
+                </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <q-card>
+                <q-card bordered flat>
                     <q-tabs
                         v-model="tab"
                         dense
-                        class="text-grey"
+                        class="text-black"
                         active-color="primary"
                         indicator-color="primary"
                         align="justify"

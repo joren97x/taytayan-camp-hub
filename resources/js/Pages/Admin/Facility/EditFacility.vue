@@ -217,6 +217,7 @@ const submitDeleteFacilityForm = () => {
                             rounded 
                             outlined 
                             label="Ameneties"
+                            type="textarea"
                             v-model="form.amenities" 
                             :error="form.errors.amenities ? true : false"
                             :error-message="form.errors.amenities"

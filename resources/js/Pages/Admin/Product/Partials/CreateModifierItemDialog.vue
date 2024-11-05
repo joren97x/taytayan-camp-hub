@@ -61,7 +61,7 @@ const submit = () => {
                         :error="form.errors.name ? true : false"
                         :error-message="form.errors.name"
                     />
-                    <q-input 
+                    <!-- <q-input 
                         label="Description (Optional)" 
                         rounded 
                         outlined 
@@ -70,7 +70,7 @@ const submit = () => {
                         v-model="form.description"
                         :error="form.errors.description ? true : false"
                         :error-message="form.errors.description"
-                    />
+                    /> -->
                     <q-input 
                         rounded 
                         outlined 

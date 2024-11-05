@@ -20,6 +20,7 @@ class Facility extends Model
         'rental_start',
         'rental_end',
         'available',
+        'location',
         'guests'
     ];
 

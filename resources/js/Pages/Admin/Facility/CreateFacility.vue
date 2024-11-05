@@ -21,6 +21,7 @@ const form = useForm({
     guests: 1,
     price: '',
     amenities: '',
+    location: '',
     rental_start: null,
     rental_end: null,
 })
@@ -242,9 +243,18 @@ const handleRemoveFile = (files) => {
                             label="Amenities" 
                             v-model="form.amenities" 
                             rounded 
+                            type="textarea"
                             outlined
                             :error="form.errors.amenities ? true : false"
                             :error-message="form.errors.amenities"
+                        />
+                        <q-input 
+                            label="Location" 
+                            v-model="form.location" 
+                            rounded 
+                            outlined
+                            :error="form.errors.location ? true : false"
+                            :error-message="form.errors.location"
                         />
                     <!-- {{ form }} -->
                         <div class="row q-col-gutter-lg">
@@ -279,6 +289,7 @@ const handleRemoveFile = (files) => {
                                     v-model="form.guests" 
                                     placeholder="None" 
                                     class="q-mt-md"
+                                    type="number"
                                     :error="form.errors.guests ? true : false"
                                     :error-message="form.errors.guests"
                                 >

@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\Facility\FacilityController;
 use App\Http\Controllers\Customer\Product\CartController;
 use App\Http\Controllers\Customer\Product\ProductController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::resource('events', EventController::class)->names([
     'index' => 'customer.events.index',
@@ -19,6 +20,8 @@ Route::resource('facilities', FacilityController::class)->names([
     'index' => 'customer.facilities.index',
     'show' => 'customer.facilities.show',
 ]);
+
+Route::get('/search/{query?}', [ViewController::class, 'search'])->name('search');
 
 Route::resource('products', ProductController::class)->names([
     'index' => 'customer.products.index',

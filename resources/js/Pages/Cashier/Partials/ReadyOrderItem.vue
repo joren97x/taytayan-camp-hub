@@ -5,7 +5,8 @@ import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { useOrderStore } from '@/Stores/OrderStore'
 import OrderedItems from '@/Components/OrderedItems.vue'
-import { formatDistance } from 'date-fns'
+import OrderDetails from '@/Components/OrderDetails.vue'
+import { formatDistance, differenceInMinutes } from 'date-fns'
 
 const props = defineProps({
     order: Object,
@@ -148,107 +149,31 @@ function calculateSteps() {
         transition-show="slide-up"
         transition-hide="slide-down"
     >
-        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="justify-center">
-                <div class="text-h6 text-center">Order Details</div>
-                <q-btn icon="close" class="absolute-top-right q-mr-sm q-mt-xs" round v-close-popup flat/>
-            </q-card-actions>
-            <q-card-section>
-                <!-- <q-item>
+        <OrderDetails :order="order">
+            <div v-if="order.driver">
+                <div class="text-h6">Driver</div>
+                <q-item clickable>
+                    <q-item-section avatar>
+                        <q-avatar>
+                            <img src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg?w=800&h=533&crop=1"/>
+                        </q-avatar>
+                    </q-item-section>
                     <q-item-section>
-                        <q-item-label class="text-h6">Order Details</q-item-label>
-                        <q-item-label caption> {{ order.created_at }}
-                        </q-item-label>
+                        <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                        <q-item-label caption>{{ order.driver.phone_number }}</q-item-label>
                     </q-item-section>
                     <q-item-section side>
-                        <q-btn round icon="close" unelevated v-close-popup></q-btn>
+                        <Link :href="route('conversations.chat_user', order.user.id)">
+                            <q-btn icon="message" color="primary" round />
+                        </Link>
                     </q-item-section>
-                </q-item> -->
-                <q-stepper
-                    flat
-                    v-model="step"
-                    ref="stepper"
-                    color="primary"
-                    animated
-                    alternative-labels
-                    active-icon="hourglass_top"
-                    :vertical="$q.screen.lt.md"
-                >
-                    <div class="text-h6">Status</div>
-                    <q-step
-                        :name="index"
-                        :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
-                        :icon="s.icon"
-                        :error="order.status == 'cancelled'"
-                        v-for="(s, index) in pickupSteps"
-                        :done="step > index || order.status == 'completed'"
-                        v-if="order.mode == 'pickup'"
-                    />
-                    <q-step
-                        :name="index"
-                        :title="order.status == 'cancelled' ? 'Cancelled' : s.title"
-                        :icon="s.icon"
-                        :error="order.status == 'cancelled'"
-                        v-for="(s, index) in deliverySteps"
-                        :done="step > index || order.status == 'completed'"
-                        v-else
-                    />
-                </q-stepper>
-                <div :class="['row', $q.screen.gt.sm ? 'q-col-gutter-xl' : '']">
-                    <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
-                        <div class="text-h6">Customer</div>
-                        <q-item class="q-py-none">
-                            <q-item-section avatar>
-                                <q-avatar size="100px" class="text-white" color="primary">
-                                    <q-img :src="`/storage/${order.user.profile_pic}`" v-if="order.user.profile_pic"/>
-                                    <div v-else>
-                                        {{ order.user.first_name[0] }}
-                                    </div>
-                                </q-avatar>
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-                                <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
-                                <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
-                            </q-item-section>
-                            <q-item-section side>
-                                <Link :href="route('conversations.chat_user', order.user.id)">
-                                    <q-btn round icon="message" unelevated color="primary" />
-                                </Link>
-                            </q-item-section>
-                        </q-item>
-                        <q-separator class="q-my-md" />
-                        <div class="text-h6">
-                            Order - {{ order.cart_products.length }} items
-                        </div>
-                        <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" /> 
-                    </div>
-                    <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
-                        <div v-if="order.driver">
-                            <div class="text-h6">Driver</div>
-                            <q-item clickable>
-                                <q-item-section avatar>
-                                    <q-avatar>
-                                        <img src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg?w=800&h=533&crop=1"/>
-                                    </q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
-                                    <q-item-label caption>{{ order.driver.phone_number }}</q-item-label>
-                                </q-item-section>
-                                <q-item-section side>
-                                    <Link :href="route('conversations.chat_user', order.user.id)">
-                                        <q-btn icon="message" color="primary" round />
-                                    </Link>
-                                </q-item-section>
-                            </q-item>
-                        </div>
-                        
-                    </div>
-                </div>
-            </q-card-section>
-           
-        </q-card>
+                </q-item>
+            </div>
+            <div v-else class="justify-center items-center flex q-pa-xl">
+                <div v-if="order.mode == 'delivery'">Waiting to be delivered...</div>
+                <div v-else>Waiting to be picked up...</div>
+            </div>
+        </OrderDetails>
     </q-dialog>
 
     <q-dialog 
@@ -257,59 +182,8 @@ function calculateSteps() {
         transition-show="slide-up"
         transition-hide="slide-down"
     >
-        <q-card :style="$q.screen.gt.sm ? 'max-width: 50vw; width: 100%;' : ''">
-            <q-card-actions class="justify-center">
-                <div class="text-h6 text-center">Order Details</div>
-                <q-btn icon="close" class="absolute-top-right q-mr-sm q-mt-xs" round v-close-popup flat/>
-            </q-card-actions>
-            <q-card-section>
-                <!-- <div class="justify-between row col-12"> -->
-                    <!-- <div class="col text-h6">
-                        {{ order.user.first_name + ' ' + order.user.last_name }}
-                        <div class="text-caption">{{ date.getDateDiff(new Date(), order.created_at, 'minutes') }} minutes ago</div>
-                    </div>
-                    <div class="col text-right">
-                        <q-chip>{{ order.cart_products.length }} items</q-chip>
-                        <q-btn round icon="message" />
-                    </div> -->
-                    <div class="text-h6">Customer</div>
-                    <q-item class="q-py-none">
-                        <q-item-section avatar>
-                            <q-avatar size="100px" square>
-                                <q-img :src="`/storage/${order.user.profile_pic}`"/>
-                            </q-avatar>
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label class="text-weight-bold">{{ order.user.first_name + ' ' + order.user.last_name }}</q-item-label>
-                            <q-item-label> <q-icon name="phone"/> {{ order.user.phone_number }}</q-item-label>
-                            <q-item-label> <q-icon name="location_on"/> {{ order.user.address }}</q-item-label>
-                        </q-item-section>
-                        <q-item-section side>
-                            <Link :href="route('conversations.chat_user', order.user.id)">
-                                <q-btn round icon="message" unelevated color="primary" />
-                            </Link>
-                        </q-item-section>
-                    </q-item>
-                <!-- </div> -->
-                <q-separator class="q-my-md" />
-                <!-- <q-item>
-                    <q-item-section>
-                        <q-item-label class="text-h6">
-                            {{ order.cart_products.length }} items
-                            <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">
-                                {{ order.mode }}
-                            </q-chip>
-                        </q-item-label>
-                    </q-item-section>
-                </q-item> -->
-                
-                <div class="text-h6">
-                    Order - {{ order.cart_products.length }} items
-                </div>
-                <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        
-            </q-card-section>
-            <q-card-actions class="justify-end">
-                <q-btn no-caps v-close-popup rounded outline color="primary">Cancel</q-btn>
+        <OrderDetails :order="order">
+            <div>
                 <q-btn 
                     no-caps
                     :loading="form.processing"
@@ -317,11 +191,12 @@ function calculateSteps() {
                     @click="completeOrder()"
                     color="primary"
                     rounded 
+                    class="full-width q-mt-md"
                     unelevated
                     label="Complete"    
                 />
-            </q-card-actions>
-        </q-card>
+            </div>
+        </OrderDetails>
     </q-dialog>
     
 </template>

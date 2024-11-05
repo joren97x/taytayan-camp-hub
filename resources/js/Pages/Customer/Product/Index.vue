@@ -414,19 +414,21 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                 :id="category.id"
                 :ref="el => categoryRefs[category.id] = el"
             >
-                <q-item class="text-h6">{{ category.name }}</q-item>
-                <div class="row q-col-gutter-md">
-                    <div 
-                        class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
-                        v-for="product in category.filteredProducts" 
-                        :key="product.id"
-                    >
-                        <ProductCard :product="product" />
+                <div v-show="category.filteredProducts.length > 0">
+                    <q-item class="text-h6">{{ category.name }}</q-item>
+                    <div class="row q-col-gutter-md">
+                        <div 
+                            class="col-12 col-md-4 cold-lg-4 col-xl-4 col-sm-6 col-xs-12" 
+                            v-for="product in category.filteredProducts" 
+                            :key="product.id"
+                        >
+                            <ProductCard :product="product" />
+                        </div>
                     </div>
                 </div>
-                <q-card bordered flat v-if="category.filteredProducts.length == 0" class="text-grey bg-grey-3 justify-center items-center flex q-mt-md" style="height: 100px">
+                <!-- <q-card bordered flat v-if="category.filteredProducts.length == 0" class="text-grey bg-grey-3 justify-center items-center flex q-mt-md" style="height: 100px">
                     No products found...
-                </q-card>
+                </q-card> -->
             </div>
         </div>
         <div class="q-mx-sm q-mb-md">
@@ -538,7 +540,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
 .menu-header {
     position: -webkit-sticky; /* For Safari */
     position: sticky;
-    top: 55px; /* Adjust this value to control the sticky position */
+    top: 50px; /* Adjust this value to control the sticky position */
     z-index: 100;
 }
 

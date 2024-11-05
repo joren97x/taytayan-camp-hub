@@ -13,13 +13,13 @@ const showPastBookings = ref(false)
 </script>
 
 <template>
-    <div class="text-h6">Bookings</div>
+    <!-- <div class="text-h6">Bookings</div> -->
     <BookingCard v-for="booking in active_bookings" :booking="booking"/>
     <div v-show="active_bookings.length <= 0">
         <div class="flex items-center justify-center" style="height: 100px;">
             <q-icon name="confirmation_number" size="50px"/>
         </div>
-        <div class="text-subtitle1 text-center">No Upcoming Bookings</div>
+        <div class="text-subtitle1 text-center">No Upcoming/Active Bookings</div>
     </div>
     <div class="flex justify-center q-mt-md">
         <q-btn label="See Past Bookings" @click="showPastBookings = !showPastBookings" v-show="!showPastBookings" no-caps flat  color="primary"/>

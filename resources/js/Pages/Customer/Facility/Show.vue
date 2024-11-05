@@ -210,14 +210,14 @@ const decrementGuests = () => {
                 </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <div class="gt-sm justify-between flex">
-                    <div>
+                <div class="gt-sm" style="position: relative">
+                    <div class="q-mr-xl">
                         <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                        <div class="" >
+                        <div class="q-mr-xl" >
                             {{ facility.amenities }}
                         </div>
                     </div>
-                    <div class="text-subtitle1 q-mt-xs q-mr-xs">
+                    <div class="text-subtitle1 q-mt-sm absolute-top-right q-mr-sm">
                         <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                     </div>
                 </div>

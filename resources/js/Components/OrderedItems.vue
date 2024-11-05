@@ -9,10 +9,9 @@ defineProps({
 
 <template>
      <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
-                <div class="text-h6 q-mb-md">
-                    Order - {{ cart_products.length }} items
+                <div class="text-subtitle1 text-weight-medium text-center">
+                    {{ cart_products.length }} Items
                 </div>
-
                 <q-item v-for="item in cart_products" :class="$q.screen.lt.md ? 'q-mx-none' : ''" class="q-py-sm">
                     <q-item-section avatar>
                         <q-img 
@@ -25,7 +24,7 @@ defineProps({
                     </q-item-section>
                     <q-item-section>
                         <q-item-label class="text-weight-medium">
-                            • {{ item.product.name }} ({{ item.product.price }}) - {{ item.quantity }} pcs
+                            • {{ item.product.name }} - {{ item.quantity }} pcs
                         </q-item-label>
                         <template 
                             v-for="(modifier, index) in item.grouped_modifiers" 
@@ -38,7 +37,7 @@ defineProps({
                                 v-for="(modifier_item, index) in modifier.modifier_items" 
                                 :key="index"
                             >
-                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
+                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
                             </q-item-label>
                         </template>
                         <q-item-label class="q-pl-sm" caption v-if="item.special_instruction">

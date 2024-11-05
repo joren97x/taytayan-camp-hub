@@ -27,10 +27,7 @@ const showFoodCartItemDialog = ref(false)
 const selectedCartItem = ref(null)
 const page = usePage()
 const $q = useQuasar()
-
-const isAdressSet = () => {
-    
-}
+const total = ref(0)
 const selectedRows = ref([]);
 const form = useForm({
     cart_id: props.cart.id,
@@ -131,7 +128,7 @@ const onSelection = (selection) => {
         v-if="$page.props.auth.user"
     />
     <!-- {{ form }} -->
-    <div class="row">
+    <div class="row q-mt-md">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
                 bordered
@@ -201,32 +198,46 @@ const onSelection = (selection) => {
         </div>
         <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
             <q-card bordered flat :class="['q-mx-md sticky', $q.screen.lt.md ? 'q-mt-md' : '']" style="position: sticky; top: 60px;">
-                <q-card-section>
+                <q-card-section class="q-pb-none">
                     <div class="text-h6">Order Summary</div>
-                    <q-separator></q-separator>
-                    <q-item>
+                    <q-separator/>
+                    <!-- {{ selectedRows }} -->
+                    <q-list>
+                        <q-item-label header>Selected Items</q-item-label>
+                        <q-item v-for="row in selectedRows">
+                            <q-item-section avatar>
+                                <q-avatar square>
+                                    <q-img class="fit" fit="cover" :src="`/storage/${row.product.photo}`" />
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ row.product.name }}</q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                                P{{ row.total }}
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                    <!-- <q-item>
                         <q-item-section>
                             <q-item-label>Subtotal</q-item-label>
                         </q-item-section>
                         <q-item-section side top>
                             <q-item-label>{{ subtotal }}</q-item-label>
                         </q-item-section>
-                    </q-item>
+                    </q-item> -->
+                    <q-separator/>
                     <q-item>
                         <q-item-section>
-                            <q-item-label>Total</q-item-label>
+                            <q-item-label class="text-weight-medium text-subtitle1">Total</q-item-label>
                         </q-item-section>
-                        <q-item-section side top>
-                            <q-item-label>{{ subtotal }}</q-item-label>
+                        <q-item-section class="flex items-end">
+                            <div class="text-weight-medium text-subtitle1">P165</div>
                         </q-item-section>
                     </q-item>
                 </q-card-section>
-                
-                <q-card-section vertical>
-                    <q-separator class="q-mb-sm"></q-separator>
-                    <!-- <Link :href="route('product-checkout')"> -->
-                        <q-btn color="primary" @click="submit()" class="full-width" no-caps rounded label="Go To Checkout"/>
-                    <!-- </Link> -->
+                <q-card-section>
+                    <q-btn color="primary" @click="submit()" class="full-width" no-caps rounded label="Go To Checkout"/>
                 </q-card-section>
             </q-card>
         </div>
