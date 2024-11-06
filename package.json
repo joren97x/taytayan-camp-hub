@@ -24,6 +24,8 @@
     "dependencies": {
         "@googlemaps/js-api-loader": "^1.16.6",
         "@quasar/extras": "^1.16.11",
+        "chart.js": "^4.4.6",
+        "chartjs": "^0.3.24",
         "date-fns": "^4.1.0",
         "pinia": "^2.2.4",
         "quasar": "^2.15.4",

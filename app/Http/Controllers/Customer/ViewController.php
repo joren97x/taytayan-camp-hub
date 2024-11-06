@@ -15,6 +15,8 @@ use App\Services\CartService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ViewController extends Controller
@@ -28,15 +30,34 @@ class ViewController extends Controller
 
     public function search(string $query = null)
     {
+
+        if(Auth::check() && Auth::user()->role != 'customer') {
+            abort(403);
+        }
+
         if(!$query) {
             return Inertia::render('Customer/Search');
         }
 
-        $products = Product::where('name', 'LIKE', "%$query%")->orWhere('description', 'LIKE', "%$query%")
-        ->with('modifier_groups.modifier_items')
+        $products = Product::where('name', 'LIKE', "%$query%")
+            ->orWhere('description', 'LIKE', "%$query%")
+            ->with('modifier_groups.modifier_items')
+            ->where('available', true)
+            ->get();
+
+        $events = Event::where('title', 'LIKE', "%$query%")
+        ->orWhere('description', 'LIKE', "%$query%")
+        ->orWhere('location', 'LIKE', "%$query%")
         ->get();
-        $events = Event::where('title', 'LIKE', "%$query%")->orWhere('location', 'LIKE', "%$query%")->get();
-        $facilities = Facility::where('name', 'LIKE', "%$query%")->orWhere('amenities', 'LIKE', "%$query%")->get();
+
+        $facilities = Facility::where('name', 'LIKE', "%$query%")
+            ->orWhere('description', 'LIKE', "%$query%")
+            ->orWhere('amenities', 'LIKE', "%$query%")
+            ->where('available', true)
+            ->withCount(['facility_ratings as average_rating' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get();
 
         return Inertia::render('Customer/Search', [
             'products' => $products,

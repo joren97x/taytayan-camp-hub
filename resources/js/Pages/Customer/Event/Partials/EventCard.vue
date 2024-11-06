@@ -23,14 +23,19 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
     <div class="event-card">
         <Link :href="route('customer.events.show', event.id)">
             <q-card bordered flat class="rounded-borders">
-                <q-card-section horizontal>
-                    <q-card-section class="text-center q-pa-none">
-                        <q-img 
-                            fill="cover" 
-                            height="200px" 
-                            width="220px" 
-                            :src="`/storage/${event.cover_photo}`"
-                        />
+                <q-card-section :horizontal="$q.screen.gt.sm">
+                    <q-card-section class="text-center q-py-none">
+                        <div class="full-width q-my-md rounded-borders" style="height: 150px; position: relative; overflow: hidden;">
+                            <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
+                            <q-img 
+                                :src="`/storage/${event.cover_photo}`"
+                                class="rounded-borders content-wrapper" 
+                                height="100%"
+                                :width="$q.screen.gt.sm ? '220px' : '100%'" 
+                                fit="contain"
+                                style="position: relative; z-index: 2;" 
+                            />
+                        </div>
                     </q-card-section>
                     <q-card-section class="q-pa-md full-width">
                         <q-item  class="q-pa-none">
@@ -38,23 +43,26 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
                                 <q-item-label class="text-h6">{{ event.title }}</q-item-label>
                                 <q-item-label caption class="">
                                     {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
-                                    {{ formattedTime }}
+                                    at {{ formattedTime }}
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
-                        <!-- <p class="q-mt-md ellipsis-2-lines">Let's GO DISCO sa OLANGO this Wednesday hello annyeong 🍻🍾💃🕺</p> -->
                         <p class="q-mt-md ellipsis-2-lines">
                             {{ event.description }}
                         </p>
-                        <!-- {{ event }} -->
-                        
-                        <div class="absolute-bottom-right q-mb-md q-mr-md">
+                        <!-- <div class="absolute-bottom-right q-mb-md q-mr-md gt-sm">
                             <q-btn @click="shareOnFacebook" rounded  label="Share" no-caps icon="share" unelevated class="q-mr-xs"/>
                             <Link :href="route('customer.events.show', event.id)">
                                 <q-btn unelevated no-caps color="primary" label="Button" rounded />
                             </Link>
-                        </div>
+                        </div> -->
                     </q-card-section> 
+                    <!-- <q-card-actions class="justify-end lt-md">
+                        <q-btn @click="shareOnFacebook" rounded  label="Share" no-caps icon="share" unelevated class="q-mr-xs"/>
+                        <Link :href="route('customer.events.show', event.id)">
+                            <q-btn unelevated no-caps color="primary" label="Button" rounded />
+                        </Link>
+                    </q-card-actions> -->
                 </q-card-section>
             </q-card>
         </Link>
@@ -63,20 +71,34 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
 
 <style scoped>
 
-.event-card:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-color: #4CAF50;
-    /* border: 1px solid #4CAF50; */
+.event-card:hover .q-card {
+    border-color: var(--q-primary)
 }
-
 
 a {
     color: black;
     text-decoration: none;
 }
 
-.q-card, .event-card, .q-img {
+/* .q-card, .event-card, .q-img {
     border-radius: 15px;
+} */
+
+.blurred-background {
+   /* Background image you want to blur */
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(8px); /* Apply blur effect */
+  z-index: 1; /* Keep it behind the foreground content */
+}
+
+/* Foreground image (clear, no blur) */
+.content-wrapper {
+  position: relative;
+  z-index: 2; /* Ensure it's on top of the blurred background */
 }
 
 </style>

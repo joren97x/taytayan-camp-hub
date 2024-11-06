@@ -5,7 +5,8 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
 import { date } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
-import OrderedItems from '@/Components/OrderedItems.vue'
+import OrderDetails from '@/Components/OrderDetails.vue'
+// import OrderedItems from '@/Components/OrderedItems.vue'
 
 defineOptions({
     layout: AdminLayout
@@ -27,17 +28,21 @@ const filteredOrders = computed(() => {
   let filtered = props.orders;
   // Apply status filter
   if (filter.value !== 'all') {
-    filtered = filtered.filter(event => event.status === filter.value);
+    filtered = filtered.filter(order => order.status === filter.value);
   }
 
   // Apply search term filter
   if (searchTerm.value) {
-    filtered = filtered.filter(event => {
-      const eventName = event.title.toLowerCase();
+    filtered = filtered.filter(order => {
+        // console.log(order)
+      const fullName = `${order.user.first_name} ${order.user.last_name}`.toLowerCase();
+      const orderId = order.id.toLowerCase();
       const search = searchTerm.value.toLowerCase();
 
       return (
-        eventName.includes(search)
+        fullName.includes(search) ||
+        orderId.includes(search) ||
+        facilityName.includes(search)
       );
     });
   }
@@ -97,7 +102,7 @@ const showOrderDialog = (order) => {
                     </Link> -->
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
-                            v-model="filter"
+                            v-model="searchTerm"
                             rounded
                             outlined
                             dense
@@ -129,7 +134,7 @@ const showOrderDialog = (order) => {
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps color="primary" rounded label="View Order"/>
+                        <q-btn no-caps color="primary" rounded @click="showOrderDialog(props.row)" label="View Order"/>
                     </q-td>
                 </template>
                 <template v-slot:item="props">
@@ -158,9 +163,9 @@ const showOrderDialog = (order) => {
                                                 <q-item clickable @click="showOrderDialog(props.row)">
                                                     <q-item-section>View</q-item-section>
                                                 </q-item>
-                                                <q-item clickable @click="showDeleteProductDialog(props.row)">
+                                                <!-- <q-item clickable @click="showDeleteProductDialog(props.row)">
                                                     <q-item-section>Delete</q-item-section>
-                                                </q-item>
+                                                </q-item> -->
                                             </q-list>
                                         </q-menu>
                                     </q-btn>
@@ -197,7 +202,23 @@ const showOrderDialog = (order) => {
         transition-show="slide-up"
         transition-hide="slide-down"
     >   
-        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+        <OrderDetails  :order="selectedOrder">
+            <div v-if="selectedOrder.driver">
+                <q-item class="bg-grey">
+                    <q-item-section avatar>
+                        <q-avatar color="secondary">
+                            <q-img :src="`/storage/${selectedOrder.driver.profile_pic}`" fit="cover" class="fit" v-if="selectedOrder.driver.profile_pic"/>
+                            <div v-else>{{ selectedOrder.driver.first_name[0] }}</div>
+                        </q-avatar>
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>{{ selectedOrder.driver.first_name + ' ' + selectedOrder.driver.last_name }}</q-item-label>
+                        <q-item-label label>{{ selectedOrder.driver.phone_number }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </div>
+        </OrderDetails>
+        <!-- <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-actions class="justify-between">
                 <div class="text-h6">Order Details</div>
                     <q-btn  
@@ -217,7 +238,7 @@ const showOrderDialog = (order) => {
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
                         <div style="height: 250px; position: relative" class="full-width bg-grey-3">
                             <div v-if="selectedOrder.driver">
-                                <!-- {{ selectedOrder.driver }} -->
+                               
                                 <q-item class="bg-grey">
                                     <q-item-section avatar>
                                         <q-avatar color="secondary">
@@ -230,13 +251,13 @@ const showOrderDialog = (order) => {
                                         <q-item-label label>{{ selectedOrder.driver.phone_number }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
-                                <!-- {{ order }} -->
+
                             </div>
                         </div>
                     </div>
                 </div>
             </q-card-section>
-        </q-card>
+        </q-card> -->
     </q-dialog>
     </div>
 </template>

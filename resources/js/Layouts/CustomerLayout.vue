@@ -163,7 +163,7 @@ onMounted(() => {
                         </div>
                         <q-separator class="lt-md" />
                         <Link :href="route('customer.profile')">
-                            <q-item clickable>
+                            <q-item clickable class="rounded-borders">
                                 <q-item-section avatar>
                                     <q-icon name="person" />
                                 </q-item-section>
@@ -171,7 +171,7 @@ onMounted(() => {
                             </q-item>
                         </Link>
                         <Link :href="route('customer.cart.index')">
-                            <q-item clickable>
+                            <q-item clickable class="rounded-borders">
                                 <q-item-section avatar>
                                     <q-icon name="shopping_cart" />
                                 </q-item-section>

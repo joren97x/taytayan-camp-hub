@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
 const props = defineProps({ facility: Object })
-
+const slide = ref(0)
 const page = usePage()
 const url = page.url
 const images = JSON.parse(props.facility.images)
@@ -14,7 +14,6 @@ function shareOnFacebook() {
     // console.log(facebookShareUrl)
     // window.open(facebookShareUrl, '_blank');
 }
-const slide = ref(0)
 
 </script>
 
@@ -28,36 +27,51 @@ const slide = ref(0)
                         transition-prev="slide-right"
                         transition-next="slide-left"
                         animated
-                        control-type="regular"
                         swipeable
                         control-color="white"
                         control-text-color="black"
-                        navigation
-                        arrows
                         height="280px"
+                        class="rounded-borders"
+                        ref="carousel"
                     >
                         <q-carousel-slide id="carousel-container" :name="index" class="q-pa-none" v-for="(image, index) in images">
-                            <q-img 
-                                class="fit"
-                                :src="`/storage/${image}`"
-                            />
+                            <q-img  class="fit" :src="`/storage/${image}`" />
                         </q-carousel-slide>
-                        
-                        <template v-slot:navigation-icon="{ active, btnProps, onClick }">
-                            <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
-                            <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
+                        <template v-slot:control>
+                            <q-carousel-control
+                                position="left"
+                                :offset="[6, 18]"
+                                class="q-gutter-xs items-center flex"
+                            >
+                                <q-btn
+                                    push round dense color="white" text-color="black" icon="chevron_left"
+                                    @click.prevent="$refs.carousel.previous()"
+                                    v-if="slide != 0"
+                                />
+                               
+                            </q-carousel-control>
+                            <q-carousel-control
+                                position="right"
+                                :offset="[6, 18]"
+                                class="q-gutter-xs items-center flex"
+                            >
+                                <q-btn
+                                    push round dense color="white" text-color="black" icon="chevron_right"
+                                    @click.prevent="$refs.carousel.next()"
+                                    v-if="slide != images.length-1"
+                                />
+                            </q-carousel-control>
                         </template>
+                        <!-- <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+                            <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click.stop="onClick" />
+                            <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click.stop="onClick" />
+                        </template> -->
                     </q-carousel>
-                    <!-- <q-img 
-                        height="200px"
-                        width="100%"
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Endicott_College_Stoneridge_Hall_empty_dorm_room.jpg/800px-Endicott_College_Stoneridge_Hall_empty_dorm_room.jpg"
-                    ></q-img> -->
                 </q-card-section>
                 <Link :href="route('customer.facilities.show', facility.id)">
                     <q-card-section class="q-py-xs q-px-md">
-                        <div class="text-h6">{{ facility.name }}</div>
-                        <div class="ellipsis-2-lines">{{ facility.amenities }}</div>
+                        <div class="text-h6 ellipsis q-mr-xl">{{ facility.name }}</div>
+                        <div class="ellipsis-2-lines">{{ facility.description }}</div>
                         <div>P{{ facility.price }}</div>
                         <div class="absolute-top-right q-mt-sm q-mr-sm">
                             <q-icon name="star" color="orange" size="xs"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
@@ -86,10 +100,8 @@ const slide = ref(0)
 
 <style scoped>
 
-.facility-card:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-color: #4CAF50;
-    /* border: 1px solid #4CAF50; */
+.facility-card:hover .q-card {
+    border-color: var(--q-primary)
 }
 
 .q-card, .facility-card, .q-img, #carousel-container {

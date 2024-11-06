@@ -49,7 +49,7 @@ const dialog = ref(false)
 <style scoped>
 
 .product-card:hover {
-  background-color: gainsboro;
+    border-color: var(--q-primary)
 }
 
 </style>

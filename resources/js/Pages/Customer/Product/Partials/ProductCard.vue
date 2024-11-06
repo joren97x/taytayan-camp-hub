@@ -10,7 +10,7 @@ const dialog = ref(false)
 
 <template>
 
-    <q-card class="product-card" flat bordered>
+    <q-card class="product-card cursor-pointer" flat bordered @click="dialog = true" >
         <div class="row">
             <div class="col-6">
                 <q-card-section>
@@ -36,7 +36,6 @@ const dialog = ref(false)
                 </q-btn>
             </div>
         </div>
-        
     </q-card>
 
     <FoodDescriptionDialog 
@@ -49,8 +48,12 @@ const dialog = ref(false)
 
 <style scoped>
 
-.product-card:hover {
+/* .product-card:hover {
   background-color: gainsboro;
+} */
+
+.product-card:hover {
+    border-color: var(--q-primary)
 }
 
 </style>

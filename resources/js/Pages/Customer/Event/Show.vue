@@ -3,14 +3,11 @@
 
 import { Link, Head } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { parse, format } from 'date-fns'
 
-defineOptions({
-    layout: CustomerLayout
-})
-
+defineOptions({ layout: CustomerLayout })
 const props = defineProps({
     event: Object
 })
@@ -27,11 +24,14 @@ const incrementTicket = () => {
 
 //bawal minus 0 or minus sa min tickets
 const decrementTicket = () => {
-
     if(attendees.value <= props.event.max_ticket && attendees.value > props.event.min_ticket) {
         attendees.value--
     }
 }
+
+const total = computed(() => {
+    return attendees.value * props.event.admission_fee
+})
 
 </script>
 
@@ -58,7 +58,7 @@ const decrementTicket = () => {
                 <div class="text-h3 text-weight-bold">
                     {{ event.title }}
                 </div>
-                <div>
+                <div style="white-space: pre-line;">
                     {{ event.description }}
                 </div>
                 <q-separator class="q-my-md"/>
@@ -89,44 +89,30 @@ const decrementTicket = () => {
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 gt-sm ">
                 <q-card bordered>
-                    <q-card-section class="row">
-                        <div class="col-6">
-                            <div>Admission</div>
-                            <div>{{ event.admission_fee }}</div>
-                        </div>
-                        <div class="col-6 justify-end items-center flex">
-                            <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementTicket"/>
-                            <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
-                            <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="incrementTicket"/>
-                        </div>
+                    <q-card-section>
+                        <q-card class="row rounded-borders q-pa-md" bordered flat>
+                            <div class="col-6">
+                                <div>Admission</div>
+                                <div class="text-h6 text-weight-bold">P{{ total }}</div>
+                            </div>
+                            <div class="col-6 justify-end items-center flex">
+                                <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementTicket"/>
+                                <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
+                                <q-btn icon="add" size="sm" round unelevated class="bg-grey-4" @click="incrementTicket"/>
+                            </div>
+                        </q-card>
                     </q-card-section>
-                    <!-- <q-item>
-                        <q-item-section>
-                            <div>
-                                Admission
-                            </div>
-                            <div>
-                                {{ event.admission_fee }}
-                            </div>
-                        </q-item-section>
-                        <q-item-section side class="item-center flex justify-center self-center">
-                            <q-btn icon="remove" @click="attendees--"></q-btn>
-                            {{ attendees }}
-                            <q-btn icon="add" @click="attendees++"></q-btn>
-                        </q-item-section>
-                    </q-item> -->
                     <q-card-actions>
-                        <!-- {{ date.getDateDiff(event.date, new Date()) >= 0 ? 'on sale' : 'past' }}
-                        {{ date.getDateDiff(event.date, new Date()) }} -->
                         <Link 
                             :href="route('event.checkout')" 
                             class="full-width" 
                             :data="{ event_id: event.id, attendees }" 
                             v-if="date.getDateDiff(event.date, new Date()) >= 0"
                         >
-                            <q-btn class="full-width" rounded color="primary" no-caps label="Check Out"/>
+                            <q-btn class="full-width" rounded color="primary" no-caps label="Go To Checkout"/>
                         </Link>
                         <q-btn class="full-width" v-else disable rounded color="primary" no-caps label="Event Ended"/>
+                        <!-- <div class="q-mt-md flex justify-center full-width">You wont be charged yet...</div> -->
                     </q-card-actions>
                 </q-card>
             </div>
@@ -136,26 +122,31 @@ const decrementTicket = () => {
             <q-card-section class="row">
                 <div class="col-3">
                     <div>Admission</div>
-                    <div>{{ event.admission_fee }}</div>
+                    <div class="text-h6">P{{ total }}</div>
                 </div>
                 <div class="col-9 justify-end items-center flex">
-                    <q-btn icon="remove" round unelevated class="bg-grey-4" @click="attendees--"></q-btn>
+                    <q-btn icon="remove" round unelevated class="bg-grey-4" @click="decrementTicket"></q-btn>
                     <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
-                    <q-btn icon="add" round unelevated class="bg-grey-4 q-mr-sm" @click="attendees++"></q-btn>
-                    <Link :href="route('event.checkout')" :data="{ event_id: event.id, attendees }">
+                    <q-btn icon="add" round unelevated class="bg-grey-4 q-mr-sm" @click="incrementTicket"></q-btn>
+                    <Link 
+                        :href="route('event.checkout')" 
+                        :data="{ event_id: event.id, attendees }"
+                        v-if="date.getDateDiff(event.date, new Date()) >= 0"
+                    >
                         <q-btn
-                            label="Checkout"
+                            label="Go To Checkout"
                             color="primary"
                             no-caps
                             rounded
                         />  
                     </Link>
+                    <q-btn v-else disable rounded color="primary" no-caps label="Event Ended"/>
+                    
                 </div>
             </q-card-section>
         </q-card>
-
-     
     </div>
+  
 </template>
   
 <style scoped>

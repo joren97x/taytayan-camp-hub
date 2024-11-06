@@ -82,7 +82,7 @@ const search = () => {
 
             <q-tab-panel name="events">
                 <div class="row q-col-gutter-md">
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-xl-4 col-lg-4" v-for="event in events"  >
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6" v-for="event in events"  >
                         <EventCard :event="event"/>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ defineProps({
     <div class="gradient-overlay" style="position: relative" v-if="upcoming_events.length > 0">
         <div class="blurred-background" :style="`background-image: url('/storage/${upcoming_events[0].cover_photo}');`"></div>
         <q-img 
-            style="width: 100%; height: 50vh; z-index: 100;"  
+            :style="`width: 100%; height: ${$q.screen.gt.sm ? '50vh' : '35vh'}; z-index: 100;`"  
             class="rounded-borders" 
             :src="`/storage/${upcoming_events[0].cover_photo}`"
             fit="contain"
@@ -33,17 +33,17 @@ defineProps({
                 <div style="border-left: 5px solid #FF6F61; background-image: linear-gradient(to right, #FF6F61, transparent);" class="q-pa-sm q-mb-xs">
                     Upcoming Event
                 </div>
-                <div class=" text-h3 text-weight-bold q-mb-sm">
+                <div class=" text-h3 text-weight-bold q-mb-sm gt-sm">
                     <!-- Under The Sky Disco Party SKibidi Gyatt -->
                      {{ upcoming_events[0].title }}
                 </div>
-                <div :class="['text-subtitle2', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
+                <div :class="['text-subtitle2 gt-sm', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
                     <!-- Let's GO DISCO sa OLANGO this Wednesday hello annyeong
                     The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient. -->
                      {{ upcoming_events[0].description }}
                     </div>
                 <div>
-                    <Link :href="route('customer.events.show', upcoming_events[0].id)">
+                    <Link :href="route('customer.events.show', upcoming_events[0].id)" class="gt-sm">
                         <q-btn color="primary" no-caps class="q-mt-sm" rounded icon="confirmation_number" label="Buy Tickets"/>
                     </Link>
                 </div>

@@ -27,7 +27,9 @@ const form = useForm({
 
 const images = JSON.parse(props.facility.images)
 const slide = ref(0)
+const carouselSlide = ref(0)
 const dialog = ref(false)
+const carouselDialog = ref(false)
 
 const book = () => {
     if(form.date.from && form.date.to) {
@@ -86,7 +88,7 @@ const decrementGuests = () => {
             height="280px"
             class="q-pa-none q-ma-none lt-md"
         >
-            <q-carousel-slide :name="index" v-for="(image, index) in images" class="q-pa-none">
+            <q-carousel-slide :name="index" v-for="(image, index) in images" class="q-pa-none" @click="carouselDialog = true">
                 <q-img
                     class="fit"
                     :src="`/storage/${image}`"
@@ -104,12 +106,12 @@ const decrementGuests = () => {
         </q-carousel>
         <div class="row q-col-gutter-sm gt-sm">
             <div class="col-md-6" style="height: 52vh;">
-                <q-img :src="`/storage/${fiveImages[0]}`" height="100%" style="position: relative"></q-img>
+                <q-img :src="`/storage/${fiveImages[0]}`" height="100%" style="position: relative" @click="carouselDialog = true"/>
             </div>
             <div class="col-md-6">
                 <div class="row q-col-gutter-sm">
                     <div class="col-md-6" v-for="image in fiveImages.slice(1, 5)" style="height: 26vh;">
-                        <q-img :src="`/storage/${image}`" height="100%" style="position: relative"></q-img>
+                        <q-img :src="`/storage/${image}`" height="100%" style="position: relative" @click="carouselDialog = true"/>
                     </div>
                 </div>
             </div>
@@ -212,28 +214,30 @@ const decrementGuests = () => {
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="gt-sm" style="position: relative">
                     <div class="q-mr-xl">
-                        <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                        <div class="q-mr-xl" >
+                        <div class="text-h3 text-weight-bold">{{ facility.name }}</div>
+                        <div style="white-space: pre-line;">{{ facility.description }}</div>
+                        <!-- <div class="q-mr-xl" style="white-space: pre-line;">
                             {{ facility.amenities }}
-                        </div>
+                        </div> -->
                     </div>
                     <div class="text-subtitle1 q-mt-sm absolute-top-right q-mr-sm">
                         <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                     </div>
                 </div>
+                
+                <q-separator class="q-my-md" />
+                <div class="text-h6">What This Place Offers</div>
+                <div style="white-space: pre-line;">
+                    {{ facility.amenities }}
+                </div>
                 <q-separator class="q-my-md" />
                 <div class="text-h6">About This Place</div>
                 <div class="">
                     <ul>
-                        <li>Location: Olango Island</li>
+                        <li>Location: {{ facility.location }}</li>
                         <li>Check in time: {{ facility.rental_start }}</li>
                         <li>Check out time: {{ facility.rental_end }}</li>
                     </ul>
-                </div>
-                <q-separator class="q-my-md" />
-                <div class="text-h6">What This Place Offers</div>
-                <div class="">
-                    {{ facility.amenities }}
                 </div>
             </div>
         </div>
@@ -282,44 +286,38 @@ const decrementGuests = () => {
             <h1>HIII</h1>
         </div> -->
     </div>
-    <!-- <q-dialog 
-        v-model="dialog" 
-        :maximized="$q.screen.lt.md"  
+    <q-dialog 
+        v-model="carouselDialog" 
+        :maximized="$q.screen.lt.md"
         transition-show="slide-up"
         transition-hide="slide-down"
-        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
-        <q-card style="width: 100%; ">
-            <q-card-section class="row justify-between">
-                <div class="col-10">
-                    <span class="text-h6">Lorem ipsum dolor sit amtet</span>
-                    <br>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
-                </div>
-                <div>
-                    <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
-                </div>
-            </q-card-section>
-            <q-card-section>
-                <q-date
-                    v-model="date"
-                    range
-                    :options="options"
-                    style="width: 100%;"
-                    :subtitle="form.date.to && form.date.from ? `${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}` : 'Please choose dates'"
-                >
-                </q-date>
-            </q-card-section>
-            <q-card-actions class="row q-col-gutter-md">
-                <div class="col-6" v-if="form.date.from && form.date.to">
-                    <q-btn class="full-width" color="accent" no-caps rounded @click="clearDates()">Clear Dates</q-btn>
-                </div>
-                <div :class="form.date.from && form.date.to ? 'col-6' : 'col-12'">
-                    <q-btn class="full-width" color="primary" no-caps rounded @click="setDates">Save</q-btn>
-                </div>
-            </q-card-actions>
+        <q-card class="full-width full-height" style="position: relative;">
+            <div class="absolute-top z-max q-mt-md text-white text-center text-subtitle1">
+                {{ `${slide+1}/${images.length}` }}
+            </div>
+            <q-btn class="absolute-top-right z-max q-mr-sm q-mt-sm text-black" v-close-popup icon="close" round color="white" />
+            <!-- <q-btn class="" icon="close" color="primary"/> -->
+            <q-carousel
+                swipeable
+                animated
+                arrows
+                transition-prev="slide-right"
+                transition-next="slide-left"
+                v-model="slide"
+                infinite
+                class="items-center justify-center full-height"
+            >
+            <q-btn class="absolute-top-left" icon="close" color="primary"/>
+                <q-carousel-slide :name="index" class="items-center flex bg-black q-pa-none" v-for="(image, index) in images">
+                    <q-img :src="`/storage/${image}`"></q-img>
+                </q-carousel-slide>
+                <!-- <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
+                <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
+                <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" /> -->
+            </q-carousel>
         </q-card>
-    </q-dialog> -->
+    </q-dialog>
     <DatePicker :dialog="dialog" :reserved_dates="reserved_dates" @setBookingDates="(dates) => setBookingDates(dates)" @close="dialog = false" />
 </template> 
 

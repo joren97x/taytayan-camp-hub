@@ -2,7 +2,7 @@
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Link, Head } from '@inertiajs/vue3'
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
@@ -27,7 +27,6 @@ const showFoodCartItemDialog = ref(false)
 const selectedCartItem = ref(null)
 const page = usePage()
 const $q = useQuasar()
-const total = ref(0)
 const selectedRows = ref([]);
 const form = useForm({
     cart_id: props.cart.id,
@@ -114,7 +113,13 @@ const onSelection = (selection) => {
         const removedIds = selection.rows.map(row => row.id);
         form.cart_products = form.cart_products.filter(id => !removedIds.includes(id));
     }
-};
+}
+
+const total = computed(() => {
+    let subtotal = 0
+    selectedRows.value.map((row) => subtotal += row.total)
+    return subtotal
+})
 </script>
 
 <template>
@@ -217,6 +222,9 @@ const onSelection = (selection) => {
                                 P{{ row.total }}
                             </q-item-section>
                         </q-item>
+                        <div class="bg-grey-3 q-mb-md items-center justify-center flex q-pa-xl" v-if="selectedRows && selectedRows.length <= 0">
+                            No selected items...
+                        </div>
                     </q-list>
                     <!-- <q-item>
                         <q-item-section>
@@ -232,7 +240,7 @@ const onSelection = (selection) => {
                             <q-item-label class="text-weight-medium text-subtitle1">Total</q-item-label>
                         </q-item-section>
                         <q-item-section class="flex items-end">
-                            <div class="text-weight-medium text-subtitle1">P165</div>
+                            <div class="text-weight-medium text-subtitle1">P{{ total }}</div>
                         </q-item-section>
                     </q-item>
                 </q-card-section>
