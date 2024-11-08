@@ -194,7 +194,7 @@ const formatTime = (time) => {
                                         Actions
                                     </div> -->
                                     <Link :href="route('cashier.events.check_in', props.row.id)" class="full-width">
-                                        <q-btn label="Button" color="primary" rounded unelevated class="full-width"/>
+                                        <q-btn label="View Tickets" no-caps color="primary" rounded unelevated class="full-width"/>
                                     </Link>
                                 </div>
                             </div>

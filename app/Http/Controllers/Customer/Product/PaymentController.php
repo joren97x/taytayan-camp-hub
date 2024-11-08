@@ -26,7 +26,7 @@ class PaymentController extends Controller
         
         // dd($cart_products);
         if (!$payment_session) {
-            abort(404);
+            return redirect(route('customer.orders.index'));
         }
         
         $order = Order::create([

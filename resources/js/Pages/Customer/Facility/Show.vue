@@ -2,7 +2,7 @@
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import DatePicker from './Partials/DatePicker.vue'
-import { Link, useForm, Head } from '@inertiajs/vue3'
+import { Link, useForm, Head, router } from '@inertiajs/vue3'
 import { date as qdate, useQuasar } from 'quasar'
 import { onMounted, ref, computed } from 'vue'
 
@@ -36,12 +36,13 @@ const book = () => {
         form.get(route('facility.checkout'))
     }
     else {
-        $q.notify({
-            message: `Check in and Check out dates are required`,
-            color: 'negative', // or any custom color defined in the brand config
-            textColor: 'white',
-            position: 'top'
-        })
+        // $q.notify({
+        //     message: `Check in and Check out dates are required`,
+        //     color: 'negative', 
+        //     textColor: 'white',
+        //     position: 'top'
+        // })
+        dialog.value = true
         // alert('Check in and Check out dates are required')
     }
 }
@@ -72,6 +73,16 @@ const decrementGuests = () => {
         form.guests--
     }
 }
+
+// const goToCheckoutPage = () => {
+//     if(form.date.from == null || form.date.to == null) {
+//         dialog.value = true
+//     }
+//     else {
+//         router.visit(route())
+//     }
+// }
+
 </script>
 
 <template>
@@ -121,54 +132,25 @@ const decrementGuests = () => {
         <div :class="['row q-col-gutter-md', $q.screen.lt.md ? '' : 'reverse']">
             <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                 <div class="lt-md q-mb-xs justify-between flex">
-                    <div>
-                        <div class="text-h6 text-capitalize">{{ facility.name }}</div>
-                        <div class="text-subtitle1" >
-                            {{ facility.amenities }}
+                    <div style="position: relative">
+                        <div class="q-mr-xl">
+                            <div class="text-h5 text-weight-bold">{{ facility.name }}</div>
+                            <div style="white-space: pre-line;">{{ facility.description }}</div>
+                            <!-- <div class="q-mr-xl" style="white-space: pre-line;">
+                                {{ facility.amenities }}
+                            </div> -->
+                        </div>
+                        <div class="text-subtitle1 q-mt-sm absolute-top-right q-mr-sm">
+                            <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                         </div>
                     </div>
-                    <div>
-                        Star
-                    </div>
                 </div>
-                <q-card>
+                <q-card class="gt-sm">
                     <q-card-section class="q-pb-xs"> 
                         <span class="text-subtitle1">P{{ facility.price }}</span>
                         kada adlaw
                     </q-card-section>
                     <q-card-section class="row q-py-none q-col-gutter-sm q-mb-sm" @click="dialog = true">
-                        <!-- <q-menu v-model="dialog" persistent class="gt-sm" anchor="bottom left" self="center right"> 
-                            <q-card style="width: 500px;">
-                                <q-card-section class="row justify-between">
-                                    <div class="col-10">
-                                        <span class="text-h6">Lorem ipsum dolor sit amtet</span>
-                                        <br>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
-                                    </div>
-                                    <div>
-                                        <q-btn icon="close" round unelevated @click="dialog = false" v-close-popup/>
-                                    </div>
-                                </q-card-section>
-                                <q-card-section class="q-py-none">
-                                    <q-date
-                                        v-model="date"
-                                        range
-                                        :options="options"
-                                        style="width: 100%;"
-                                        :subtitle="`${qdate.formatDate(form.date.from, 'MMM D, YYYY')} - ${qdate.formatDate(form.date.to, 'MMM D, YYYY')}`"
-                                    >
-                                    </q-date>
-                                </q-card-section>
-                                <q-card-actions class="row q-col-gutter-md">
-                                    <div class="col-6" v-if="form.date.from && form.date.to">
-                                        <q-btn class="full-width" color="accent" no-caps rounded @click="clearDates()">Clear Dates</q-btn>
-                                    </div>
-                                    <div :class="form.date.from && form.date.to ? 'col-6' : 'col-12'">
-                                        <q-btn class="full-width" color="primary" no-caps rounded @click="setDates">Save</q-btn>
-                                    </div>
-                                </q-card-actions>
-                            </q-card>
-                        </q-menu> -->
                         <div class="col-6">
                             <q-card flat bordered >
                                 <q-card-section>
@@ -192,7 +174,6 @@ const decrementGuests = () => {
                         </div>
                     </q-card-section>
                     <q-card-section class="row q-py-none">
-                        
                         <q-card class="col-12" bordered flat>
                             <q-card-section class="row">
                                 <div class="col-6 items-center flex">
@@ -207,14 +188,21 @@ const decrementGuests = () => {
                         </q-card>
                     </q-card-section>
                     <q-card-actions>
-                            <q-btn class="full-width" color="primary" @click="book" rounded no-caps>Book Now</q-btn>
+                        <q-btn 
+                            class="full-width" 
+                            color="primary" 
+                            @click="book" 
+                            rounded 
+                            no-caps 
+                            :label="form.date.from && form.date.to ? 'Book Now' : 'Check Availability'"
+                        />
                     </q-card-actions>
                 </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="gt-sm" style="position: relative">
                     <div class="q-mr-xl">
-                        <div class="text-h3 text-weight-bold">{{ facility.name }}</div>
+                        <div class="text-h5 text-weight-bold">{{ facility.name }}</div>
                         <div style="white-space: pre-line;">{{ facility.description }}</div>
                         <!-- <div class="q-mr-xl" style="white-space: pre-line;">
                             {{ facility.amenities }}
@@ -276,15 +264,11 @@ const decrementGuests = () => {
                         </q-card-section>
                     </q-card>
                 </div>
-                <q-card v-if="facility.facility_ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-my-md" style="height: 100px">
+                <q-card v-if="facility.facility_ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-ma-sm" style="height: 100px">
                     No ratings yet...
                 </q-card>
             </div>
         </div>
-        <!-- <div style="height: 700px;">
-            bruh
-            <h1>HIII</h1>
-        </div> -->
     </div>
     <q-dialog 
         v-model="carouselDialog" 
@@ -318,6 +302,30 @@ const decrementGuests = () => {
             </q-carousel>
         </q-card>
     </q-dialog>
+    <q-card class="bg-white fixed-bottom lt-md" bordered square>
+            <!-- <div class="row q-pa-none q-col-gutter-md"> -->
+        <q-card-section class="row q-px-sm">
+            <div class="col-4">
+                <div>
+                    <span class="text-subtitle1 text-weight-bold">P{{ facility.price }} </span>
+                    night
+                </div>
+                <div v-if="form.date.from && form.date.to">{{ qdate.formatDate(form.date.from, 'MMM D') + ' - ' + qdate.formatDate(form.date.to, 'MMM D') }}</div>
+            </div>
+            <div class="col-8 justify-end items-center flex">
+                <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementGuests"></q-btn>
+                <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
+                <q-btn icon="add" round unelevated size="sm" class="bg-grey-4 q-mr-sm" @click="incrementGuests"></q-btn>
+                <q-btn 
+                    color="primary" 
+                    @click="book" 
+                    rounded 
+                    no-caps 
+                    :label="form.date.from && form.date.to ? 'Book Now' : 'Check Availability'"
+                />
+            </div>
+        </q-card-section>
+    </q-card>
     <DatePicker :dialog="dialog" :reserved_dates="reserved_dates" @setBookingDates="(dates) => setBookingDates(dates)" @close="dialog = false" />
 </template> 
 

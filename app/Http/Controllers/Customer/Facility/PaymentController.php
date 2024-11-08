@@ -19,9 +19,8 @@ class PaymentController extends Controller
     {
 
         $payment_session = session('payment_session');
-
         if (!$payment_session) {
-            abort(404);
+            return redirect(route('customer.bookings.index'));
         }
         // dd($request->query('payment_method'));
         $booking = Booking::create([
@@ -48,6 +47,7 @@ class PaymentController extends Controller
             $booking->status = Booking::STATUS_CONFIRMED;
             $booking->save();
         }
+        
         session()->forget('payment_session');
 
         return redirect(route('customer.bookings.index'));
@@ -71,6 +71,7 @@ class PaymentController extends Controller
         // dd($request);
         if($request->payment_method == 'walk_in') {
             // dd('annyeong');
+        // dd($request->total);
             session(['payment_session' => true]);
             return redirect(route('facility.checkout.success') . '?' . http_build_query($request->all()));
         }

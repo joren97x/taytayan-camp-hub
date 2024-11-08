@@ -60,6 +60,8 @@ onUnmounted(() => {
     Echo.leave(`users.online.${conversationStore.receiver.id}`)
 })
 
+
+
 </script>
 
 <template>

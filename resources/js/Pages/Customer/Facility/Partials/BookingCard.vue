@@ -101,33 +101,31 @@ const submitRatingForm = () => {
                         </q-carousel>
                         <!-- <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/> -->
                         <div class="text-h6">{{ booking.facility.name }}</div>
-                        <div>{{ booking.facility.amenities }}</div>
-                        <!-- Olango Island -->
-                        <!-- <q-btn class="full-width q-mt-md" label="View" color="primary" no-caps unelevated/> -->
+                        <div>{{ booking.facility.description }}</div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
                         <div class="text-h6">Booking Details</div>
                         <!-- <q-separator class="q-my-md"/> -->
-                        <div class="row q-col-gutter-md">
+                        <div class="row q-col-gutter-md ">
                             <div class="col-6">
-                                <div class="text-caption">Check-in</div>
+                                <div class="text-caption text-grey-9">Check-in</div>
                                 <div>{{ date.formatDate(booking.check_in, 'MMMM D, YYYY') }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Check-out</div>
+                                <div class="text-caption text-grey-9">Check-out</div>
                                 <div>{{ date.formatDate(booking.check_out, 'MMMM D, YYYY') }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Guests</div>
+                                <div class="text-caption text-grey-9">Guests</div>
                                 <div>{{ booking.guests }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Status</div>
+                                <div class="text-caption text-grey-9">Status</div>
                                 <div class="text-weight-bold">{{ booking.status }}</div>
                             </div>
                             <div class="col-6">
-                                <div class="text-caption">Amount</div>
+                                <div class="text-caption text-grey-9">Amount</div>
                                 <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div>
                             </div>
                         </div>

@@ -4,8 +4,10 @@ import DatePicker from './Partials/DatePicker.vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import { date } from 'quasar'
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 const dialog = ref(false)
+const $q = useQuasar()
 const props = defineProps({
     facility: Object,
     date: Array,
@@ -27,6 +29,14 @@ const submit = () => {
     form.post(route('facility.pay'), {
         onSuccess: () => {
             console.log('ok')
+        },
+        onError: () => {
+            $q.notify({
+                message: `Something went wrong...`,
+                color: 'negative', // or any custom color defined in the brand config
+                textColor: 'white',
+                position: 'top'
+            })
         }
     })
 }
@@ -35,7 +45,8 @@ const setBookingDates = (dates) => {
     form.check_in = dates.check_in
     form.check_out = dates.check_out
     dialog.value = false
-    form.total = props.facility.price * (date.getDateDiff(form.check_out, form.check_in, 'days'))
+    form.total = props.facility.price * (date.getDateDiff(form.check_out, form.check_in, 'days') + 1)
+    form.clearErrors('check_in', 'check_out')
 }
 
 const incrementGuests = () => {
@@ -71,12 +82,11 @@ const decrementGuests = () => {
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <q-card flat bordered>
-                            {{ date.getDateDiff(form.check_out, form.check_in, 'days') }}
                             <q-card-section>
                                 <div class="text-h6 text-center">Checkout</div>
                                 <q-separator class="q-my-md"/>
                                 <div class="text-h6">Your trip</div>
-                                <q-item>
+                                <q-item class="rounded-borders" :style="`${form.errors.check_in || form.errors.check_out ? 'border: 1px solid var(--q-negative)' : ''}`">
                                     <q-item-section>
                                         <q-item-label>Dates</q-item-label>
                                         <q-item-label caption>{{ date.formatDate(form.check_in, 'MMMM D, YYYY') }} - {{ date.formatDate(form.check_out, 'MMMM D, YYYY') }}</q-item-label>
@@ -85,6 +95,7 @@ const decrementGuests = () => {
                                         <q-chip @click="dialog = true" clickable>Edit</q-chip>
                                     </q-item-section>
                                 </q-item>
+                                <div class="text-caption text-negative" v-if="form.errors.check_in || form.errors.check_out">Check-in and Check-out dates are required</div>
                                 <q-item>
                                     <q-item-section>
                                         <q-item-label>Guests</q-item-label>
@@ -174,7 +185,7 @@ const decrementGuests = () => {
                                 <q-separator class="q-my-md"/>
                                 <div class="row">
                                     <div class="col-8">
-                                        P{{ facility.price }} x {{ date.getDateDiff(form.check_out, form.check_in, 'days') }} nights
+                                        P{{ facility.price }} x {{ date.getDateDiff(form.check_out, form.check_in, 'days') + 1 }} nights
                                     </div>
                                     <div class="col-4 text-right">
                                         P{{ form.total }}

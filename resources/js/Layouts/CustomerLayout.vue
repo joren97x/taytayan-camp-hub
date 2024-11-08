@@ -295,6 +295,9 @@ onMounted(() => {
                 <q-list style="max-width: 100vw; width: 500px; max-height: 700px;" bordered class="rounded-borders q-pa-sm">
                     <q-item class="text-h6">Notifications</q-item>
                     <NotificationItem @click="notificationMenu = false" :notification="notification" v-for="notification in notificationStore.notifications" />
+                    <div v-if="notificationStore.notifications.length == 0" class="q-pa-xl flex items-center justify-center">
+                        No notifications...
+                    </div>
                 </q-list>
                 <q-card-actions  class="absolute-top-right">
                     <q-btn icon="close" v-close-popup round unelevated></q-btn>

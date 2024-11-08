@@ -100,17 +100,15 @@ const cameraError = (err) => {
     
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card class="q-mb-md" bordered flat>
-            <q-card-section>
+            <q-card-actions class="justify-center">
                 <div class="flex justify-center items-center">
                     <Link :href="route('admin.tickets.index')" class="absolute-left q-mt-sm">
                         <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
                     </Link>
-                    <div class="">
-                        <!-- <q-btn rounded @click="drawerStore.toggle" no-caps class="lt-md" icon="menu" flat /> -->
-                        <div class="text-h6">Event Dashboard</div>
-                    </div>
+                    <div class="text-h6">Event Dashboard</div>
                 </div>
-
+            </q-card-actions>
+            <q-card-section >
                 <!-- <q-btn 
                     label="Scan Qr Code" 
                     no-caps 
@@ -185,6 +183,23 @@ const cameraError = (err) => {
                 <template v-slot:no-data>
                     <div class="full-width row flex-center q-gutter-sm text-grey" style="height: 50vh">
                         No Attendees Found. Check again later...
+                    </div>
+                </template>
+                <template v-slot:item="props">
+                    <div class="col-12 q-mb-sm">
+                        <q-card class="q-mx-sm" bordered flat>
+                            <q-card-section>
+                                <q-item class="q-pa-none">
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.ticket_holder.name }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.status }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <q-chip>{{ props.row.status == 'used' ? 'Checked in' : 'Pending' }}</q-chip>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
                     </div>
                 </template>
             </q-table>

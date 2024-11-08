@@ -19,12 +19,37 @@ const props = defineProps({
 
 const drawerStore = useDrawerStore()
 const $q = useQuasar()
-const filter = ref('')
+const filter = ref('all')
+const showSearch = ref(false)
+const searchTerm = ref('')
 const columns = [
     { name: 'attendee', align: 'center', label: 'Attendee Name', field: 'attendee', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
 ]
+
+const filteredTickets = computed(() => {
+  let filtered = props.tickets;
+  // Apply status filter
+  if (filter.value !== 'all') {
+    filtered = filtered.filter(ticket => ticket.status === filter.value);
+  }
+
+  // Apply search term filter
+  if (searchTerm.value) {
+    filtered = filtered.filter(ticket => {
+    const fullName = ticket.ticket_holder.name.toLowerCase();
+    const search = searchTerm.value.toLowerCase();
+
+        return (
+            fullName.includes(search)
+        );
+    });
+  }
+
+  return filtered;
+});
+
 const checkedIn = computed(() => {
     return props.tickets.filter((tix) => tix.status == 'used') 
 })
@@ -103,11 +128,15 @@ const cameraError = (err) => {
                 <!-- <Link :href="route('cashier.tickets.index')">
                     <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
                 </Link> -->
-                <div class="flex items-center">
+                <div :class="`flex ${$q.screen.gt.sm ? 'items-center justify-center' : ''}`">
+                    <Link :href="route('cashier.tickets.index')" class="gt-sm absolute-left q-mt-sm">
+                        <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
+                    </Link> 
                     <q-btn rounded @click="drawerStore.toggle" no-caps class="lt-md" icon="menu" flat />
                     <div class="text-h6">Check-in</div>
                 </div>
 
+                
                 <q-btn 
                     label="Scan Qr Code" 
                     no-caps 
@@ -146,19 +175,42 @@ const cameraError = (err) => {
                 flat
                 :grid="$q.screen.lt.md"
                 title="Treats"
-                :rows="tickets"
+                :rows="filteredTickets"
                 :columns="columns"
                 row-key="name"
-                :filter="filter"
             >
                 <template v-slot:top>
                     <p class="text-h6 q-pt-md">Attendees</p>
                     <q-space />
-                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
+                    <!-- <q-input rounded outlined dense label="Search..." v-model="searchTerm" class="q-mx-md" debounce="300" color="primary">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
-                    </q-input>
+                    </q-input> -->
+                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    <q-select 
+                        :options="['all', 'used', 'sold']" 
+                        v-model="filter"
+                        outlined 
+                        rounded
+                        dense
+                    />
+                    <div class="full-width q-mt-sm" v-if="showSearch">
+                        <q-input
+                            v-model="searchTerm"
+                            rounded
+                            outlined
+                            dense
+                            label="Search using name"
+                            debounce="300"
+                            class="full-width"
+                            color="primary"
+                        >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </div>
                     <!-- <Link :href="route('admin.facilities.create')">f
                         <q-btn no-caps color="primary">Create Facility</q-btn>
                     </Link> -->
@@ -172,6 +224,28 @@ const cameraError = (err) => {
                     <q-td :props="props">
                         <EventCheckinDialog :ticket="props.row" />
                     </q-td>
+                </template>
+                <template v-slot:item="props">
+                    <div class="col-12 q-mb-sm">
+                        <q-card class="q-mx-sm" bordered flat>
+                            <q-card-section>
+                                <q-item class="q-pa-none">
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.ticket_holder.name }}</q-item-label>
+                                        <q-item-label caption>Attendee Name</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ props.row.status }}</q-item-label>
+                                        <q-item-label caption>Status</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <EventCheckinDialog :ticket="props.row" />
+                                        <!-- <q-chip>{{ props.row.status == 'used' ? 'Checked in' : 'Pending' }}</q-chip> -->
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
+                    </div>
                 </template>
                 <template v-slot:no-data>
                     <div class="full-width row flex-center q-gutter-sm text-grey" style="height: 50vh">
@@ -199,3 +273,9 @@ const cameraError = (err) => {
       </q-card>
     </q-dialog>
 </template>
+
+<style scoped>
+a {
+    color: black;
+}
+</style>

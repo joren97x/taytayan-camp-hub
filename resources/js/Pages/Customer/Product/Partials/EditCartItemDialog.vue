@@ -5,7 +5,7 @@ import { useForm, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'remove_from_cart'])
 const page = usePage()
 const $q = useQuasar()
 const props = defineProps({ dialog: Boolean, cart_item: Object })
@@ -145,6 +145,11 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
         transition-hide="slide-down"
     >
         <q-card class="q-px-md" :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+            <div class="absolute-top-right q-mt-sm q-mr-sm lt-md">
+                <q-btn rounded no-caps icon="close" label="Remove from cart" color="negative" @click="emit('remove_from_cart')" class="q-mr-sm"/>
+                <q-btn round icon="close" v-close-popup/>
+            </div>
+
             <q-form @submit="submit">
                 <!-- <q-item>
                     <q-item-section class="text-h6">
@@ -163,8 +168,8 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
                         />
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7" style="position: relative;">
-                        <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-lg"/>
-                        <div class="q-mt-md">
+                        <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-lg gt-sm"/>
+                        <div class="q-mt-md text-center">
                             <span class="text-h6">
                                 {{ cart_item.product.name }}
                             </span>

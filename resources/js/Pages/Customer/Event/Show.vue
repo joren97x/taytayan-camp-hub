@@ -50,12 +50,12 @@ const total = computed(() => {
             />
         </div>
 
-        <div class="row q-ma-xs q-col-gutter-md">
+        <div class="row q-mx-xs q-col-gutter-md">
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="text-subtitle1">
-                    {{ date.formatDate(event.date, 'dddd, MMMM D') }}
+                    {{ date.formatDate(event.date, 'dddd, MMMM D') }} at {{ formattedTime }}
                 </div>
-                <div class="text-h3 text-weight-bold">
+                <div class="text-h5 text-weight-bold">
                     {{ event.title }}
                 </div>
                 <div style="white-space: pre-line;">
@@ -81,7 +81,7 @@ const total = computed(() => {
                             <q-icon name="location_on" />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label>RJC Cafe</q-item-label>
+                            <q-item-label>{{ event.location }}</q-item-label>
                             <q-item-label caption>Olango Island</q-item-label>
                         </q-item-section>
                     </q-item>
@@ -89,6 +89,7 @@ const total = computed(() => {
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 gt-sm ">
                 <q-card bordered>
+                    {{ event.status }}
                     <q-card-section>
                         <q-card class="row rounded-borders q-pa-md" bordered flat>
                             <div class="col-6">
@@ -107,7 +108,7 @@ const total = computed(() => {
                             :href="route('event.checkout')" 
                             class="full-width" 
                             :data="{ event_id: event.id, attendees }" 
-                            v-if="date.getDateDiff(event.date, new Date()) >= 0"
+                            v-if="date.getDateDiff(event.date, new Date()) >= 0 && event.status == 'on_sale'"
                         >
                             <q-btn class="full-width" rounded color="primary" no-caps label="Go To Checkout"/>
                         </Link>
@@ -125,13 +126,13 @@ const total = computed(() => {
                     <div class="text-h6">P{{ total }}</div>
                 </div>
                 <div class="col-9 justify-end items-center flex">
-                    <q-btn icon="remove" round unelevated class="bg-grey-4" @click="decrementTicket"></q-btn>
+                    <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementTicket"></q-btn>
                     <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
-                    <q-btn icon="add" round unelevated class="bg-grey-4 q-mr-sm" @click="incrementTicket"></q-btn>
+                    <q-btn icon="add" round unelevated size="sm" class="bg-grey-4 q-mr-sm" @click="incrementTicket"></q-btn>
                     <Link 
                         :href="route('event.checkout')" 
                         :data="{ event_id: event.id, attendees }"
-                        v-if="date.getDateDiff(event.date, new Date()) >= 0"
+                        v-if="date.getDateDiff(event.date, new Date()) >= 0 && event.status == 'on_sale'"
                     >
                         <q-btn
                             label="Go To Checkout"

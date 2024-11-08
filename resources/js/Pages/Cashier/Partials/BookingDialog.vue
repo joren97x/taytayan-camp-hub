@@ -15,7 +15,9 @@ const $q = useQuasar()
 const bookingDetailsDialog = ref(false)
 const checkInDialog = ref(false)
 const checkOutDialog = ref(false)
+const cancelDialog = ref(false)
 const form = useForm({})
+const cancelForm = useForm({})
 const checkIn = () => {
     form.patch(route('cashier.bookings.check_in', props.booking.id), {
         onSuccess: () => {
@@ -34,39 +36,68 @@ const checkOut = () => {
     })
 }
 
+const cancel = () => {
+    form.patch(route('cashier.bookings.cancel', props.booking.id), {
+        onSuccess: () => {
+            cancelDialog.value = false
+            $q.notify('Booking is Cancelled')
+        }
+    })
+}
+
+const statuses = props.booking_statuses.reduce((obj, status) => {
+    obj[status] = status
+        return obj
+    }, {})
+
 </script>
 
 <template>
-    <div :class="[$q.screen.lt.md ? 'justify-end' : 'justify-center', 'flex q-mt-sm']">
-        <div class="gt-sm">
-            <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_in || booking.status == booking_statuses.checked_out">
+        <!-- <div class="gt-sm">
+            <q-chip class="q-mr-xs" size="12px" color="green-3"v-if="booking.status == statuses.checked_in || booking.status == statuses.checked_out">
                 Checked-in
             </q-chip>
-            <q-chip size="12px" color="green-3"v-if="booking.status == booking_statuses.checked_out">
+            <q-chip size="12px" color="green-3"v-if="booking.status == statuses.checked_out">
                 Checked-out
             </q-chip>
-            <q-chip v-if="booking.status == booking_statuses.complete">Complete</q-chip>
+            <q-chip v-if="booking.status == statuses.complete">Complete</q-chip>
+        </div> -->
+        <div >
+            <q-item clickable @click="checkInDialog = true" v-if="booking.status == statuses.pending || booking.status == statuses.confirmed">
+                <q-item-section>Check-in</q-item-section>
+            </q-item>
+            <q-item clickable @click="checkOutDialog = true" v-if="booking.status == statuses.checked_in">
+                <q-item-section>Check-out</q-item-section>
+            </q-item>
+            <q-item clickable @click="bookingDetailsDialog = true">
+                <q-item-section>View</q-item-section>
+            </q-item>
+            <q-item clickable @click="cancelDialog = true" class="text-negative" v-if="booking.status == statuses.pending || booking.status == statuses.confirmed">
+                <q-item-section>Cancel</q-item-section>
+            </q-item>
         </div>
-        <q-btn 
-            @click="checkInDialog = true" 
-            no-caps
-            label="Check-in"
-            rounded 
-            unelevated
-            color="primary"
-            v-if="booking.status == booking_statuses.pending || booking.status == booking_statuses.confirmed"
-        />
-        <q-btn 
-            @click="checkOutDialog = true" 
-            label="Check-out"
-            no-caps
-            rounded 
-            unelevated
-            color="primary"
-            v-if="booking.status == booking_statuses.checked_in"
-        />  
-        <q-btn rounded color="primary" no-caps unelevated outline class="q-ml-sm" @click="bookingDetailsDialog = true" label="View"/>
-    </div>
+        <!-- <div class="gt-sm" v-if="false">
+            <q-btn label="Cancel" rounded color="negative" no-caps outline class="q-mr-sm" />
+            <q-btn 
+                @click="checkInDialog = true" 
+                no-caps
+                label="Check-in"
+                rounded 
+                unelevated
+                color="primary"
+                v-if="booking.status == statuses.pending || booking.status == statuses.confirmed"
+            />
+            <q-btn 
+                @click="checkOutDialog = true" 
+                label="Check-out"
+                no-caps
+                rounded 
+                unelevated
+                color="primary"
+                v-if="booking.status == booking_statuses.checked_in"
+            />  
+            <q-btn rounded color="primary" no-caps unelevated outline class="q-ml-sm" @click="bookingDetailsDialog = true" label="View"/>
+        </div> -->
     <q-dialog 
         v-model="checkInDialog"
         :maximized="$q.screen.lt.md"  
@@ -78,28 +109,22 @@ const checkOut = () => {
             <q-card-section>
                 <div class="text-subtitle1 text-weight-medium">Confirm Check-in</div>
                 Are you sure you want to check in this booking for {{ booking.facility.name }} ?
+                <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>
                 <div class="row">
                     <q-item class="col-xs-12 col-sm-12">
                         <q-item-section avatar>
                             <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label caption>Facility</q-item-label>
-                            <q-item-label>{{ booking.facility.name }}</q-item-label>
+                            <q-item-label>{{ booking.user.first_name + ' ' + booking.user.last_name }}</q-item-label>
+                            <q-item-label class="text-caption">{{ booking.facility.name }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
-                            <q-item-label caption>Status</q-item-label>
                             <q-item-label>
                                 <q-chip>{{ booking.status }}</q-chip>
                             </q-item-label>
                         </q-item-section>
                     </q-item>
-                    <div class="col-xs-6 col-sm-6">
-                        <div class="text-caption text-grey">
-                            Guest
-                        </div>
-                        {{ booking.user.first_name + ' ' + booking.user.last_name }}
-                    </div>
                     <div class="col-xs-6 col-sm-6">
                         <div class="text-caption text-grey">
                             Dates
@@ -108,7 +133,7 @@ const checkOut = () => {
                     </div>
                 </div>
             </q-card-section>
-            <q-card-actions>
+            <q-card-actions class="justify-end">
                 <q-btn v-close-popup no-caps unelevated rounded>No</q-btn>
                 <q-btn 
                     @click="checkIn"
@@ -134,28 +159,22 @@ const checkOut = () => {
             <q-card-section>
                 <div class="text-subtitle1 text-weight-medium">Confirm Check-out</div>
                 Are you sure you want to check out this booking for {{ booking.facility.name }} ?
+                <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>
                 <div class="row">
                     <q-item class="col-xs-12 col-sm-12">
                         <q-item-section avatar>
                             <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label caption>Facility</q-item-label>
-                            <q-item-label>{{ booking.facility.name }}</q-item-label>
+                            <q-item-label>{{ booking.user.first_name + ' ' + booking.user.last_name }}</q-item-label>
+                            <q-item-label class="text-caption">{{ booking.facility.name }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
-                            <q-item-label caption>Status</q-item-label>
                             <q-item-label>
                                 <q-chip>{{ booking.status }}</q-chip>
                             </q-item-label>
                         </q-item-section>
                     </q-item>
-                    <div class="col-xs-6 col-sm-6">
-                        <div class="text-caption text-grey">
-                            Guest
-                        </div>
-                        {{ booking.user.first_name + ' ' + booking.user.last_name }}
-                    </div>
                     <div class="col-xs-6 col-sm-6">
                         <div class="text-caption text-grey">
                             Dates
@@ -195,7 +214,7 @@ const checkOut = () => {
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/>
                         <div class="text-h6">{{ booking.facility.name }}</div>
-                        <!-- <div>P{{ booking.facility.price }}</div> -->
+                        <div>P{{ booking.facility.description }}</div>
                         <!-- <q-btn class="full-width q-mt-md" label="View" color="primary" no-caps unelevated/> -->
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -235,7 +254,7 @@ const checkOut = () => {
                                 <div class="text-h6">Guest</div>
                                 <q-item>
                                     <q-item-section avatar>
-                                        <q-avatar size="70px" color="primary" class="text-white">
+                                        <q-avatar size="50px" color="primary" class="text-white">
                                             <q-img class="fit" fit="cover" :src="`/storage/${booking.user.profile_pic}`" v-if="booking.user.profile_pic"/>
                                             <div v-else>
                                                 {{ booking.user.first_name[0] }}
@@ -260,6 +279,56 @@ const checkOut = () => {
                 </div>
             </q-card-section>
         </q-card>
-            
+    </q-dialog>
+    <q-dialog 
+        v-model="cancelDialog" 
+        persistent 
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
+    >
+    <q-card>
+            <q-card-section>
+                <div class="text-subtitle1 text-weight-medium">Cancel Booking</div>
+                Are you sure you want to cancel this booking for {{ booking.facility.name }}? This cannot be undone
+                <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>
+                <div class="row">
+                    <q-item class="col-xs-12 col-sm-12 bg-negative text-white rounded-borders">
+                        <q-item-section avatar>
+                            <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>{{ booking.user.first_name + ' ' + booking.user.last_name }}</q-item-label>
+                            <q-item-label class="text-caption text-white">{{ booking.facility.name }}</q-item-label>
+                        </q-item-section>
+                        <q-item-section side>
+                            <q-item-label>
+                                <q-chip>{{ booking.status }}</q-chip>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="text-caption text-grey">
+                            Dates
+                        </div>
+                        {{ date.formatDate(booking.check_in, 'MMM D, YYYY') }} - {{ date.formatDate(booking.check_out, 'MMM D, YYYY') }}
+                    </div>
+                </div>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn v-close-popup no-caps unelevated rounded>No</q-btn>
+                <q-btn 
+                    @click="cancel"
+                    :loading="cancelForm.processing" 
+                    :disable="cancelForm.processing"
+                    label="Cancel Booking"
+                    no-caps
+                    rounded
+                    color="negative"
+                    unelevated
+                />
+            </q-card-actions>
+        </q-card>
     </q-dialog>
 </template>

@@ -117,8 +117,6 @@ function options(date) {
                 <div class="col-10">
                     <span class="text-h6">Lorem ipsum dolor sit amtet</span>
                     <br>
-                    {{ bookingDates }}
-                    {{ date }}
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
                 </div>
                 <div>
@@ -131,7 +129,7 @@ function options(date) {
                     range
                     :options="options"
                     style="width: 100%;"
-                    :subtitle="bookingDates.check_in && bookingDates.check_out ? `${qdate.formatDate(bookingDates.check_in, 'MMM D, YYYY')} - ${qdate.formatDate(bookingDates.check_out, 'MMM D, YYYY')}` : 'Please choose dates'"
+                    :subtitle="bookingDates.check_in && bookingDates.check_out ? `${qdate.formatDate(bookingDates.check_in, 'MMM D, YYYY')} - ${qdate.formatDate(bookingDates.check_out, 'MMM D, YYYY')}` : 'Add your travel dates'"
                 >
 
                 </q-date>

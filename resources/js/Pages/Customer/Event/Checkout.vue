@@ -48,7 +48,15 @@ const submit = () => {
         },
         onError: (err) => {
             console.log(err)
-            $q.notify(err.error)
+            // $q.notify(err.error)
+            if(err.error) {
+                $q.notify({
+                    message: err.error,
+                    color: 'negative', // or any custom color defined in the brand config
+                    textColor: 'white',
+                    position: 'top'
+                })
+            }
         }
     })
 }

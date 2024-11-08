@@ -27,7 +27,7 @@ class PaymentController extends Controller
         // dd($payment_session);
 
         if (!$payment_session) {
-            abort(404);
+            return redirect(route('customer.tickets.index'));
         }
 
         $ticket_order = TicketOrder::create([
@@ -89,7 +89,7 @@ class PaymentController extends Controller
         $event = Event::find($request->event_id);
         
         if (!($event->tickets_sold + count($request->ticket_holders) <= $event->capacity)) {
-            return back()->withErrors(['error' => 'Event is full or not found']);
+            return back()->withErrors(['error' => 'Unable to complete booking: The event is fully booked.']);
         }
 
         $request->validate([

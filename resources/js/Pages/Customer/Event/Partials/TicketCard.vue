@@ -30,12 +30,16 @@ const dialog = ref(false)
                 <div>{{ date.formatDate(ticket_order.event.date, 'D') }}</div>
             </q-item-section>
             <q-item-section avatar>
-                <q-img :src="`/storage/${ticket_order.event.cover_photo}`" height="100px" width="200px" class="rounded-borders" />
+                <q-img :src="`/storage/${ticket_order.event.cover_photo}`" height="100px" width="100px" fit="cover" class="rounded-borders" />
             </q-item-section>
             <q-item-section top>
                 <q-item-label class="text-subtitle1">{{ ticket_order.event.title }}</q-item-label>
                 <q-item-label caption>{{ date.formatDate(ticket_order.event.date, 'MMM D, YYYY') + ' at ' + formattedTime }}</q-item-label>
-                <q-item-label caption>Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}(₱{{ ticket_order.amount }}) </q-item-label>
+                <q-item-label caption>
+                    <!-- Purchased on 
+                    {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }} -->
+                    ₱{{ ticket_order.amount }}
+                </q-item-label>
             </q-item-section>
         </q-item>
     </q-card>
@@ -47,8 +51,9 @@ const dialog = ref(false)
         :maximized="$q.screen.lt.md"
     >
         <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="justify-end lt-md">
-                <q-btn round icon="close" v-close-popup unelevated />
+            <q-card-actions class="lt-md">
+                <div class="text-h6">Ticket Details</div>
+                <q-btn round icon="close" class="absolute-top-right q-mt-xs q-mr-xs" v-close-popup unelevated />
             </q-card-actions>
             <q-card-section>
                 <div class="row q-col-gutter-md">

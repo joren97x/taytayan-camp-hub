@@ -2,7 +2,7 @@
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import EditUserDialog from './Partials/EditUserDialog.vue'
 import { useDrawerStore } from '@/Stores/DrawerStore'
@@ -11,15 +11,44 @@ defineOptions({
     layout: AdminLayout
 })
 
-defineProps({
+const props = defineProps({
     users: Object,
     role: String,
     user_roles: Object
 })
 
+props.user_roles.unshift('all')
+
 const drawerStore = useDrawerStore()
-const filter = ref('')
+const filter = ref('all')
+const searchTerm = ref('')
 const showSearch = ref(false)
+
+const filteredUsers = computed(() => {
+  let filtered = props.users;
+  // Apply status filter
+  if (filter.value !== 'all') {
+    filtered = filtered.filter(user => user.role === filter.value);
+  }
+
+  // Apply search term filter
+  if (searchTerm.value) {
+    filtered = filtered.filter(user => {
+        // console.log(order)
+      const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
+      const email = user.email.toLowerCase();
+      const search = searchTerm.value.toLowerCase();
+
+      return (
+        fullName.includes(search) ||
+        email.includes(search)
+      );
+    });
+  }
+
+  return filtered;
+});
+
 const $q = useQuasar()
 const showPassword = ref(false)
 const showPassword2 = ref(false)
@@ -109,21 +138,28 @@ const initialPagination = {
         <q-card bordered flat>
             <q-table
                 flat
-                :rows="users"
+                :rows="filteredUsers"
                 :columns="columns"
                 row-key="name"
-                :filter="filter"
                 :pagination="initialPagination"
+                :grid="$q.screen.lt.md"
             >
                 <template v-slot:top>
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
-                    <div class="text-h6">User Management</div>
+                    <div class="text-h6">Users</div>
                     <q-space />
                     <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    <q-select 
+                        :options="user_roles" 
+                        v-model="filter"
+                        outlined 
+                        rounded
+                        dense
+                    />
                     <q-btn class="q-ml-sm" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
-                            v-model="filter"
+                            v-model="searchTerm"
                             rounded
                             outlined
                             dense
@@ -176,52 +212,46 @@ const initialPagination = {
                         <!--  -->
                     </q-td>
                 </template>
-                <!-- <template v-slot:top>
-                    <div class="text-h6 text-capitalize">User Management</div>
-                    <q-space />
-                    <q-input outlined rounded dense label="Search by email" debounce="300" color="primary" v-model="filter">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                    <q-btn class="q-ml-md" rounded unelevated no-caps color="primary" @click="newUserDialog = true" label="Create User" />
-
-                </template> -->
                 <template v-slot:item="props">
                     <div class="col-12 q-mb-sm">
                         <q-card class="q-mx-sm" bordered flat>
                             <q-card-section>
                                 <q-item class="q-pa-none">
                                     <q-item-section avatar>
-                                        <q-img :src="`/storage/${props.row.profile_pic}`" fit="contain" height="60px" width="60px" class="rounded-borders" v-if="props.row.profile_pic" />
-                                        <div v-else>
-                                            {{ props.row.first_name[0] }}
-                                        </div>
+                                        <q-avatar color="primary" text-color="white">
+                                            <q-img :src="`/storage/${props.row.profile_pic}`" fit="contain" height="60px" width="60px" class="rounded-borders" v-if="props.row.profile_pic" />
+                                            <div v-else>
+                                                {{ props.row.first_name[0] }}
+                                            </div>
+                                        </q-avatar>
                                     </q-item-section>
                                     <q-item-section class="items-start">
-                                        <q-item-label>{{ props.row.name }}</q-item-label>
-                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.description }}</q-item-label>
-                                        <q-item-label caption >P{{ props.row.price }}</q-item-label>
-                                        <q-btn icon="more_horiz" class="absolute-top-right z-top text-black" flat color="white" round>
-                                            <q-menu>
-                                                <q-list style="min-width: 100px">
-                                                    <Link :href="route(`admin.facilities.edit`, props.row.id)">
-                                                        <q-item clickable>
+                                        <q-item-label>{{ props.row.first_name + ' ' + props.row.last_name }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.email }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <div class="flex">
+                                            <q-chip>{{ props.row.role }}</q-chip>
+                                            <q-btn icon="more_horiz" class="text-black" flat color="white" round>
+                                                <q-menu>
+                                                    <q-list style="min-width: 100px">
+                                                        <q-item clickable @click="showEditUserDialog(props.row)">
                                                             <q-item-section>Edit</q-item-section>
                                                         </q-item>
-                                                    </Link>
-                                                    <q-item clickable @click="showDeleteFacilityDialog(props.row)">
-                                                        <q-item-section>Delete</q-item-section>
-                                                    </q-item>
-                                                </q-list>
-                                            </q-menu>
-                                        </q-btn>
+                                                        <q-item clickable @click="showDeleteUserDialog(props.row)">
+                                                            <q-item-section>Delete</q-item-section>
+                                                        </q-item>
+                                                    </q-list>
+                                                </q-menu>
+                                            </q-btn>
+                                        </div>
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>
                         </q-card>
                     </div>
                 </template>
+                
             </q-table>
         </q-card>
     </div>
@@ -409,6 +439,7 @@ const initialPagination = {
             :maximized="$q.screen.lt.md"
             transition-show="slide-up"
             transition-hide="slide-down"
+            :position="$q.screen.lt.md ? 'bottom' : 'standard'"
         >
             <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
                 <q-card-section class="row items-center q-pb-none">
@@ -421,7 +452,12 @@ const initialPagination = {
                     Are you sure you want to delete this user? All data will be permanently removed. This action cannot be undone.
                     <q-item class="bg-negative text-white q-my-md">
                         <q-item-section avatar>
-                            <q-img :src="`/storage/${deleteUserForm.user.profile_pic}`" alt="Profile Picture" height="100px" width="100px"></q-img>
+                            <q-avatar color="primary" text-color="white">
+                                <q-img :src="`/storage/${deleteUserForm.user.profile_pic}`" v-if="deleteUserForm.user.profile_pic" alt="Profile Picture" height="100px" width="100px"/>
+                                <div v-else>
+                                    {{ deleteUserForm.user.first_name[0] }}
+                                </div>
+                            </q-avatar>
                         </q-item-section>  
                         <q-item-section>
                             <q-item-label class="text-weight-bold text-subtitle1">{{ deleteUserForm.user.first_name + ' ' +  deleteUserForm.user.last_name }}</q-item-label>

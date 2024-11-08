@@ -88,6 +88,23 @@ class BookingController extends Controller
         return back();
     }
 
+    public function cancel(string $id)
+    {
+        $booking = Booking::find($id);
+        $booking->update(['status' => Booking::STATUS_CANCELLED]);
+
+        $notification = Notification::create([
+            'user_id' => $booking->user_id,
+            'title' => 'Booking Cancelled',
+            'description' => 'Your booking has been cancelled!',
+            'link' => route('customer.bookings.show', $booking->id)
+        ]);
+        // dd($notification);
+        event(new Notify($notification));
+
+        return back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */

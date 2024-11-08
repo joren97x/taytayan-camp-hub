@@ -42,17 +42,17 @@ class BookingController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'facility_id' => 'required',
-            'user_id' => 'required',
-            'payment_method' => 'required',
-            'guests' => 'required',
-            'check_in' => 'required',
-            'check_out' => 'required',
-            'total' => 'required'
-        ]);
+        // $request->validate([
+        //     'facility_id' => 'required',
+        //     'user_id' => 'required',
+        //     'payment_method' => 'required',
+        //     'guests' => 'required',
+        //     'check_in' => 'required',
+        //     'check_out' => 'required',
+        //     'total' => 'required'
+        // ]);
 
-        dd($request);
+        // dd($request);
 
     }
 

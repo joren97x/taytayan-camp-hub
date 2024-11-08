@@ -48,7 +48,7 @@ const submit = () => {
         // })
         form.get(route('customer.checkout'), {
             onSuccess: () => {
-                $q.notify('Address Successfully Set')
+                // $q.notify('Address Successfully Set')
             },
             onError: () => {
                 $q.notify({
@@ -145,6 +145,7 @@ const total = computed(() => {
                 v-model:selected="selectedRows"
                 @selection="onSelection"
                 :pagination="initialPagination"
+                :grid="$q.screen.lt.md"
             >
                 <template v-slot:top>
                     <span class="text-h6">Cart</span> 
@@ -184,19 +185,63 @@ const total = computed(() => {
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)" color="primary" flat>Edit</q-btn>
+                        <q-btn no-caps unelevated @click="showEditCartItemDialog(props.row)" color="primary" flat label="Edit"/>
                         <q-btn no-caps 
                             unelevated color="red" flat 
-                            
+                            label="Remove"
                             @click="deleteCartItem(props.row.id)"
-                        >
-                            Remove
-                        </q-btn>
+                        />
                     </q-td>
                 </template>
+                
                 <template v-slot:no-data>
                     <div class="full-width row flex-center q-gutter-sm" style="height: 50vh">
                         No Orders Found
+                    </div>
+                </template>
+                <template v-slot:item="props">
+                    <div class="col-12 q-mb-sm">
+                        <q-card class="q-mx-sm" bordered flat>
+                            <q-card-section>
+                                <q-item class="q-pa-none" @click="showEditCartItemDialog(props.row)" clickable>
+                                    <!-- <q-item-section avatar class="q-pa-none q-ma-none">
+                                        <q-select outlined dropdown-icon="keyboard_arrow_down" class="q-pa-none q-ma-none" :items="[1,2,3,4,5,6,7,8,9]" dense>
+                                            <template v-slot:append>
+                                                <div class="text-subtitle2">{{ props.row.quantity }}</div>
+                                            </template>
+                                        </q-select>
+                                    </q-item-section> -->
+                                    <q-item-section avatar>
+                                        <div>
+                                            <q-chip class="q-pa-sm q-ma-none">{{ props.row.quantity }}</q-chip>
+                                            <q-img :src="`/storage/${props.row.product.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
+                                        </div>
+                                    </q-item-section>
+                                    <q-item-section class="items-start">
+                                        <q-item-label>{{ props.row.product.name }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.product.description }}</q-item-label>
+                                        <q-item-label caption >P{{ props.row.product.price }}</q-item-label>
+                                        <div class="absolute-top-right text-black">
+                                            P{{ props.row.total }}
+                                        </div>
+                                        <!-- <q-btn icon="more_horiz" class="absolute-top-right text-black" flat color="white" round>
+                                            <q-menu>
+                                                <q-list style="min-width: 100px">
+                                                    <Link :href="route(`admin.products.edit`, props.row.product.id)">
+                                                        <q-item clickable>
+                                                            <q-item-section>Edit</q-item-section>
+                                                        </q-item>
+                                                    </Link>
+                                                    <q-item clickable @click="showDeleteProductDialog(props.row.product)">
+                                                        <q-item-section>Delete</q-item-section>
+                                                    </q-item>
+                                                </q-list>
+                                            </q-menu>
+                                        </q-btn> -->
+                                    </q-item-section>
+                                </q-item>
+                            </q-card-section>
+                        </q-card>
                     </div>
                 </template>
             </q-table>
