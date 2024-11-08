@@ -48,9 +48,11 @@ class Order extends Model
         'driver_id',
         'status',
         'payment_method',
+        'payment_id',
         'mode',
         'completed_at',
-        'waiting_time'
+        'waiting_time',
+        'amount'
     ];
 
     public function user() : BelongsTo

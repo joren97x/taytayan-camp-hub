@@ -24,6 +24,7 @@ class Booking extends Model
         'total',
         'status',
         'payment_method',
+        'payment_id',
         'check_in',
         'check_out',
         'guests'

@@ -20,7 +20,9 @@ class TicketOrder extends Model
         'user_id',
         'event_id',
         'amount',
+        'status',
         'payment_method',
+        'payment_id',
         'status',
         'qr_code_path'
     ];

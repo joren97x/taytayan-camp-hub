@@ -138,6 +138,7 @@ class ViewController extends Controller
         ->whereHas('event', function($query) use ($today) {
             $query->where('date', '>=', $today);
         })
+        ->whereIn('status', [TicketOrder::STATUS_CONFIRMED, TicketOrder::STATUS_PENDING])
         ->where('user_id', auth()->id())
         ->get();
 
@@ -146,8 +147,11 @@ class ViewController extends Controller
             'ticket_order_items', 
             'ticket_order_items.ticket.ticket_holder',
         ])
-        ->whereHas('event', function($query) use ($today) {
-            $query->where('date', '<', $today);
+        ->where(function($query) use ($today) {
+            $query->whereHas('event', function($subQuery) use ($today) {
+                $subQuery->where('date', '<', $today);
+            })
+            ->orWhereIn('status', [TicketOrder::STATUS_CANCELLED, TicketOrder::STATUS_COMPLETED]);
         })
         ->where('user_id', auth()->id())
         ->get();

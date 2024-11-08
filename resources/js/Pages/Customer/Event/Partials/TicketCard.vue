@@ -2,17 +2,27 @@
 
 import { date } from 'quasar'
 import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import { parse, format } from 'date-fns'
+import { useQuasar } from 'quasar'
 
 const props = defineProps({
     ticket_order: Object
 })
 
 const formattedTime = format(parse(props.ticket_order.event.start_time, 'HH:mm:ss', new Date()), 'h a');
-
+const $q = useQuasar()
 const dialog = ref(false)
-
+const cancelForm = useForm({})
+const cancelDialog = ref(false)
+const cancel = () => {
+    cancelForm.put(route('customer.tickets.cancel', props.ticket_order.id), {
+        onSuccess: () => {
+            cancelDialog.value = false
+            $q.notify('Ticket Order Cancelled')
+        }
+    })
+}
 // const formatTime = (timeString) => {
 //     const today = new Date()
 //     const dateObj = new Date(`${today.t}T${timeString}Z`)
@@ -71,7 +81,8 @@ const dialog = ref(false)
                                 <Link :href="route('conversations.chat_cashier')" >
                                     <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
                                 </Link>
-                                <!-- <q-btn label="View QR Code" class="full-width q-my-sm" no-caps color="primary" unelevated/>
+                                <q-btn class="full-width q-mt-sm" label="Cancel" @click="cancelDialog = true" no-caps color="negative" outline rounded />
+                                    <!-- <q-btn label="View QR Code" class="full-width q-my-sm" no-caps color="primary" unelevated/>
                                 <div class="text-center">Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div> -->
                             </q-card-section>
                         </q-card>
@@ -101,6 +112,10 @@ const dialog = ref(false)
                             <div class="col-6">
                                 <div class="text-caption text-grey-9">Price</div>
                                 <div>{{ ticket_order.amount }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Status</div>
+                                <q-chip>{{ ticket_order.status }}</q-chip>
                             </div>
                             <div class="col-6">
                                 <div class="text-caption text-grey-9">Payment Method</div>
@@ -147,5 +162,37 @@ const dialog = ref(false)
             </q-card-section>
         </q-card>
     </q-dialog>
-
+    <q-dialog 
+        v-model="cancelDialog"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card>
+            <q-card-section class="row items-center q-pb-none">
+                <q-icon name="warning" color="negative" size="32px" />
+                <div class="text-h6 q-ml-md">Cancel Order</div>
+                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+            </q-card-section>
+            <q-card-section>
+                <q-item class="bg-negative text-white q-my-md q-pa-md rounded-borders">
+                    <q-item-section>
+                        <q-item-label class="text-weight-bold text-subtitle1">Are you sure you want to cancel this order? This action cannot be undone.</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn no-caps v-close-popup label="No" flat/>
+                <q-btn 
+                    no-caps
+                    :loading="cancelForm.processing"
+                    :disable="cancelForm.processing"
+                    @click="cancel()"
+                    rounded 
+                    unelevated
+                    label="Yes"
+                    color="negative"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>

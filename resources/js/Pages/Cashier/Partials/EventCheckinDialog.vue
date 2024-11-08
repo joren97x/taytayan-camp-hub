@@ -42,7 +42,8 @@ const checkOut = () => {
 </script>
 
 <template>
-    <div :class="$q.screen.lt.md ? 'q-mt-md' : ''">
+    <div :class="[$q.screen.lt.md ? 'q-mt-md' : '']">
+        {{ ticket }}
         <q-btn 
             no-caps 
             color="primary" 
@@ -51,7 +52,7 @@ const checkOut = () => {
             label="Check-in"
             rounded
             :loading="form.processing"
-            :disable="form.processing"
+            :disable="form.processing || ticket.status == 'available'"
             v-if="ticket.status != 'used'"
         />
         <q-btn 
@@ -63,7 +64,7 @@ const checkOut = () => {
             v-else
             @click="undo"
             :loading="form.processing"
-            :disable="form.processing"
+            :disable="form.processing || ticket.status == 'available'"
         />
     </div>
     <q-dialog v-model="checkInDialog">

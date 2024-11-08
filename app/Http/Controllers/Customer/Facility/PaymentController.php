@@ -43,9 +43,14 @@ class PaymentController extends Controller
 
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
-            $booking->payment_method = $checkout_session->payment_method_used;
-            $booking->status = Booking::STATUS_CONFIRMED;
-            $booking->save();
+            // $booking->payment_method = $checkout_session->payment_method_used;
+            // $booking->status = Booking::STATUS_CONFIRMED;
+            $booking->update([
+                'payment_method' => $checkout_session->payment_method_used,
+                'payment_id' => $checkout_session->payments[0]['id'],
+                'status' => Booking::STATUS_CONFIRMED
+            ]);
+            // $booking->save();
         }
         
         session()->forget('payment_session');

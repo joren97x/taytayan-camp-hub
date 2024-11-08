@@ -10,6 +10,7 @@ use App\Services\CartService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Luigel\Paymongo\Facades\Paymongo;
 
 class OrderController extends Controller
 {
@@ -80,7 +81,6 @@ class OrderController extends Controller
         $request->validate([
             'status' => 'required'
         ]);
-
         // $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
         $order->status = $request->status;
         $order->update();
@@ -88,9 +88,20 @@ class OrderController extends Controller
         // dd($order);
         // event(new OrderStatusUpdated($order, true, app(CartService::class)));
         event(new OrderStatusUpdated($order));
-        if($order->mode == 'delivery') {
+        if($order->mode == Order::MODE_DELIVERY && $request->status != Order::STATUS_CANCELLED) {
             event(new OrderReadyForDelivery($order));
         }
+        // dd($order);
+
+        if($request->status == Order::STATUS_CANCELLED && ($order->payment_method != 'walk_in' || $order->payment_method != 'cash_on_delivery')) {
+            $payment = Paymongo::payment()->find($order->payment_id);
+            Paymongo::refund()->create([
+                'amount' => $payment->amount,
+                'reason' => \Luigel\Paymongo\Models\Refund::REASON_OTHERS, // `duplicate`, `fraudulent`, required by customer
+                'payment_id' => $order->payment_id
+            ]);
+        }
+
 
         // switch($request->status) {
         //     case Order::STATUS_PREPARING:

@@ -177,7 +177,11 @@ function cancelOrder() {
             </div>
         </OrderDetails>
     </q-dialog>
-    <q-dialog v-model="cancelOrderDialog">
+    <q-dialog 
+        v-model="cancelOrderDialog" 
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
         <q-card>
             <q-card-section class="row items-center q-pb-none">
                 <q-icon name="warning" color="negative" size="32px" />

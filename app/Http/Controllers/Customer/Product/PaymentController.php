@@ -18,13 +18,10 @@ class PaymentController extends Controller
     //
     public function success(Request $request, CartService $cartService) 
     {
-        // dd(session('checkout_id'));
-        // dd($checkout_session);
-        // dd($request->get('cart_id'));
+
         $cart = Cart::find($request->cart_id);
         $payment_session = session('payment_session');
         
-        // dd($cart_products);
         if (!$payment_session) {
             return redirect(route('customer.orders.index'));
         }
@@ -39,16 +36,14 @@ class PaymentController extends Controller
 
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
+            // dd($checkout_session);
             $order->update([
-                'payment_method' => $checkout_session->payment_method_used
+                'payment_method' => $checkout_session->payment_method_used,
+                'payment_id' => $checkout_session->payments[0]['id'],
+                'amount' => $checkout_session->payments[0]['attributes']['amount']
             ]);
         }
 
-        // $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
-        // $order->cart_products = $result['cart_products'];
-        // $order->subtotal = $result['subtotal'];
-
-        // Log::info($order);
         event(new OrderPending($order));
 
         // if ang cart kay active mag create bag-o then e inactive dayun!!!
@@ -60,7 +55,7 @@ class PaymentController extends Controller
             $cart->update();
 
             $cart_product_ids = array_column($request->cart_products, 'id');
-            $cart_products = CartProduct::where('cart_id', $cart->id)
+            CartProduct::where('cart_id', $cart->id)
             ->whereNotIn('id', $cart_product_ids)
             ->update(['cart_id' => $new_cart->id]);
             
@@ -73,13 +68,8 @@ class PaymentController extends Controller
 
     public function pay(Request $request, CartService $cartService) 
     {
-        // dd($request);
-        // dd($request->cart_products);
-
         if($request->payment_method != 'right_now') {
             session(['payment_session' => true]);
-            // return $this->success($request->payment_method, $request->cart_id, $request->mode, $cartService);
-            // return $this->success($request->mode, $request->payment_method, $request->cart_id, $cartService);
             return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
         }
 
@@ -87,18 +77,15 @@ class PaymentController extends Controller
         $line_items = [];
         
         foreach($request->cart_products as $cart_product) {
-            // Calculate the base price with modifiers without multiplying by quantity
             $base_price = (double)$cart_product['product']['price'];
             $modifiers_total = 0;
         
-            // Add up the price of each modifier
             if (isset($cart_product['modifiers'])) {
                 foreach($cart_product['modifiers'] as $modifier) {
                     $modifiers_total += (double)$modifier['modifier_item']['price'];
                 }
             }
         
-            // Set the amount as the base price + modifiers total (no quantity)
             $line_items[] = [
                 'name' => $cart_product['product']['name'],
                 'quantity' => $cart_product['quantity'],

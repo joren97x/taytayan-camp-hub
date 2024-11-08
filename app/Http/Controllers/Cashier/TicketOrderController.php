@@ -31,14 +31,14 @@ class TicketOrderController extends Controller
 
     public function check_in(Event $event)
     {
+        $tickets = Ticket::with(['ticket_holder', 'ticket_order_items.ticket_order'])
+        ->where('event_id', $event->id)
+        ->whereIn('status', [Ticket::STATUS_SOLD, Ticket::STATUS_USED])
+        ->whereHas('ticket_order_items.ticket_order', function ($query) {
+            $query->where('status', '!=', TicketOrder::STATUS_CANCELLED);
+        })
+        ->get();
 
-        $tickets = Ticket::with('ticket_holder')->where('event_id', $event->id)->whereIn('status', [Ticket::STATUS_SOLD, Ticket::STATUS_USED])->get();
-        // $ticket_orders = TicketOrder::with('ticket_order_items.ticket.ticket_holder')->where('event_id', $event->id)->get();
-        // $tickets = Ticket::where('event_id', $event->id)->whereIn('status', [Ticket::STATUS_SOLD, Ticket::STATUS_USED])->get();
-
-        // $ticket_holders = TicketHolder::where('ticket_id', )
-
-        // dd($tickets);
         return Inertia::render('Cashier/EventCheckIn', [
             'event' => $event,
             'tickets' => $tickets

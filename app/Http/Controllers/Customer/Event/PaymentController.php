@@ -42,7 +42,9 @@ class PaymentController extends Controller
             // $ticket_order->payment_method = $checkout_session->payment_method_used;
             // $ticket_order->status = TicketOrder::STATUS_COMPLETED;
             $ticket_order->update([
-                'payment_method' => $checkout_session->payment_method_used
+                'payment_method' => $checkout_session->payment_method_used,
+                'status' => TicketOrder::STATUS_CONFIRMED,
+                'payment_id' => $checkout_session->payments[0]['id']
             ]);
         }
 

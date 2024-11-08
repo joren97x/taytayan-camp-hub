@@ -90,8 +90,16 @@ const columns = [
                         </q-item>
                         <q-item class="col-4">
                             <q-item-section>
-                                <q-item-label caption>Ticket Total</q-item-label>
+                                <q-item-label caption>Total Amount</q-item-label>
                                 <q-item-label>John Doe</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <q-item class="col-4">
+                            <q-item-section>
+                                <q-item-label caption>Status</q-item-label>
+                                <q-item-label>
+                                    <q-chip>{{ ticket_order.status }}</q-chip>
+                                </q-item-label>
                             </q-item-section>
                         </q-item>
                     </div>
