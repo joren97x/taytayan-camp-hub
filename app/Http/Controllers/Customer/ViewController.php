@@ -23,8 +23,29 @@ class ViewController extends Controller
 {
     //
     public function home() {
+        $products = Product::with('modifier_groups.modifier_items')
+            ->where('available', true)
+            ->get();
+
+        $currentDateTime = now();
+        $events = Event::where('date', '>', $currentDateTime->toDateString())
+        ->orWhere(function ($query) use ($currentDateTime) {
+            $query->where('date', '=', $currentDateTime->toDateString())
+                ->where('start_time', '>', $currentDateTime->toTimeString());
+        })
+        ->where('status', Event::STATUS_ON_SALE)
+        ->get();
+
+        $facilities = Facility::where('available', true)
+            ->withCount(['facility_ratings as average_rating' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get();
+
         return Inertia::render('Customer/Index', [
-            'products' => Product::with('modifier_groups.modifier_items')->get()
+            'products' => $products,
+            'events' => $events,
+            'facilities' => $facilities
         ]);
     }
 

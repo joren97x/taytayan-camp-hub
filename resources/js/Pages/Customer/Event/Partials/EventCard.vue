@@ -1,7 +1,7 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
 import { date } from 'quasar'
-import { parse, format } from 'date-fns';
+import { parse, format, formatDistanceToNow } from 'date-fns'
 
 const props = defineProps({ event: Object })
 
@@ -25,6 +25,7 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
             <q-card bordered flat class="rounded-borders">
                 <q-card-section :horizontal="$q.screen.gt.sm">
                     <q-card-section class="text-center q-py-none">
+                        
                         <div class="full-width q-my-md rounded-borders" style="height: 150px; position: relative; overflow: hidden;">
                             <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
                             <q-img 
@@ -38,9 +39,12 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
                         </div>
                     </q-card-section>
                     <q-card-section class="q-pa-md full-width">
-                        <q-item  class="q-pa-none">
+                        <q-item class="q-pa-none">
                             <q-item-section>
-                                <q-item-label class="text-h6">{{ event.title }}</q-item-label>
+                                <q-item-label class="text-h6">
+                                    <slot name="badge" />
+                                    {{ event.title }}
+                                </q-item-label>
                                 <q-item-label caption class="">
                                     {{ date.formatDate(event.date, 'MMMM D, YYYY') }}
                                     at {{ formattedTime }}

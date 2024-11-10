@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('amount');
             $table->string('qr_code_path')->nullable();
             $table->string('payment_method');
+            $table->string('payment_id')->nullable();
+            $table->string('status')->default(TicketOrder::STATUS_PENDING);
             $table->softDeletes();
             $table->timestamps();
         });

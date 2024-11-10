@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('customer.bookings.complete');
+Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('customer.bookings.cancel');
 Route::resource('bookings', BookingController::class)->names([
     'index' => 'customer.bookings.index',
     'show' => 'customer.bookings.show',

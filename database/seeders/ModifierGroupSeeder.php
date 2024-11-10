@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ModifierGroup;
 use App\Models\ModifierGroupItem;
+use App\Models\ModifierItem;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,29 +15,68 @@ class ModifierGroupSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $dummy_modifier_groups = [
-            'Choose your drinks',
-            'Choice of toppings',
-            'Add ons',
-            'Would you like uhh...'
+
+        $menu = [
+            [
+                'group_name' => 'Choose your classic flavour milk tea size',
+                'items' => [
+                    ['name' => 'Petite', 'price' => 35.00],
+                    ['name' => 'Moyen', 'price' => 55.00],
+                    ['name' => 'Grand', 'price' => 65.00],
+                ],
+            ],
+            [
+                'group_name' => 'Choose your special flavour milk tea size',
+                'items' => [
+                    ['name' => 'Petite', 'price' => 45.00],
+                    ['name' => 'Moyen', 'price' => 65.00],
+                    ['name' => 'Grand', 'price' => 75.00],
+                ],
+            ],
+            [
+                'group_name' => 'Choose your frappe size',
+                'items' => [
+                    ['name' => 'Moyen', 'price' => 75.00],
+                    ['name' => 'Grand', 'price' => 85.00],
+                ],
+            ],
+            [
+                'group_name' => 'Choose your halo-halo size',
+                'items' => [
+                    ['name' => 'Petite', 'price' => 35.00],
+                    ['name' => 'Grand', 'price' => 45.00],
+                ],
+            ],
+            [
+                'group_name' => 'Choose your fruit shake size',
+                'items' => [
+                    ['name' => 'Moyen', 'price' => 55.00],
+                    ['name' => 'Grand', 'price' => 65.00],
+                ],
+            ],
         ];
-
-        foreach($dummy_modifier_groups as $item) {
+        
+        foreach ($menu as $groupData) {
+            // Create a ModifierGroup
             $modifier_group = ModifierGroup::create([
-                'name' => $item,
-                'required' => fake()->boolean()
+                'name' => $groupData['group_name'],
+                'required' => true
             ]);
-
-            $no_of_items = fake()->numberBetween(2, 5);
-
-            for($i = 1; $i <= $no_of_items; $i++) {
+        
+            // Loop through each item in the group
+            foreach ($groupData['items'] as $itemData) {
+                // Create a ModifierItem
+                $modifier_item = ModifierItem::create([
+                    'name' => $itemData['name'],
+                    'price' => $itemData['price'],
+                ]);
+        
+                // Associate ModifierItem with ModifierGroup
                 ModifierGroupItem::create([
                     'modifier_group_id' => $modifier_group->id,
-                    'modifier_item_id' => fake()->randomNumber(1, 11)
+                    'modifier_item_id' => $modifier_item->id
                 ]);
             }
-
         }
 
     }

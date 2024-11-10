@@ -29,6 +29,7 @@ return new class extends Migration
                 Order::STATUS_COMPLETED
             ]);
             $table->string('payment_method');
+            $table->string('payment_id')->nullable();
             $table->enum('mode', [
                 Order::MODE_DELIVERY,
                 Order::MODE_PICKUP

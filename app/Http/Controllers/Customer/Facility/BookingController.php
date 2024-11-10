@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Luigel\Paymongo\Facades\Paymongo;
 
 class BookingController extends Controller
 {
@@ -93,6 +94,26 @@ class BookingController extends Controller
     public function complete(Request $request, string $id)
     {
         Booking::find($id)->update(['status' => Booking::STATUS_COMPLETE]);
+        return back();
+    }
+
+    public function cancel(Request $request, string $id)
+    {
+        $booking = Booking::find($id);
+
+        if($booking->payment_method != 'walk_in') {
+            $payment = Paymongo::payment()->find($booking->payment_id);
+            Paymongo::refund()->create([
+                'amount' => $payment->amount,
+                'reason' => \Luigel\Paymongo\Models\Refund::REASON_REQUESTED_BY_CUSTOMER, // `duplicate`, `fraudulent`, required by customer
+                'payment_id' => $booking->payment_id
+            ]);
+        }
+
+        $booking->update([
+            'status' => Booking::STATUS_CANCELLED
+        ]);
+
         return back();
     }
 

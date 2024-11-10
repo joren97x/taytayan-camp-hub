@@ -31,7 +31,7 @@ function shareOnFacebook() {
                         control-color="white"
                         control-text-color="black"
                         height="280px"
-                        class="rounded-borders"
+                        class="rounded-borders carousel-hover"
                         ref="carousel"
                     >
                         <q-carousel-slide id="carousel-container" :name="index" class="q-pa-none" v-for="(image, index) in images">
@@ -41,7 +41,7 @@ function shareOnFacebook() {
                             <q-carousel-control
                                 position="left"
                                 :offset="[6, 18]"
-                                class="q-gutter-xs items-center flex"
+                                class="q-gutter-xs items-center flex carousel-control-left"
                             >
                                 <q-btn
                                     push round dense color="white" text-color="black" icon="chevron_left"
@@ -53,7 +53,7 @@ function shareOnFacebook() {
                             <q-carousel-control
                                 position="right"
                                 :offset="[6, 18]"
-                                class="q-gutter-xs items-center flex"
+                                class="q-gutter-xs items-center flex carousel-control-right"
                             >
                                 <q-btn
                                     push round dense color="white" text-color="black" icon="chevron_right"
@@ -62,10 +62,6 @@ function shareOnFacebook() {
                                 />
                             </q-carousel-control>
                         </template>
-                        <!-- <template v-slot:navigation-icon="{ active, btnProps, onClick }">
-                            <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click.stop="onClick" />
-                            <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click.stop="onClick" />
-                        </template> -->
                     </q-carousel>
                 </q-card-section>
                 <Link :href="route('customer.facilities.show', facility.id)">
@@ -81,21 +77,6 @@ function shareOnFacebook() {
             </q-card>
         </Link>
     </div>
-    <!-- <q-card>
-        <q-item>
-            <q-item-section>
-                <q-img :src="`/storage/${images[0]}`" height="200"></q-img>
-            </q-item-section>
-            <q-item-section>
-                <q-item-label>{{ facility.name }}</q-item-label>
-                <q-item-label caption>{{ facility.name }}</q-item-label>
-                <q-item-label>{{ facility.price }}</q-item-label>
-            </q-item-section>
-            <q-item-section side class="q-mt-lg">
-                <q-btn>Book</q-btn>
-            </q-item-section>
-        </q-item>
-    </q-card> -->
 </template>
 
 <style scoped>
@@ -111,5 +92,20 @@ function shareOnFacebook() {
 a {
     text-decoration: none;
     color: black;
+}
+
+.carousel-hover {
+    position: relative;
+}
+
+.carousel-control-left,
+.carousel-control-right {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-hover:hover .carousel-control-left,
+.carousel-hover:hover .carousel-control-right {
+    opacity: 1;
 }
 </style>

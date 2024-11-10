@@ -154,6 +154,12 @@ const decrementGuests = () => {
                                     </q-card>
                                 </q-list>
                                 <q-separator class="q-my-md"/>
+                                <div class="text-h6">Cancellation Policy</div>
+                                <div class="">
+                                    You may cancel your booking anytime up to 2 days before the check-in date to receive a full refund. 
+                                    <!-- Cancellations made within 2 days of check-in will not be eligible for a refund. -->
+                                </div>
+                                <q-separator class="q-my-md"/>
                                 <div class="text-h6">Facility Details</div>
                                 <q-item>
                                     <q-item-section avatar>

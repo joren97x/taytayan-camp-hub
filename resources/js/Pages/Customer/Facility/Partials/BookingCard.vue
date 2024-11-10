@@ -1,8 +1,9 @@
 <script setup>
 import { Link, usePage, useForm } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { date } from 'quasar'
 import { useQuasar } from 'quasar'
+import { isBefore, addDays } from 'date-fns'
 
 const props = defineProps({ 
     booking: Object 
@@ -38,6 +39,30 @@ const submitRatingForm = () => {
         }
     })
 }
+
+const cancelForm = useForm({})
+const cancelDialog = ref(false)
+const cancel = () => {
+    cancelForm.patch(route('customer.bookings.cancel', props.booking.id), {
+        onSuccess: () => {
+            cancelDialog.value = false
+            $q.notify('Booking Cancelled')
+        }
+    })
+}
+
+const showCancelButton = computed(() => {
+    // Check if the booking status allows cancellation
+    const cancellableStatuses = ['pending', 'confirmed']
+    if (!cancellableStatuses.includes(props.booking.status)) {
+        return false
+    }
+
+    // Check if the current date is within 2 days of the check-in date
+    const twoDaysBeforeCheckIn = addDays(new Date(props.booking.check_in), -2)
+    const now = new Date()
+    return isBefore(now, twoDaysBeforeCheckIn)
+})
 
 </script>
 
@@ -125,6 +150,10 @@ const submitRatingForm = () => {
                                 <div class="text-weight-bold">{{ booking.status }}</div>
                             </div>
                             <div class="col-6">
+                                <div class="text-caption text-grey-9">Payment Method</div>
+                                <div>{{ booking.payment_method }}</div>
+                            </div>
+                            <div class="col-6">
                                 <div class="text-caption text-grey-9">Amount</div>
                                 <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div>
                             </div>
@@ -143,7 +172,16 @@ const submitRatingForm = () => {
                         <Link :href="route('conversations.chat_cashier')">
                             <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
                         </Link>
-                        <!-- <q-btn label="Cancel Booking" color="negative" class="full-width" no-caps v-if="order.status == 'pending'"/> -->
+                        <q-btn 
+                            label="Cancel Booking" 
+                            @click="cancelDialog = true" 
+                            color="negative" 
+                            class="full-width q-mt-sm" 
+                            no-caps 
+                            rounded 
+                            outline 
+                            v-if="showCancelButton"
+                        />
                     </div>
                 </div>
             </q-card-section>
@@ -206,6 +244,39 @@ const submitRatingForm = () => {
                     :loading="ratingForm.processing" 
                     label="Submit" 
                     rounded
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+    <q-dialog 
+        v-model="cancelDialog"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card>
+            <q-card-section class="row items-center q-pb-none">
+                <q-icon name="warning" color="negative" size="32px" />
+                <div class="text-h6 q-ml-md">Cancel Booking</div>
+                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+            </q-card-section>
+            <q-card-section>
+                <q-item class="bg-negative text-white q-my-md q-pa-md rounded-borders">
+                    <q-item-section>
+                        <q-item-label class="text-weight-bold text-subtitle1">Are you sure you want to cancel this booking? This action cannot be undone.</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn no-caps v-close-popup label="No" flat/>
+                <q-btn 
+                    no-caps
+                    :loading="cancelForm.processing"
+                    :disable="cancelForm.processing"
+                    @click="cancel()"
+                    rounded 
+                    unelevated
+                    label="Yes"
+                    color="negative"
                 />
             </q-card-actions>
         </q-card>

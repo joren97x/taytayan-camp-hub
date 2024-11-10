@@ -26,6 +26,7 @@ return new class extends Migration
                 Booking::STATUS_CONFIRMED
             ])->default(Booking::STATUS_PENDING);
             $table->string('payment_method');
+            $table->string('payment_id')->nullable();
             $table->timestamp('check_in')->nullable();
             $table->timestamp('check_out')->nullable();
             $table->integer('guests');

@@ -65,7 +65,7 @@ onMounted(() => {
 <template>
     <q-layout view="hHh lpR lfr">
 
-        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" style="z-index: 999;">
+        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" style="z-index: 999;" bordered>
             <q-toolbar class="row items-center justify-between" style="margin: 0 auto;">
                 <div class="row items-center">
                     <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder">
@@ -222,7 +222,7 @@ onMounted(() => {
         <q-page-container>
             <div class="content-wrapper">
                 <slot />
-                <Footer class="content-wrapper" />
+                <!-- <Footer class="content-wrapper" /> -->
             </div>
         </q-page-container>
         

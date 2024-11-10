@@ -84,7 +84,6 @@ const scrollRight = () => {
 const showNewAddressDialog = ref(false)
 const scrollContainer = ref(null);
 
-// Method to scroll left
 const scrollLeftFeatured = () => {
   const container = scrollContainer.value;
   container.scrollBy({
@@ -93,7 +92,6 @@ const scrollLeftFeatured = () => {
   });
 };
 
-// Method to scroll right
 const scrollRightFeatured = () => {
   const container = scrollContainer.value;
   container.scrollBy({
@@ -329,8 +327,8 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                         Featured items
                     </div>
                     <div class="col flex justify-end">
-                        <q-btn icon="arrow_back" flat @click="scrollLeftFeatured"/>
-                        <q-btn icon="arrow_forward" flat @click="scrollRightFeatured"/>
+                        <q-btn class="bg-grey-3 q-mr-sm" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_back" flat @click="scrollLeftFeatured"/>
+                        <q-btn class="bg-grey-3" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRightFeatured"/>
                     </div>
                 </div>
                 <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
@@ -397,16 +395,13 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             />
                         </q-tabs>
                     </div>
-                    <q-btn icon="arrow_back" flat @click="scrollLeft" />
-                    <q-btn icon="arrow_forward" flat @click="scrollRight" />
+                    <q-btn class="bg-grey-3 q-mr-sm" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_back" flat @click="scrollLeft" />
+                    <q-btn class="bg-grey-3" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRight" />
                 </div>
             </div>
-            <div style="height: 30vh;" class="column bg-grey-3 q-mt-md" v-if="filteredCategories.length <= 0">
-                <q-card flat bordered class="col items-center self-center flex text-grey">
-                    No Products Found
-                </q-card>
-            
-            </div>
+            <q-card flat bordered class="q-pa-xl items-center justify-center flex bg-grey-3" v-if="filteredCategories.length <= 0">
+                No Products Found
+            </q-card>
             <div 
                 v-for="(category, i) in filteredCategories" 
                 :key="i" 
@@ -449,7 +444,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                     </q-card>
                 </div>
             </div>
-            <q-card bordered flat style="height: 100px" class="bg-grey-3 items-center justify-center flex text-grey" v-if="ratings.length == 0">
+            <q-card bordered flat class="bg-grey-3 items-center justify-center flex q-pa-xl" v-if="ratings.length == 0">
                 No ratings found
             </q-card>
         </div>

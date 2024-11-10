@@ -16,6 +16,7 @@ const dialog = ref(false)
         class="product-card"
     >
         <q-card-section class="q-pa-none">
+            <slot name="badge"/>
             <q-img
                 :src="`./storage/${product.photo}`"
                 alt="product image"

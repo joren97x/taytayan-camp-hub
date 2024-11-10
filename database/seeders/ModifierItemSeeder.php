@@ -14,26 +14,16 @@ class ModifierItemSeeder extends Seeder
     public function run(): void
     {
         //
-        $dummy_modifier_items = [
-            'cookies',
-            'strawberry',
-            'mango',
-            'sauce',
-            'chocolate syrup',
-            'magic sarap',
-            'cream',
-            'butter',
-            'avocado',
-            'hot sauce',
-            'milk'
-        ];  
+        // $dummy_modifier_items = [
 
-        foreach($dummy_modifier_items as $item) {
-            ModifierItem::create([
-                'name' => $item,
-                'description' => fake()->sentence(),
-                'price' => fake()->numberBetween(0, 10)
-            ]);
-        }
+        // ];  
+
+        // foreach($dummy_modifier_items as $item) {
+        //     ModifierItem::create([
+        //         'name' => $item,
+        //         'description' => fake()->sentence(),
+        //         'price' => fake()->numberBetween(0, 10)
+        //     ]);
+        // }
     }
 }
