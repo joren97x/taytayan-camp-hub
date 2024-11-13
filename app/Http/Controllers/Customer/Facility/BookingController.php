@@ -70,7 +70,7 @@ class BookingController extends Controller
     {
         //
         return Inertia::render('Customer/Facility/ShowBooking', [
-            'booking' => Booking::with('facility')->find($id)
+            'booking' => Booking::with('facility')->findOrFail($id)
         ]);
     }
 

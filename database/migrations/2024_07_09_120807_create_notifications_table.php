@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Notification;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('link')->nullable();
             $table->boolean('is_read')->default(false);
             $table->boolean('is_clicked')->default(false);
+            $table->enum('type', [Notification::TYPE_BOOKING, Notification::TYPE_ORDER])->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -4,45 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
     use HasFactory, SoftDeletes;
 
-    const STATUS_AVAILABLE = 'available';
-    const STATUS_SOLD = 'sold';
+    const STATUS_PENDING = 'pending';
     const STATUS_USED = 'used';
+    const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
-        'event_id',
-        'user_id',
-        'status',
+        'ticket_order_id',
+        'name',
+        'status'
     ];
 
-    public function event()
-    {
-        return $this->belongsTo(Event::class);
-    }
-
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // public function ticket_holders()
-    // {
-    //     return $this->hasMany(TicketHolder::class);
-    // }
-
-    public function ticket_holder()
+    public function ticket_order(): BelongsTo
     {
-        return $this->hasOne(TicketHolder::class, 'ticket_id');
-    }
-
-    public function ticket_order_items()
-    {
-        return $this->hasMany(TicketOrderItem::class);
+        return $this->belongsTo(TicketOrder::class);
     }
 
 }

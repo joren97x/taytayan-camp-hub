@@ -227,6 +227,7 @@ onMounted(() => {
         </q-page-container>
         
     </q-layout>
+    <Footer />
 </template>
 
 <style scoped>

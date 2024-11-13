@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, nextTick, computed, defineEmits } from 'vue'
+import { ref, nextTick, computed, defineEmits, onMounted } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
@@ -15,16 +15,17 @@ const emit = defineEmits(['close'])
 const page = usePage()
 const $q = useQuasar()
 
+console.log(JSON.parse(page.props.auth.user.address_coordinates))
 const form = useForm({
     phone_number: page.props.auth.user.phone_number,
     address: page.props.auth.user.address,
-    // use if expired na ang free trial :P
-    // 10.259152, 124.046597
+    street: page.props.auth.user.street,
     address_coordinates: {
-        lat: 10.259152,
-        lng: 124.046597
+        lat: JSON.parse(page.props.auth.user.address_coordinates).lat ? JSON.parse(page.props.auth.user.address_coordinates).lat : null,
+        lng: JSON.parse(page.props.auth.user.address_coordinates).lng ? JSON.parse(page.props.auth.user.address_coordinates).lng : null
     }
 })
+console.log(form.address_coordinates)
 
 const submit = () => {
     form.put(route('add-address'), {
@@ -40,12 +41,15 @@ const loader = initializeLoader(props.google_maps_api_key)
 let olangoBounds = ref(null)
 
 const initializeAutocomplete = async () => {
-    console.log("annyeong")
+    console.log("Initializing autocomplete")
     const Places = await loader.importLibrary('places')
+
+    // Define Olango Island bounds to restrict location selection
     olangoBounds.value = new google.maps.LatLngBounds(
-        new google.maps.LatLng(10.2150, 124.0100),  // South-west corner
-        new google.maps.LatLng(10.2700, 124.0600)   // North-east corner
+        new google.maps.LatLng(10.205, 124.014),  // South-west corner
+        new google.maps.LatLng(10.305, 124.085)   // North-east corner
     )
+
     await nextTick()
 
     const inputElement = placeInput.value.$el.querySelector('input')
@@ -54,28 +58,34 @@ const initializeAutocomplete = async () => {
         componentRestrictions: { country: 'ph' }
     })
 
-    console.log(autocomplete)
-    autocomplete.addListener('place_changed', (e) => {
+    // Handle selection of a place within valid bounds
+    autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
         if (isPlaceInOlango(place)) {
-            form.address = place.formatted_address;
-            form.address_coordinates.lat = place.geometry.location.lat();
-            form.address_coordinates.lng = place.geometry.location.lng();
-            map();
+            form.address = place.formatted_address
+            form.address_coordinates.lat = place.geometry.location.lat()
+            form.address_coordinates.lng = place.geometry.location.lng()
+            map()  // Initialize map with new valid coordinates
         } else {
-            alert('Please select a location within Olango Island, Lapu-Lapu, Philippines.');
-        } 
-        // form.address = place.formatted_address
-        // form.address_coordinates.lat = place.geometry.location.lat()
-        // form.address_coordinates.lng = place.geometry.location.lng()
-        // map()
+            $q.notify({
+                message: 'Please select a location within Olango Island, Lapu-Lapu, Philippines.',
+                color: 'negative',
+                textColor: 'white',
+                position: 'top'
+            })
+        }
     })
 
+    // Initialize map if existing coordinates are valid
+    if (form.address_coordinates.lat && form.address_coordinates.lng) {
+        map()
+    }
 }
 
 const isPlaceInOlango = (place) => {
-  return olangoBounds.value.contains(place.geometry.location);
+    return place.geometry && olangoBounds.value.contains(place.geometry.location)
 }
+
 
 async function map() {
     const { Map, InfoWindow } = await loader.importLibrary('maps')
@@ -95,32 +105,38 @@ async function map() {
         title: 'This marker is draggable.',
     })
 
+    // Set info window content to help user understand marker positioning
     const content = `
-            <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
-            <div>Please check your map location is correct</div>
-        `
-        // infoWindow.close()
-        infoWindow.setContent(content)
-        infoWindow.open(map, draggableMarker)
+        <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
+        <div>Please check if your map location is correct</div>
+    `
+    infoWindow.setContent(content)
+    infoWindow.open(map, draggableMarker)
 
     draggableMarker.addListener('dragend', (event) => {
         const position = draggableMarker.position
 
-
+        // Check if new marker position is within valid bounds
         if (!olangoBounds.value.contains(position)) {
-            alert('The marker must be within Olango Island, Lapu-Lapu, Philippines.');
+            $q.notify({
+                message: 'The marker must be within Olango Island, Lapu-Lapu, Philippines.',
+                color: 'negative',
+                textColor: 'white',
+                position: 'top'
+            })
+            // Reset marker position to last valid coordinates
             draggableMarker.position = new google.maps.LatLng(form.address_coordinates.lat, form.address_coordinates.lng)
         } else {
+            // Update form coordinates with new valid marker position
             form.address_coordinates.lat = position.lat
             form.address_coordinates.lng = position.lng
-            const content = `
+            const updatedContent = `
                 <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
-                <div>Please check your map location is correct</div>
-            `;
-            infoWindow.setContent(content);
-            infoWindow.open(map, draggableMarker);
+                <div>Please check if your map location is correct</div>
+            `
+            infoWindow.setContent(updatedContent)
+            infoWindow.open(map, draggableMarker)
         }
-
     })
 }
 
@@ -136,47 +152,58 @@ async function map() {
         transition-hide="slide-down"
     >
         <q-card 
-            :style="[
-                $q.screen.gt.xs ? 'width: 100%; max-width: 70vw;' : '',
-                $q.screen.sm ? 'width: 100%; max-width: 90vw;' : '',
-            ]"
+            :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''"
         >
-
-            <q-form @submit="submit">
-                <q-card-section class="row justify-between">
+                <q-card-actions class="row justify-between">
                     <div>
-                        <span class="text-h6">New Address</span>
+                        <span class="text-h6">New Address (Olango Island)</span>
                         <br>
-                        To place order, please add a delivery address
+                        Please enter your Olango Island address to proceed with the delivery
                     </div>
                     <div>
                         <q-btn icon="close" round unelevated @click="emit('close')" v-close-popup/>
                     </div>
-                </q-card-section>
+                </q-card-actions>
             
                 <q-card-section>
-                    <!-- <q-input filled label="Phone Number"></q-input> -->
-                    <q-input
-                        filled
-                        v-model="form.phone_number"
-                        label="Phone"
-                        :error="form.errors.phone_number ? true : false"
-                        :error-message="form.errors.phone_number"
-                    />
-
-                    <q-input 
-                        filled 
-                        v-model="form.address" 
-                        class="q-my-md" 
-                        ref="placeInput"
-                        id="place"
-                        :error="form.errors.address ? true : false"
-                        :error-message="form.errors.address"
-                        label="Barangay, City, Province"
-                    />
-                    <!-- <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
-                     
-                    </q-banner> -->
+                    <div class="row q-col-gutter-x-md">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                            <q-input
+                                outlined
+                                dense 
+                                rounded
+                                type="number"
+                                v-model="form.phone_number"
+                                label="Phone Number"
+                                :error="form.errors.phone_number ? true : false"
+                                :error-message="form.errors.phone_number"
+                            />
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                            <q-input 
+                                outlined
+                                dense 
+                                rounded 
+                                v-model="form.address" 
+                                ref="placeInput"
+                                id="place"
+                                :error="form.errors.address ? true : false"
+                                :error-message="form.errors.address"
+                                label="Barangay, Province, City"
+                            />
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                            <q-input 
+                                outlined
+                                dense 
+                                rounded 
+                                v-model="form.street" 
+                                :error="form.errors.street ? true : false"
+                                :error-message="form.errors.street"
+                                label="Street Name Purok, House No."
+                            />
+                        </div>
+                    </div>
                     <div v-show="form.address" class="q-pa-sm q-mb-md bg-red-1">
                         <span class="text-primary text-subtitle1">
                             <q-icon name="warning" color="red" class="q-mx-md"></q-icon>
@@ -193,7 +220,7 @@ async function map() {
                     >
                         <div id="map" style="width: 100%; height: 100%;" v-if="form.address"></div>
                         <div class="text-center" style="width: 100%; position: relative;" v-else>
-                            <q-btn icon="add" no-caps class="non-selectable cursor-not-allowed">Add Location</q-btn>
+                            <q-btn icon="add" no-caps class="non-selectable cursor-not-allowed" flat label="Add Location"/>
                         </div>
                     </div>
                 </q-card-section>
@@ -205,14 +232,14 @@ async function map() {
                         type="submit" 
                         unelevated 
                         no-caps
+                        rounded
                         class="full-width"
                         :loading="form.processing"
                         :disable="form.processing"
-                    >
-                        Submit
-                    </q-btn>
+                        label="Submit"
+                        @click="submit"
+                    />
                 </q-card-actions>
-            </q-form>
         </q-card>
     </q-dialog>
 </template>

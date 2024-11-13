@@ -69,10 +69,13 @@ class TicketController extends Controller
     public function show(string $id)
     {
         $ticket_order = TicketOrder::with([
-            'event', 
-            'ticket_order_items', 
-            'ticket_order_items.ticket.ticket_holder',
-        ])->find($id);
+            'event',
+            'tickets'
+        ])->findOrFail($id);
+
+        if($ticket_order->user_id != auth()->id()) {
+            abort(404);
+        }
         
         return Inertia::render('Customer/Event/ShowTicket', [
             'ticket_order' => $ticket_order
@@ -81,14 +84,12 @@ class TicketController extends Controller
 
     public function cancel(string $id)
     {
-        $ticket_order = TicketOrder::with('ticket_order_items.ticket')->find($id);
+        $ticket_order = TicketOrder::with('tickets')->find($id);
         $event = Event::find($ticket_order->event_id);
-        foreach($ticket_order->ticket_order_items as $torder) {
+        
+        foreach($ticket_order->tickets as $ticket) {
             $event->decrement('tickets_sold');
-            $torder->ticket->update([
-                'status' => Ticket::STATUS_AVAILABLE,
-                'user_id' => null
-            ]);
+            $ticket->update([ 'status' => Ticket::STATUS_CANCELLED ]);
         }
 
         if($ticket_order->payment_method != 'walk_in') {
@@ -100,9 +101,7 @@ class TicketController extends Controller
             ]);
         }
 
-        $ticket_order->update([
-            'status' => TicketOrder::STATUS_CANCELLED
-        ]);
+        $ticket_order->update(['status' => TicketOrder::STATUS_CANCELLED ]);
 
         return back();
         // dd($ticket_order);

@@ -49,6 +49,7 @@ class Order extends Model
         'status',
         'payment_method',
         'payment_id',
+        'delivery_fee',
         'mode',
         'completed_at',
         'waiting_time',

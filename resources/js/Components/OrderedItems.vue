@@ -2,7 +2,8 @@
 
 defineProps({
     cart_products: Object,
-    subtotal: Number
+    subtotal: Number,
+    delivery_fee: Number
 })
 
 </script>
@@ -50,10 +51,19 @@ defineProps({
                 </q-item>
 
                 <q-separator inset class="q-my-md" />
-
-                <div class="row justify-end q-mt-md q-mr-md text-h6">
-                    <span class="q-mr-md">Subtotal</span> 
-                    <span>P{{ subtotal }}</span>
+                <div class="row q-mt-md q-mr-md">
+                    <div class="col-12 justify-end items-end flex">
+                        <span class="q-mr-md">Subtotal</span> 
+                        <span>P{{ subtotal }}</span>
+                    </div>
+                    <div class="col-12 justify-end items-end flex" v-if="delivery_fee">
+                        <span class="q-mr-md">Delivery Fee</span> 
+                        <span>P{{ delivery_fee }}</span>
+                    </div>
+                    <div class="col-12 justify-end items-end flex" v-if="delivery_fee">
+                        <span class="q-mr-md">Total</span> 
+                        <span>P{{ parseFloat(subtotal) + parseFloat(delivery_fee) }}</span>
+                    </div>
                 </div>
             </div>
 </template>

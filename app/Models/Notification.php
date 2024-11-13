@@ -10,13 +10,17 @@ class Notification extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const TYPE_ORDER = 'order';
+    const TYPE_BOOKING = 'booking';
+
     protected $fillable = [
         'user_id',
         'title',
         'description',
         'link',
         'is_read',
-        'is_clicked'
+        'is_clicked',
+        'type'
     ];
 
     public function user()

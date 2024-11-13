@@ -9,7 +9,7 @@ import { ref } from 'vue'
 import { formatDistanceToNow } from 'date-fns'
 
 defineOptions({ layout: CustomerLayout })
-defineProps({ products: Object, events: Object, facilities: Object })
+const props = defineProps({ products: Object, events: Object, facilities: Object })
 
 const productContainer = ref(null)
 const facilityContainer = ref(null)
@@ -88,20 +88,21 @@ const setContainer = (category) => {
 
     <div class="q-px-lg q-py-md q-mt-xl" :style="`${$q.screen.lt.md ? 'margin-top: 35vh' : 'margin-top: 80vh'};`">
 		<div>
-			<div class="text-h6 text-center q-mt-xl">Taytayan Camp</div>
+			<div class="text-h2 text-weight-bold text-center q-mt-xl">Taytayan Camp</div>
 			<div class="text-center q-my-md">
-				Joining Starbucks® Rewards means unlocking access to benefits like quick and easy ordering,  <br>
-				tasty Rewards and—yes, free coffee.
+				Explore Taytayan Camp's scenic beauty, where stunning sunsets, 
+                palm trees, and cozy spaces await you.
 			</div>
 			<div class="row q-col-gutter-md">
 				<div  class="col-12 col-md-4">
-					<q-card flat bordered class="">
-                        <div class="full-width bg-grey" style="height: 100px;">
-                            <q-icon name="hotel" size="50px" class="text-primary" />
+					<q-card flat bordered>
+                        <div class="full-width bg-grey" style="height: 250px;">
+                            <q-img src="images/first.jpg" class="rounded-borders fit"/>
                         </div>
-                        <q-card-section>
+                        <q-card-section class="q-mb-none q-pb-none">
                             <div>
-                                Not only can you earn free coffee, look forward to a birthday treat plus coffee and tea refills.
+                                Enjoy refreshing milk teas, shakes, and snacks crafted to delight your taste buds. 
+                                Order online or on-site and savor every sip and bite.
                             </div>
                             
                         </q-card-section>
@@ -114,15 +115,15 @@ const setContainer = (category) => {
 				</div>
 				
 				<div  class="col-12 col-md-4">
-					<q-card flat bordered class="">
-                        <div class="full-width bg-grey" style="height: 100px;">
-                            <q-icon name="hotel" size="50px" class="text-primary" />
+					<q-card flat bordered>
+                        <div class="full-width bg-grey" style="height: 250px;">
+                            <q-img src="images/second.jpg" class="rounded-borders fit"/>
                         </div>
-                        <q-card-section>
+                        <q-card-section class="q-mb-none q-pb-none">
                             <div>
-                                Master the art of ordering ahead with saved favorites and payment methods.
+                                Book a cozy room or tent for a relaxing escape in nature. 
+                                Whether a night or weekend, we've got the perfect spot for you.
                             </div>
-                            
                         </q-card-section>
                         <q-card-actions class="justify-end">
                             <Link>
@@ -133,13 +134,15 @@ const setContainer = (category) => {
 				</div>
 				
 				<div  class="col-12 col-md-4">
-					<q-card flat bordered class="" >
-                        <div class="full-width bg-grey" style="height: 100px;">
-                            <q-icon name="hotel" size="50px" class="text-primary" />
+					<q-card flat bordered>
+                        <div class="full-width bg-grey" style="height: 250px;">
+                            <q-img src="images/third.jpg" class="rounded-borders fit"/>
                         </div>
-                        <q-card-section horizontal>
+                        <q-card-section class="q-mb-none q-pb-none">
                             <div>
-                                Earn Stars even quicker with Bonus Star challenges, Double Star Days and exciting games.
+                                Catch exciting events at Taytayan Camp! 
+                                From concerts to parties.
+                                Get your tickets in advance and make memories that last a lifetime.
                             </div>
                         </q-card-section>
                         <q-card-actions class="justify-end">
@@ -164,23 +167,18 @@ const setContainer = (category) => {
                     </div>
                 </div>
 			<div ref="productContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
-				<div v-for="n in 10" class="col-5 col-xs-5 col-sm-5 col-md-3 col-lg-3 col-xl-3">
-					<div 
-						
-						v-for="(product, i) in products"
-						:key="product.id"
-					>
-						<FeaturedProductCard :product="product">
-							<template v-slot:badge>
-								<div 
-									class="text-white q-px-md q-mt-sm absolute-top-left bg-primary" 
-									style="border-top-right-radius: 25px; border-bottom-right-radius: 25px; z-index: 200;"
-								>
-									#1 Most Selling
-								</div>
-							</template>
-						</FeaturedProductCard>
-					</div>
+				<div class="col-5 col-xs-5 col-sm-5 col-md-3 col-lg-3 col-xl-3" v-for="(product, i) in products">
+                    <FeaturedProductCard :product="product">
+                        <template v-slot:badge>
+                            <div 
+                                class="text-white q-px-md q-mt-sm absolute-top-left bg-primary" 
+                                style="border-top-right-radius: 25px; border-bottom-right-radius: 25px; z-index: 200;"
+                                v-if="i < 3"
+                            >
+                                #{{ i + 1 }} Most Selling
+                            </div>
+                        </template>
+                    </FeaturedProductCard>
 				</div>
 			</div>
 
@@ -225,6 +223,9 @@ const setContainer = (category) => {
                         </template>
                     </EventCard>
 				</div>
+                <q-card bordered flat class="q-pa-xl items-center col-12 justify-center flex bg-grey-3" v-if="events.length == 0">
+                    No upcoming events... Check again later! 
+                </q-card>
 			</div>
 
             <q-separator class="q-my-xl"/>

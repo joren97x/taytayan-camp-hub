@@ -179,7 +179,7 @@ const addAttendee = () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Right Now</q-item-label>
-                                                <q-item-label caption>E wallet, gcash, debit card etcc..</q-item-label>
+                                                <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
@@ -198,7 +198,7 @@ const addAttendee = () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Walk In</q-item-label>
-                                                <q-item-label caption>Lorem ipsum dolor sit amet.</q-item-label>
+                                                <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>

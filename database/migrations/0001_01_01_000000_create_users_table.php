@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone_number')->nullable()->unique();
             $table->string('address')->nullable();
+            $table->string('street')->nullable();
             $table->json('address_coordinates')->nullable();
             $table->string('profile_pic')->nullable();
             $table->string('email')->unique();

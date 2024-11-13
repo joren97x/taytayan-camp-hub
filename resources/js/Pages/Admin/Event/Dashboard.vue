@@ -2,22 +2,12 @@
 
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
-// import EventCheckinDialog from './Partials/EventCheckinDialog.vue'
-import { QrcodeStream } from 'vue-qrcode-reader'
 import { useQuasar, date } from 'quasar'
-import { router, Link } from '@inertiajs/vue3'
-import { useDrawerStore } from '@/Stores/DrawerStore'
+import { Link } from '@inertiajs/vue3'
 
-defineOptions({
-    layout: AdminLayout
-})
+defineOptions({ layout: AdminLayout })
+const props = defineProps({ event: Object, tickets: Object })
 
-const props = defineProps({
-    event: Object,
-    tickets: Object
-})
-
-const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const filter = ref('')
 const columns = [
@@ -29,70 +19,6 @@ const columns = [
 const checkedIn = computed(() => {
     return props.tickets.filter((tix) => tix.status == 'used') 
 })
-
-const showScanner = ref(false)
-const loading = ref(false)
-
-const onDecode = (result) => {
-    $q.notify('helo its decoded')
-    showScanner.value = false;
-    loading.value = false;
-    // Do something with the QR code result
-    console.log('QR Code Result:', result);
-    // You can display it, use it, or redirect the user based on the result.
-}
-
-const onInit = (promise) => {
-    promise.then(() => {
-        this.loading = false;
-    }).catch((error) => {
-    console.error(error);
-        this.loading = false;
-        this.showScanner = false;
-    });
-}
-
-const onDetect = (detectedCodes) => {
-    $q.notify('detecented?')
-    console.log(detectedCodes)
-    router.visit(detectedCodes[0].rawValue)
-}
-
-const selectedConstraints = ref({ facingMode: 'environment' })
-const defaultConstraintOptions = [
-  { label: 'rear camera', constraints: { facingMode: 'environment' } },
-  { label: 'front camera', constraints: { facingMode: 'user' } }
-]
-const constraintOptions = ref(defaultConstraintOptions)
-
-async function onCameraReady() {
-  // NOTE: on iOS we can't invoke `enumerateDevices` before the user has given
-  // camera access permission. `QrcodeStream` internally takes care of
-  // requesting the permissions. The `camera-on` event should guarantee that this
-  // has happened.
-  const devices = await navigator.mediaDevices.enumerateDevices()
-  const videoDevices = devices.filter(({ kind }) => kind === 'videoinput')
-
-  constraintOptions.value = [
-    ...defaultConstraintOptions,
-    ...videoDevices.map(({ deviceId, label }) => ({
-      label: `${label} (ID: ${deviceId})`,
-      constraints: { deviceId }
-    }))
-  ]
-
-//   error.value = ''
-}
-
-const cameraError = (err) => {
-    console.log(err)
-    $q.notify({
-        message: `Something went wrong`,
-        color: 'negative', // or any custom color defined in the brand config
-        textColor: 'white',
-        position: 'top'
-    })
-}
 
 </script>
 
@@ -166,7 +92,7 @@ const cameraError = (err) => {
                 </template>
                 <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
-                        {{ props.row.ticket_holder.name }}
+                        {{ props.row.name }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -191,7 +117,7 @@ const cameraError = (err) => {
                             <q-card-section>
                                 <q-item class="q-pa-none">
                                     <q-item-section class="items-start">
-                                        <q-item-label>{{ props.row.ticket_holder.name }}</q-item-label>
+                                        <q-item-label>{{ props.row.name }}</q-item-label>
                                         <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.status }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>

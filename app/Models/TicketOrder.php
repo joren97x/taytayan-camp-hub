@@ -51,9 +51,9 @@ class TicketOrder extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function ticket_order_items()
+    public function tickets()
     {
-        return $this->hasMany(TicketOrderItem::class);
+        return $this->hasMany(Ticket::class);
     }
 
 }

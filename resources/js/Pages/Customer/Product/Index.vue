@@ -2,7 +2,7 @@
 
 import { Head, Link } from '@inertiajs/vue3'
 import { ref, onMounted, computed } from 'vue'
-import { useQuasar } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import ProductCard from './Partials/ProductCard.vue'
 import FeaturedProductCard from './Partials/FeaturedProductCard.vue'
@@ -47,7 +47,15 @@ const categoryMenu = ref(false)
 const categoriesWrapper = ref(null);
 const selectedCategory = ref(null);
 const categoryRefs = ref({});
-const menuHeight = ref(0);  
+const menuHeight = ref(0)
+const ratingsContainer = ref(null)
+
+const scrollToRatings = () => {
+    console.log('hii')
+    if (ratingsContainer.value) {
+        ratingsContainer.value.scrollTop = ratingsContainer.value.scrollHeight;
+    }
+};
 
 const scrollToCategory = (category) => {
     categoryMenu.value = false
@@ -102,7 +110,6 @@ const scrollRightFeatured = () => {
 
 const search = ref('');
 
-// Computed property to filter products
 const filteredCategories = computed(() => {
   if (!search.value) {
     // Return all categories with their original products
@@ -112,27 +119,10 @@ const filteredCategories = computed(() => {
     }));
   }
 
-  // Lowercase search term for case-insensitive search
   const searchTerm = search.value.toLowerCase();
   console.log('hi')
   console.log(searchTerm)
-  // Filter each category based on the search in products' name or description
-//   return props.categories
-//     .map(category => {
-//       // Filter the products within each category
-//       const filteredProducts = category.products.filter(product =>
-//         product.name.toLowerCase().includes(searchTerm) ||
-//         product.description.toLowerCase().includes(searchTerm)
-//       );
 
-//       // Return the category with the filtered products
-      
-//       return {
-//         ...category,
-//         filteredProducts
-//       };
-//     })
-//     .filter(category => category.filteredProducts.length > 0); // Remove categories with no matching products
     return props.categories
     .map(category => {
       // Filter products within this category based on search term
@@ -170,8 +160,17 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
             :google_maps_api_key="google_maps_api_key" 
             v-if="$page.props.auth.user"
         />
-        <div>
-        <q-carousel
+        <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center">
+            <q-img class="fit" fit="cover" src="images/rjc1.jpg" />
+            <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
+                    <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
+                </div>
+            </div>
+        </q-card>
+        <!--  <div>
+       <q-carousel
             v-model="slide"
             transition-prev="slide-right"
             transition-next="slide-left"
@@ -182,38 +181,34 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
             class="bg-grey-3"
         >
             <q-carousel-slide name="tv" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="https://scontent.fmnl8-6.fna.fbcdn.net/v/t39.30808-6/327176035_2597203457087463_6666288379572413234_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHT6bAH_xzh6Vg9iFUnt9gsxyJehLiQb3PHIl6EuJBvcw4nDhus6WwDL6T4fK7p9R8-8LqvpNDq2urrB75YENcK&_nc_ohc=E7uRMRCh2pcQ7kNvgFqMqeT&_nc_ht=scontent.fmnl8-6.fna&oh=00_AYADGlYxrGEIUMRv-umEj4-opVYiYHGjWNA0Af3WDHP9nA&oe=66F32406"></q-img>
+                <q-img cover class="fit" src="images/rjc.jpg"></q-img>
             </q-carousel-slide>
             <q-carousel-slide name="style" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="https://t3.ftcdn.net/jpg/04/64/30/76/360_F_464307620_CYWfA00cdwwtYPxXMfFpbTjVjaFYmP93.jpg"></q-img>
+                <q-img cover class="fit" src="images/rjc1.jpg"></q-img>
             </q-carousel-slide>
             <q-carousel-slide name="layers" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="https://scontent.fmnl8-1.fna.fbcdn.net/v/t39.30808-6/429651402_889256136542523_718280217750389034_n.png?_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHGGK0N0_9U3uEEKF4u42UKzlPQJZH18AfOU9AlkfXwB7Um-T8361oFY_dmTbLWO6gXGJ5aBriU_bqyr-tCIUig&_nc_ohc=T36VYrD1TpwQ7kNvgHAG6iL&_nc_ht=scontent.fmnl8-1.fna&_nc_gid=AtWspy-0XSBL8CaIaUaOrsc&oh=00_AYBTfSFPnmVVkZc-Q0__gNDt5KJyH_ChrO4HPWKr-S5FnQ&oe=66F331CE"></q-img>
+                <q-img cover class="fit" src="images/rjc3.jpg"></q-img>
             </q-carousel-slide>
             <q-carousel-slide name="map" class="column no-wrap flex-center q-pa-none">
-                <q-icon name="terrain" color="primary" size="56px" />
-                <div class="q-mt-md text-center">
-                    {{ lorem }}
-                </div>
+                <q-img cover class="fit" src="images/rjc2.jpg"></q-img>
             </q-carousel-slide>
             <template v-slot:navigation-icon="{ active, btnProps, onClick }">
                 <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
                 <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
             </template>
-        </q-carousel>
-
-    </div>
+        </q-carousel> 
+    </div>-->
         <div class="q-mx-sm">
             <div class="row q-col-gutter-md q-mt-xs">
                 <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">
-                    <p :class="[$q.screen.lt.md ? 'text-center' : '']">
+                    <div :class="[$q.screen.lt.md ? 'text-center' : '']">
                         <span class="text-h4 text-weight-bold">RJC Cafe</span>
                         <br>
                         <span><q-icon name="star"></q-icon>{{ overAllRating }} • ({{ rating_stats.rating_count }})</span>
-                        <br>
-                        <span>San Vicente, Olango Island</span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, explicabo bomboclattt lmao.</p>
+                    </div>
+                    <div>
+                        RJK stands for Ruby Ann, Joan, Key Marie. Its a snack shop that sells cold drinks burgers and more😊.
+                    </div>
                     <div v-if="$page.props.auth.user">
                         <q-banner 
                             rounded 
@@ -255,9 +250,11 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             <div class="text-h6">
                                 Rating and Reviews
                             </div>
-                            <!-- <div class="">
-                                <q-btn icon="arrow_downward" no-caps color="primary">Show More</q-btn>
-                            </div> -->
+                            <div class=" flex justify-end items-center">
+                                <q-btn rounded no-caps flat label="View All" class="bg-grey-3" @click="scrollToRatings"/>
+                                <q-btn round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_back" flat @click="scrollLeftFeatured('products')" class="bg-grey-3 q-mx-xs"/>
+                                <q-btn round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRightFeatured('products')" class="bg-grey-3"/>
+                            </div>
                         </div>
                         <div ref="scrollContainer" class="row q-col-gutter-md no-wrap hide-scrollbar q-py-xs" style="overflow-x: auto; scroll-behavior: smooth;">
                             <div class="col-md-2 col-xs-5 col-sm-5 col-lg-2 col-xl-2">
@@ -278,11 +275,11 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             >
                                 <q-card style="max-height: 600px; height: 115px">
                                     <q-card-section class="q-pb-none ellipsis-2-lines">
-                                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Commo.pisicing elit. Commo"
+                                        {{ rating.review }}
                                     </q-card-section>
                                     <q-card-actions class="q-pt-sm">
-                                        <q-rating/>
-                                        • Lissa H. • 02/01/23
+                                        <q-rating v-model="rating.rating" readonly/>
+                                        • {{ rating.user.first_name }} • {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
                                     </q-card-actions>
                                 </q-card>
                             </div>
@@ -395,8 +392,8 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             />
                         </q-tabs>
                     </div>
-                    <q-btn class="bg-grey-3 q-mr-sm" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_back" flat @click="scrollLeft" />
-                    <q-btn class="bg-grey-3" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRight" />
+                    <q-btn class="bg-grey-3 q-mr-sm lt-md" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_back" flat @click="scrollLeft" />
+                    <q-btn class="bg-grey-3 lt-md" round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRight" />
                 </div>
             </div>
             <q-card flat bordered class="q-pa-xl items-center justify-center flex bg-grey-3" v-if="filteredCategories.length <= 0">
@@ -426,21 +423,36 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                 </q-card> -->
             </div>
         </div>
-        <div class="q-mx-sm q-mb-md">
+        <div class="q-mx-sm q-mb-md" ref="ratingsContainer">
             <div class="q-my-md">
                 <div class="text-h6">Rating and Reviews</div>
                 <div><q-icon name="star"></q-icon> {{ overAllRating }} • {{ rating_stats.rating_count }} Ratings</div>
             </div>
             <div class="row q-col-gutter-md" v-if="ratings.length > 0">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
-                    <q-card bordered flat>
-                        <q-card-section>
-                            <span class="text-subtitle1">{{ rating.user.first_name + ' ' + rating.user.last_name }}</span>
-                            <br>
-                            <q-rating></q-rating> • {{ rating.created_at }}
-                            <br>
-                            {{ rating.review }}
-                        </q-card-section>
+                    <q-card bordered flat class="q-py-md">
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-avatar color="primary" text-color="white">
+                                    <q-img v-if="rating.user.profile_pic" :src="`/storage/${rating.user.profile_pic}`" class="fit" fit="cover"/>
+                                    <div v-else>
+                                        {{ rating.user.first_name[0] }}
+                                    </div>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    {{ rating.user.first_name + ' ' + rating.user.last_name }} • 
+                                    <span class="text-caption">
+                                        {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
+                                    </span>
+                                </q-item-label>
+                                <q-item-label>{{ rating.review }}</q-item-label>
+                            </q-item-section>
+                            <q-item-section side top>
+                                <q-rating v-model="rating.rating" readonly/> 
+                            </q-item-section>
+                        </q-item>
                     </q-card>
                 </div>
             </div>

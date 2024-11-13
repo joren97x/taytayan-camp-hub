@@ -37,7 +37,7 @@ defineProps({ order: Object })
                     </Link>
                 </q-item-section>
             </q-item>
-            <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />  
+            <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" :delivery_fee="order.delivery_fee" />  
         </div>
 
         <!-- Customer Details Section -->

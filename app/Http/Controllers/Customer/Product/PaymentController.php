@@ -34,6 +34,12 @@ class PaymentController extends Controller
             'mode' => $request->mode
         ]);
 
+        if($order->mode == Order::MODE_DELIVERY) {
+            $order->update([
+                'delivery_fee' => $request->shipping_fee
+            ]);
+        }
+
         if($request->payment_method == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
             // dd($checkout_session);
@@ -68,6 +74,9 @@ class PaymentController extends Controller
 
     public function pay(Request $request, CartService $cartService) 
     {
+
+        // dd($request->all());
+
         if($request->payment_method != 'right_now') {
             session(['payment_session' => true]);
             return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
@@ -98,8 +107,16 @@ class PaymentController extends Controller
             ];
         }
 
-        // dd($line_items);
+        if($request->mode == Order::MODE_DELIVERY) {
+            $line_items[] = [
+                'name' => 'Shipping Fee',
+                'quantity' => 1,
+                'amount' => $request->shipping_fee * 100,
+                'description' => 'Shipping Fee'
+            ];
+        }
 
+        // dd($line_items);
 
         $checkout = Paymongo::checkout()->create([
             'cancel_url' => route('customer.cart.index'),

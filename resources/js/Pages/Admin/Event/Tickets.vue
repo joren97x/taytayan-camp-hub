@@ -7,13 +7,8 @@ import { date } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 import { parse, format } from 'date-fns'
 
-defineOptions({
-    layout: AdminLayout
-})
-
-const props = defineProps({
-    events: Object
-})
+defineOptions({ layout: AdminLayout })
+const props = defineProps({ events: Object })
 
 const drawerStore = useDrawerStore()
 const filter = ref('all')
@@ -78,8 +73,7 @@ const columns = [
                         outlined 
                         rounded
                         dense
-                    >
-                    </q-select>
+                    />
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
                             v-model="searchTerm"

@@ -7,13 +7,8 @@ import { useQuasar, date } from 'quasar'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 import { parse, format } from 'date-fns'
 
-defineOptions({
-    layout: AdminLayout
-})
-
-const props = defineProps({
-    events: Object
-})
+defineOptions({ layout: AdminLayout })
+const props = defineProps({ events: Object })
 
 const drawerStore = useDrawerStore()
 const $q = useQuasar()

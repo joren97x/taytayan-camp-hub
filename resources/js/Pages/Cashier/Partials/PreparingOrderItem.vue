@@ -4,7 +4,6 @@ import { ref, defineEmits } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { formatDistance, differenceInMinutes, parseISO } from 'date-fns'
-import OrderedItems from '@/Components/OrderedItems.vue'
 import OrderDetails from '@/Components/OrderDetails.vue'
 
 const props = defineProps({

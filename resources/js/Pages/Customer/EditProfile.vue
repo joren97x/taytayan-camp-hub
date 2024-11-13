@@ -16,13 +16,14 @@ defineProps({
     status: {
         type: String,
     },
+    google_maps_api_key: String
 })
 </script>
 
 <template>
     <Head title="Profile" />
     <div class="q-pa-md">
-        <UpdateProfileInformationForm/>
+        <UpdateProfileInformationForm :google_maps_api_key="google_maps_api_key" />
         <UpdatePasswordForm/>
     </div>
 </template>

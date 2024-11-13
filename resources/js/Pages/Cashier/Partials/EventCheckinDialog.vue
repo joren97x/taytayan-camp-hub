@@ -43,7 +43,6 @@ const checkOut = () => {
 
 <template>
     <div :class="[$q.screen.lt.md ? 'q-mt-md' : '']">
-        {{ ticket }}
         <q-btn 
             no-caps 
             color="primary" 

@@ -153,8 +153,7 @@ class ViewController extends Controller
         $today = Carbon::today();
         $active_ticket_orders = TicketOrder::with([
             'event', 
-            'ticket_order_items', 
-            'ticket_order_items.ticket.ticket_holder',
+            'tickets'
         ])
         ->whereHas('event', function($query) use ($today) {
             $query->where('date', '>=', $today);
@@ -164,9 +163,8 @@ class ViewController extends Controller
         ->get();
 
         $past_ticket_orders = TicketOrder::with([
-            'event', 
-            'ticket_order_items', 
-            'ticket_order_items.ticket.ticket_holder',
+            'event',
+            'tickets'
         ])
         ->where(function($query) use ($today) {
             $query->whereHas('event', function($subQuery) use ($today) {
@@ -192,6 +190,7 @@ class ViewController extends Controller
         return Inertia::render('Customer/EditProfile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 

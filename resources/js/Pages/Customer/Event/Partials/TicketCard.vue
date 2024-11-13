@@ -2,33 +2,12 @@
 
 import { date } from 'quasar'
 import { ref } from 'vue'
-import { Link, useForm } from '@inertiajs/vue3'
 import { parse, format } from 'date-fns'
-import { useQuasar } from 'quasar'
+import ShowTicket from '../ShowTicket.vue'
 
-const props = defineProps({
-    ticket_order: Object
-})
-
+const props = defineProps({ ticket_order: Object })
 const formattedTime = format(parse(props.ticket_order.event.start_time, 'HH:mm:ss', new Date()), 'h a');
-const $q = useQuasar()
 const dialog = ref(false)
-const cancelForm = useForm({})
-const cancelDialog = ref(false)
-const cancel = () => {
-    cancelForm.put(route('customer.tickets.cancel', props.ticket_order.id), {
-        onSuccess: () => {
-            cancelDialog.value = false
-            $q.notify('Ticket Order Cancelled')
-        }
-    })
-}
-// const formatTime = (timeString) => {
-//     const today = new Date()
-//     const dateObj = new Date(`${today.t}T${timeString}Z`)
-//     console.log(dateObj)
-//     return date.formatDate(dateObj, 'h:mm A'); // 12-hour format with AM/PM
-// }
 
 </script>
 
@@ -46,8 +25,6 @@ const cancel = () => {
                 <q-item-label class="text-subtitle1">{{ ticket_order.event.title }}</q-item-label>
                 <q-item-label caption>{{ date.formatDate(ticket_order.event.date, 'MMM D, YYYY') + ' at ' + formattedTime }}</q-item-label>
                 <q-item-label caption>
-                    <!-- Purchased on 
-                    {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }} -->
                     ₱{{ ticket_order.amount }}
                 </q-item-label>
             </q-item-section>
@@ -60,139 +37,10 @@ const cancel = () => {
         transition-hide="slide-down"
         :maximized="$q.screen.lt.md"
     >
-        <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="lt-md">
-                <div class="text-h6">Ticket Details</div>
-                <q-btn round icon="close" class="absolute-top-right q-mt-xs q-mr-xs" v-close-popup unelevated />
-            </q-card-actions>
-            <q-card-section>
-                <div class="row q-col-gutter-md">
-                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                        <q-card bordered flat>
-                            <q-img :src="`/storage/${ticket_order.event.cover_photo}`"></q-img>
-                            <q-card-section>
-                                <div class="text-h6">{{ ticket_order.event.title }}</div>
-                                <div>
-                                    {{ date.formatDate(ticket_order.event.date, 'ddd, MMM D') }}
-                                </div>
-                                <div class="q-mb-sm">
-                                    {{ ticket_order.event.location }}
-                                </div>
-                                <Link :href="route('conversations.chat_cashier')" >
-                                    <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
-                                </Link>
-                                <q-btn class="full-width q-mt-sm" label="Cancel" @click="cancelDialog = true" no-caps color="negative" outline rounded />
-                                    <!-- <q-btn label="View QR Code" class="full-width q-my-sm" no-caps color="primary" unelevated/>
-                                <div class="text-center">Purchased on {{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div> -->
-                            </q-card-section>
-                        </q-card>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
-                        <div class="text-h6">({{ ticket_order.ticket_order_items.length }}x) Admission</div>
-                        <q-btn round :flat="$q.screen.gt.sm" v-close-popup icon="close" class="absolute-top-right q-mr-sm q-mt-sm gt-sm"/>
-                        <q-separator class="q-my-md"/>
-                        <div class="text-subtitle1 text-weight-bold">Contact Information</div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">First Name</div>
-                                <div>{{ $page.props.auth.user.first_name }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Last Name</div>
-                                <div>{{ $page.props.auth.user.last_name }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Email Address </div>
-                                <div>{{ $page.props.auth.user.email }}</div>
-                            </div>
-                        </div>
-                        <q-separator class="q-my-md"/>
-                        <div class="text-subtitle1 text-weight-bold">Order Details</div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Price</div>
-                                <div>{{ ticket_order.amount }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Status</div>
-                                <q-chip>{{ ticket_order.status }}</q-chip>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Payment Method</div>
-                                <div>{{ ticket_order.payment_method }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Purchased On</div>
-                                <div>{{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:m A') }}</div>
-                            </div>
-                            <div class="col-12 q-mt-md">
-                                <div class="text-weight-bold">Attendees</div>
-                                <div class="row">
-                                    <div v-for="ticket_holder in ticket_order.ticket_order_items" class="col-6">
-                                        <q-item clickable class="rounded-borders">
-                                            <q-item-section avatar>
-                                                <q-avatar color="primary" text-color="white">
-                                                    {{ ticket_holder.ticket.ticket_holder.name[0] }}
-                                                </q-avatar>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                {{ ticket_holder.ticket.ticket_holder.name }}
-                                            </q-item-section>
-                                        </q-item>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <q-separator class="q-my-md" />
-                        <div class="row">
-                            <div class="col-12">
-                                <div :class="$q.screen.lt.md ? 'text-center' : ''">
-                                    Qr Code
-                                    <a :href="`/storage/${ticket_order.qr_code_path}`" class="q-ml-sm" download>Download Qr</a>
-                                </div>
-                                <div :class="$q.screen.lt.md ? ' flex justify-center' : ''">
-                                    <q-img :src="`/storage/${ticket_order.qr_code_path}`" height="200px" width="200px"></q-img>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- {{ ticket_order }} -->
-            </q-card-section>
-        </q-card>
-    </q-dialog>
-    <q-dialog 
-        v-model="cancelDialog"
-        transition-show="slide-up"
-        transition-hide="slide-down"
-    >
-        <q-card>
-            <q-card-section class="row items-center q-pb-none">
-                <q-icon name="warning" color="negative" size="32px" />
-                <div class="text-h6 q-ml-md">Cancel Order</div>
-                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
-            </q-card-section>
-            <q-card-section>
-                <q-item class="bg-negative text-white q-my-md q-pa-md rounded-borders">
-                    <q-item-section>
-                        <q-item-label class="text-weight-bold text-subtitle1">Are you sure you want to cancel this order? This action cannot be undone.</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </q-card-section>
-            <q-card-actions class="justify-end">
-                <q-btn no-caps v-close-popup label="No" flat/>
-                <q-btn 
-                    no-caps
-                    :loading="cancelForm.processing"
-                    :disable="cancelForm.processing"
-                    @click="cancel()"
-                    rounded 
-                    unelevated
-                    label="Yes"
-                    color="negative"
-                />
-            </q-card-actions>
-        </q-card>
+        <ShowTicket :ticket_order="ticket_order">
+            <template v-slot:button>
+                <q-btn round :flat="$q.screen.gt.sm" v-close-popup icon="close" class="absolute-top-right q-mr-sm q-mt-sm gt-sm"/>
+            </template>
+        </ShowTicket>
     </q-dialog>
 </template>

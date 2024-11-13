@@ -89,7 +89,6 @@ const total = computed(() => {
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 gt-sm ">
                 <q-card bordered>
-                    {{ event.status }}
                     <q-card-section>
                         <q-card class="row rounded-borders q-pa-md" bordered flat>
                             <div class="col-6">

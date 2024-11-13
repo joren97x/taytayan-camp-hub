@@ -196,7 +196,7 @@ const total = computed(() => {
                 
                 <template v-slot:no-data>
                     <div class="full-width row flex-center q-gutter-sm" style="height: 50vh">
-                        No Orders Found
+                        No Items Found
                     </div>
                 </template>
                 <template v-slot:item="props">

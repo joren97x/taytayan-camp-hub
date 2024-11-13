@@ -9,8 +9,15 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 const props = defineProps({ order: Object })
 defineOptions({ layout: CustomerLayout })
 const $q = useQuasar()
+const completeOrderForm = useForm({})
 const step = ref(1)
-const order = ref(props.order)
+const completeOrder = () => {
+    completeOrderForm.patch(route('customer.orders.update', order.value.id), {
+        onSuccess: () => {
+            rateDialog.value = true
+        }
+    })
+}
 
 // so i want to get the index of the step based from the order,status
 // and then set the index to the step
@@ -82,17 +89,17 @@ onMounted(() => {
 
 function calculateSteps() {
     var newStep
-    if(order.value.mode == 'pickup') {
-        newStep = pickupSteps.findIndex((s) => order.value.status == s.name)
+    if(props.order.mode == 'pickup') {
+        newStep = pickupSteps.findIndex((s) => props.order.status == s.name)
     }
     else {
-        newStep = deliverySteps.findIndex((s) => order.value.status == s.name)
+        newStep = deliverySteps.findIndex((s) => props.order.status == s.name)
     }
     step.value = newStep 
 
     // if complete na increment ang step para mo mark as done sa QStepper
     // idk y
-    if(order.value.status == 'completed') {
+    if(props.order.status == 'completed') {
         step.value++
     }
 }

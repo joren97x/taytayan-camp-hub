@@ -14,14 +14,13 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id');
-            $table->foreignId('user_id')->nullable();
-            // $table->string('ticket_code')->unique();
+            $table->foreignId('ticket_order_id');
+            $table->string('name');
             $table->enum('status', [
-                Ticket::STATUS_AVAILABLE,
-                Ticket::STATUS_SOLD,
+                Ticket::STATUS_PENDING,
+                Ticket::STATUS_CANCELLED,
                 Ticket::STATUS_USED
-            ])->default(Ticket::STATUS_AVAILABLE);
+            ])->default(Ticket::STATUS_PENDING);
             $table->softDeletes();
             $table->timestamps();
         });

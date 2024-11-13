@@ -5,10 +5,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
-
-defineOptions({
-    layout: AdminLayout
-})
+defineOptions({ layout: AdminLayout })
 
 const $q = useQuasar()
 const form = useForm({
@@ -192,6 +189,7 @@ const onFileChange = (file) => {
                             :error="form.errors.description ? true : false"
                             :error-message="form.errors.description"
                         />
+                        
                         <!-- <div>Date and location</div>    
                         <div>Date and time</div> -->
                         <div class="row q-col-gutter-md">

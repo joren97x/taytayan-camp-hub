@@ -434,51 +434,51 @@ const initialPagination = {
         </q-card>
     </q-dialog>
     <q-dialog 
-            v-model="deleteUserDialog" 
-            persistent 
-            :maximized="$q.screen.lt.md"
-            transition-show="slide-up"
-            transition-hide="slide-down"
-            :position="$q.screen.lt.md ? 'bottom' : 'standard'"
-        >
-            <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-                <q-card-section class="row items-center q-pb-none">
-                    <q-icon name="warning" color="negative" size="32px" />
-                    <div class="text-h6 q-ml-md">Delete User</div>
-                    <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+        v-model="deleteUserDialog" 
+        persistent 
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
+    >
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
+            <q-card-section class="row items-center q-pb-none">
+                <q-icon name="warning" color="negative" size="32px" />
+                <div class="text-h6 q-ml-md">Delete User</div>
+                <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
 
-                </q-card-section>
-                <q-card-section>
-                    Are you sure you want to delete this user? All data will be permanently removed. This action cannot be undone.
-                    <q-item class="bg-negative text-white q-my-md">
-                        <q-item-section avatar>
-                            <q-avatar color="primary" text-color="white">
-                                <q-img :src="`/storage/${deleteUserForm.user.profile_pic}`" v-if="deleteUserForm.user.profile_pic" alt="Profile Picture" height="100px" width="100px"/>
-                                <div v-else>
-                                    {{ deleteUserForm.user.first_name[0] }}
-                                </div>
-                            </q-avatar>
-                        </q-item-section>  
-                        <q-item-section>
-                            <q-item-label class="text-weight-bold text-subtitle1">{{ deleteUserForm.user.first_name + ' ' +  deleteUserForm.user.last_name }}</q-item-label>
-                            <q-item-label >{{ deleteUserForm.user.email }}</q-item-label>
-                        </q-item-section>
-                    </q-item>
-                </q-card-section>
-            
-                <q-card-actions align="right">
-                    <q-btn flat label="Cancel" rounded no-caps color="grey-7" v-close-popup />
-                    <q-btn 
-                        label="Delete" 
-                        rounded 
-                        no-caps 
-                        unelevated 
-                        color="negative"
-                        @click="deleteUser" 
-                        :loading="deleteUserForm.processing"
-                        :disable="deleteUserForm.processing"
-                    />
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
+            </q-card-section>
+            <q-card-section>
+                Are you sure you want to delete this user? All data will be permanently removed. This action cannot be undone.
+                <q-item class="bg-negative text-white q-my-md">
+                    <q-item-section avatar>
+                        <q-avatar color="primary" text-color="white">
+                            <q-img :src="`/storage/${deleteUserForm.user.profile_pic}`" v-if="deleteUserForm.user.profile_pic" alt="Profile Picture" height="100px" width="100px"/>
+                            <div v-else>
+                                {{ deleteUserForm.user.first_name[0] }}
+                            </div>
+                        </q-avatar>
+                    </q-item-section>  
+                    <q-item-section>
+                        <q-item-label class="text-weight-bold text-subtitle1">{{ deleteUserForm.user.first_name + ' ' +  deleteUserForm.user.last_name }}</q-item-label>
+                        <q-item-label >{{ deleteUserForm.user.email }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-card-section>
+        
+            <q-card-actions align="right">
+                <q-btn flat label="Cancel" rounded no-caps color="grey-7" v-close-popup />
+                <q-btn 
+                    label="Delete" 
+                    rounded 
+                    no-caps 
+                    unelevated 
+                    color="negative"
+                    @click="deleteUser" 
+                    :loading="deleteUserForm.processing"
+                    :disable="deleteUserForm.processing"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>

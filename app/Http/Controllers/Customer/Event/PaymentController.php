@@ -27,7 +27,7 @@ class PaymentController extends Controller
         // dd($payment_session);
 
         if (!$payment_session) {
-            return redirect(route('customer.tickets.index'));
+            return redirect(route('customer.profile'));
         }
 
         $ticket_order = TicketOrder::create([
@@ -50,21 +50,26 @@ class PaymentController extends Controller
 
         foreach($request->query('ticket_holders') as $ticket_holder) {
 
-            $ticket = Ticket::where('event_id', $event->id)->where('status', Ticket::STATUS_AVAILABLE)->first();
+            // $ticket = Ticket::where('event_id', $event->id)->where('status', Ticket::STATUS_AVAILABLE)->first();
 
-            $ticket->update([
-                'user_id' => $request->query('user_id'),
-                'status' => Ticket::STATUS_SOLD,
-            ]);
+            // $ticket->update([
+            //     'user_id' => $request->query('user_id'),
+            //     'status' => Ticket::STATUS_SOLD,
+            // ]);
 
-            TicketHolder::create([
-                'ticket_id' => $ticket->id,
-                'name' => $ticket_holder['name']
-            ]);
+            // TicketHolder::create([
+            //     'ticket_id' => $ticket->id,
+            //     'name' => $ticket_holder['name']
+            // ]);
 
-            TicketOrderItem::create([
-                'ticket_id' => $ticket->id,
+            // TicketOrderItem::create([
+            //     'ticket_id' => $ticket->id,
+            //     'ticket_order_id' => $ticket_order->id,
+            // ]);
+
+            Ticket::create([
                 'ticket_order_id' => $ticket_order->id,
+                'name' => $ticket_holder['name']
             ]);
 
             $event->increment('tickets_sold');
@@ -83,7 +88,7 @@ class PaymentController extends Controller
 
         session()->forget('payment_session');
 
-        return redirect(route('customer.tickets.index'));
+        return redirect(route('customer.tickets.show', $ticket_order->id));
     }
 
     public function pay(Request $request) 

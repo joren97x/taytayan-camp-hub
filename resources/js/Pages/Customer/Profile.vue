@@ -26,8 +26,8 @@ const tab = ref('orders')
 <template>
     <Head title="Profile" />
 
-    <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
-        <div class="row q-col-gutter-md q-mt-md">
+    <div :class="$q.screen.lt.md ? '' : ''">
+        <div :class="`${$q.screen.gt.sm ? 'q-mt-sm' : ''} row q-col-gutter-y-md`">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <q-card bordered flat class="full-width">
                     <q-card-section>
@@ -47,7 +47,9 @@ const tab = ref('orders')
                                     <Link :href="route('customer.edit_profile')">
                                         <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="q-mr-sm" icon="edit_square"/>
                                     </Link>
-                                <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" icon="inbox"/>
+                                    <Link :href="route('conversations.index')">
+                                        <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" icon="inbox"/>
+                                    </Link>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>

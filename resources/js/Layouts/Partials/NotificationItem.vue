@@ -9,7 +9,7 @@ const $q = useQuasar()
 const deleteForm = useForm({})
 const updateForm = useForm({})
 const clickForm = useForm({})
-
+console.log(props.notification)
 const deleteNotification = () => {
     deleteForm.delete(route('customer.notifications.destroy', props.notification.id), {
         onSuccess: () => {

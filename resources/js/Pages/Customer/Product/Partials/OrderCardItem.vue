@@ -195,13 +195,13 @@ const reorder = () => {
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-actions class="justify-between">
                 <div class="text-h6">Order Details</div>
-                    <q-btn  
-                        icon="close" 
-                        v-close-popup
-                        round
-                        class="absolute-top-right"
-                        unelevated
-                    />
+                <q-btn  
+                    icon="close" 
+                    v-close-popup
+                    round
+                    class="absolute-top-right q-mr-sm q-mt-sm"
+                    unelevated
+                />
             </q-card-actions>
             <q-card-section class="q-py-none">
                 <q-stepper

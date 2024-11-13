@@ -113,16 +113,14 @@ function options(date) {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
         <q-card style="width: 100%; ">
-            <q-card-section class="row justify-between">
-                <div class="col-10">
-                    <span class="text-h6">Lorem ipsum dolor sit amtet</span>
+            <q-card-actions>
+                <div class="q-mr-xl">
+                    <span class="text-h6">Choose Your Stay Dates</span>
                     <br>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odio incidunt ventore.
+                    Select the dates for your stay at Taytayan Camp Hut and enjoy a relaxing getaway close to nature.
                 </div>
-                <div>
-                    <q-btn icon="close" round unelevated @click="emit('close')" v-close-popup/>
-                </div>
-            </q-card-section>
+                <q-btn icon="close" class="absolute-top-right q-mt-sm q-mr-sm" round unelevated @click="emit('close')" v-close-popup/>
+            </q-card-actions>
             <q-card-section>
                 <q-date
                     v-model="date"

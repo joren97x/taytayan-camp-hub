@@ -34,7 +34,12 @@ class EventController extends Controller
 
     public function dashboard(Event $event)
     {
-        $tickets = Ticket::with('ticket_holder')->where('event_id', $event->id)->whereIn('status', [Ticket::STATUS_SOLD, Ticket::STATUS_USED])->get();
+        $tickets = Ticket::whereHas('ticket_order', function ($query) use ($event) {
+            $query->where('event_id', $event->id);
+        })
+        ->get();
+        // $tickets = Ticket::with('tickets')->where('event_id', $event->id)->get();
+
         return Inertia::render('Admin/Event/Dashboard', [
             'event' => $event,
             'tickets' => $tickets
@@ -48,13 +53,13 @@ class EventController extends Controller
     {
         //
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'cover_photo' => 'required',
             'date' => ['required', 'date'],
             'capacity' => 'required',
             'start_time' => 'required',
-            'location' => 'required',
+            'location' => 'required|string|max:255',
             'admission_fee' => 'required',
             'min_ticket' => 'required',
             'max_ticket' => 'required'
@@ -75,13 +80,6 @@ class EventController extends Controller
             'max_ticket' => $request->max_ticket
         ]); 
 
-        for($i = 0; $i < $request->capacity; $i++) {
-            Ticket::create([
-                'event_id' => $event->id,
-                // 'ticket_code' => Str::random(15)
-            ]);
-        }
-
         return redirect(route('admin.events.index'));
 
     }
@@ -94,10 +92,8 @@ class EventController extends Controller
         //
         return Inertia::render('Admin/Event/ShowEvent', [
             'event' => Event::with([
-                'ticket_orders',
+                'ticket_orders.tickets',
                 'ticket_orders.user',
-                'ticket_orders.ticket_order_items',
-                'ticket_orders.ticket_order_items.ticket.ticket_holder',
             ])->find($id)
             // 'ticket_orders' =>  TicketOrder::with([
             //     'event', 
@@ -134,12 +130,12 @@ class EventController extends Controller
     {
         //
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'date' => ['required', 'date'],
             'capacity' => 'required',
             'start_time' => 'required',
-            'location' => 'required',
+            'location' => 'required|string|max:255',
             'admission_fee' => 'required',
             'min_ticket' => 'required',
             'max_ticket' => 'required'

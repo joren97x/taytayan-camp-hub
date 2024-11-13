@@ -5,14 +5,8 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
-defineOptions({
-    layout: AdminLayout
-})
-
-const props = defineProps({
-    event: Object,
-    event_statuses: Object
-})
+defineOptions({ layout: AdminLayout })
+const props = defineProps({ event: Object, event_statuses: Object })
 
 const $q = useQuasar()
 const form = useForm({

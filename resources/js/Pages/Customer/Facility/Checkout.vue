@@ -129,7 +129,7 @@ const decrementGuests = () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Right Now</q-item-label>
-                                                <q-item-label caption>E wallet, gcash, debit card etcc..</q-item-label>
+                                                <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
@@ -148,17 +148,23 @@ const decrementGuests = () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Walk In</q-item-label>
-                                                <q-item-label caption>Lorem ipsum dolor sit amet.</q-item-label>
+                                                <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
                                 </q-list>
-                                <q-separator class="q-my-md"/>
-                                <div class="text-h6">Cancellation Policy</div>
+                                <!-- <q-separator class="q-my-md"/> -->
+                                <!-- <div class="text-h6">Cancellation Policy</div>
                                 <div class="">
                                     You may cancel your booking anytime up to 2 days before the check-in date to receive a full refund. 
-                                    <!-- Cancellations made within 2 days of check-in will not be eligible for a refund. -->
-                                </div>
+                                </div> -->
+                                <q-separator class="q-my-md"/>
+                                <q-banner rounded class="text-black" style="border: 1px solid var(--q-warning)">
+                                    <div class="text-subtitle1">
+                                        <q-icon name="warning" class="q-mr-sm" color="warning"/> Cancellation Policy
+                                    </div>
+                                    You may cancel your booking anytime up to 2 days before the check-in date to receive a full refund. 
+                                </q-banner>
                                 <q-separator class="q-my-md"/>
                                 <div class="text-h6">Facility Details</div>
                                 <q-item>

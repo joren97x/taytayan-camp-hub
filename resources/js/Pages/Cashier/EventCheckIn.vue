@@ -38,7 +38,7 @@ const filteredTickets = computed(() => {
   // Apply search term filter
   if (searchTerm.value) {
     filtered = filtered.filter(ticket => {
-    const fullName = ticket.ticket_holder.name.toLowerCase();
+    const fullName = ticket.name.toLowerCase();
     const search = searchTerm.value.toLowerCase();
 
         return (
@@ -217,7 +217,7 @@ const cameraError = (err) => {
                 </template>
                 <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
-                        {{ props.row.ticket_holder.name }}
+                        {{ props.row.name }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -231,7 +231,8 @@ const cameraError = (err) => {
                             <q-card-section>
                                 <q-item class="q-pa-none">
                                     <q-item-section class="items-start">
-                                        <q-item-label>{{ props.row.ticket_holder.name }}</q-item-label>
+                                        {{ props.row }}
+                                        <q-item-label>{{ props.row.name }}</q-item-label>
                                         <q-item-label caption>Attendee Name</q-item-label>
                                     </q-item-section>
                                     <q-item-section>
@@ -240,7 +241,6 @@ const cameraError = (err) => {
                                     </q-item-section>
                                     <q-item-section side>
                                         <EventCheckinDialog :ticket="props.row" />
-                                        <!-- <q-chip>{{ props.row.status == 'used' ? 'Checked in' : 'Pending' }}</q-chip> -->
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>

@@ -4,6 +4,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { ref, onMounted, watch } from 'vue'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
+import { useQuasar } from 'quasar'
 
 const props = defineProps({
     cart_id: Number,
@@ -13,6 +14,7 @@ const props = defineProps({
     google_maps_api_key: Object,
 })
 
+const $q = useQuasar()
 const page = usePage()
 const map = ref(null)
 const directionsService = ref(null)
@@ -30,9 +32,24 @@ const initMap = () => {
     })
 
     directionsRenderer.value.setMap(map.value)
-    travelMode.value = google.maps.TravelMode.WALKING
+    travelMode.value = google.maps.TravelMode.DRIVING
     calculateAndDisplayRoute()
 }
+
+
+const mode = ref('delivery')
+const form = useForm({
+    cart_products: props.cart_products,
+    payment_method: 'right_now',
+    mode: 'delivery',
+    cart_id: props.cart_id,
+    shipping_fee: 0,
+    total: props.subtotal
+})
+
+const MIN_SHIPPING_FEE = 30;
+const THRESHOLD_DISTANCE = 3; // distance up to which the minimum fee applies
+
 
 const calculateAndDisplayRoute = () => {
     directionsService.value
@@ -42,49 +59,65 @@ const calculateAndDisplayRoute = () => {
             travelMode: travelMode.value,
         })
         .then((response) => {
-            console.log("please get the fkn time")
-            console.log(response)
+            const duration = response.routes[0].legs[0].duration.text;
+            const distance = response.routes[0].legs[0].distance.text;
+            const distanceValue = parseFloat(distance.split(' ')[0]);
 
-            const duration = response.routes[0].legs[0].duration.text
-            const distance = response.routes[0].legs[0].distance.text
+            let shippingFee = MIN_SHIPPING_FEE;
 
+            // Calculate additional fees only if distance exceeds threshold
+            if (distanceValue > THRESHOLD_DISTANCE) {
+                const extraDistance = Math.floor(distanceValue - THRESHOLD_DISTANCE);
+                shippingFee += extraDistance * 10; // Each km above threshold costs an extra 10 pesos
+            }
+
+            console.log(`Shipping fee: ${shippingFee} pesos`);
             const path = response.routes[0].overview_path;
-            const midpointIndex = Math.floor(path.length / 2)
+            const midpointIndex = Math.floor(path.length / 2);
 
             if (!infoWindow.value) {
                 infoWindow.value = new google.maps.InfoWindow();
             }
-            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p>`);
-            infoWindow.value.setPosition(path[midpointIndex]);
-            infoWindow.value.open(map.value)
 
-            directionsRenderer.value.setDirections(response)
+            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p> <p>Shipping Fee: ₱${shippingFee}</p>`);
+            infoWindow.value.setPosition(path[midpointIndex]);
+            infoWindow.value.open(map.value);
+
+            directionsRenderer.value.setDirections(response);
+
+            form.shipping_fee = shippingFee;
+            form.total += shippingFee;
         })
         .catch((e) => 
-            window.alert("Directions request failed due to " + e)
-        )
-}
-
-const changeTravelMode = (mode) => {
-    switch (mode) {
-        case 'DRIVING':
-            travelMode.value = google.maps.TravelMode.DRIVING;
-            break;
-        case 'BICYCLING':
-            travelMode.value = google.maps.TravelMode.BICYCLING;
-            break;
-        case 'WALKING':
-            travelMode.value = google.maps.TravelMode.WALKING;
-            break;
-        case 'TWO_WHEELER':
-            travelMode.value = google.maps.TravelMode.TWO_WHEELER;
-            break;
-        case 'TRANSIT':
-            travelMode.value = google.maps.TravelMode.TWO_WHEELER;
-            break;
-    }
-    calculateAndDisplayRoute();
+            $q.notify({
+                message: `It seems the marker is placed in an area where no route exists. Please try again with a different location.`,
+                color: 'negative',
+                textColor: 'white',
+                position: 'top'
+            })
+        );
 };
+
+// const changeTravelMode = (mode) => {
+//     switch (mode) {
+//         case 'DRIVING':
+//             travelMode.value = google.maps.TravelMode.DRIVING;
+//             break;
+//         case 'BICYCLING':
+//             travelMode.value = google.maps.TravelMode.BICYCLING;
+//             break;
+//         case 'WALKING':
+//             travelMode.value = google.maps.TravelMode.WALKING;
+//             break;
+//         case 'TWO_WHEELER':
+//             travelMode.value = google.maps.TravelMode.TWO_WHEELER;
+//             break;
+//         case 'TRANSIT':
+//             travelMode.value = google.maps.TravelMode.TWO_WHEELER;
+//             break;
+//     }
+//     calculateAndDisplayRoute();
+// };
 
 onMounted(() => {
     const loader = initializeLoader(props.google_maps_api_key)
@@ -92,16 +125,6 @@ onMounted(() => {
     loader.load().then(() => {
         initMap()
     })
-})
-
-console.log(page.props)
-
-const mode = ref('delivery')
-const form = useForm({
-    cart_products: props.cart_products,
-    payment_method: 'right_now',
-    mode: 'delivery',
-    cart_id: props.cart_id
 })
 
 const submit = () => {
@@ -115,7 +138,16 @@ const submit = () => {
 watch(mode, () => {
     form.mode = mode.value
     form.payment_method = 'right_now'
+
+    if(mode.value == 'delivery') {
+        form.total += form.shipping_fee 
+    }
+    else {
+        form.total = props.subtotal
+    }
+
 })
+
 
 </script>
 
@@ -179,6 +211,7 @@ watch(mode, () => {
                                     <q-item-section>
                                         {{ $page.props.auth.user.phone_number }}
                                         <q-item-label caption>{{ $page.props.auth.user.address }}</q-item-label>
+                                        <q-item-label caption>{{ $page.props.auth.user.street }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
                                 <div v-show="form.mode == 'pickup'">
@@ -190,11 +223,10 @@ watch(mode, () => {
                                         <div class="row">
                                             <div class="col-12">
                                                 <q-btn-group spread flat unelevated class="no-border">
-                                                    <q-btn push no-caps label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" />
-                                                    <q-btn push no-caps label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" />
-                                                    <q-btn push no-caps label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" />
-                                                    <q-btn push no-caps label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" />
-                                                    <q-btn push no-caps label="Transit" @click="changeTravelMode('TRANSIT')" icon="update" />
+                                                    <!-- <q-btn push no-caps label="Walking" @click="changeTravelMode('WALKING')" icon="timeline" /> -->
+                                                    <!-- <q-btn push no-caps label="Driving" @click="changeTravelMode('DRIVING')" icon="visibility" /> -->
+                                                    <!-- <q-btn push no-caps label="Cycling" @click="changeTravelMode('BICYCLING')" icon="update" /> -->
+                                                    <!-- <q-btn push no-caps label="Two Wheeler" @click="changeTravelMode('TWO_WHEELER')" icon="update" /> -->
                                                 </q-btn-group>
                                             </div>
                                         </div>
@@ -232,7 +264,7 @@ watch(mode, () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Right Now</q-item-label>
-                                                <q-item-label caption>E wallet, gcash, debit card etcc..</q-item-label>
+                                                <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
@@ -252,7 +284,7 @@ watch(mode, () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Cash On Delivery</q-item-label>
-                                                <q-item-label caption>Lorem ipsum dolor sit amet.</q-item-label>
+                                                <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
@@ -338,16 +370,16 @@ watch(mode, () => {
                                         </q-item-section>
                                     </q-item>
                                     <q-item v-if="form.mode == 'delivery'">
-                                        <q-item-section>delivery fee</q-item-section>
+                                        <q-item-section>Shipping Fee</q-item-section>
                                         <q-item-section side>
-                                            P5.00
+                                            P{{ form.shipping_fee }}
                                         </q-item-section>
                                     </q-item>
                                     <q-separator/>
                                     <q-item class="text-h6">
                                         <q-item-section>Total</q-item-section>
                                         <q-item-section side>
-                                            {{  subtotal  }}
+                                            {{  form.total  }}
                                         </q-item-section>
                                     </q-item>
                                 </q-card-section>
