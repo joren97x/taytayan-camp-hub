@@ -138,7 +138,8 @@ const formatTime = (time) => {
                 </template>
                 <template v-slot:body-cell-gross="props">
                     <q-td :props="props">
-                        {{ props.row.tickets_sold * props.row.admission_fee }}
+                        <!-- {{ props.row.tickets_sold * props.row.admission_fee }} -->
+                        ₱{{ parseFloat(props.row.tickets_sold * props.row.admission_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

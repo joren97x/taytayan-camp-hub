@@ -162,12 +162,12 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
         />
         <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center">
             <q-img class="fit" fit="cover" src="images/rjc1.jpg" />
-            <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
+            <!-- <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
                     <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
                 </div>
-            </div>
+            </div> -->
         </q-card>
         <!--  <div>
        <q-carousel

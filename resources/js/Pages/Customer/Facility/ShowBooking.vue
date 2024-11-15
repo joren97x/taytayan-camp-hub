@@ -114,9 +114,10 @@ const showCancelButton = computed(() => {
                             :loading="completeBookingForm.processing"
                             :disable="completeBookingForm.processing"
                             rounded
+                            outline
                         />
                         <Link :href="route('conversations.chat_cashier')">
-                            <q-btn class="full-width " label="Contact Host" no-caps color="primary" rounded />
+                            <q-btn class="full-width q-mt-sm" label="Contact Host" no-caps color="primary" rounded />
                         </Link>
                         <q-btn 
                             label="Cancel Booking" 

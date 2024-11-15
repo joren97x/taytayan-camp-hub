@@ -9,7 +9,7 @@
                 <q-avatar>
                     <q-img src="logo.jpg" ></q-img>
                 </q-avatar>
-                Taytayan Camp Hubss
+                Taytayan Camp Hub
             </div>
             <div class="col-12 items-center justify-center flex q-mt-md">
                 <q-btn flat no-caps>Home</q-btn>

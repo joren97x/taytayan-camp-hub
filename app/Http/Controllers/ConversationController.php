@@ -18,8 +18,8 @@ class ConversationController extends Controller
     public function index()
     {
         // dd(auth()->user());
-        // return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox');
-        return Inertia::render('Chat/Index', ['role' => auth()->user()->role]);
+        return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox');
+        // return Inertia::render('Chat/Index', ['role' => auth()->user()->role]);
 
     }
 
@@ -91,8 +91,8 @@ class ConversationController extends Controller
      */
     public function show(string $id)
     {
-        // return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat');
-        return Inertia::render('Chat/Show');
+        return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat');
+        // return Inertia::render('Chat/Show');
     }
 
     public function chat_user(User $user) 

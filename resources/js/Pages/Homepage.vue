@@ -18,7 +18,7 @@ const showVideo = ref(false)
 
 <template>
     <Head title="Welcome" />
-    <q-carousel
+    <!-- <q-carousel
       arrows
       animated
       v-model="slide"
@@ -43,8 +43,8 @@ const showVideo = ref(false)
           <div class="text-subtitle1">Famous Bridge</div>
         </div>
       </q-carousel-slide>
-    </q-carousel>
-    <div style="margin-top: 80vh">
+    </q-carousel> -->
+    <div>
         <q-dialog 
             v-model="showVideo" 
             persistent 

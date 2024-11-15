@@ -81,19 +81,19 @@ const tab = ref('orders')
                     <q-separator />
 
                     <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="orders" class="q-pa-none q-px-sm">
+                        <q-tab-panel name="orders" class="q-pa-none q-px-sm q-pb-sm">
                             <Orders :active_orders="active_orders" :past_orders="past_orders" />
                             <!-- <div class="text-h6">Orders</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
                         </q-tab-panel>
 
-                        <q-tab-panel name="bookings" class="q-pa-none q-px-sm">
+                        <q-tab-panel name="bookings" class="q-pa-none q-px-sm q-pb-sm">
                             <Bookings :active_bookings="active_bookings" :past_bookings="past_bookings" />
                             <!-- <div class="text-h6">bookings</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
                         </q-tab-panel>
 
-                        <q-tab-panel name="tickets" class="q-pa-none q-px-sm">
+                        <q-tab-panel name="tickets" class="q-pa-none q-px-sm q-pb-sm">
                             <Tickets :active_ticket_orders="active_ticket_orders" :past_ticket_orders="past_ticket_orders" />
                             <!-- <div class="text-h6">Tickets</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->

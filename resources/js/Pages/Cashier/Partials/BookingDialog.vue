@@ -248,7 +248,7 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
                             </div>
                             <div class="col-6">
                                 <div class="text-caption">Amount</div>
-                                <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div>
+                                <div class="text-weight-bold text-subtitle1">₱{{ parseFloat(booking.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                             </div>
                             <div class="col-12">
                                 <div class="text-h6">Guest</div>

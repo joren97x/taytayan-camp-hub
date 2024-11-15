@@ -3,6 +3,7 @@ import { Link, useForm } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { onMounted, ref } from 'vue'
 import OrderedItems from '@/Components/OrderedItems.vue'
+import { formatDistance } from 'date-fns'
 // import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
@@ -206,7 +207,7 @@ const getStatusColor = (status) => {
             <q-badge :color="getStatusColor(order.status)" class="text-capitalize">
                 {{ order.status }}
             </q-badge>
-            ₱{{ order.subtotal }}
+            ₱{{ parseFloat(order.subtotal).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
         </q-item-section>
     </q-item>
         <!-- <q-btn rounded no-caps label="View Details" class="absolute-bottom-right q-mb-sm q-mr-sm" icon="visibility" unelevated color="primary" /> -->
@@ -228,7 +229,7 @@ const getStatusColor = (status) => {
     >   
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-actions class="justify-between">
-                <div class="text-h6">Order Details</div>
+                <div class="text-h6">Order #{{ order.id }}</div>
                 <q-btn  
                     icon="close" 
                     v-close-popup
@@ -269,7 +270,7 @@ const getStatusColor = (status) => {
                         v-else
                     />
                 </q-stepper>
-                <div class="row">
+                <div class="row q-mb-md">
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                         <OrderedItems 
                             :subtotal="order.subtotal" 
@@ -278,6 +279,25 @@ const getStatusColor = (status) => {
                         />                        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
+                        <div class="text-subtitle1 text-weight-medium q-m-md text-center">Order Information</div>
+                        <div class="row text-center q-col-gutter-md">
+                            <div class="col-6">
+                                <div class="text-caption text-grey">Ordered At</div>
+                                <div>{{ formatDistance(new Date(), order.created_at) }} ago</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey">Payment Method</div>
+                                <div>{{ order.payment_method }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey">Fulfillment Type</div>
+                                <div>{{ order.mode }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey">Status</div>
+                                <div>{{ order.status }}</div>
+                            </div>
+                        </div>
                         <div style="height: 250px; position: relative" class="full-width bg-grey-3" v-if="order.driver && order.status != 'completed'">
                             <q-item class="bg-grey">
                                 <q-item-section avatar>

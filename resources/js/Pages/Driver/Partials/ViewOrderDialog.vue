@@ -70,8 +70,6 @@ const completeOrder = () => {
                     <q-btn
                         no-caps
                         class="full-width q-mt-sm"
-                        :loading="completeOrderForm.processing"
-                        :disable="completeOrderForm.processing"
                         rounded
                         outline
                         color="primary"
