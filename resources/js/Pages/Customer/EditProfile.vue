@@ -22,7 +22,7 @@ defineProps({
 
 <template>
     <Head title="Profile" />
-    <div class="q-pa-md">
+    <div :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'">
         <UpdateProfileInformationForm :google_maps_api_key="google_maps_api_key" />
         <UpdatePasswordForm/>
     </div>

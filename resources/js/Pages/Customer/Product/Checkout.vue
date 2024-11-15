@@ -21,7 +21,8 @@ const directionsService = ref(null)
 const directionsRenderer = ref(null)
 const infoWindow = ref(null)
 const travelMode = ref(null)
-
+const locationError = ref(false)
+const editAddressDialog = ref(false)
 const initMap = () => {
     
     directionsService.value = new google.maps.DirectionsService()
@@ -43,14 +44,14 @@ const form = useForm({
     payment_method: 'right_now',
     mode: 'delivery',
     cart_id: props.cart_id,
-    shipping_fee: 0,
+    delivery_fee: 0,
     total: props.subtotal
 })
 
-const MIN_SHIPPING_FEE = 30;
+const MIN_DELIVERY_FEE = 30;
 const THRESHOLD_DISTANCE = 3; // distance up to which the minimum fee applies
 
-
+console.log(JSON.parse(page.props.auth.user.address_coordinates))
 const calculateAndDisplayRoute = () => {
     directionsService.value
         .route({
@@ -63,15 +64,15 @@ const calculateAndDisplayRoute = () => {
             const distance = response.routes[0].legs[0].distance.text;
             const distanceValue = parseFloat(distance.split(' ')[0]);
 
-            let shippingFee = MIN_SHIPPING_FEE;
+            let deliveryFee = MIN_DELIVERY_FEE;
 
             // Calculate additional fees only if distance exceeds threshold
             if (distanceValue > THRESHOLD_DISTANCE) {
                 const extraDistance = Math.floor(distanceValue - THRESHOLD_DISTANCE);
-                shippingFee += extraDistance * 10; // Each km above threshold costs an extra 10 pesos
+                deliveryFee += extraDistance * 10; // Each km above threshold costs an extra 10 pesos
             }
 
-            console.log(`Shipping fee: ${shippingFee} pesos`);
+            console.log(`Shipping fee: ${deliveryFee} pesos`);
             const path = response.routes[0].overview_path;
             const midpointIndex = Math.floor(path.length / 2);
 
@@ -79,45 +80,26 @@ const calculateAndDisplayRoute = () => {
                 infoWindow.value = new google.maps.InfoWindow();
             }
 
-            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p> <p>Shipping Fee: ₱${shippingFee}</p>`);
+            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p> <p>Shipping Fee: ₱${deliveryFee}</p>`);
             infoWindow.value.setPosition(path[midpointIndex]);
             infoWindow.value.open(map.value);
 
             directionsRenderer.value.setDirections(response);
 
-            form.shipping_fee = shippingFee;
-            form.total += shippingFee;
+            form.delivery_fee = deliveryFee;
+            form.total += deliveryFee;
         })
-        .catch((e) => 
+        .catch((e) => {
+            console.log(e)
+            locationError.value = true
             $q.notify({
                 message: `It seems the marker is placed in an area where no route exists. Please try again with a different location.`,
                 color: 'negative',
                 textColor: 'white',
                 position: 'top'
             })
-        );
+        });
 };
-
-// const changeTravelMode = (mode) => {
-//     switch (mode) {
-//         case 'DRIVING':
-//             travelMode.value = google.maps.TravelMode.DRIVING;
-//             break;
-//         case 'BICYCLING':
-//             travelMode.value = google.maps.TravelMode.BICYCLING;
-//             break;
-//         case 'WALKING':
-//             travelMode.value = google.maps.TravelMode.WALKING;
-//             break;
-//         case 'TWO_WHEELER':
-//             travelMode.value = google.maps.TravelMode.TWO_WHEELER;
-//             break;
-//         case 'TRANSIT':
-//             travelMode.value = google.maps.TravelMode.TWO_WHEELER;
-//             break;
-//     }
-//     calculateAndDisplayRoute();
-// };
 
 onMounted(() => {
     const loader = initializeLoader(props.google_maps_api_key)
@@ -140,7 +122,7 @@ watch(mode, () => {
     form.payment_method = 'right_now'
 
     if(mode.value == 'delivery') {
-        form.total += form.shipping_fee 
+        form.total += form.delivery_fee 
     }
     else {
         form.total = props.subtotal
@@ -154,13 +136,11 @@ watch(mode, () => {
 <template>
     
     <Head title="Checkout" />
+    
     <div class="bg-grey-2">
-        <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
+        <q-card class="row justify-between bg-white q-pa-sm" flat bordered square>
             <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
-               <q-avatar size="lg">
-                    <q-img src="../logo.png" fill="cover" />
-                </q-avatar>
-                    Taytayan CAMP
+                Checkout
                 <Link :href="route('customer.cart.index')" class="absolute-left">
                     <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
                 </Link>
@@ -170,13 +150,12 @@ watch(mode, () => {
             <div class="q-my-md">
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
-                        <q-card flat bordered>
-                            <q-card-section>
-                                <div class="text-h6 text-center">Checkout</div>
+                        <q-card flat bordered :square="$q.screen.lt.md">
+                            <q-card-section :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'">
+                                <div class="text-h6 text-center"></div>
+                                <!-- <q-separator class="q-my-sm"/> -->
 
-                                <q-separator class="q-my-md"/>
-
-                                <q-item>
+                                <q-item class="q-pa-none">
                                     <q-item-section class="text-h6 text-capitalize">{{ form.mode }} Details</q-item-section>
                                     <q-item-section side>
                                         <q-btn-toggle
@@ -195,7 +174,7 @@ watch(mode, () => {
                                     </q-item-section>
                                 </q-item>
                                 <!-- <q-separator/> -->
-                                <q-item v-show="form.mode == 'delivery'">
+                                <q-item v-show="form.mode == 'delivery'" class="q-pa-none">
                                     <q-item-section avatar>
                                         <q-icon name="person"></q-icon>
                                     </q-item-section>
@@ -204,7 +183,11 @@ watch(mode, () => {
                                         <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
-                                <q-item v-show="form.mode == 'delivery'">
+                                <q-item 
+                                    v-show="form.mode == 'delivery'" 
+                                    class="rounded-borders q-pa-none q-mt-sm"
+                                    :style="locationError ? 'border: 1px solid var(--q-negative)' : ''"
+                                >
                                     <q-item-section avatar>
                                         <q-icon name="location_on"></q-icon>
                                     </q-item-section>
@@ -212,6 +195,11 @@ watch(mode, () => {
                                         {{ $page.props.auth.user.phone_number }}
                                         <q-item-label caption>{{ $page.props.auth.user.address }}</q-item-label>
                                         <q-item-label caption>{{ $page.props.auth.user.street }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side v-if="locationError">
+                                        <Link :href="route('customer.edit_profile')">
+                                            <q-btn label="Edit Address" color="primary" outline rounded no-caps/>
+                                        </Link>
                                     </q-item-section>
                                 </q-item>
                                 <div v-show="form.mode == 'pickup'">
@@ -242,11 +230,8 @@ watch(mode, () => {
                                     </q-item>
                                 </div>
                                 <q-separator class="q-my-md"/>
-                                <q-item>
+                                <q-item class="q-pa-none">
                                     <q-item-section class="text-h6">Pay With</q-item-section>
-                                    <q-item-section side>
-                                        <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">Required</q-chip>
-                                    </q-item-section>
                                 </q-item>
                                 <q-list>
                                     <q-card 
@@ -258,13 +243,13 @@ watch(mode, () => {
                                         <q-item>
                                             <q-item-section avatar>
                                                 <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                    <img src="images/right_now.png" fit="cover">
                                                 </q-avatar>
                                                 <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Right Now</q-item-label>
-                                                <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
+                                                <q-item-label caption>Pay immediately using e-wallet, GCash, card, or other digital methods.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>
@@ -275,10 +260,10 @@ watch(mode, () => {
                                         v-if="form.mode == 'delivery'"
                                         :style="form.payment_method == 'cash_on_delivery' ? 'border: 1px solid black' : ''"
                                     >
-                                        <q-item>
+                                        <q-item >
                                             <q-item-section avatar>
                                                 <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                    <img src="images/walk_in.png">
                                                 </q-avatar>
                                                 <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
                                             </q-item-section>
@@ -298,7 +283,7 @@ watch(mode, () => {
                                         <q-item>
                                             <q-item-section avatar>
                                                 <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                    <img src="images/walk_in.png">
                                                 </q-avatar>
                                                 <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
                                             </q-item-section>
@@ -309,21 +294,21 @@ watch(mode, () => {
                                         </q-item>
                                     </q-card>
                                 </q-list>
-                                <q-item class="q-mt-md">
+                                <q-item class="q-mt-md q-pa-none">
                                     <q-item-section class="text-h6">Order Summary</q-item-section>
                                     <q-item-section side>
                                         <q-chip :class="$q.dark.isActive ? 'bg-grey-9' : ''">{{ cart_products.length }} items</q-chip>
                                     </q-item-section>
                                 </q-item>
                                 <q-list>
-                                    <q-item v-for="(cart_product, index) in cart_products" :key="index">
+                                    <q-item v-for="(cart_product, index) in cart_products" :key="index" class="q-px-none">
                                         <q-item-section avatar>
                                             <q-img 
                                                 :src="`/storage/${cart_product.product.photo}`"
                                                 height="70px"
                                                 width="70px"
                                                 fit="contain"
-                                                class="q-mx-md"
+                                                :class="$q.screen.gt.sm ? 'q-mx-md' : ''"
                                             />
                                         </q-item-section>
                                         <q-item-section>
@@ -340,7 +325,7 @@ watch(mode, () => {
                                                     v-for="(modifier_item, index) in modifier.modifier_items" 
                                                     :key="index"
                                                 >
-                                                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.total})` }}
+                                                    {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
                                                 </q-item-label>
                                                 
                                             </template>
@@ -349,7 +334,7 @@ watch(mode, () => {
                                             </q-item-label>
                                         </q-item-section>
                                         <q-item-section side>
-                                            P{{ cart_product.total }}
+                                            ₱{{ parseFloat(cart_product.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </q-item-section>
                                     </q-item>
                                 </q-list>
@@ -359,32 +344,35 @@ watch(mode, () => {
                     <div class="col-5 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5"  style="position: relative;">
                         <div style="position: sticky; top: 50px">
                             <q-card flat bordered>
-                                <q-card-section>
-                                    <q-item>
+                                <q-card-section class="q-pa-none">
+                                    <q-item >
                                         <q-item-section class="text-h6">Order Summary</q-item-section>
                                     </q-item>
                                     <q-item>
                                         <q-item-section>Subtotal</q-item-section>
                                         <q-item-section side>
-                                            {{ subtotal }}
+                                            <!-- {{ subtotal }} -->
+                                            ₱{{ parseFloat(subtotal).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </q-item-section>
                                     </q-item>
                                     <q-item v-if="form.mode == 'delivery'">
                                         <q-item-section>Shipping Fee</q-item-section>
                                         <q-item-section side>
-                                            P{{ form.shipping_fee }}
+                                            <!-- P{{ form.delivery_fee }} -->
+                                            ₱{{ parseFloat(form.delivery_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </q-item-section>
                                     </q-item>
                                     <q-separator/>
-                                    <q-item class="text-h6">
+                                    <q-item class="text-h6 text-black">
                                         <q-item-section>Total</q-item-section>
-                                        <q-item-section side>
-                                            {{  form.total  }}
+                                        <q-item-section side class="text-black">
+                                            <!-- {{  form.total  }} -->
+                                            ₱{{ parseFloat(form.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </q-item-section>
                                     </q-item>
                                 </q-card-section>
                                 <q-card-actions>
-                                    <q-btn class="full-width" @click="submit" label="Checkout" no-caps color="primary" rounded/>
+                                    <q-btn class="full-width" @click="submit" label="Place Order" no-caps color="primary" rounded/>
                                 </q-card-actions>
                             </q-card>
                         </div>
@@ -393,7 +381,6 @@ watch(mode, () => {
             </div>
         </div>
     </div>
-
 </template>
 
 <style scoped>

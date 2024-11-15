@@ -53,7 +53,7 @@ const onFileChange = (file) => {
 </script>
 
 <template>
-    <q-form class="q-mb-md" >
+    <q-form class="q-mb-sm" >
         <q-card bordered flat>
             <q-card-section>
                 <div class="flex justify-center q-mb-md" style="position: relative" v-if="$page.props.auth.user.role == 'cashier' || $page.props.auth.user.role == 'admin'">
@@ -68,7 +68,7 @@ const onFileChange = (file) => {
                 <div class="text-h6">Profile Picture</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
                 <div class="row q-col-gutter-md ">
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 justify-center flex">
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                         <q-avatar size="100px" v-if="$page.props.auth.user.profile_pic || imgPreview">
                             <q-img class="fit" fit="cover" :src="imgPreview ? imgPreview : `/storage/${$page.props.auth.user.profile_pic}`" />
                         </q-avatar>
@@ -107,9 +107,9 @@ const onFileChange = (file) => {
                             v-else 
                             @click="triggerFilePicker" 
                             rounded 
-                            label="Change Profile Picture" 
+                            label="Change Avatar" 
                         />
-                        <q-btn 
+                        <!-- <q-btn 
                             no-caps 
                             unelevated 
                             color="primary" 
@@ -117,19 +117,54 @@ const onFileChange = (file) => {
                             @click="dialog = true" 
                             rounded 
                             label="Update Address" 
-                        />
+                        /> -->
                     </div>
                 </div>
             </q-card-section>
         </q-card>
     </q-form>
+    <q-card bordered flat class="q-my-sm">
+        <NewAddressDialog 
+            :dialog="dialog" 
+            @close="dialog = false"
+            :google_maps_api_key="google_maps_api_key" 
+        />
+        <q-card-section>
+            <div class="text-h6">Address Information</div>
+            <div class="q-mb-lg">Update your account's address and phone number.</div>
+            <div class="row q-col-gutter-md">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="text-caption text-weight-light">Location</div>
+                    <div>{{ $page.props.auth.user.address }}</div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="text-caption text-weight-light">Street, House No, Purok</div>
+                    <div>{{ $page.props.auth.user.street }}</div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="text-caption text-weight-light">Phone Number</div>
+                    <div>{{ $page.props.auth.user.phone_number }}</div>
+                </div>
+            </div>
+
+            <q-btn  rounded 
+                unelevated
+                label="Edit Address" 
+                type="submit" 
+                @click="dialog = true"
+                class="q-mt-sm" 
+                no-caps 
+                color="primary" 
+            />
+        </q-card-section>
+    </q-card>
     <q-form @submit="form.patch(route('profile.update'))">
         <q-card bordered flat>
             <q-card-section>
                 <div class="text-h6">Profile Information</div>
                 <div class="q-mb-lg">Update your account's profile information and email address.</div>
                 <div class="row q-col-gutter-md">
-                    <div class="col-6">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <q-input
                             outlined 
                             rounded
@@ -141,7 +176,7 @@ const onFileChange = (file) => {
                             :rules="[ val => val && val.length > 0 || 'Please type something']"
                         />
                     </div>
-                    <div class="col-6">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <q-input
                             outlined 
                             rounded
@@ -195,39 +230,6 @@ const onFileChange = (file) => {
             </q-card-section>
         </q-card>
     </q-form>
-    <q-card bordered flat class="q-mt-md">
-        <q-card-section>
-            <div class="text-h6">Address Information</div>
-            <div class="q-mb-lg">Update your account's address and phone number.</div>
-            <div class="row q-col-gutter-md">
-                <div class="col-6">
-                    <div class="text-caption text-weight-light">Location</div>
-                    <div>{{ $page.props.auth.user.address }}</div>
-                </div>
-                <div class="col-6">
-                    <div class="text-caption text-weight-light">Street, House No, Purok</div>
-                    <div>{{ $page.props.auth.user.street }}</div>
-                </div>
-                <div class="col-6">
-                    <div class="text-caption text-weight-light">Phone Number</div>
-                    <div>{{ $page.props.auth.user.phone_number }}</div>
-                </div>
-            </div>
+    
 
-            <q-btn  rounded 
-                unelevated
-                label="Edit Address" 
-                type="submit" 
-                @click="dialog = true"
-                class="q-mt-sm" 
-                no-caps 
-                color="primary" 
-            />
-        </q-card-section>
-    </q-card>
-    <NewAddressDialog 
-        :dialog="dialog" 
-        @close="dialog = false"
-        :google_maps_api_key="google_maps_api_key" 
-    />
 </template>

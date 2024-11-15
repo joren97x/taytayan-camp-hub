@@ -18,17 +18,14 @@ defineProps({
     <Head title="Facilities" />
     <div>
         <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center" v-if="facilities.length > 0">
-    <!-- Background Image -->
-    <q-img class="fit" fit="cover" src="images/huts2.jpg" />
-
-    <!-- Overlay and Text -->
-    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
-        <div class="text-center text-white">
-            <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
-            <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
-        </div>
-    </div>
-</q-card>
+            <q-img class="fit" fit="cover" src="images/huts2.jpg" />
+            <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
+                    <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
+                </div>
+            </div>
+        </q-card>
         <div v-else style="width: 100%; height: 50vh;" class="rounded-borders bg-grey items-center flex justify-center" >
             <div class="text-center text-white">
                 <div class="text-h3 q-mb-md">No Facilities Available</div>
@@ -36,7 +33,7 @@ defineProps({
             </div>
         </div>
         
-        <div class="q-ma-md">
+        <div class="q-ma-sm">
             <div class="text-h6">Facilities</div>
 
             <div class="row q-col-gutter-md">

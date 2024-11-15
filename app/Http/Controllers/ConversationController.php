@@ -18,22 +18,8 @@ class ConversationController extends Controller
     public function index()
     {
         // dd(auth()->user());
-        return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox', [
-            // 'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-            //     $query->where('user_id', auth()->id());
-            // })->get()
-        ]);
-        //
-        // return response()->json([
-        //     'conversations' => Conversation::with('messages', 'participants')->whereHas('participants', function ($query) {
-        //         $query->where('user_id', auth()->user()->id);
-        //     })->get()
-        // ]);
-        // return Inertia::render(ucwords(auth()->user()->role).'/Inbox/Index', [
-        //     'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-        //         $query->where('user_id', auth()->id());
-        //     })->get(),
-        // ]);
+        // return Inertia::render(ucfirst(auth()->user()->role) . '/Inbox');
+        return Inertia::render('Chat/Index', ['role' => auth()->user()->role]);
 
     }
 
@@ -105,12 +91,8 @@ class ConversationController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat', [
-            // 'conversations' => Conversation::with('participants')->whereHas('participants', function ($query) {
-            //     $query->where('user_id', auth()->id());
-            // })->get(),
-            // 'conversation' => Conversation::with('participants', 'messages.user')->find($id)
-        ]);
+        // return Inertia::render(ucfirst(auth()->user()->role) . '/ShowChat');
+        return Inertia::render('Chat/Show');
     }
 
     public function chat_user(User $user) 

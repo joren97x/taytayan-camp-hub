@@ -71,7 +71,7 @@ const setContainer = (category) => {
     </video>
     <div class="text-white items-end q-mt-xl flex text-center justify-center" 
         :style="`
-            background: rgba(0, 0.9, 0.7, 0.8);
+            background: rgba(0, 0.0, 0.0, 0.5);
             width: ${$q.screen.lt.md ? '100vw' : '99vw'};
             top: 0;
             left: 0;
@@ -86,7 +86,7 @@ const setContainer = (category) => {
         </div>
     </div>
 
-    <div class="q-px-lg q-py-md q-mt-xl" :style="`${$q.screen.lt.md ? 'margin-top: 35vh' : 'margin-top: 80vh'};`">
+    <div class="q-px-xs q-py-md q-mt-xl" :style="`${$q.screen.lt.md ? 'margin-top: 35vh' : 'margin-top: 80vh'};`">
 		<div>
 			<div class="text-h2 text-weight-bold text-center q-mt-xl">Taytayan Camp</div>
 			<div class="text-center q-my-md">
@@ -166,7 +166,7 @@ const setContainer = (category) => {
                         <q-btn round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRightFeatured('products')" class="bg-grey-3"/>
                     </div>
                 </div>
-			<div ref="productContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
+			<div ref="productContainer" :class="`row ${$q.screen.lt.md ? 'q-col-gutter-sm' : 'q-col-gutter-md'} no-wrap hide-scrollbar`" style="overflow-x: auto; scroll-behavior: smooth;">
 				<div class="col-5 col-xs-5 col-sm-5 col-md-3 col-lg-3 col-xl-3" v-for="(product, i) in products">
                     <FeaturedProductCard :product="product">
                         <template v-slot:badge>
@@ -194,7 +194,7 @@ const setContainer = (category) => {
                         <q-btn round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRightFeatured('facilities')" class="bg-grey-3"/>
                     </div>
                 </div>
-				<div ref="facilityContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
+				<div ref="facilityContainer" :class="`row ${$q.screen.lt.md ? 'q-col-gutter-sm' : 'q-col-gutter-md'} no-wrap hide-scrollbar`" style="overflow-x: auto; scroll-behavior: smooth;">
 				<div class="col-xs-10 col-sm-10 col-md-4 col-lg-4 col-xl-4" v-for="facility in facilities">
 					<FacilityCard :facility="facility" />
 				</div>
@@ -212,7 +212,7 @@ const setContainer = (category) => {
                         <q-btn round :size="$q.screen.lt.md ? 'sm' : 'md'" icon="arrow_forward" flat @click="scrollRightFeatured('events')" class="bg-grey-3"/>
 				</div>
 			</div>
-			<div ref="eventContainer" class="row q-col-gutter-md no-wrap hide-scrollbar" style="overflow-x: auto; scroll-behavior: smooth;">
+			<div ref="eventContainer" :class="`row ${$q.screen.lt.md ? 'q-col-gutter-sm' : 'q-col-gutter-md'} no-wrap hide-scrollbar`" style="overflow-x: auto; scroll-behavior: smooth;">
 				<div class="col-xs-10 col-sm-10 col-md-6 col-lg-6 col-xl-6" v-for="event in events">
 					<EventCard :event="event">
                         <template v-slot:badge>

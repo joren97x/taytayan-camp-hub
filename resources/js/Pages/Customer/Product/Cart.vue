@@ -28,6 +28,7 @@ const selectedCartItem = ref(null)
 const page = usePage()
 const $q = useQuasar()
 const selectedRows = ref([]);
+const selectAllChecked = ref(false)
 const form = useForm({
     cart_id: props.cart.id,
     cart_products: []
@@ -72,6 +73,8 @@ function deleteCartItem(id) {
     deleteCartItemForm.delete(route('customer.cart.destroy', id), {
         onSuccess: () => {
             $q.notify('Cart Item Removed From Cart')
+            showFoodCartItemDialog.value = false
+
         }
     })
 }
@@ -103,23 +106,36 @@ const initialPagination = {
     // rowsNumber: xx if getting data from a server
 }
 
+
 const onSelection = (selection) => {
     if (selection.added) {
-        // Add selected IDs to cart_products
         const addedIds = selection.rows.map(row => row.id);
         form.cart_products = [...form.cart_products, ...addedIds];
     } else {
-        // Remove unselected IDs from cart_products
         const removedIds = selection.rows.map(row => row.id);
         form.cart_products = form.cart_products.filter(id => !removedIds.includes(id));
     }
-}
+    selectAllChecked.value = selectedRows.value.length === props.cart_products.length;
+};
 
 const total = computed(() => {
     let subtotal = 0
     selectedRows.value.map((row) => subtotal += row.total)
     return subtotal
 })
+
+// const selectAllChecked = ref(false)
+const selectAll = () => {
+    if (selectAllChecked.value) {
+        // Select all rows
+        selectedRows.value = props.cart_products;
+        form.cart_products = props.cart_products.map(row => row.id);
+    } else {
+        // Deselect all rows
+        selectedRows.value = [];
+        form.cart_products = [];
+    }
+};
 </script>
 
 <template>
@@ -133,7 +149,7 @@ const total = computed(() => {
         v-if="$page.props.auth.user"
     />
     <!-- {{ form }} -->
-    <div class="row q-mt-md">
+    <div :class="`row ${$q.screen.gt.md ? 'q-mt-md' : ''}`">
         <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
             <q-table
                 bordered
@@ -148,6 +164,11 @@ const total = computed(() => {
                 :grid="$q.screen.lt.md"
             >
                 <template v-slot:top>
+                    <q-checkbox
+                        v-model="selectAllChecked"
+                        @update:model-value="selectAll"
+                        class="lt-md"
+                    />
                     <span class="text-h6">Cart</span> 
                     <q-space/>
                     <span class="text-subtitle1">{{ cart_products.length }} items</span>
@@ -180,7 +201,7 @@ const total = computed(() => {
                 </template>
                 <template v-slot:body-cell-total="props">
                     <q-td :props="props">
-                        <span class="text-weight-medium">P{{ props.row.total }}</span>
+                        <span class="text-weight-medium">₱{{ parseFloat(props.row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -204,40 +225,25 @@ const total = computed(() => {
                         <q-card class="q-mx-sm" bordered flat>
                             <q-card-section>
                                 <q-item class="q-pa-none" @click="showEditCartItemDialog(props.row)" clickable>
-                                    <!-- <q-item-section avatar class="q-pa-none q-ma-none">
-                                        <q-select outlined dropdown-icon="keyboard_arrow_down" class="q-pa-none q-ma-none" :items="[1,2,3,4,5,6,7,8,9]" dense>
-                                            <template v-slot:append>
-                                                <div class="text-subtitle2">{{ props.row.quantity }}</div>
-                                            </template>
-                                        </q-select>
-                                    </q-item-section> -->
                                     <q-item-section avatar>
                                         <div>
-                                            <q-chip class="q-pa-sm q-ma-none">{{ props.row.quantity }}</q-chip>
+                                            <q-checkbox
+                                                v-model="selectedRows"
+                                                :val="props.row"
+                                                @update:model-value="onSelection(selectedRows)"
+                                                size="xs"
+                                            />
                                             <q-img :src="`/storage/${props.row.product.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
                                         </div>
+                                        
                                     </q-item-section>
                                     <q-item-section class="items-start">
                                         <q-item-label>{{ props.row.product.name }}</q-item-label>
-                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.product.description }}</q-item-label>
-                                        <q-item-label caption >P{{ props.row.product.price }}</q-item-label>
+                                        <q-item-label caption class="ellipsis q-mr-xl">{{ props.row.product.description }} pcs</q-item-label>
+                                        <q-item-label caption >{{ props.row.quantity }} qty</q-item-label>
                                         <div class="absolute-top-right text-black">
-                                            P{{ props.row.total }}
+                                            ₱{{ parseFloat(props.row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </div>
-                                        <!-- <q-btn icon="more_horiz" class="absolute-top-right text-black" flat color="white" round>
-                                            <q-menu>
-                                                <q-list style="min-width: 100px">
-                                                    <Link :href="route(`admin.products.edit`, props.row.product.id)">
-                                                        <q-item clickable>
-                                                            <q-item-section>Edit</q-item-section>
-                                                        </q-item>
-                                                    </Link>
-                                                    <q-item clickable @click="showDeleteProductDialog(props.row.product)">
-                                                        <q-item-section>Delete</q-item-section>
-                                                    </q-item>
-                                                </q-list>
-                                            </q-menu>
-                                        </q-btn> -->
                                     </q-item-section>
                                 </q-item>
                             </q-card-section>
@@ -246,14 +252,13 @@ const total = computed(() => {
                 </template>
             </q-table>
         </div>
-        <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-            <q-card bordered flat :class="['q-mx-md sticky', $q.screen.lt.md ? 'q-mt-md' : '']" style="position: sticky; top: 60px;">
+        <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 gt-sm">
+            <q-card bordered flat :class="['sticky', $q.screen.lt.md ? 'q-mt-md q-mx-sm' : 'q-mx-md']" style="position: sticky; top: 60px;">
                 <q-card-section class="q-pb-none">
                     <div class="text-h6">Order Summary</div>
-                    <q-separator/>
-                    <!-- {{ selectedRows }} -->
+                    <!-- <q-separator/> -->
                     <q-list>
-                        <q-item-label header>Selected Items</q-item-label>
+                        <!-- <q-item-label header>Selected Items</q-item-label> -->
                         <q-item v-for="row in selectedRows">
                             <q-item-section avatar>
                                 <q-avatar square>
@@ -264,28 +269,20 @@ const total = computed(() => {
                                 <q-item-label>{{ row.product.name }}</q-item-label>
                             </q-item-section>
                             <q-item-section side>
-                                P{{ row.total }}
+                                ₱{{ parseFloat(row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                             </q-item-section>
                         </q-item>
                         <div class="bg-grey-3 q-mb-md items-center justify-center flex q-pa-xl" v-if="selectedRows && selectedRows.length <= 0">
                             No selected items...
                         </div>
                     </q-list>
-                    <!-- <q-item>
-                        <q-item-section>
-                            <q-item-label>Subtotal</q-item-label>
-                        </q-item-section>
-                        <q-item-section side top>
-                            <q-item-label>{{ subtotal }}</q-item-label>
-                        </q-item-section>
-                    </q-item> -->
                     <q-separator/>
                     <q-item>
                         <q-item-section>
                             <q-item-label class="text-weight-medium text-subtitle1">Total</q-item-label>
                         </q-item-section>
                         <q-item-section class="flex items-end">
-                            <div class="text-weight-medium text-subtitle1">P{{ total }}</div>
+                            <div class="text-weight-medium text-subtitle1">₱{{ parseFloat(total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                         </q-item-section>
                     </q-item>
                 </q-card-section>
@@ -295,67 +292,26 @@ const total = computed(() => {
             </q-card>
         </div>
     </div>
-    <!-- <q-dialog v-model="showNewAddressDialog" style="z-index: 1;" @show="initializeAutocomplete">
-        <div>
-            <q-card style=" margin-top: 100px;">
-                <q-form @submit="submit">
-                    <q-card-section>
-                        <div class="text-h6">New Address</div>
-                        <div>To place order, please add a delivery address</div>
-                    </q-card-section>
+    <q-card class="bg-white fixed-bottom lt-md z-top" bordered square>
+        <q-card-section class="row justify-between q-pa-sm">
+            <div class="col">
+                <div>Total ({{ form.cart_products.length }} items)</div>
+                <div class="text-weight-bold">₱{{ parseFloat(total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
+            </div>
+            <div class="col justify-end items-center flex">
                 
-                    <q-card-section>
-                        <q-input
-                            filled
-                            v-model="form.phone_number"
-                            label="Phone"
-                            :error="form.errors.phone_number ? true : false"
-                            :error-message="form.errors.phone_number"
-                        />
-
-                        <q-input 
-                            filled 
-                            v-model="form.address" 
-                            class="q-my-md" 
-                            ref="placeInput"
-                            id="place"
-                            :error="form.errors.address ? true : false"
-                            :error-message="form.errors.address"
-                            label="Barangay, City, Province"
-                        />
-                        <q-banner dense class="bg-red-1 q-mb-md" v-if="form.address">
-                            <template v-slot:avatar>
-                                <q-icon name="alert" color="primary" />
-                            </template>
-                            <p class="text-weight-bold text-primary text-h6">Place an accurate pin</p>
-                            <p class="text-subtitle-1">
-                                We will deliver to your map location. 
-                                Please check it is correct, else click the map to adjust.
-                            </p>
-                        </q-banner>
-                        <div id="map" style="width: 100%; height: 600px"  v-if="form.address"></div>
-                    </q-card-section>
-                    <q-card-actions>
-                        <q-space/>
-                        <q-btn v-close-popup no-caps flat>Cancel</q-btn>
-                        <q-btn 
-                            v-close-popup 
-                            color="primary"
-                            type="submit" 
-                            unelevated 
-                            no-caps
-                            :loading="form.processing"
-                            :disable="form.processing"
-                        >
-                            Submit
-                        </q-btn>
-                    </q-card-actions>
-                </q-form>
-            </q-card>
-        </div>
-    </q-dialog> -->
-
-    <EditCartItemDialog :dialog="showFoodCartItemDialog" :cart_item="selectedCartItem" @close="showFoodCartItemDialog = false" />
+                <q-btn
+                    label="Checkout"
+                    color="primary"
+                    no-caps
+                    rounded
+                    @click="submit"
+                />  
+                
+            </div>
+        </q-card-section>
+    </q-card>
+    <EditCartItemDialog :dialog="showFoodCartItemDialog" :cart_item="selectedCartItem" @close="showFoodCartItemDialog = false"  @remove_from_cart="deleteCartItem(selectedCartItem.id)"/>
 
 </template>
 

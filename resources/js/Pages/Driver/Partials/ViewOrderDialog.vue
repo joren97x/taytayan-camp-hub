@@ -66,6 +66,19 @@ const completeOrder = () => {
                     v-if="order.status == 'delivering'"
                     label="Complete Delivery"
                 />
+                <Link :href="route('driver.map')">
+                    <q-btn
+                        no-caps
+                        class="full-width q-mt-sm"
+                        :loading="completeOrderForm.processing"
+                        :disable="completeOrderForm.processing"
+                        rounded
+                        outline
+                        color="primary"
+                        v-if="order.status == 'delivering'"
+                        label="View in Map"
+                    />
+                </Link>
             </div>
         </OrderDetails>
     </q-dialog>

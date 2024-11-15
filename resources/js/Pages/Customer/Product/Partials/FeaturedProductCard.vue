@@ -13,7 +13,7 @@ const dialog = ref(false)
     <q-card
         flat
         bordered
-        class="product-card"
+        class="product-card fit"
     >
         <q-card-section class="q-pa-none">
             <slot name="badge"/>
@@ -37,8 +37,8 @@ const dialog = ref(false)
         </q-card-section>
         <q-card-section class="q-pa-sm">
             <!-- <span>hi</span> -->
-            <div class="text-subtitle1 text-weight-regular ellipsis">{{ product.name }}</div>
-            <div class="text-subtitle2 text-weight-regular">{{ product.price }}</div>
+            <div class=" text-weight-regular ellipsis">{{ product.name }}</div>
+            <div class="text-weight-regular">{{ product.price }}</div>
             <div class="text-caption ellipsis-2-lines">{{ product.description }}</div>
         </q-card-section>
     </q-card>

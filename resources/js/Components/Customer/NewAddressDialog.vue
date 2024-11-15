@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, nextTick, computed, defineEmits, onMounted } from 'vue'
+import { ref, nextTick, computed, defineEmits } from 'vue'
 import { usePage, useForm } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
@@ -15,17 +15,17 @@ const emit = defineEmits(['close'])
 const page = usePage()
 const $q = useQuasar()
 
-console.log(JSON.parse(page.props.auth.user.address_coordinates))
+// console.log(JSON.parse(page.props.auth.user.address_coordinates))
 const form = useForm({
     phone_number: page.props.auth.user.phone_number,
     address: page.props.auth.user.address,
     street: page.props.auth.user.street,
     address_coordinates: {
-        lat: JSON.parse(page.props.auth.user.address_coordinates).lat ? JSON.parse(page.props.auth.user.address_coordinates).lat : null,
-        lng: JSON.parse(page.props.auth.user.address_coordinates).lng ? JSON.parse(page.props.auth.user.address_coordinates).lng : null
+        lat: page.props.auth.user.address_coordinates ? JSON.parse(page.props.auth.user.address_coordinates).lat : null,
+        lng: page.props.auth.user.address_coordinates ? JSON.parse(page.props.auth.user.address_coordinates).lng : null
     }
 })
-console.log(form.address_coordinates)
+// console.log(form)
 
 const submit = () => {
     form.put(route('add-address'), {
@@ -41,7 +41,7 @@ const loader = initializeLoader(props.google_maps_api_key)
 let olangoBounds = ref(null)
 
 const initializeAutocomplete = async () => {
-    console.log("Initializing autocomplete")
+    // console.log("Initializing autocomplete")
     const Places = await loader.importLibrary('places')
 
     // Define Olango Island bounds to restrict location selection
@@ -88,56 +88,59 @@ const isPlaceInOlango = (place) => {
 
 
 async function map() {
-    const { Map, InfoWindow } = await loader.importLibrary('maps')
-    const { AdvancedMarkerElement } = await loader.importLibrary('marker')
+    try {
+        const { Map, InfoWindow } = await loader.importLibrary('maps')
+        const { AdvancedMarkerElement } = await loader.importLibrary('marker')
 
-    const map = new Map(document.getElementById('map'), {
-        center: form.address_coordinates,
-        zoom: 17,
-        mapId: '4504f8b37365c3d0',
-    })
+        const map = new Map(document.getElementById('map'), {
+            center: form.address_coordinates,
+            zoom: 17,
+            mapId: '4504f8b37365c3d0',
+        })
+        const infoWindow = new InfoWindow()
+        const draggableMarker = new AdvancedMarkerElement({
+            map,
+            position: form.address_coordinates,
+            gmpDraggable: true,
+            title: 'This marker is draggable.',
+        })
 
-    const infoWindow = new InfoWindow()
-    const draggableMarker = new AdvancedMarkerElement({
-        map,
-        position: form.address_coordinates,
-        gmpDraggable: true,
-        title: 'This marker is draggable.',
-    })
+        const content = `
+            <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
+            <div>Please check if your map location is correct</div>
+        `
+        infoWindow.setContent(content)
+        infoWindow.open(map, draggableMarker)
 
-    // Set info window content to help user understand marker positioning
-    const content = `
-        <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
-        <div>Please check if your map location is correct</div>
-    `
-    infoWindow.setContent(content)
-    infoWindow.open(map, draggableMarker)
+        draggableMarker.addListener('dragend', (event) => {
+            const position = draggableMarker.position
 
-    draggableMarker.addListener('dragend', (event) => {
-        const position = draggableMarker.position
-
-        // Check if new marker position is within valid bounds
-        if (!olangoBounds.value.contains(position)) {
-            $q.notify({
-                message: 'The marker must be within Olango Island, Lapu-Lapu, Philippines.',
-                color: 'negative',
-                textColor: 'white',
-                position: 'top'
-            })
-            // Reset marker position to last valid coordinates
-            draggableMarker.position = new google.maps.LatLng(form.address_coordinates.lat, form.address_coordinates.lng)
-        } else {
-            // Update form coordinates with new valid marker position
-            form.address_coordinates.lat = position.lat
-            form.address_coordinates.lng = position.lng
-            const updatedContent = `
-                <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
-                <div>Please check if your map location is correct</div>
-            `
-            infoWindow.setContent(updatedContent)
-            infoWindow.open(map, draggableMarker)
-        }
-    })
+            // Check if new marker position is within valid bounds
+            if (!olangoBounds.value.contains(position)) {
+                $q.notify({
+                    message: 'The marker must be within Olango Island, Lapu-Lapu, Philippines.',
+                    color: 'negative',
+                    textColor: 'white',
+                    position: 'top'
+                })
+                // Reset marker position to last valid coordinates
+                draggableMarker.position = new google.maps.LatLng(form.address_coordinates.lat, form.address_coordinates.lng)
+            } else {
+                // Update form coordinates with new valid marker position
+                form.address_coordinates.lat = position.lat
+                form.address_coordinates.lng = position.lng
+                const updatedContent = `
+                    <div class="text-weight-bold text-center text-subtitle2">Your location is here</div>
+                    <div>Please check if your map location is correct</div>
+                `
+                infoWindow.setContent(updatedContent)
+                infoWindow.open(map, draggableMarker)
+            }
+        })
+    }
+    catch (error) {
+        console.error(error)
+    }
 }
 
 </script>
@@ -154,15 +157,13 @@ async function map() {
         <q-card 
             :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''"
         >
-                <q-card-actions class="row justify-between">
-                    <div>
+                <q-card-actions class="">
+                    <div class="q-mr-xl">
                         <span class="text-h6">New Address (Olango Island)</span>
                         <br>
-                        Please enter your Olango Island address to proceed with the delivery
+                        Enter your Olango Island address to proceed with the delivery
                     </div>
-                    <div>
-                        <q-btn icon="close" round unelevated @click="emit('close')" v-close-popup/>
-                    </div>
+                        <q-btn icon="close" round unelevated @click="emit('close')" class="absolute-top-right q-mr-sm q-mt-sm" v-close-popup/>
                 </q-card-actions>
             
                 <q-card-section>
@@ -204,21 +205,17 @@ async function map() {
                             />
                         </div>
                     </div>
-                    <div v-show="form.address" class="q-pa-sm q-mb-md bg-red-1">
-                        <span class="text-primary text-subtitle1">
-                            <q-icon name="warning" color="red" class="q-mx-md"></q-icon>
-                            Place an accurate pin.
-                            <span class="text-weight-light text-body2">
-                                We will deliver to your map location. 
-                            Please check it is correct, else click the map to adjust.
-                            </span>
-                        </span>
-                    </div>
+                    <q-banner v-show="form.address" class="q-py-sm q-mb-md rounded-borders" style="border: 1px solid var(--q-warning)">
+                        <q-icon name="info" color="warning" class="q-mr-sm"/>
+                        Place an accurate pin. We will deliver to your map location. 
+                        Please check it is correct, else click the map to adjust.
+                    </q-banner>
                     <div 
                         style="width: 100%; height: 500px" 
-                        :class="['bg-grey items-center flex', form.address ? '' : 'non-selectable cursor-not-allowed']"
+                        :class="['items-center flex', form.address ? '' : 'non-selectable cursor-not-allowed']"
                     >
-                        <div id="map" style="width: 100%; height: 100%;" v-if="form.address"></div>
+                        <div id="map" style="width: 100%; height: 100%;" v-if="form.address">
+                        </div>
                         <div class="text-center" style="width: 100%; position: relative;" v-else>
                             <q-btn icon="add" no-caps class="non-selectable cursor-not-allowed" flat label="Add Location"/>
                         </div>
@@ -243,3 +240,6 @@ async function map() {
         </q-card>
     </q-dialog>
 </template>
+
+<style scoped>
+</style>

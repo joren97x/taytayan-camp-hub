@@ -37,6 +37,7 @@ class ViewController extends Controller
         //     'cart_id' => 'required'
         // ]);
         // dd($request);
+        // dd($request);
         $request->validate([
             'cart_id' => 'required',
             'cart_products' => 'required|array|min:1', // Must be an array with at least one item

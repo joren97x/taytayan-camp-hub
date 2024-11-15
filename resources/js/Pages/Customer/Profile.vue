@@ -25,12 +25,20 @@ const tab = ref('orders')
 
 <template>
     <Head title="Profile" />
-
-    <div :class="$q.screen.lt.md ? '' : ''">
-        <div :class="`${$q.screen.gt.sm ? 'q-mt-sm' : ''} row q-col-gutter-y-md`">
+    <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
+        <div :class="`${$q.screen.gt.sm ? 'q-mt-sm' : ''} row q-col-gutter-y-sm`">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <q-card bordered flat class="full-width">
-                    <q-card-section>
+                    <div class="text-h6">Profile</div>
+                    <q-card bordered flat class="full-width">
+                    <!-- <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center">
+                        <q-img class="fit" fit="cover" src="images/huts2.jpg" />
+                        <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
+                                <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
+                            </div>
+                        </div>
+                    </q-card> -->
                         <q-item>
                             <q-item-section avatar>
                                 <q-avatar size="80px" color="primary" class="text-white">
@@ -45,38 +53,25 @@ const tab = ref('orders')
                                 <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
                                 <q-item-label>
                                     <Link :href="route('customer.edit_profile')">
-                                        <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="q-mr-sm" icon="edit_square"/>
+                                        <q-btn label="Edit" no-caps unelevated rounded color="primary" class="q-mr-sm"/>
                                     </Link>
                                     <Link :href="route('conversations.index')">
-                                        <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" icon="inbox"/>
+                                        <q-btn label="Inbox" no-caps unelevated rounded outline color="primary"/>
                                     </Link>
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
-                        <!-- <div class="row q-col-gutter-sm q-mb-md">
-                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                <Link :href="route('customer.edit_profile')">
-                                    <q-btn label="Edit Profile" no-caps unelevated rounded color="primary" class="full-width" />
-                                </Link>
-                            </div>
-                            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                <q-btn label="Inbox" no-caps unelevated rounded outline color="primary" class="full-width" />
-                            </div>
-                        </div> -->
-                    </q-card-section>
                 </q-card>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <q-card bordered flat>
                     <q-tabs
                         v-model="tab"
-                        dense
                         class="text-black"
                         active-color="primary"
                         indicator-color="primary"
                         align="justify"
                         no-caps
-                        narrow-indicator
                     >
                         <q-tab name="orders" label="Orders" />
                         <q-tab name="bookings" label="Bookings" />
@@ -86,19 +81,19 @@ const tab = ref('orders')
                     <q-separator />
 
                     <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="orders">
+                        <q-tab-panel name="orders" class="q-pa-none q-px-sm">
                             <Orders :active_orders="active_orders" :past_orders="past_orders" />
                             <!-- <div class="text-h6">Orders</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
                         </q-tab-panel>
 
-                        <q-tab-panel name="bookings">
+                        <q-tab-panel name="bookings" class="q-pa-none q-px-sm">
                             <Bookings :active_bookings="active_bookings" :past_bookings="past_bookings" />
                             <!-- <div class="text-h6">bookings</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->
                         </q-tab-panel>
 
-                        <q-tab-panel name="tickets">
+                        <q-tab-panel name="tickets" class="q-pa-none q-px-sm">
                             <Tickets :active_ticket_orders="active_ticket_orders" :past_ticket_orders="past_ticket_orders" />
                             <!-- <div class="text-h6">Tickets</div>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. -->

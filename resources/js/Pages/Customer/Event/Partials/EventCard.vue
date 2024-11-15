@@ -23,10 +23,9 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
     <div class="event-card">
         <Link :href="route('customer.events.show', event.id)">
             <q-card bordered flat class="rounded-borders">
-                <q-card-section :horizontal="$q.screen.gt.sm">
-                    <q-card-section class="text-center q-py-none">
-                        
-                        <div class="full-width q-my-md rounded-borders" style="height: 150px; position: relative; overflow: hidden;">
+                <q-card-section :horizontal="$q.screen.gt.sm" class="q-pa-none">
+                    <q-card-section :class="`text-center ${$q.screen.lt.md ? 'q-pa-none' : 'q-px-md'}`">
+                        <div class="full-width  rounded-borders" style="height: 150px; position: relative; overflow: hidden;">
                             <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
                             <q-img 
                                 :src="`/storage/${event.cover_photo}`"

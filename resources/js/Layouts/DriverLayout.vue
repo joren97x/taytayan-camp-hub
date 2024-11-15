@@ -3,13 +3,13 @@
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 const $q = useQuasar()
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-    leftDrawerOpen.value = !leftDrawerOpen.value
-}
+const drawerStore = useDrawerStore()
+// function toggleLeftDrawer () {
+//     leftDrawerOpen.value = !leftDrawerOpen.value
+// }
 
 Echo.private(`orders`)
     .listen('Product\\OrderPending', (data) => {
@@ -46,7 +46,7 @@ Echo.private(`orders`)
         </q-header> -->
   
         <q-drawer
-            v-model="leftDrawerOpen"
+            v-model="drawerStore.drawer"
             show-if-above
             bordered
             class="bg-white"
@@ -144,7 +144,7 @@ Echo.private(`orders`)
                         </q-item-section>
                         <q-item-section side top class="">
                             <q-btn :color="$page.component == 'Driver/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
-                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
+                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start" auto-close>
                                     <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>
                                             <q-icon name="drafts" />
@@ -198,7 +198,7 @@ Echo.private(`orders`)
                     <q-img src="../logo.jpg"></q-img>
                 </q-avatar> -->
                 <q-toolbar class="bg-white">
-                    <q-btn flat round dense icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" class="q-mr-sm" />
+                    <q-btn flat round dense icon="menu" @click="drawerStore.drawer = !drawerStore.drawer" class="q-mr-sm" />
                     <q-avatar>
                         <q-img src="../logo.jpg"/>
                     </q-avatar>

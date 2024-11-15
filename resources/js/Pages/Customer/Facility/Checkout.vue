@@ -66,12 +66,9 @@ const decrementGuests = () => {
 <template>
     <Head title="Checkout" />
     <div class="bg-grey-2">
-        <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
+        <q-card class="row justify-between bg-white q-pa-sm" flat bordered square>
             <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
-               <q-avatar size="lg">
-                    <q-img src="../logo.png" fill="cover" />
-                </q-avatar>
-                    Taytayan CAMP
+                Checkout
                 <Link :href="route('customer.facilities.index')" class="absolute-left">
                     <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
                 </Link>
@@ -81,10 +78,8 @@ const decrementGuests = () => {
             <div class="q-mt-sm">
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
-                        <q-card flat bordered>
-                            <q-card-section>
-                                <div class="text-h6 text-center">Checkout</div>
-                                <q-separator class="q-my-md"/>
+                        <q-card flat bordered :square="$q.screen.lt.md">
+                            <q-card-section :class="$q.screen.lt.sm ? 'q-pa-sm' : 'q-pa-md'">
                                 <div class="text-h6">Your trip</div>
                                 <q-item class="rounded-borders" :style="`${form.errors.check_in || form.errors.check_out ? 'border: 1px solid var(--q-negative)' : ''}`">
                                     <q-item-section>
@@ -123,7 +118,7 @@ const decrementGuests = () => {
                                         <q-item>
                                             <q-item-section avatar>
                                                 <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                    <q-img src="images/right_now.png" fit="cover"/>
                                                 </q-avatar>
                                                 <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
                                             </q-item-section>
@@ -142,7 +137,7 @@ const decrementGuests = () => {
                                         <q-item>
                                             <q-item-section avatar>
                                                 <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                                                    <img src="images/walk_in.png">
                                                 </q-avatar>
                                                 <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
                                             </q-item-section>
@@ -165,47 +160,63 @@ const decrementGuests = () => {
                                     </div>
                                     You may cancel your booking anytime up to 2 days before the check-in date to receive a full refund. 
                                 </q-banner>
-                                <q-separator class="q-my-md"/>
-                                <div class="text-h6">Facility Details</div>
+                                <!-- <q-separator class="q-my-md"/> -->
+                                <!-- <div class="text-h6">Facility Details</div>
                                 <q-item>
                                     <q-item-section avatar>
                                         <q-img 
-                                            height="100px"
-                                            width="100px"
+                                            :height="$q.screen.gt.md ? '100px' : '80px'"
+                                            :width="$q.screen.gt.md ? '100px' : '80px'"
                                             class="rounded-borders"
-                                            src="https://a0.muscache.com/im/pictures/miso/Hosting-22774851/original/7789a5cc-f7cb-4238-ad5d-f1d71e36365c.jpeg?aki_policy=large"
+                                            :src="`/storage/${JSON.parse(facility.images)[0]}`"
                                         ></q-img>
                                     </q-item-section>
                                     <q-item-section>
                                         <q-item-label>{{ facility.name }}</q-item-label>
-                                        <q-item-label caption>{{ facility.description }}</q-item-label>
-                                        <q-item-label>P{{ facility.price }}</q-item-label>
+                                        <q-item-label caption class="ellipsis-2-lines	">{{ facility.description }}</q-item-label>
+                                        <div class="text-weight-bold">₱{{ parseFloat(facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                                     </q-item-section>
                                     <q-item-section side top>
-                                        <div>
-                                            <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
-                                        </div>
+                                        <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                                     </q-item-section>
-                                </q-item>
+                                </q-item> -->
                             </q-card-section>
                         </q-card>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <q-card bordered flat>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-img 
+                                        :height="$q.screen.gt.md ? '100px' : '80px'"
+                                        :width="$q.screen.gt.md ? '100px' : '80px'"
+                                        class="rounded-borders"
+                                        :src="`/storage/${JSON.parse(facility.images)[0]}`"
+                                    ></q-img>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>{{ facility.name }}</q-item-label>
+                                    <q-item-label caption class="ellipsis-2-lines	">{{ facility.description }}</q-item-label>
+                                    <!-- <div class="text-weight-bold">₱{{ parseFloat(facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div> -->
+                                </q-item-section>
+                                <q-item-section side top>
+                                    <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
+                                </q-item-section>
+                            </q-item>
+                            <q-separator class="q-mt-sm"/>
                             <q-card-section>
                                 <div class="text-h6">Price Details</div>
-                                <q-separator class="q-my-md"/>
                                 <div class="row">
                                     <div class="col-8">
-                                        P{{ facility.price }} x {{ date.getDateDiff(form.check_out, form.check_in, 'days') + 1 }} nights
+                                        ₱{{ parseFloat(facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} x {{ date.getDateDiff(form.check_out, form.check_in, 'days') + 1 }} nights
                                     </div>
-                                    <div class="col-4 text-right">
-                                        P{{ form.total }}
+                                    <div class="col-4 text-right text-subtitle1">
+                                        <div class="text-weight-bold">₱{{ parseFloat(form.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                                     </div>
                                 </div>
                             </q-card-section>
                             <q-card-actions>
-                                <q-btn class="full-width" no-caps rounded color="primary" @click="submit">Checkout</q-btn>
+                                <q-btn class="full-width" no-caps rounded color="primary" @click="submit" label="Place Order"/>
                             </q-card-actions>
                         </q-card>
                     </div>

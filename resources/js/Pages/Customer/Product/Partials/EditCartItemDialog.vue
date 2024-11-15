@@ -145,12 +145,10 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
         transition-hide="slide-down"
     >
         <q-card class="q-px-md" :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <div class="absolute-top-right q-mt-sm q-mr-sm lt-md">
-                <q-btn rounded no-caps icon="close" label="Remove from cart" color="negative" @click="emit('remove_from_cart')" class="q-mr-sm"/>
-                <q-btn round icon="close" v-close-popup/>
+            <div class="absolute-top-right q-mt-sm q-mr-sm lt-md z-top">
+                <q-btn rounded no-caps icon="delete" size="sm" label="Remove from cart" outline color="negative" @click="emit('remove_from_cart')" class="q-mr-sm"/>
+                <q-btn round icon="close" v-close-popup flat @click="emit('close')"/>
             </div>
-
-            <q-form @submit="submit">
                 <!-- <q-item>
                     <q-item-section class="text-h6">
                         Food description
@@ -271,6 +269,7 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
                                         color="primary"
                                         :loading="form.processing"
                                         :disable="form.processing"
+                                        @click="submit"
                                     >
                                         Update
                                     </q-btn>
@@ -279,7 +278,6 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
                         </q-card>
                     </div>
                 </div>
-            </q-form>
         </q-card>
     </q-dialog>
 </template>

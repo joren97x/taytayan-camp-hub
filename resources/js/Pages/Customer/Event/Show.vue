@@ -50,7 +50,7 @@ const total = computed(() => {
             />
         </div>
 
-        <div class="row q-mx-xs q-col-gutter-md">
+        <div class="row q-mx-sm">
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="text-subtitle1">
                     {{ date.formatDate(event.date, 'dddd, MMMM D') }} at {{ formattedTime }}
@@ -117,16 +117,17 @@ const total = computed(() => {
                 </q-card>
             </div>
         </div>
-        <q-card class="bg-white fixed-bottom lt-md" bordered>
+        <q-card class="bg-white fixed-bottom lt-md z-top" bordered square>
             <!-- <div class="row q-pa-none q-col-gutter-md"> -->
             <q-card-section class="row">
                 <div class="col-3">
                     <div>Admission</div>
-                    <div class="text-h6">P{{ total }}</div>
+                    <!-- <div class="text-weight-bold">P{{ parseFloat(total).toFixed(2) }}</div> -->
+                    <div class="text-weight-bold">₱{{ parseFloat(total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                 </div>
                 <div class="col-9 justify-end items-center flex">
                     <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementTicket"></q-btn>
-                    <span class="q-mx-md text-subtitle1">{{ attendees }}</span>
+                    <span class="q-mx-xs text-subtitle1">{{ attendees }}</span>
                     <q-btn icon="add" round unelevated size="sm" class="bg-grey-4 q-mr-sm" @click="incrementTicket"></q-btn>
                     <Link 
                         :href="route('event.checkout')" 
@@ -134,7 +135,7 @@ const total = computed(() => {
                         v-if="date.getDateDiff(event.date, new Date()) >= 0 && event.status == 'on_sale'"
                     >
                         <q-btn
-                            label="Go To Checkout"
+                            label="Checkout"
                             color="primary"
                             no-caps
                             rounded

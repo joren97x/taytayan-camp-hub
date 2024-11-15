@@ -33,9 +33,8 @@ class OrderController extends Controller
             $order->cart_products = $result['cart_products'];
             $order->subtotal = $result['subtotal'];
         }
-
         return Inertia::render('Cashier/Orders', [
-            // 'orders' => $orders,
+            'google_maps_api_key' => config('app.google_maps_api_key'),
             'order_constants' => Order::getConstants()
         ]);
     }

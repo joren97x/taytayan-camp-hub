@@ -8,8 +8,10 @@ import NotificationItem from './Partials/NotificationItem.vue'
 import { useNotificationStore } from '@/Stores/NotificationStore'
 import AuthLinks from '@/Layouts/Partials/AuthLinks.vue'
 import MainLinks from '@/Layouts/Partials/MainLinks.vue'
-import axios from 'axios'
+// import axios from 'axios'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
+const drawerStore = useDrawerStore()
 const notificationStore = useNotificationStore()
 const $q = useQuasar()
 const $page = usePage()
@@ -46,36 +48,36 @@ const logout = () => {
     })
 }
 
-const cartLength = ref(0)
-onMounted(() => {
-    if ($page.props.auth.user) {
-        axios.get(route('customer.cart.length'))
-            .then((res) => {
-                console.log(res)
-                cartLength.value = res.data.cart_length
-            })
-            .catch((err) => {
-                console.error(err)
-            })
-    }
-})
+// const cartLength = ref(0)
+// onMounted(() => {
+//     if ($page.props.auth.user) {
+//         axios.get(route('customer.cart.length'))
+//         .then((res) => {
+//             console.log(res)
+//             $q.notify(res.data.cart_length)
+//             cartLength.value = res.data.cart_length
+//         })
+//         .catch((err) => {
+//             console.error(err)
+//         })
+//     }
+// })
 
 </script>
 
 <template>
     <q-layout view="hHh lpR lfr">
-
-        <q-header :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'" style="z-index: 999;" bordered>
+        <q-header :class="[$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black',]" style="z-index: 999;" bordered>
             <q-toolbar class="row items-center justify-between" style="margin: 0 auto;">
                 <div class="row items-center">
                     <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder">
-                    <q-avatar size="40px" class="q-mr-sm">
-                        <q-img src="../logo.jpg" fill="cover" />
-                    </q-avatar>
+                        <q-avatar size="40px" class="q-mr-sm">
+                            <q-img src="../logo.jpg" fill="cover" />
+                        </q-avatar>
                     </Link>
 
-                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder q-mr-lg">
-                    Taytayan CAMP
+                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder q-mr-lg" v-if="$q.screen.width > 360">
+                        Taytayan CAMP
                     </Link>
 
                     <q-tabs v-model="tab" shrink no-caps inline-label class="gt-sm">
@@ -140,6 +142,10 @@ onMounted(() => {
                                     <q-item class="text-h6">Notifications</q-item>
                                     <NotificationItem :notification="notification"
                                         v-for="notification in notificationStore.notifications" />
+                                        <div v-if="notificationStore.notifications.length == 0"
+                                            class="q-pa-xl flex items-center justify-center">
+                                            No notifications...
+                                        </div>
                                 </q-list>
                             </q-menu>
                         </q-btn>
@@ -155,7 +161,7 @@ onMounted(() => {
                             <span class="q-ml-sm gt-sm">{{ $page.props.auth.user.first_name + ' ' +
                                 $page.props.auth.user.last_name
                                 }}</span>
-                            <q-menu class="q-pa-sm" style="width: 300px">
+                            <q-menu class="q-pa-sm" style="width: 300px" auto-close @show="drawerStore.getCartLength">
                                 <q-list>
                                     <div class="lt-md">
                                         <MainLinks />
@@ -176,7 +182,7 @@ onMounted(() => {
                                         </q-item-section>
                                         <q-item-section>Cart</q-item-section>
                                         <q-item-section side>
-                                            <q-chip>{{ cartLength }}</q-chip>
+                                            <q-chip>{{ drawerStore.cart }}</q-chip>
                                         </q-item-section>
                                     </q-item>
                                     </Link>

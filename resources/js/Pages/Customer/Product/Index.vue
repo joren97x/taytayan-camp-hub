@@ -215,7 +215,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             class="bg-primary" 
                             v-if="!$page.props.auth.user.address"
                         >
-                            <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
+                            <span class="text-white text-weight-bold text-subtitle1">Please enter your address to place an order.</span>
                             <q-btn 
                                 icon="pin_drop" 
                                 label="Place your address" 
@@ -229,7 +229,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                     </div>
                     <div v-else>
                         <q-banner rounded class="bg-primary">
-                            <span class="text-white text-weight-bold text-subtitle1">E butang imong address para ka order ka.</span>
+                            <span class="text-white text-weight-bold text-subtitle1">Please enter your address to place an order.</span>
                             <Link :href="route('login')">
                                 <q-btn 
                                     icon="pin_drop" 
@@ -347,7 +347,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                     <div class="col-6 col-md-8 col-lg-8 col-xl-8 col-xs-6 col-sm-6">
                         <span class="text-h6">Menu</span>
                         <br>
-                        <span>Open till 8AM to 5PM or ambot</span>
+                        <span>Open till 8 AM to 5 PM</span>
                     </div>
                     <div class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 self-center">
                         <q-input placeholder="Search..." v-model="search" debounce="300" outlined dense rounded>

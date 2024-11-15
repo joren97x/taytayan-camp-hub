@@ -47,33 +47,12 @@ class PaymentController extends Controller
                 'payment_id' => $checkout_session->payments[0]['id']
             ]);
         }
-
         foreach($request->query('ticket_holders') as $ticket_holder) {
-
-            // $ticket = Ticket::where('event_id', $event->id)->where('status', Ticket::STATUS_AVAILABLE)->first();
-
-            // $ticket->update([
-            //     'user_id' => $request->query('user_id'),
-            //     'status' => Ticket::STATUS_SOLD,
-            // ]);
-
-            // TicketHolder::create([
-            //     'ticket_id' => $ticket->id,
-            //     'name' => $ticket_holder['name']
-            // ]);
-
-            // TicketOrderItem::create([
-            //     'ticket_id' => $ticket->id,
-            //     'ticket_order_id' => $ticket_order->id,
-            // ]);
-
             Ticket::create([
                 'ticket_order_id' => $ticket_order->id,
                 'name' => $ticket_holder['name']
             ]);
-
             $event->increment('tickets_sold');
-
         }
 
         $url = route('cashier.ticket_order.verify', ['ticket_order_id' => $ticket_order->id]);

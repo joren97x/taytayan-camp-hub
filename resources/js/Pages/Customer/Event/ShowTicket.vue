@@ -50,7 +50,7 @@ const showCancelButton = computed(() => {
                 </div>
                 <q-btn round icon="close" v-close-popup unelevated />
             </q-card-actions>
-            <q-card-section class="q-pa-none">
+            <q-card-section :class="$q.screen.lt.md ? 'q-pa-none' : ''">
                 <slot name="button" />
                 <div class="row q-col-gutter-md">
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -164,7 +164,7 @@ const showCancelButton = computed(() => {
                 <q-card-section class="row items-center q-pb-none">
                     <q-icon name="warning" color="negative" size="32px" />
                     <div class="text-h6 q-ml-md">Cancel Order</div>
-                    <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
+                    <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/> 
                 </q-card-section>
                 <q-card-section>
                     <q-item class="bg-negative text-white q-my-md q-pa-md rounded-borders">

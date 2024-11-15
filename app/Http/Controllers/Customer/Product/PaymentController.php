@@ -36,7 +36,7 @@ class PaymentController extends Controller
 
         if($order->mode == Order::MODE_DELIVERY) {
             $order->update([
-                'delivery_fee' => $request->shipping_fee
+                'delivery_fee' => $request->delivery_fee
             ]);
         }
 
@@ -46,7 +46,6 @@ class PaymentController extends Controller
             $order->update([
                 'payment_method' => $checkout_session->payment_method_used,
                 'payment_id' => $checkout_session->payments[0]['id'],
-                'amount' => $checkout_session->payments[0]['attributes']['amount']
             ]);
         }
 
@@ -84,7 +83,16 @@ class PaymentController extends Controller
 
         $cart = Cart::find($request->cart_id);
         $line_items = [];
-        
+        if($request->mode == Order::MODE_DELIVERY) {
+            $line_items[] = [
+                'name' => 'Delivery Fee',
+                'quantity' => 1,
+                'amount' => $request->delivery_fee * 100,
+                'currency' => 'PHP',
+                'description' => 'Delivery Fee'
+            ];
+        }
+
         foreach($request->cart_products as $cart_product) {
             $base_price = (double)$cart_product['product']['price'];
             $modifiers_total = 0;
@@ -104,15 +112,6 @@ class PaymentController extends Controller
                 'images' => [
                     'https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
                 ],
-            ];
-        }
-
-        if($request->mode == Order::MODE_DELIVERY) {
-            $line_items[] = [
-                'name' => 'Shipping Fee',
-                'quantity' => 1,
-                'amount' => $request->shipping_fee * 100,
-                'description' => 'Shipping Fee'
             ];
         }
 

@@ -20,26 +20,13 @@ const drawerStore = useDrawerStore()
 const $q = useQuasar()
 const props = defineProps({
     orders: Object,
-    order_constants: Object
+    order_constants: Object,
+    google_maps_api_key: String
 })
 
 const orders = ref(props.orders)
 const tab = ref('preparing')
 
-// props.orders.forEach(order => {
-//     orders.value.push(order)
-// });
-
-// const preparingOrders = computed(() => {
-//     // return orders.value.filter(order => ['pending', 'preparing'].includes(order.status))
-//     return orderStore.orders.filter(order => ['pending', 'preparing'].includes(order.status))
-
-// })
-
-// const readyOrders = computed(() => {
-//     // return orders.value.filter(order => !['pending', 'preparing'].includes(order.status))
-//     return orderStore.orders.filter(order => !['pending', 'preparing'].includes(order.status))
-// })
 
 const order_statuses = computed(() => {
     return props.order_constants.statuses.reduce((obj, status) => {
@@ -58,27 +45,10 @@ onMounted(() => {
         orderStore.getOrders()
         console.log(data)
     })
-    // .listen('Product\\OrderStatusUpdated', (data) => {
-    //     console.log('data')
-    //     axios.get(route('cashier.orders.get_orders'))
-    //     .then((res) => {
-    //         orders.value = res.data
-    //     })
-    //     .catch((err) => {
-    //         console.error(err)
-    //     })
-    // })
+
 })
 
-// axios.get(route('cashier.orders.show', 12))
-//     .then((orderData) => {
-//         $q.notify('fetched and ykwis bruh')
-//         console.log(orderData.data)
-//         orders.value.push(orderData.data)
-//     })
-//     .catch((err) => {
-//         console.error(err)
-//     })
+
 </script>
 
 <template>
@@ -96,18 +66,14 @@ onMounted(() => {
                 <div class="col-6 q-pb-md q-px-md">
                     <p class="text-h6">Preparing</p>
                     <q-list>
-                        <!-- <PreparingOrderItem
-                            v-for="(order, index) in preparingOrders" 
-                            :key="index"
-                            :order="order" 
-                            :order_statuses="order_statuses"
-                        /> -->
+                        
                         <PreparingOrderItem
                             v-for="(order, index) in orderStore.preparingOrders" 
                             :key="index"
                             :order="order" 
                             @order_updated="orderStore.getOrders()"
                             :order_statuses="order_statuses"
+                            :google_maps_api_key="google_maps_api_key"
                         />
                         <p v-if="orderStore.preparingOrders.length == 0">
                             No orders yet...
@@ -165,6 +131,7 @@ onMounted(() => {
                                     :order="order" 
                                     @order_updated="orderStore.getOrders()"
                                     :order_statuses="order_statuses"
+                                    :google_maps_api_key="google_maps_api_key"
                                 />
                                 <p v-if="orderStore.preparingOrders.length == 0" class="text-center">
                                     No orders yet...

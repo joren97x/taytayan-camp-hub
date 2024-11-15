@@ -1,20 +1,20 @@
 <script setup>
 
-import { ref, defineEmits } from 'vue'
-import { useForm, Link } from '@inertiajs/vue3'
-import { useQuasar, date } from 'quasar'
-import { formatDistance, differenceInMinutes, parseISO } from 'date-fns'
+import { ref, defineEmits, onMounted } from 'vue'
+import { useForm } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
+import { formatDistance, differenceInMinutes } from 'date-fns'
 import OrderDetails from '@/Components/OrderDetails.vue'
+import { initializeLoader } from '@/Pages/Utils/GoogleMapsLoader'
 
 const props = defineProps({
     order: Object,
-    order_statuses: Object
+    order_statuses: Object,
+    google_maps_api_key: String
 })
 
-// const orderStore = useOrderStore()
 const emit = defineEmits(['order_updated'])
 const dialog = ref(false)
-const orderReadyDialog = ref(false)
 const cancelOrderDialog = ref(false)
 const readyOrderDialog = ref(false)
 const $q = useQuasar()
@@ -39,14 +39,7 @@ function acceptOrder() {
     })
 }
 
-// function acceptOrder() {
-//     acceptOrderForm.patch(route('cashier.order.update_status', props.order.id), {
-//         onSuccess: () => {
-//             dialog.value = false
-//             $q.notify('Order Accepted')
-//         }
-//     })
-// }
+
 
 function readyOrder() {
     orderForm.patch(route('cashier.orders.update_status', props.order.id), {
@@ -71,6 +64,55 @@ function cancelOrder() {
             $q.notify('Order Cancelled')
         }
     })
+}
+
+const directionsService = ref(null)
+const duration = ref(null)
+const delivery_time = ref('')
+const getDuration = () => {
+    console.log(props.google_maps_api_key)
+    const loader = initializeLoader(props.google_maps_api_key)
+    loader.load().then(() => {
+    directionsService.value = new google.maps.DirectionsService()
+    directionsService.value
+        .route({
+            origin: JSON.parse(props.order.user.address_coordinates),
+            destination: { lat: 10.258812370722216, lng: 124.03867488692084 },
+            travelMode: google.maps.TravelMode.DRIVING
+        })
+        .then((response) => {
+            console.error(response)
+            // duration.value = response.routes[0].legs[0].duration.text;
+            delivery_time.value = response.routes[0].legs[0].duration.text
+            // Convert duration to minutes and add extra 10 minutes
+            const durationInMinutes = parseDurationToMinutes(delivery_time.value)
+            duration.value = durationInMinutes
+            acceptOrderForm.waiting_time = durationInMinutes + 10
+        })
+        .catch((e) => {
+            console.error(e)
+            $q.notify({
+                message: `It seems the marker is placed in an area where no route exists.`,
+                color: 'negative',
+                textColor: 'white',
+                position: 'top'
+            })
+        });
+    })
+};
+const parseDurationToMinutes = (durationText) => {
+    let totalMinutes = 0;
+    const hoursMatch = durationText.match(/(\d+)\s*hour/)
+    const minutesMatch = durationText.match(/(\d+)\s*min/)
+
+    if (hoursMatch) {
+        totalMinutes += parseInt(hoursMatch[1]) * 60
+    }
+    if (minutesMatch) {
+        totalMinutes += parseInt(minutesMatch[1])
+    }
+
+    return totalMinutes
 }
 
 </script>
@@ -103,15 +145,17 @@ function cancelOrder() {
     v-model="dialog" 
     transition-show="slide-up"
     transition-hide="slide-down"
+    @show="getDuration"
     :maximized="$q.screen.lt.md"
 >
     <OrderDetails :order="order">
         <div class="text-subtitle1 text-weight-medium text-center q-mt-md">Estimated Time of Arrival</div>
+        Delivery Time: {{ delivery_time }}
             <q-input
                 outlined 
                 rounded
                 v-model="acceptOrderForm.waiting_time"
-                label="Waiting Time In Minutes"
+                label="Recommended Waiting Time In Minutes"
                 unmasked-value
                 :error="acceptOrderForm.errors.waiting_time ? true : false"
                 :error-message="acceptOrderForm.errors.waiting_time"

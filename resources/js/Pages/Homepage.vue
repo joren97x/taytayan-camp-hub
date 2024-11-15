@@ -4,41 +4,47 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { useQuasar } from 'quasar'
 import { computed, ref } from 'vue'
 
-const slide = ref('style1')
+// const slide = ref('style1')
 const $q = useQuasar()
-const layout = computed(() => {
-    return $q.screen.lt.md ? 'dense' : ($q.screen.lt.md ? 'comfortable' : 'loose')
-})
-
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
 
 defineOptions({
     layout: CustomerLayout
 })
 
-
-    const showVideo = ref(false)
+const slide = ref('first')
+const showVideo = ref(false)
 
 </script>
 
 <template>
     <Head title="Welcome" />
-    <div >
+    <q-carousel
+      arrows
+      animated
+      v-model="slide"
+      height="80vh"
+      style="position: absolute; left: 0; width: 99vw; top: 0;"
+    >
+      <q-carousel-slide name="first" img-src="https://cdn.quasar.dev/img/mountains.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h2">First stop</div>
+          <div class="text-subtitle1">Mountains</div>
+        </div>
+      </q-carousel-slide>
+      <q-carousel-slide name="second" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h2">Second stop</div>
+          <div class="text-subtitle1">Famous City</div>
+        </div>
+      </q-carousel-slide>
+      <q-carousel-slide name="third" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h2">Third stop</div>
+          <div class="text-subtitle1">Famous Bridge</div>
+        </div>
+      </q-carousel-slide>
+    </q-carousel>
+    <div style="margin-top: 80vh">
         <q-dialog 
             v-model="showVideo" 
             persistent 
@@ -60,7 +66,7 @@ defineOptions({
         <div class="row q-col-gutter-lg items-center q-my-md">
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div :class="['q-ma-lg', $q.screen.lt.md ? 'text-center' : '']">
-                    <p class="text-start text-h3 q-mt-xl text-weight-medium">Taytayan Camp Hub</p>
+                    <p class="text-start text-h2 q-mt-xl text-weight-medium">Taytayan Camp Hub</p>
                     <p class="text-start text-subtitle1"> Experience the ultimate adventure at Taytayan Camp Hub! Order your favorite drinks, book event tickets, and reserve a cozy camp tent for an unforgettable outdoor getaway. Enjoy, discover, and indulge in every moment at Taytayan Camp Hub.</p>
                     <q-btn size="lg" unelevated color="primary" no-caps class="q-px-xl"> Create your account </q-btn>
                 </div>
@@ -91,7 +97,7 @@ defineOptions({
         </div>
         <!-- <q-separator class="q-my-xl"/> -->
 
-        <p class="text-center text-h5 q-my-xl text-weight-medium">Our Features & Services</p>
+        <p class="text-center text-h3 q-my-xl text-weight-medium">What We Offer</p>
         <!-- <p class="text-red text-center">Do the relationships of the models tommorow</p> -->
         <div :class="$q.screen.lt.md ? 'text-center' : ''">
             <div class="row justify-center items-center">
@@ -153,7 +159,7 @@ defineOptions({
             </div>
         </div>
     </div>
-    <p class="text-center text-h5 q-mt-lg text-weight-medium"> Here's what they have to say. </p>
+    <!-- <p class="text-center text-h5 q-mt-lg text-weight-medium"> Here's what they have to say. </p>
     <q-carousel
         v-model="slide"
         transition-prev="jump-right"
@@ -183,7 +189,7 @@ defineOptions({
                 - John Doe
             </q-card>
         </q-carousel-slide>
-    </q-carousel>
+    </q-carousel> -->
 
     <div class="row justify-center">
         <div class="col-12">
@@ -245,6 +251,13 @@ defineOptions({
     </div> -->
 </template>
 
+<style lang="sass" scoped>
+.custom-caption
+  text-align: center
+  padding: 12px
+  color: white
+  background-color: rgba(0, 0, 0, .3)
+</style>
 
 <style scoped>
 .bg-container {

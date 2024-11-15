@@ -82,13 +82,13 @@ const addAttendee = () => {
 <template>
     
     <Head title="Checkout" />
-    <div class="bg-grey-2">
-        <q-card class="row justify-between bg-white q-pa-sm" flat bordered>
+    <div class="bg-grey-2" style="height: 100vh">
+        <q-card class="row justify-between bg-white q-pa-sm" flat bordered square>
             <div class="col-12 text-center text-h6" style="max-width: 1280px; margin: 0 auto; position: relative;">
-               <q-avatar size="lg">
+               <!-- <q-avatar size="lg">
                     <q-img src="../logo.png" fill="cover" />
-                </q-avatar>
-                    Taytayan CAMP
+                </q-avatar> -->
+                Checkout
                 <Link :href="route('customer.events.index')" class="absolute-left">
                     <q-btn :label="$q.screen.lt.md ? '' : 'Go back'" icon="arrow_back" color="black" flat no-caps unelevated />
                 </Link>
@@ -98,14 +98,11 @@ const addAttendee = () => {
             <div class="q-my-md">
                 <div class="row q-col-gutter-md">
                     <div class="col-7 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
-                        <q-card flat bordered>
-                            <q-card-section>
-                                <div class="text-h6 text-center">Checkout</div>
-                                <q-separator class="q-my-md"/>
-                                <div class="text-h6 q-mb-sm">Event Details</div>
-                                <div class="full-width rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
+                        <q-card flat bordered :square="$q.screen.lt.md">
+                            <q-card-section class="q-pa-none">
+                                <!-- <div class="text-h6 text-center">Checkout</div>     -->
+                                <!-- <div class="full-width rounded-borders" style="height: 40vh; position: relative; overflow: hidden;">
                                     <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
-                                    <!-- Foreground image (not blurred) -->
                                     <q-img 
                                         :src="`/storage/${event.cover_photo}`"
                                         class="rounded-borders content-wrapper" 
@@ -119,7 +116,7 @@ const addAttendee = () => {
                                         <q-icon name="event"></q-icon>
                                     </q-item-section>
                                     <q-item-section>
-                                        {{ event.title }}
+                                        <q-item-label class="text-weight-bold">{{ event.title }}</q-item-label>
                                         <q-item-label caption>{{ date.formatDate(event.date, 'MMMM D, YYYY') }} - {{ formattedTime }}</q-item-label>
                                     </q-item-section>
                                 </q-item>
@@ -131,78 +128,70 @@ const addAttendee = () => {
                                         {{ event.location }}
                                         <q-item-label caption>Event Location</q-item-label>
                                     </q-item-section>
-                                </q-item>
-                                <q-separator class="q-my-md"/>
-                                <q-list>
-                                    <div class="text-h6">
-                                        Attendees
-                                    </div>
-                                    <div class="row q-col-gutter-sm">
-                                        <div class="col-6" v-for="(attendee, index) in form.ticket_holders">
-                                            <div class="q-ml-md">Ticket {{ index + 1 }}</div>
-                                            <!-- <div class="row items-center q-pa-none">
-                                                <div class="col-6">
-                                                </div>
-                                                <div class="col-6 justify-end flex">
-                                                    <q-btn @click="removeAttendee(index)" flat round icon="close"></q-btn>
-                                                </div>
-                                            </div> -->
-                                            <q-input 
-                                                label="Full Name" 
-                                                v-model="form.ticket_holders[index].name" 
-                                                outlined 
-                                                rounded
-                                                :error="!!form.errors[`ticket_holders.${index}.name`]"
-                                                error-message="Name is required"
-                                            />
-                                            <!-- :error-message="form.errors[`ticket_holders.${index}.name`]" -->
-
+                                </q-item> -->
+                                <q-separator class="q-mb-md"/>
+                                <div :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-md', 'q-mb-md']">
+                                    <q-list>
+                                        <div class="text-h6">
+                                            Attendees
                                         </div>
-                                    </div>
-                                    <!-- <q-btn class="full-width" color="primary" @click="addAttendee()" no-caps rounded>Add Attendee</q-btn> -->
-                                </q-list>
-                                <q-separator class="q-my-md" />
-                                <div class="text-h6 q-mb-md">Pay With</div>
-                                <q-list>
-                                    <q-card 
-                                        bordered flat 
-                                        class="q-pa-sm q-mb-sm" 
-                                        @click="form.payment_method = 'right_now'" 
-                                        :style="form.payment_method == 'right_now' ? 'border: 1px solid black' : ''"
-                                    >
-                                        <q-item>
-                                            <q-item-section avatar>
-                                                <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                                                </q-avatar>
-                                                <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Right Now</q-item-label>
-                                                <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                    <q-card 
-                                        bordered flat 
-                                        class="q-pa-sm q-mt-sm" 
-                                        @click="form.payment_method = 'walk_in'" 
-                                        :style="form.payment_method == 'walk_in' ? 'border: 1px solid black' : ''"
-                                    >
-                                        <q-item>
-                                            <q-item-section avatar>
-                                                <q-avatar square>
-                                                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                                                </q-avatar>
-                                                <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Walk In</q-item-label>
-                                                <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-card>
-                                </q-list>
+                                        <div class="row q-col-gutter-sm">
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" v-for="(attendee, index) in form.ticket_holders">
+                                                <div class="q-ml-md">Ticket {{ index + 1 }}</div>
+                                                <q-input 
+                                                    label="Full Name" 
+                                                    v-model="form.ticket_holders[index].name" 
+                                                    outlined 
+                                                    rounded
+                                                    :error="!!form.errors[`ticket_holders.${index}.name`]"
+                                                    error-message="Name is required"
+                                                />
+                                            </div>
+                                        </div>
+                                    </q-list>
+                                    <q-separator class="q-my-md" />
+                                    <div class="text-h6 q-mb-md">Pay With</div>
+                                    <q-list>
+                                        <q-card 
+                                            bordered flat 
+                                            class="q-pa-sm q-mb-sm" 
+                                            @click="form.payment_method = 'right_now'" 
+                                            :style="form.payment_method == 'right_now' ? 'border: 1px solid black' : ''"
+                                        >
+                                            <q-item>
+                                                <q-item-section avatar>
+                                                    <q-avatar square>
+                                                        <q-img src="images/right_now.png" />
+                                                    </q-avatar>
+                                                    <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
+                                                </q-item-section>
+                                                <q-item-section>
+                                                    <q-item-label>Right Now</q-item-label>
+                                                    <q-item-label caption>Pay immediately using e-wallet, GCash, debit card, or other digital methods.</q-item-label>
+                                                </q-item-section>
+                                            </q-item>
+                                        </q-card>
+                                        <q-card 
+                                            bordered flat 
+                                            class="q-pa-sm q-mt-sm" 
+                                            @click="form.payment_method = 'walk_in'" 
+                                            :style="form.payment_method == 'walk_in' ? 'border: 1px solid black' : ''"
+                                        >
+                                            <q-item>
+                                                <q-item-section avatar>
+                                                    <q-avatar square>
+                                                        <q-img src="images/walk_in.png" />
+                                                    </q-avatar>
+                                                    <!-- <q-radio v-model="form.payment_method" val="right_now"/> -->
+                                                </q-item-section>
+                                                <q-item-section>
+                                                    <q-item-label>Walk In</q-item-label>
+                                                    <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
+                                                </q-item-section>
+                                            </q-item>
+                                        </q-card>
+                                    </q-list>
+                                </div>
                                 <!-- <div class="text-h6 q-my-md">Event</div>
                                 <q-item>
                                     <q-item-section avatar>
@@ -225,14 +214,33 @@ const addAttendee = () => {
                         </q-card>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                        <q-card bordered flat>
+                        <q-card bordered flat :square="$q.screen.lt.md">
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-img 
+                                        :height="$q.screen.gt.md ? '100px' : '80px'"
+                                        :width="$q.screen.gt.md ? '100px' : '80px'"
+                                        class="rounded-borders"
+                                        :src="`/storage/${event.cover_photo}`"
+                                    ></q-img>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>{{ event.title }}</q-item-label>
+                                    <!-- <q-item-label caption class="ellipsis-2-lines">{{ event.description }}</q-item-label> -->
+                                    <q-item-label caption class="ellipsis-2-lines">{{ date.formatDate(event.date, 'MMMM D, YYYY') }} - {{ formattedTime }}</q-item-label>
+                                    <!-- <div class="text-weight-bold">₱{{ parseFloat(event.admission_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div> -->
+                                </q-item-section>
+                                <q-item-section side top>
+                                    <!-- <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(event.average_rating).toFixed(2) }} -->
+                                </q-item-section>
+                            </q-item>
+                            <q-separator class="q-my-sm"/>
                             <q-card-section>
-                                <div class="text-h6">Order Summary</div>
-                                <q-separator class="q-my-sm"/>
+                                <div class="text-h6">Price Details</div>
                                 <!-- <div>{{ event.date }} - {{ event.start_time }}</div> -->
-                                <div class="row text-weight-medium">
-                                    <div class=" col">{{ form.attendees }} Admission or eTicket</div>
-                                    <div class=" col text-right">P{{ form.amount }}</div>
+                                <div class="row">
+                                    <div class=" col">{{ form.attendees }} Admission x ₱{{ parseFloat(event.admission_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
+                                    <div class=" col text-right  text-weight-bold text-subtitle1">₱{{ parseFloat(form.amount).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                                 </div>
                                 <!-- <div class="row text-h6">
                                     <div class=" col">Total</div>
@@ -240,7 +248,7 @@ const addAttendee = () => {
                                 </div> -->
                             </q-card-section>
                             <q-card-actions>
-                                <q-btn class="full-width" no-caps rounded color="primary" @click="submit">Checkout</q-btn>
+                                <q-btn class="full-width" no-caps rounded color="primary" @click="submit">Place Order</q-btn>
                             </q-card-actions>
                         </q-card>
                     </div>

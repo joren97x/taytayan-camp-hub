@@ -3,8 +3,10 @@
 import { computed } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
+import { useDrawerStore } from '@/Stores/DrawerStore'
 
 const emit = defineEmits(['close'])
+const drawerStore = useDrawerStore()
 const page = usePage()
 const $q = useQuasar()
 const props = defineProps({ dialog: Boolean, product: Object })
@@ -21,6 +23,7 @@ const submit = () => {
     form.post(route('customer.cart.store'), {
         onSuccess: (e) => {
             console.log(e)
+            drawerStore.getCartLength
             $q.notify(props.product.name + ' Added To Cart')
             emit('close')
             form.reset('modifiers', 'quantity', 'special_instruction')
@@ -198,7 +201,6 @@ const decrementQuantity = () => {
                                             :val="modifier_item.id"
                                             @update:model-value="selected => handleRadioSelection(modifier_group.id, modifier_item.id)"
                                         />
-
                                         <!-- Use q-checkbox when required_quantity is greater than 1 -->
                                         <q-checkbox
                                             v-else

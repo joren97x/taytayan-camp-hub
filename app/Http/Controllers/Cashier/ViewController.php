@@ -24,6 +24,7 @@ class ViewController extends Controller
         return Inertia::render('Cashier/Profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 

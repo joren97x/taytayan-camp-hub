@@ -33,6 +33,7 @@ const submitRatingForm = () => {
     ratingForm.post(route('customer.product_rating.store'), {
         onSuccess: () => {
             rateDialog.value = false
+            $q.notify('Thank you for rating!!')
         }
     })
 }
@@ -101,9 +102,6 @@ const deliverySteps = [
     }
 ]
 
-
-
-
 onMounted(() => {
     calculateSteps()
 })
@@ -152,31 +150,67 @@ const reorder = () => {
 
 // const diff = date.getDateDiff(date1, date2, unit)
 // `diff` is 34 (days)
+const getStatusColor = (status) => {
+    switch (status) {
+        case 'pending':
+            return 'orange';
+        case 'preparing':
+            return 'blue';
+        case 'ready_for_delivery':
+            return 'purple';
+        case 'ready_for_pickup':
+            return 'teal';
+        case 'delivering':
+            return 'indigo';
+        case 'delivered':
+            return 'green';
+        case 'completed':
+            return 'light-green';
+        case 'cancelled':
+            return 'red';
+        default:
+            return 'grey';
+    }
+}
 </script>
 <template>
     <q-card bordered flat class="q-my-sm">
-        <q-item clickable  @click="viewOrderDialog = true">
-            <q-item-section top>
-                <!-- waiting time {{ date.getDateDiff(order.waiting_time, Date.now(), 'minutes') }} minutes -->
-                <div class="ellipsi-2-lines">
-                    <!-- <span v-for="(p, index) in order.cart_products">
-                        {{ p.product.name }}, 
-                    </span> -->
-                    {{ order.id }}
-                    <!-- {{ date.formatDate(order.created_at, 'MMMM D, YYYY') }} -->
-                </div>
-                <q-item-label caption>
-                    {{ order.cart_products.length }} items - P{{ order.subtotal }}
-                </q-item-label>
-                <q-item-label caption>
-                    {{ order.mode }}
-                </q-item-label>
-            </q-item-section>
-            <q-item-section side top>
+    <q-item clickable @click="viewOrderDialog = true">
+        <q-item-section>
+            <!-- Order ID and Date -->
+            <q-item-label class="text-subtitle1 text-primary">
+                Order #{{ order.id }}
+            </q-item-label>
+            <!-- <q-item-label caption class="text-grey">
+                Ordered at
+            </q-item-label>
+            <q-item-label>
+                {{ new Date(order.created_at).toLocaleString() }}
+            </q-item-label>
+        </q-item-section>
+
+        <q-item-section> -->
+            <q-item-label>
+                {{ order.cart_products.length }} items
+            </q-item-label>
+            <!-- <q-item-label caption>
+                Mode
+            </q-item-label>
+            <q-item-label>
+                {{ order.mode.charAt(0).toUpperCase() + order.mode.slice(1) }}
+            </q-item-label> -->
+        </q-item-section>
+
+        <q-item-section side>
+            <!-- Status with color indication -->
+            <q-badge :color="getStatusColor(order.status)" class="text-capitalize">
                 {{ order.status }}
-            </q-item-section>
-        </q-item>
-    </q-card>
+            </q-badge>
+            ₱{{ order.subtotal }}
+        </q-item-section>
+    </q-item>
+        <!-- <q-btn rounded no-caps label="View Details" class="absolute-bottom-right q-mb-sm q-mr-sm" icon="visibility" unelevated color="primary" /> -->
+</q-card>
         <!-- <div class="row">
             <div class="col-4">
                 <div style="height: 150px; width: 100%;" class="bg-grey"></div>
@@ -237,29 +271,38 @@ const reorder = () => {
                 </q-stepper>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                        <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        
+                        <OrderedItems 
+                            :subtotal="order.subtotal" 
+                            :cart_products="order.cart_products" 
+                            :delivery_fee="order.delivery_fee" 
+                        />                        
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                        <div style="height: 250px; position: relative" class="full-width bg-grey-3">
-                            <div v-if="order.driver">
-                                <!-- {{ order.driver }} -->
-                                <q-item class="bg-grey">
-                                    <q-item-section avatar>
-                                        <q-avatar color="secondary">
-                                            <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
-                                            <div v-else>{{ order.driver.first_name[0] }}</div>
-                                        </q-avatar>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
-                                        <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                                <!-- {{ order }} -->
-                            </div>
+                        <div style="height: 250px; position: relative" class="full-width bg-grey-3" v-if="order.driver && order.status != 'completed'">
+                            <q-item class="bg-grey">
+                                <q-item-section avatar>
+                                    <q-avatar color="secondary">
+                                        <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
+                                        <div v-else>{{ order.driver.first_name[0] }}</div>
+                                    </q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                                    <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
+                                </q-item-section>
+                            </q-item>
                         </div>
-                        <q-btn class="full-width q-mt-sm" @click="reorder()" label="Reorder" color="primary" no-caps unelevated v-if="order.status == 'completed' || order.status == 'cancelled'" />
-                        <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver">
+                        <q-btn 
+                            class="full-width q-mt-md" 
+                            @click="reorder()" 
+                            label="Reorder" 
+                            color="primary" 
+                            no-caps 
+                            unelevated 
+                            rounded
+                            v-if="order.status == 'completed' || order.status == 'cancelled'" 
+                        />
+                        <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver && order.status != 'completed'">
                             <q-btn class="full-width q-mt-sm" no-caps label="Message Driver"/>
                         </Link>
                         <q-btn 

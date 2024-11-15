@@ -128,7 +128,7 @@ const decrementGuests = () => {
             </div>
         </div>
     </div>
-    <div class="q-ma-md">
+    <div class="q-ma-sm">
         <div :class="['row q-col-gutter-md', $q.screen.lt.md ? '' : 'reverse']">
             <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                 <div class="lt-md q-mb-xs justify-between flex">
@@ -304,18 +304,18 @@ const decrementGuests = () => {
     </q-dialog>
     <q-card class="bg-white fixed-bottom lt-md" bordered square>
             <!-- <div class="row q-pa-none q-col-gutter-md"> -->
-        <q-card-section class="row q-px-sm">
-            <div class="col-4">
+        <q-card-actions class="justify-between">
+            <div class="">
                 <div>
                     <span class="text-subtitle1 text-weight-bold">P{{ facility.price }} </span>
                     night
                 </div>
                 <div v-if="form.date.from && form.date.to">{{ qdate.formatDate(form.date.from, 'MMM D') + ' - ' + qdate.formatDate(form.date.to, 'MMM D') }}</div>
             </div>
-            <div class="col-8 justify-end items-center flex">
-                <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementGuests"></q-btn>
-                <span class="q-mx-md text-subtitle1">{{ form.guests }}</span>
-                <q-btn icon="add" round unelevated size="sm" class="bg-grey-4 q-mr-sm" @click="incrementGuests"></q-btn>
+            <div class="justify-end items-center flex">
+                    <!-- <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementGuests" />
+                    <span class="q-mx-xs text-subtitle1">{{ form.guests }}</span>
+                    <q-btn icon="add" round unelevated size="sm" class="bg-grey-4 q-mr-sm" @click="incrementGuests" /> -->
                 <q-btn 
                     color="primary" 
                     @click="book" 
@@ -324,7 +324,7 @@ const decrementGuests = () => {
                     :label="form.date.from && form.date.to ? 'Book Now' : 'Check Availability'"
                 />
             </div>
-        </q-card-section>
+        </q-card-actions>
     </q-card>
     <DatePicker :dialog="dialog" :reserved_dates="reserved_dates" @setBookingDates="(dates) => setBookingDates(dates)" @close="dialog = false" />
 </template> 

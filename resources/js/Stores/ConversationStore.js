@@ -62,13 +62,8 @@ export const useConversationStore = defineStore('conversations', () => {
     }
 
     const fetchConversations = () => {
-        // notifications.value = []
-        // console.log(conversation.value)
         axios.get(route('conversations.get_conversations'))
         .then((result) => {
-            // result.data.notifications.forEach(el => {
-            //     notifications.value.push(el)
-            // })
             console.log(result)
             conversations.value = result.data.conversations
         })

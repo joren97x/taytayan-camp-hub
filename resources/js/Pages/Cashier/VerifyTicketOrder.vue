@@ -11,10 +11,10 @@ defineOptions({
     layout: CashierLayout
 })
 
-defineProps({
+const props = defineProps({
     ticket_order: Object
 })
-
+console.log(props)
 // const selected = ref([])
 const drawerStore = useDrawerStore()
 const $q = useQuasar()
@@ -111,7 +111,7 @@ const columns = [
                 class="my-sticky-header-column-table"
                 flat
                 :grid="$q.screen.lt.md"
-                :rows="ticket_order.ticket_order_items"
+                :rows="ticket_order.tickets"
                 :columns="columns"
                 row-key="name"
                 :filter="filter"
@@ -130,17 +130,17 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
-                        {{ props.row.ticket.ticket_holder.name }}
+                        {{ props.row.name }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-status="props">
                     <q-td :props="props">
-                        {{ props.row.ticket.status }}
+                        {{ props.row.status }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <EventCheckinDialog :ticket="props.row.ticket" />
+                        <EventCheckinDialog :ticket="props.row" />
                     </q-td>
                 </template>
                 <template v-slot:item="props">
@@ -151,16 +151,16 @@ const columns = [
                                     <div class="text-caption text-grey">
                                         Name
                                     </div>
-                                    {{ props.row.ticket.ticket_holder.name }}
+                                    {{ props.row.name }}
                                 </div>
                                 <div class="col-6">
                                     <div class="text-caption text-grey">
                                         Status
                                     </div>
-                                    {{ props.row.ticket.status }}
+                                    {{ props.row.status }}
                                 </div>
                                 <div class="col-12">
-                                    <EventCheckinDialog :ticket="props.row.ticket" />
+                                    <EventCheckinDialog :ticket="props.row" />
                                 </div>
                             </div>
                         </q-card-section>
