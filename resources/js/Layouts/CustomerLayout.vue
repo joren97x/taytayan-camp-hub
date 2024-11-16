@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import Footer from '@/Components/Footer.vue'
@@ -20,11 +20,11 @@ const notificationMenu = ref(false)
 const tab = ref('')
 
 const components = [
-    'Customer/Facility/Show',
     'Customer/Product/Index',
     'Customer/Event/Index',
     'Customer/Facility/Index',
-    'Customer/Event/Index'
+    'Customer/Index',
+    'Homepage',
 ]
 
 const currentComponent = computed(() => $page.component)
@@ -63,63 +63,96 @@ const logout = () => {
 //     }
 // })
 
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+  // Toggle `isScrolled` based on scroll position
+  isScrolled.value = window.scrollY > 10;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
+const getTextColor = computed((component) => {
+    if(!isScrolled.value && components.includes($page.component)) {
+        return 'text-white'
+    }
+    else if(components.includes(component)) {
+        return 'text-primary'
+    }
+    else {
+        return 'text-black'
+    }
+}) 
+
 </script>
 
 <template>
     <q-layout view="hHh lpR lfr">
-        <q-header :class="[$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black',]" style="z-index: 999;" bordered>
-            <q-toolbar class="row items-center justify-between" style="margin: 0 auto;">
+        <q-header 
+            :class="[
+                'q-header',
+                isScrolled ? 'bg-white text-black ' : 'bg-transparent text-white',
+            ]" 
+            style="z-index: 999;" 
+            :bordered="isScrolled"
+        >
+            <q-toolbar class="row items-center justify-between" style="margin: 0 auto; max-width: 1280px">
                 <div class="row items-center">
                     <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder">
-                        <q-avatar size="40px" class="q-mr-sm">
+                        <q-avatar size="xl" class="q-mr-sm">
                             <q-img src="../logo.jpg" fill="cover" />
                         </q-avatar>
                     </Link>
 
-                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder q-mr-lg" v-if="$q.screen.width > 360">
-                        Taytayan CAMP
+                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder q-mr-lg">
+                        <!-- Taytayan CAMP -->
+                        <div class="text-design">
+                            taytayan<br>
+                            camp
+                        </div>
                     </Link>
-
-                    <q-tabs v-model="tab" shrink no-caps inline-label class="gt-sm">
-                        <Link :href="route('customer.products.index')">
-                        <q-tab name="products" label="Products" icon="fastfood"
-                            :class="tab == 'products' ? 'text-primary' : ''" />
-                        </Link>
-                        <Link :href="route('customer.events.index')">
-                        <q-tab name="events" label="Events" icon="celebration"
-                            :class="tab == 'events' ? 'text-primary' : ''" />
-                        </Link>
-                        <Link :href="route('customer.facilities.index')">
-                        <q-tab name="facilities" label="Facilities" icon="cottage"
-                            :class="tab == 'facilities' ? 'text-primary' : ''" />
-                        </Link>
-                    </q-tabs>
-
                 </div>
-                <div class="row">
-                    <div class="items-center flex">
+                 <div class="text-red gt-xs">
+                    <Link :href="route('customer.products.index')" :class="getTextColor">
+                        Products
+                    </Link>
+                    <Link :href="route('customer.events.index')" :class="`${getTextColor} q-mx-md`">
+                        Events
+                    </Link>
+                    <Link :href="route('customer.facilities.index')" :class="getTextColor">
+                        Facilities
+                    </Link>
+                 </div>
+                <div class="row items-center flex">
+                    <!-- <div class="items-center flex">
                         <q-input v-model="query" dense placeholder="Search..." @keyup.enter="search" outlined rounded
                             class="q-mr-md gt-sm">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
                         </q-input>
-                    </div>
-                    <Link :href="route('search')" class="lt-md">
-                    <q-btn icon="search" round flat />
+                    </div> -->
+                    <Link :href="route('search')" >
+                        <q-btn icon="search" round flat :class="getTextColor"/>
                     </Link>
                     <div v-if="!$page.props.auth.user">
-                        <div class="gt-sm">
-                            <Link :href="route('register')">
-                            <q-btn label="Sign up for free" unelevated rounded no-caps class="text-primary" />
+                        <div class="gt-sm items-center flex justify-center full-height">
+                            <Link :href="route('register')" :class="`${getTextColor} q-mx-md`">
+                                Sign up
                             </Link>
-                            <Link :href="route('login')">
-                            <q-btn label="Login" rounded color="primary" no-caps unelevated icon="login" />
+                            <Link :href="route('login')" :class="getTextColor">
+                                Login
                             </Link>
                         </div>
                         <div class="lt-md">
                             <q-btn icon="menu" unelevated @click="drawer = true" class="lt-md">
-                                <q-menu>
+                                <q-menu style="width: 200px;">
                                     <q-list>
                                         <MainLinks />
                                         <q-separator />
@@ -130,8 +163,8 @@ const logout = () => {
                         </div>
 
                     </div>
-                    <div v-else class="flex">
-                        <q-btn flat dense rounded class="q-mr-sm" @click="notificationMenu = true">
+                    <div v-else class="flex items-center">
+                        <q-btn flat round class="q-mx-xs" @click="notificationMenu = true" :class="getTextColor" >
                             <q-icon size="2em" name="notifications" />
                             <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">
                                 {{ notificationStore.unreadCount }}
@@ -149,7 +182,7 @@ const logout = () => {
                                 </q-list>
                             </q-menu>
                         </q-btn>
-                        <q-btn class="q-px-xs" flat unelevated no-caps>
+                        <q-btn class="q-px-xs" flat unelevated no-caps :class="getTextColor">
                             <q-icon name="menu" class="lt-md" />
                             <q-avatar size="3em" text-color="white" color="primary" class="gt-sm">
                                 <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"
@@ -158,16 +191,14 @@ const logout = () => {
                                     {{ $page.props.auth.user.first_name[0] }}
                                 </div>
                             </q-avatar>
-                            <span class="q-ml-sm gt-sm">{{ $page.props.auth.user.first_name + ' ' +
-                                $page.props.auth.user.last_name
-                                }}</span>
+                            <span class="q-ml-sm gt-sm">{{ $page.props.auth.user.first_name }}</span>
                             <q-menu class="q-pa-sm" style="width: 300px" auto-close @show="drawerStore.getCartLength">
                                 <q-list>
                                     <div class="lt-md">
                                         <MainLinks />
                                     </div>
                                     <q-separator class="lt-md" />
-                                    <Link :href="route('customer.profile')">
+                                    <Link :href="route('customer.profile')" class="text-black">
                                     <q-item clickable class="rounded-borders">
                                         <q-item-section avatar>
                                             <q-icon name="person" />
@@ -175,7 +206,7 @@ const logout = () => {
                                         <q-item-section>Profile</q-item-section>
                                     </q-item>
                                     </Link>
-                                    <Link :href="route('customer.cart.index')">
+                                    <Link :href="route('customer.cart.index')" class="text-black">
                                     <q-item clickable class="rounded-borders">
                                         <q-item-section avatar>
                                             <q-icon name="shopping_cart" />
@@ -186,7 +217,7 @@ const logout = () => {
                                         </q-item-section>
                                     </q-item>
                                     </Link>
-                                    <Link :href="route('conversations.index')" class="nav-link">
+                                    <Link :href="route('conversations.index')" class="text-black">
                                     <q-item clickable class="rounded-borders">
                                         <q-item-section avatar>
                                             <q-icon name="inbox" />
@@ -194,7 +225,7 @@ const logout = () => {
                                         <q-item-section>Inbox</q-item-section>
                                     </q-item>
                                     </Link>
-                                    <q-item clickable class="rounded-borders text-negative" @click="logout()">
+                                    <q-item clickable class="rounded-borders text-negative" @click="logout()" >
                                         <q-item-section avatar>
                                             <q-icon name="logout" />
                                         </q-item-section>
@@ -226,6 +257,9 @@ const logout = () => {
             </q-dialog>
         </q-header>
         <q-page-container>
+            
+                <slot name="cover"/>
+            
             <div class="content-wrapper">
                 <slot />
                 <!-- <Footer class="content-wrapper" /> -->
@@ -244,16 +278,22 @@ const logout = () => {
     /* padding: 0 16px;  */
 }
 
-
-
-a {
+.link, a{
     text-decoration: none;
-    color: black;
 }
 
-.navlink:hover {
-    color: #1976D2;
+.text-black:hover, .text-white:hover {
+    color: var(--q-primary) !important;
 }
+
+/* 
+.link:hover {
+  color: var(--q-primary);
+}
+
+.hover-primary:hover {
+  color: var(--q-primary);
+} */
 
 .user-menu-link {
     text-decoration: none;
@@ -264,11 +304,23 @@ a {
     transform: translateY(-100%);
 }
 
+.q-header {
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
 .slide-down-leave {
     transform: translateY(0);
 }
 
 .slide-down-active {
     transition: transform 0.3s ease;
+}
+.text-design {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem; /* Adjust font size to match image */
+    font-weight: 700;
+    color: #04b804; /* bright green color */
+    text-align: center;
+    line-height: 0.9; /* Tighten line height */
 }
 </style>

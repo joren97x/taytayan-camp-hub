@@ -14,9 +14,9 @@ return new class extends Migration
     {
         Schema::create('ticket_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->foreignId('event_id');
-            $table->decimal('amount');
+            $table->decimal('amount')->nullable();
             $table->string('qr_code_path')->nullable();
             $table->string('payment_method');
             $table->string('payment_id')->nullable();

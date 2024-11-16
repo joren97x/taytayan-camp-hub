@@ -4,9 +4,9 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Link, Head } from '@inertiajs/vue3'
 import FacilityCard from './Partials/FacilityCard.vue'
 
-defineOptions({
-    layout: CustomerLayout
-})
+// defineOptions({
+//     layout: CustomerLayout
+// })
 
 defineProps({
     facilities: Object
@@ -16,8 +16,57 @@ defineProps({
 
 <template>
     <Head title="Facilities" />
-    <div>
-        <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center" v-if="facilities.length > 0">
+    <CustomerLayout>
+    <template v-slot:cover>
+        <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 80%);
+                z-index: 1;
+            "></div>
+            <q-img src="images/huts2.jpg" class="fit" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 80%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                z-index: 2;
+                text-align: center;
+                padding: 20px; /* For smaller screens */
+            ">
+                <h1 style="
+                    margin: 0;
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
+                    " 
+                    class="text-h1 text-weight-bold"
+                >
+                    Explore Our Camp Facilities
+                </h1>
+                <div style="
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                    max-width: 800px;
+                ">
+                    Find your perfect spot to relax and enjoy nature
+                </div>
+            </div>
+        </div>
+    </template>
+    <div style="margin-top: 45vh">
+        <!-- <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center" v-if="facilities.length > 0">
             <q-img class="fit" fit="cover" src="images/huts2.jpg" />
             <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
                 <div class="text-center text-white">
@@ -31,7 +80,7 @@ defineProps({
                 <div class="text-h3 q-mb-md">No Facilities Available</div>
                 <div>Check back soon. Stay tuned for updates!</div>
             </div>
-        </div>
+        </div> -->
         
         <div class="q-ma-sm">
             <div class="text-h6">Facilities</div>
@@ -47,6 +96,7 @@ defineProps({
             
         </div>
     </div>
+</CustomerLayout>
 </template>
 
 <style scoped>

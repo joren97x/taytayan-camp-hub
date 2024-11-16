@@ -8,7 +8,7 @@ import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { formatDistanceToNow } from 'date-fns'
 
-defineOptions({ layout: CustomerLayout })
+// defineOptions({ layout: CustomerLayout })
 const props = defineProps({ products: Object, events: Object, facilities: Object })
 
 const productContainer = ref(null)
@@ -51,7 +51,7 @@ const setContainer = (category) => {
 
 <template>
     <Head title="Home" />
-    <video
+    <!-- <video
         autoplay
         muted
         loop
@@ -84,9 +84,60 @@ const setContainer = (category) => {
 			<br>
 			<q-btn icon="south" flat round/>
         </div>
-    </div>
+    </div> -->
+    <CustomerLayout>
+    <template v-slot:cover>
+        <div style="position: absolute; width: 100vw; height: 80vh; overflow: hidden; top: 0" class="bg-grey-3">
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 80%);
+                z-index: 1;
+            "></div>
+            <video autoplay muted loop style="position: absolute; top: 0; left: 0; width: 100vw; height: 100%; object-fit: cover;">
+                <source src="taytayancamp.mp4" type="video/mp4" />
+            </video>
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 80%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                z-index: 2;
+                text-align: center;
+                padding: 20px; /* For smaller screens */
+            ">
+                <h1 style="
+                    margin: 0;
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
+                    " 
+                    class="text-h1 text-weight-bold"
+                >
+                    Explore Our Camp Facilities
+                </h1>
+                <div style="
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                    max-width: 800px;
+                ">
+                    Find your perfect spot to relax and enjoy nature
+                </div>
+            </div>
+        </div>
+    </template>
 
-    <div class="q-px-xs q-py-md q-mt-xl" :style="`${$q.screen.lt.md ? 'margin-top: 35vh' : 'margin-top: 80vh'};`">
+    <div class="q-px-xs q-py-md q-mt-xl" :style="`${$q.screen.lt.md ? 'margin-top: 30vh' : 'margin-top: 70vh'};`">
 		<div>
 			<div class="text-h2 text-weight-bold text-center q-mt-xl">Taytayan Camp</div>
 			<div class="text-center q-my-md">
@@ -236,7 +287,7 @@ const setContainer = (category) => {
             </div> -->
 		</div>
     </div>
-    
+</CustomerLayout>
     <!-- <p class="text-center text-red q-mt-xl">designi inig human sa laing pages</p>
     <q-img src="https://avatars.githubusercontent.com/u/112835241?s=400&u=5c5ce654a02c61684c3e00d25d695ce142ede5ef&v=4"></q-img> -->
 </template>

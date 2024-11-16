@@ -7,9 +7,9 @@ import { computed, ref } from 'vue'
 // const slide = ref('style1')
 const $q = useQuasar()
 
-defineOptions({
-    layout: CustomerLayout
-})
+// defineOptions({
+//     layout: CustomerLayout
+// })
 
 const slide = ref('first')
 const showVideo = ref(false)
@@ -18,33 +18,56 @@ const showVideo = ref(false)
 
 <template>
     <Head title="Welcome" />
-    <!-- <q-carousel
-      arrows
-      animated
-      v-model="slide"
-      height="80vh"
-      style="position: absolute; left: 0; width: 99vw; top: 0;"
-    >
-      <q-carousel-slide name="first" img-src="https://cdn.quasar.dev/img/mountains.jpg">
-        <div class="absolute-bottom custom-caption">
-          <div class="text-h2">First stop</div>
-          <div class="text-subtitle1">Mountains</div>
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="second" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
-        <div class="absolute-bottom custom-caption">
-          <div class="text-h2">Second stop</div>
-          <div class="text-subtitle1">Famous City</div>
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="third" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom custom-caption">
-          <div class="text-h2">Third stop</div>
-          <div class="text-subtitle1">Famous Bridge</div>
-        </div>
-      </q-carousel-slide>
-    </q-carousel> -->
-    <div>
+    <CustomerLayout>
+        <template v-slot:cover>
+            <div style="position: absolute; width: 100vw; height: 85vh; overflow: hidden; top: 0">
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 80%);
+                    z-index: 1;
+                "></div>
+                <q-img src="taytayan.jpg" class="fit" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 80%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    z-index: 2;
+                    text-align: center;
+                    padding: 20px; /* For smaller screens */
+                ">
+                    <h1 style="
+                        margin: 0;
+                        font-size: 3.5rem;
+                        font-weight: bold;
+                        text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
+                        " 
+                        class="text-h1 text-weight-bold"
+                    >
+                        Welcome to Taytayan Camp
+                    </h1>
+                    <div style="
+                        font-size: 1.25rem;
+                        font-weight: bold;
+                        text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                        max-width: 800px;
+                    ">
+                        "Sip, Explore, and Stay - Discover More at Taytayan Camp Adventure Island"
+                    </div>
+                </div>
+            </div>
+        </template>
+    <div style="margin-top: 85vh;">
         <q-dialog 
             v-model="showVideo" 
             persistent 
@@ -249,6 +272,7 @@ const showVideo = ref(false)
     <!-- <div class="bg-grey text-center text-h5" style="height: 350px;">
         Footer
     </div> -->
+</CustomerLayout>
 </template>
 
 <style lang="sass" scoped>
@@ -260,6 +284,8 @@ const showVideo = ref(false)
 </style>
 
 <style scoped>
+
+
 .bg-container {
   position: relative;
   display: flex;

@@ -5,7 +5,7 @@ import { ref, computed } from 'vue'
 import EventCheckinDialog from './Partials/EventCheckinDialog.vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { useQuasar, date } from 'quasar'
-import { router, Link } from '@inertiajs/vue3'
+import { router, Link, useForm } from '@inertiajs/vue3'
 import { useDrawerStore } from '@/Stores/DrawerStore'
 
 defineOptions({
@@ -118,6 +118,20 @@ const cameraError = (err) => {
     })
 }
 
+const createAttendeeDialog = ref(false)
+const createAttendeeForm = useForm({
+    name: '',
+    event_id: props.event.id,
+})
+
+const submitCreateAttendeeForm = () => {
+    createAttendeeForm.post(route('cashier.ticket_orders.store_attendee'), {
+        onSuccess: () => {
+            $q.notify('New Attendee Aadded')
+        }
+    })
+}
+
 </script>
 
 <template>
@@ -212,9 +226,9 @@ const cameraError = (err) => {
                         </q-input>
                     </div>
                     <!-- <Link :href="route('admin.facilities.create')">f
-                        <q-btn no-caps color="primary">Create Facility</q-btn>
                     </Link> -->
-                </template>
+                        <q-btn no-caps color="primary" @click="createAttendeeDialog = true" label="Create Attendee" rounded class="q-ml-sm"/>
+                    </template>
                 <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
                         {{ props.row.name }}
@@ -271,6 +285,25 @@ const cameraError = (err) => {
         />
         <q-spinner v-if="loading" />
       </q-card>
+    </q-dialog>
+    <q-dialog 
+        v-model="createAttendeeDialog"
+        :maximized="$q.screen.lt.md"
+        transition-show="slide-up"
+        transition-hide="slide-down"
+    >
+        <q-card>
+            <q-card-actions>
+                <div class="text-h6">Create New Attendee</div>
+                <q-btn icon="close" class="absolute-top-right q-mt-sm q-mr-sm" v-close-popup round flat/>
+            </q-card-actions>
+            <q-card-section>
+                <q-input label="Name" v-model="createAttendeeForm.name"/>
+            </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn label="Create" no-caps rounded color="primary"/>
+            </q-card-actions>
+        </q-card>
     </q-dialog>
 </template>
 

@@ -8,9 +8,9 @@ import ProductCard from './Partials/ProductCard.vue'
 import FeaturedProductCard from './Partials/FeaturedProductCard.vue'
 import NewAddressDialog from '@/Components/Customer/NewAddressDialog.vue'
 
-defineOptions({
-    layout: CustomerLayout
-})
+// defineOptions({
+//     layout: CustomerLayout
+// })
 
 const $q = useQuasar()
 const props = defineProps({
@@ -146,58 +146,70 @@ const filteredCategories = computed(() => {
     .filter(category => category.filteredProducts.length > 0); 
 });
 
-const slide = ref('style')
-const lorem = ref('stylestylestylestylestylestyle')
 const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
 </script>
 
 <template>
     <Head title="Milktea Menu" />
-    <div>
+    <CustomerLayout>
+        <template v-slot:cover>
+            <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 80%);
+                    z-index: 1;
+                "></div>
+                <q-img src="images/rjc1.jpg" class="fit" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 80%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    z-index: 2;
+                    text-align: center;
+                    padding: 20px; /* For smaller screens */
+                ">
+                    <h1 style="
+                        margin: 0;
+                        font-size: 3.5rem;
+                        font-weight: bold;
+                        text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
+                        " 
+                        class="text-h1 text-weight-bold"
+                    >
+                        RJC Cafe
+                    </h1>
+                    <div style="
+                        font-size: 1.25rem;
+                        font-weight: bold;
+                        text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                        max-width: 800px;
+                    ">
+                        Savor the Flavor, Embrace the Adventure!
+                    </div>
+                </div>
+            </div>
+        </template>
+    <div style="margin-top: 45vh">
         <NewAddressDialog 
             :dialog="showNewAddressDialog" 
             @close="showNewAddressDialog = false"
             :google_maps_api_key="google_maps_api_key" 
             v-if="$page.props.auth.user"
         />
-        <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center">
+        <!-- <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center">
             <q-img class="fit" fit="cover" src="images/rjc1.jpg" />
-            <!-- <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">
-                <div class="text-center text-white">
-                    <div class="text-h2 q-mb-sm text-weight-bold">Explore Our Camp Facilities</div>
-                    <div class="text-h6">Find your perfect spot to relax and enjoy nature</div>
-                </div>
-            </div> -->
-        </q-card>
-        <!--  <div>
-       <q-carousel
-            v-model="slide"
-            transition-prev="slide-right"
-            transition-next="slide-left"
-            animated
-            swipeable
-            control-color="red"
-            navigation
-            class="bg-grey-3"
-        >
-            <q-carousel-slide name="tv" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="images/rjc.jpg"></q-img>
-            </q-carousel-slide>
-            <q-carousel-slide name="style" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="images/rjc1.jpg"></q-img>
-            </q-carousel-slide>
-            <q-carousel-slide name="layers" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="images/rjc3.jpg"></q-img>
-            </q-carousel-slide>
-            <q-carousel-slide name="map" class="column no-wrap flex-center q-pa-none">
-                <q-img cover class="fit" src="images/rjc2.jpg"></q-img>
-            </q-carousel-slide>
-            <template v-slot:navigation-icon="{ active, btnProps, onClick }">
-                <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
-                <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
-            </template>
-        </q-carousel> 
-    </div>-->
+        </q-card> -->
         <div class="q-mx-sm">
             <div class="row q-col-gutter-md q-mt-xs">
                 <div class="col-12 col-xs-12 col-sm col-md-8 col-lg-8 col-xl-8">
@@ -490,6 +502,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
             </q-card-actions>
         </q-card>
     </q-dialog>
+</CustomerLayout>
 
 </template>
 

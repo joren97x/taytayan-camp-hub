@@ -5,9 +5,9 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 // import EventCard from '@/Components/Customer/Event/EventCard.vue'
 import EventCard from './Partials/EventCard.vue';
 
-defineOptions({
-    layout: CustomerLayout
-})
+// defineOptions({
+//     layout: CustomerLayout
+// })
 
 defineProps({
     upcoming_events: Object,
@@ -18,7 +18,56 @@ defineProps({
 
 <template>
     <Head  title="Events" />
-    <div class="gradient-overlay" style="position: relative" v-if="upcoming_events.length > 0">
+    <CustomerLayout>
+    <template v-slot:cover>
+        <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 80%);
+                z-index: 1;
+            "></div>
+            <q-img src="images/third.jpg" class="fit" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 80%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                z-index: 2;
+                text-align: center;
+                padding: 20px; /* For smaller screens */
+            ">
+                <h1 style="
+                    margin: 0;
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
+                    " 
+                    class="text-h1 text-weight-bold"
+                >
+                    Explore Our Camp Facilities
+                </h1>
+                <div style="
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                    max-width: 800px;
+                ">
+                    Find your perfect spot to relax and enjoy nature
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- <div class="gradient-overlay" style="position: relative" v-if="upcoming_events.length > 0">
         <div class="blurred-background" :style="`background-image: url('/storage/${upcoming_events[0].cover_photo}');`"></div>
         <q-img 
             :style="`width: 100%; height: ${$q.screen.gt.sm ? '50vh' : '35vh'}; z-index: 100;`"  
@@ -34,12 +83,9 @@ defineProps({
                     Upcoming Event
                 </div>
                 <div class=" text-h3 text-weight-bold q-mb-sm gt-sm">
-                    <!-- Under The Sky Disco Party SKibidi Gyatt -->
                      {{ upcoming_events[0].title }}
                 </div>
                 <div :class="['text-subtitle2 gt-sm', $q.screen.lt.md ? 'ellipsis-2-lines' : '']">
-                    <!-- Let's GO DISCO sa OLANGO this Wednesday hello annyeong
-                    The text is positioned absolutely within the gradient-container to ensure it appears on top of the image and gradient. -->
                      {{ upcoming_events[0].description }}
                     </div>
                 <div>
@@ -55,8 +101,8 @@ defineProps({
             <div class="text-h3 q-mb-md">No Upcoming Events</div>
             <div>Check back soon for exciting new events. Stay tuned for updates!</div>
         </div>
-    </div>
-    <div class="q-ma-sm">
+    </div> -->
+    <div class="q-ma-sm" style="margin-top: 45vh">
         <div class="text-h6 q-my-md">Upcoming Events</div>
         <div class="row q-col-gutter-lg" v-if="upcoming_events.length > 0">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in upcoming_events">
@@ -79,6 +125,7 @@ defineProps({
             No Events Found
         </q-card>
     </div>
+</CustomerLayout>
 </template>
 
 <style scoped>
