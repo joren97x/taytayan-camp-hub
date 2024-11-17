@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ConversationController;
 use Inertia\Inertia;
@@ -8,7 +9,6 @@ use Luigel\Paymongo\Facades\Paymongo;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
-use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +23,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('homepage');
+
 
 // Route::get('/home', [ViewController::class, 'home'])->name('home');
 

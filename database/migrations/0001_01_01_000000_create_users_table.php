@@ -22,6 +22,9 @@ return new class extends Migration
             $table->json('address_coordinates')->nullable();
             $table->string('profile_pic')->nullable();
             $table->string('email')->unique();
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->string('provider_token')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->enum('role', [
                 User::ROLE_ADMIN,
@@ -29,7 +32,7 @@ return new class extends Migration
                 User::ROLE_CASHIER,
                 User::ROLE_DRIVER
             ])->default(User::ROLE_CUSTOMER);
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->boolean('is_online')->default(false);
             $table->rememberToken();
             $table->softDeletes();
