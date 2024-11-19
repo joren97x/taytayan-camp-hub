@@ -7,12 +7,12 @@ use App\Http\Controllers\Admin\UserController;
 // use App\Http\Controllers\Customer\Event\TicketController;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('/dashboard/events', [ViewController::class, 'dashboard'])->name('admin.events.dashboard');
 // Route::get('/admin/events/{event}/dashboard', [EventController::class, 'event_dashboard'])->name('event.dashboard');
 Route::get('/admin/events/reviews', [ViewController::class, 'reviews'])->name('admin.events.reviews');
 Route::patch('/admin/events/change-status/{event}', [EventController::class, 'change_status'])->name('admin.events.change_status');
 Route::post('/admin/events/update-cover_photo/{id}', [EventController::class, 'update_cover_photo'])->name('admin.events.update_cover_photo');
-Route::get('/admin/events/dashboard/{event}', [EventController::class, 'dashboard'])->name('admin.events.dashboard');
+Route::get('/admin/events/dashboard/{event}', [EventController::class, 'dashboard'])->name('admin.events.event_dashboard');
 Route::resource('/admin/events', EventController::class)->names([
     'index' => 'admin.events.index',
     'create' => 'admin.events.create',

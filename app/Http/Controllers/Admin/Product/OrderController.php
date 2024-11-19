@@ -26,7 +26,7 @@ class OrderController extends Controller
         //     Order::STATUS_PREPARING
         // ])->with('user')->get();
 
-        $orders = Order::with('user')->get();
+        $orders = Order::with('user')->latest()->get();
 
         foreach($orders as $order) {
             $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);

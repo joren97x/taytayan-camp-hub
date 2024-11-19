@@ -5,7 +5,8 @@ import { Link, Head, useForm } from '@inertiajs/vue3'
 import { date } from 'quasar'
 import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar'
-import { addDays, isBefore } from 'date-fns';
+import { addDays, isBefore } from 'date-fns'
+import Profile from '../Profile.vue';
 
 defineOptions({ layout: CustomerLayout })
 const props = defineProps({
@@ -69,6 +70,7 @@ const showCancelButton = computed(() => {
 </script>
 
 <template>
+    <Profile>
 <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-actions class="justify-between lt-md">
                 <div class="text-h6">
@@ -257,4 +259,5 @@ const showCancelButton = computed(() => {
             </q-card-actions>
         </q-card>
     </q-dialog>
+</Profile>
 </template>

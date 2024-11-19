@@ -76,13 +76,13 @@ const calculateAndDisplayRoute = () => {
             const path = response.routes[0].overview_path;
             const midpointIndex = Math.floor(path.length / 2);
 
-            if (!infoWindow.value) {
-                infoWindow.value = new google.maps.InfoWindow();
-            }
+            // if (!infoWindow.value) {
+            //     infoWindow.value = new google.maps.InfoWindow();
+            // }
 
-            infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p> <p>Shipping Fee: ₱${deliveryFee}</p>`);
-            infoWindow.value.setPosition(path[midpointIndex]);
-            infoWindow.value.open(map.value);
+            // infoWindow.value.setContent(`<p>Duration: ${duration}</p> <p>${distance}</p> <p>Shipping Fee: ₱${deliveryFee}</p>`);
+            // infoWindow.value.setPosition(path[midpointIndex]);
+            // infoWindow.value.open(map.value);
 
             directionsRenderer.value.setDirections(response);
 

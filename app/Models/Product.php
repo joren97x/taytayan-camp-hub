@@ -7,6 +7,7 @@ use App\Models\ModifierGroupProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -32,6 +33,16 @@ class Product extends Model
     public function modifier_groups() : BelongsToMany
     {
         return $this->belongsToMany(ModifierGroup::class, 'modifier_group_products');
+    }
+
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    public function cart_product(): HasMany
+    {
+        return $this->hasMany(CartProduct::class);
     }
 
 }

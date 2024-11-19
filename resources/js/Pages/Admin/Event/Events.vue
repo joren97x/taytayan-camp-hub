@@ -39,7 +39,7 @@ const formatTime = (time) => {
 const columns = [
     { name: 'event', label: 'Event', align: 'center', field: 'event', sortable: true },
     { name: 'tickets_sold', align: 'center', label: 'Tickets Sold', field: 'tickets_sold', sortable: true },
-    // { name: 'gross', align: 'center', label: 'gross', field: 'gross', sortable: true },
+    { name: 'capacity', align: 'center', label: 'Capacity', field: 'capacity', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]

@@ -121,15 +121,23 @@ const cameraError = (err) => {
 const createAttendeeDialog = ref(false)
 const createAttendeeForm = useForm({
     name: '',
-    event_id: props.event.id,
+    event_id: props.event.id
 })
 
 const submitCreateAttendeeForm = () => {
-    createAttendeeForm.post(route('cashier.ticket_orders.store_attendee'), {
+    createAttendeeForm.post(route('cashier.tickets.store'), {
         onSuccess: () => {
+            createAttendeeDialog.value = false
             $q.notify('New Attendee Aadded')
         }
     })
+}
+
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 20
 }
 
 </script>
@@ -192,6 +200,7 @@ const submitCreateAttendeeForm = () => {
                 :rows="filteredTickets"
                 :columns="columns"
                 row-key="name"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <p class="text-h6 q-pt-md">Attendees</p>
@@ -270,38 +279,68 @@ const submitCreateAttendeeForm = () => {
         </q-card>
     </div>
     <q-dialog v-model="showScanner" persistent>
-      <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
-        <!-- <q-card flat class="q-pa-md" :style="$q.screen.gt.sm ? 'max-width: 90%; max-height: 90%;' : 'max-width: 90%; max-height: 90%;'"> -->
-        <q-card-actions class="justify-between">
-            <div class="text-h6">Scan Qr Code</div>
-            <q-btn icon="close" flat round dense @click="showScanner = false"/>
-        </q-card-actions>
-        <qrcode-stream 
-            @decode="onDecode" 
-            @init="onInit" 
-            @detect="onDetect"
-            @error="cameraError"
-            @camera-on="onCameraReady"
-        />
-        <q-spinner v-if="loading" />
-      </q-card>
+        <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
+            <!-- <q-card flat class="q-pa-md" :style="$q.screen.gt.sm ? 'max-width: 90%; max-height: 90%;' : 'max-width: 90%; max-height: 90%;'"> -->
+            <q-card-actions class="justify-between">
+                <div class="text-h6">Scan Qr Code</div>
+                <q-btn icon="close" flat round dense @click="showScanner = false"/>
+            </q-card-actions>
+            <qrcode-stream 
+                @decode="onDecode" 
+                @init="onInit" 
+                @detect="onDetect"
+                @error="cameraError"
+                @camera-on="onCameraReady"
+            />
+            <q-spinner v-if="loading" />
+        </q-card>
     </q-dialog>
     <q-dialog 
         v-model="createAttendeeDialog"
         :maximized="$q.screen.lt.md"
         transition-show="slide-up"
         transition-hide="slide-down"
+        :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
-        <q-card>
+        <q-card :style="$q.screen.gt.sm ? 'max-width: 500px; width: 100%;' : ''">
             <q-card-actions>
                 <div class="text-h6">Create New Attendee</div>
                 <q-btn icon="close" class="absolute-top-right q-mt-sm q-mr-sm" v-close-popup round flat/>
             </q-card-actions>
             <q-card-section>
-                <q-input label="Name" v-model="createAttendeeForm.name"/>
+                <q-input label="Name" rounded outlined v-model="createAttendeeForm.name"/>
+                <!-- <q-select 
+                    outlined
+                    rounded
+                    emit-value
+                    map-options
+                    class="q-mt-md"
+                    :options="[
+                        {
+                            status: 'used',
+                            label: 'Checked-in'
+                        },
+                        {
+                            status: 'pending',
+                            label: 'Pending'
+                        }
+                    ]" 
+                    label="Status"
+                    option-value="status"
+                    option-label="label"
+                    v-model="createAttendeeForm.status"
+                /> -->
             </q-card-section>
             <q-card-actions class="justify-end">
-                <q-btn label="Create" no-caps rounded color="primary"/>
+                <q-btn 
+                    label="Create" 
+                    no-caps 
+                    rounded 
+                    @click="submitCreateAttendeeForm" 
+                    color="primary"
+                    :loading="createAttendeeForm.processing"
+                    :disable="createAttendeeForm.processing"
+                />
             </q-card-actions>
         </q-card>
     </q-dialog>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::put('/tickets/cancel/{ticket_order}', [TicketController::class, 'cancel'])->name('customer.tickets.cancel');
-Route::resource('tickets', TicketController::class)->names([
+Route::resource('/profile/tickets', TicketController::class)->names([
     'index' => 'customer.tickets.index',
     'show' => 'customer.tickets.show',
 ]);

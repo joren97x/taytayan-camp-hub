@@ -7,6 +7,8 @@ use App\Models\ModifierItem;
 use App\Models\CartProductModifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CartProduct extends Model
@@ -20,14 +22,19 @@ class CartProduct extends Model
         'special_instruction'
     ];
 
-    public function modifiers()
+    public function modifiers(): HasMany
     {
         return $this->hasMany(CartProductModifier::class);
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function cart():BelongsTo
+    {
+        return $this->belongsTo(Cart::class);
     }
 
 }

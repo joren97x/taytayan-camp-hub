@@ -36,32 +36,26 @@ onMounted(() => {
             show-if-above
             bordered
         >
-            <q-img 
-                class="absolute-top" 
-                src="/taytayan.jpg"
-                style="height: 150px"
-            >
-                <q-item  class="absolute-bottom">
-                    <q-item-section avatar>
-                        <q-avatar color="white" text-color="white">
-                            <q-img 
-                                src="/logo.png"
-                            />
-                        </q-avatar>
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label class="text-subtitle1 text-weight-bold">Taytayan Camp Hub</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </q-img>
-            <q-list class="q-mx-sm" style="margin-top: 150px;">
+            <q-item  class="absolute-top q-my-md">
+                <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white">
+                        <q-img 
+                            src="/logo.jpg"
+                        />
+                    </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label class="text-h6 text-weight-bold">Taytayan Camp Hub</q-item-label>
+                </q-item-section>
+            </q-item>
+            <q-list class="q-mx-sm" style="margin-top: 80px;">
                 <q-separator class="q-my-md"/>
                 <!-- <q-item-label header>Essential Links</q-item-label> -->
                 <Link :href="route('cashier.dashboard')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Dashboard'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="dashboard" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Dashboard</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -70,9 +64,9 @@ onMounted(() => {
                 </Link>
                 <Link :href="route('cashier.orders.index')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Orders'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="shopping_cart" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Orders</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -84,9 +78,9 @@ onMounted(() => {
                 </Link>
                 <Link :href="route('cashier.tickets.index')">
                     <q-item clickable class="rounded-borders" :active="components.includes($page.component)" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="confirmation_number" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Tickets</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -95,9 +89,9 @@ onMounted(() => {
                 </Link>
                 <Link :href="route('cashier.bookings.index')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Bookings'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="description" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Bookings</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -136,15 +130,18 @@ onMounted(() => {
                             <q-item-section>
                                 <q-item-label>Inbox</q-item-label>
                             </q-item-section>
-                            <q-item-section side top>
+                            <!-- <q-item-section side top>
                                 <q-chip>2</q-chip>
-                            </q-item-section> 
+                            </q-item-section>  -->
                         </q-item>
                     </Link>
                     <q-item clickable :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white q-ma-sm rounded-borders">
                         <q-item-section top avatar>
                             <q-avatar color="primary" text-color="white">
-                                <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"/>
+                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" v-if="$page.props.auth.user.profile_pic" class="fit" fit="cover" />
+                                <div v-else>
+                                    {{ $page.props.auth.user.first_name[0] }}
+                                </div>
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>
@@ -153,8 +150,8 @@ onMounted(() => {
                         </q-item-section>
                         <q-item-section side top class="">
                             <q-btn :color="$page.component == 'Cashier/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
-                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
-                                    <q-item clickable v-ripple  @click="$q.dark.toggle">
+                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start" style="max-width: 180px; width: 180px;">
+                                    <!-- <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>
                                             <q-icon name="drafts" />
                                         </q-item-section>
@@ -164,14 +161,14 @@ onMounted(() => {
                                         <q-item-section side top>
                                             <q-toggle v-model="$q.dark.isActive"></q-toggle>
                                         </q-item-section>
-                                    </q-item>
+                                    </q-item> -->
                                     <Link :href="route('cashier.profile')">
                                         <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
-                                            <q-item-section avatar >
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="school" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
-                                                <q-item-label>View Profile</q-item-label>
+                                                <q-item-label>Profile</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                                             </q-item-section>
                                         </q-item>
@@ -182,10 +179,10 @@ onMounted(() => {
                                                 Logout
                                             </q-tooltip>
                                         </q-btn> -->
-                                        <q-item clickable class="rounded-borders">
-                                            <q-item-section avatar >
+                                        <q-item clickable class="rounded-borders text-negative">
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="logout" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
                                                 <q-item-label>Log out</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->

@@ -4,6 +4,7 @@ import { useQuasar, date } from 'quasar'
 import { onMounted, ref } from 'vue'
 import OrderedItems from '@/Components/OrderedItems.vue'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
+import Profile from '../Profile.vue'
 // import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
@@ -118,6 +119,7 @@ const submitRatingForm = () => {
 </script>
 
 <template>
+    <Profile>
     <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''" flat class="q-my-md">
         <q-card-actions class="justify-center">
             <div class="text-h6">Order Details</div>
@@ -163,28 +165,24 @@ const submitRatingForm = () => {
                     <OrderedItems :subtotal="order.subtotal" :cart_products="order.cart_products" />                        
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"> 
-                    <div style="height: 250px; position: relative" class="full-width bg-grey-3">
-                        <div v-if="order.driver">
-                            <!-- {{ order.driver }} -->
-                            <q-item class="bg-grey">
-                                <q-item-section avatar>
-                                    <q-avatar color="secondary">
-                                        <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
-                                        <div v-else>{{ order.driver.first_name[0] }}</div>
-                                    </q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
-                                    <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                            <!-- {{ order }} -->
-                        </div>
+                    <div style="height: 250px; position: relative" class="full-width bg-grey-3" v-if="order.driver">
+                        <q-item class="bg-grey">
+                            <q-item-section avatar>
+                                <q-avatar color="secondary">
+                                    <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
+                                    <div v-else>{{ order.driver.first_name[0] }}</div>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                                <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
+                            </q-item-section>
+                        </q-item>
                     </div>
                     <Link :href="route('product.checkout', { cart_id: order.cart_id })">
-                        <q-btn class="full-width q-mt-sm" label="Reorder" color="primary" no-caps unelevated />
+                        <q-btn class="full-width q-mt-sm" label="Reorder" rounded color="primary" no-caps unelevated />
                     </Link>
-                    <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver">
+                    <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver && order.status != 'completed'">
                         <q-btn class="full-width q-mt-sm" no-caps label="Message Driver"/>
                     </Link>
                     <q-btn 
@@ -196,6 +194,7 @@ const submitRatingForm = () => {
                         :disable="completeOrderForm.processing"
                         rounded
                         label="Complete Order"
+                        color="primary"
                     />
                     <!-- <Link :href="route('customer.inbox', 3)">
                         <q-btn no-caps>Message Driver</q-btn>
@@ -251,4 +250,5 @@ const submitRatingForm = () => {
             </q-form>
         </q-card>
     </q-dialog>
+</Profile>
 </template>

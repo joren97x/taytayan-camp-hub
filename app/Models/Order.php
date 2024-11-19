@@ -53,7 +53,7 @@ class Order extends Model
         'mode',
         'completed_at',
         'waiting_time',
-        'amount'
+        'total'
     ];
 
     public function user() : BelongsTo

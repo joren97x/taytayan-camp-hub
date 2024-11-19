@@ -136,6 +136,20 @@ const selectAll = () => {
         form.cart_products = [];
     }
 };
+
+
+const onGridSelection = (id) => {
+    const existingIndex = form.cart_products.findIndex((product) => product.id === id);
+
+    if (existingIndex !== -1) {
+        // Remove the item if it exists in cart_products
+        form.cart_products.splice(existingIndex, 1);
+    } else {
+        // Add the item if it does not exist in cart_products
+        form.cart_products.push({ id });
+    }
+}
+
 </script>
 
 <template>
@@ -168,8 +182,9 @@ const selectAll = () => {
                         v-model="selectAllChecked"
                         @update:model-value="selectAll"
                         class="lt-md"
+                        size="xs"
                     />
-                    <span class="text-h6">Cart</span> 
+                    <span class="text-h6 q-ml-sm">Cart</span> 
                     <q-space/>
                     <span class="text-subtitle1">{{ cart_products.length }} items</span>
                 </template>
@@ -223,15 +238,16 @@ const selectAll = () => {
                 <template v-slot:item="props">
                     <div class="col-12 q-mb-sm">
                         <q-card class="q-mx-sm" bordered flat>
-                            <q-card-section>
-                                <q-item class="q-pa-none" @click="showEditCartItemDialog(props.row)" clickable>
-                                    <q-item-section avatar>
+                            <q-card-section class="q-pr-xs q-py-xs">
+                                <q-item class="q-pa-none q-pr-sm" @click="showEditCartItemDialog(props.row)" clickable>
+                                    <q-item-section avatar class="q-px-none">
                                         <div>
                                             <q-checkbox
                                                 v-model="selectedRows"
                                                 :val="props.row"
-                                                @update:model-value="onSelection(selectedRows)"
+                                                @update:model-value="onGridSelection(props.row.id)"
                                                 size="xs"
+                                                class="q-pa-none q-ma-none"
                                             />
                                             <q-img :src="`/storage/${props.row.product.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
                                         </div>
@@ -241,7 +257,7 @@ const selectAll = () => {
                                         <q-item-label>{{ props.row.product.name }}</q-item-label>
                                         <q-item-label caption class="ellipsis q-mr-xl">{{ props.row.product.description }} pcs</q-item-label>
                                         <q-item-label caption >{{ props.row.quantity }} qty</q-item-label>
-                                        <div class="absolute-top-right text-black">
+                                        <div class="absolute-top-right text-black q-mr-sm">
                                             ₱{{ parseFloat(props.row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </div>
                                     </q-item-section>
@@ -251,6 +267,9 @@ const selectAll = () => {
                     </div>
                 </template>
             </q-table>
+            <!-- {{ selectedRows }}
+            <q-separator></q-separator>
+            {{ form.cart_products }} -->
         </div>
         <div class="col-4 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 gt-sm">
             <q-card bordered flat :class="['sticky', $q.screen.lt.md ? 'q-mt-md q-mx-sm' : 'q-mx-md']" style="position: sticky; top: 60px;">
@@ -292,7 +311,7 @@ const selectAll = () => {
             </q-card>
         </div>
     </div>
-    <q-card class="bg-white fixed-bottom lt-md z-top" bordered square>
+    <q-card class="bg-white fixed-bottom lt-md z-top" bordered square v-if="!showNewAddressDialog">
         <q-card-section class="row justify-between q-pa-sm">
             <div class="col">
                 <div>Total ({{ form.cart_products.length }} items)</div>

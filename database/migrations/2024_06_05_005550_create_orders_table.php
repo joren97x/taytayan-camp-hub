@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('cart_id');
             $table->foreignId('driver_id')->nullable();
-            $table->decimal('delivery_fee', 8, 2)->nullable();
+            $table->decimal('delivery_fee')->nullable();
             $table->timestamp('waiting_time')->nullable();
+            $table->decimal('total');
             $table->enum('status', [
                 Order::STATUS_PENDING,
                 Order::STATUS_PREPARING,

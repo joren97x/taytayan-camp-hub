@@ -38,7 +38,8 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     // Route::get('/cashier/tickets', [TicketOrderController::class, 'index'])->name('cashier.tickets.index');
     Route::resource('/cashier/tickets', TicketController::class)->names([
         'index' => 'cashier.tickets.index',
-        'update' => 'cashier.tickets.update'
+        'update' => 'cashier.tickets.update',
+        'store' => 'cashier.tickets.store'
     ]);
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');
     Route::patch('/cashier/orders/update-order-status/{id}', [OrderController::class, 'update_status'])->name('cashier.orders.update_status');

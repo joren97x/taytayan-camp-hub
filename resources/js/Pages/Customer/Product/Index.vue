@@ -153,7 +153,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
     <Head title="Milktea Menu" />
     <CustomerLayout>
         <template v-slot:cover>
-            <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+            <div style="position: absolute; width: 100vw; height: 55vh; overflow: hidden; top: 0" class="bg-grey-3">
                 <div style="
                     position: absolute;
                     top: 0;
@@ -179,16 +179,15 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                     text-align: center;
                     padding: 20px; /* For smaller screens */
                 ">
-                    <h1 style="
+                    <div style="
                         margin: 0;
-                        font-size: 3.5rem;
                         font-weight: bold;
                         text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
                         " 
-                        class="text-h1 text-weight-bold"
+                        class="text-h3 text-weight-bold"
                     >
                         RJC Cafe
-                    </h1>
+                    </div>
                     <div style="
                         font-size: 1.25rem;
                         font-weight: bold;
@@ -200,7 +199,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                 </div>
             </div>
         </template>
-    <div style="margin-top: 45vh">
+    <div style="margin-top: 50vh">
         <NewAddressDialog 
             :dialog="showNewAddressDialog" 
             @close="showNewAddressDialog = false"

@@ -53,11 +53,10 @@ const filteredOrders = computed(() => {
 const columns = [
     { name: 'user', label: 'User', align: 'center', field: 'user', sortable: true },
     { name: 'cart_products', align: 'center', label: 'Items', field: 'cart_products', sortable: true },
-    { name: 'subtotal', align: 'center', label: 'Subtotal', field: 'subtotal', sortable: true },
+    { name: 'total', align: 'center', label: 'Total', field: 'total', sortable: true },
     { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
-    { name: 'mode', align: 'center', label: 'Mode', field: 'mode', sortable: true },
-    { name: 'created_at', align: 'center', label: 'Ordered At', field: 'created_at', sortable: true },
-    { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
+    { name: 'mode', align: 'center', label: 'Fullfillment Type', field: 'mode', sortable: true },
+    { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
 ]
 
 const viewOrderDialog = ref(false)
@@ -68,6 +67,14 @@ const showOrderDialog = (order) => {
     selectedOrder.value = order
     viewOrderDialog.value = true
 }
+
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 10
+}
+
 
 </script>
 
@@ -84,6 +91,7 @@ const showOrderDialog = (order) => {
                 :columns="columns"
                 row-key="name"
                 :grid="$q.screen.lt.md"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
@@ -135,6 +143,12 @@ const showOrderDialog = (order) => {
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
                         <q-btn no-caps color="primary" rounded @click="showOrderDialog(props.row)" label="View Order"/>
+                    </q-td>
+                </template>
+                <!-- ₱{{ parseFloat(item.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} -->
+                <template v-slot:body-cell-total="props">
+                    <q-td :props="props">
+                        ₱{{ parseFloat(props.row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} 
                     </q-td>
                 </template>
                 <template v-slot:item="props">

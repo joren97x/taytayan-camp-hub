@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Order;
 use App\Services\CartService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -41,50 +42,30 @@ class OrderController extends Controller
     public function index(Request $request, CartService $cartService, string $status = null) 
     {
 
-        $active_orders = Order::with('driver')
-        ->whereIn('status', [
-            Order::STATUS_PENDING,
-            Order::STATUS_READY_FOR_DELIVERY,
-            Order::STATUS_DELIVERED,
-            Order::STATUS_READY_FOR_PICKUP,
-            Order::STATUS_DELIVERING,
-            Order::STATUS_PREPARING,
-        ])
+        $orders = Order::with('driver')
         ->where('user_id', auth()->id())
         ->withTrashed()
+        ->latest()
         ->get();
 
-        $past_orders = Order::with('driver')
-        ->whereIn('status', [
-            Order::STATUS_CANCELLED,
-            Order::STATUS_COMPLETED,
-        ])
-        ->where('user_id', auth()->id())
-        ->withTrashed()
-        ->get();
+        foreach ($orders as $order) {
+            // Get cart products and subtotal
+            $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
+            $order->cart_products = $result['cart_products'];
+            $order->subtotal = $result['subtotal'];
 
-        $orders = collect([$active_orders, $past_orders]);
-
-        $orders->each(function($order_list) use ($cartService) {
-            foreach ($order_list as $order) {
-                // Get cart products and subtotal
-                $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
-                $order->cart_products = $result['cart_products'];
-                $order->subtotal = $result['subtotal'];
-
-                // Fetch conversation between user and driver if a driver is assigned
-                if ($order->driver) {
-                    $order->conversation_id = Conversation::with('participants')
-                        ->whereHas('participants', function ($query) {
-                            $query->where('user_id', auth()->id());
-                        })
-                        ->whereHas('participants', function ($query) use ($order) {
-                            $query->where('user_id', $order->driver_id);
-                        })
-                        ->first();
-                }
+            // Fetch conversation between user and driver if a driver is assigned
+            if ($order->driver) {
+                $order->conversation_id = Conversation::with('participants')
+                    ->whereHas('participants', function ($query) {
+                        $query->where('user_id', auth()->id());
+                    })
+                    ->whereHas('participants', function ($query) use ($order) {
+                        $query->where('user_id', $order->driver_id);
+                    })
+                    ->first();
             }
-        });
+        }
 
         // foreach($active_orders as $order) {
         //     $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
@@ -117,23 +98,21 @@ class OrderController extends Controller
         // }
 
         return Inertia::render('Customer/Product/Orders', [
-            'active_orders' => $active_orders,
-            'past_orders' => $past_orders
+            'orders' => $orders,
         ]);
 
     }
 
     public function update(Order $order)
     {
-        $order->status = Order::STATUS_COMPLETED;
-        $order->update();
+        $order->update(['status' => Order::STATUS_COMPLETED, 'completed_at' => Carbon::now()]);
         return back();
     }
 
     public function show(string $id, CartService $cartService)
     {
 
-        $order = Order::with('user')->find($id);
+        $order = Order::with(['user', 'driver'])->find($id);
 
         if($order->user_id != auth()->id()) {
             abort(404);
@@ -142,6 +121,17 @@ class OrderController extends Controller
         $result = $cartService->getCartLineItemsAndSubtotal($order->cart_id);
         $order->cart_products = $result['cart_products'];
         $order->subtotal = $result['subtotal'];
+
+        if ($order->driver) {
+            $order->conversation_id = Conversation::with('participants')
+                ->whereHas('participants', function ($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->whereHas('participants', function ($query) use ($order) {
+                    $query->where('user_id', $order->driver_id);
+                })
+                ->first();
+        }
         
         return Inertia::render('Customer/Product/ShowOrder', [
             'order' => $order

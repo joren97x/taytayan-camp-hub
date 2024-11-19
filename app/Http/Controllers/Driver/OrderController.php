@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Driver;
 
+use App\Events\Notify;
 use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
@@ -28,7 +29,10 @@ class OrderController extends Controller
             // $order->customer = $order->user()->get();
         }
 
-        return Inertia::render('Driver/Orders', ['orders' => $orders]);
+        return Inertia::render('Driver/Orders', [
+            'orders' => $orders,
+            'google_maps_api_key' => config('app.google_maps_api_key')
+        ]);
     }
 
     public function active_deliveries(CartService $cartService)
@@ -46,7 +50,8 @@ class OrderController extends Controller
         }
 
         return Inertia::render('Driver/ActiveDeliveries', [
-            'orders' => $orders
+            'orders' => $orders,
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 
@@ -79,12 +84,12 @@ class OrderController extends Controller
 
         event(new OrderStatusUpdated($order, true, app(CartService::class)));
         
-        Notification::create([
-            'user_id' => $order->user_id,
-            'title' => 'Your Order Has Been Delivered',
-            'description' => 'Your order has been successfully delivered!',
-            'link' => route('customer.orders.show', $order->id),
-        ]);
+        // Notification::create([
+        //     'user_id' => $order->user_id,
+        //     'title' => 'Your Order Has Been Delivered',
+        //     'description' => 'Your order has been successfully delivered!',
+        //     'link' => route('customer.orders.show', $order->id),
+        // ]);
 
         return redirect(route('driver.active_deliveries'));
 
@@ -95,6 +100,15 @@ class OrderController extends Controller
         $order->status = Order::STATUS_DELIVERED;
         $order->update();
         event(new OrderStatusUpdated($order, true, app(CartService::class)));
+
+        $notification = Notification::create([
+            'user_id' => $order->user_id,
+            'title' => 'Your Order Has Been Delivered',
+            'description' => 'Your order has been successfully delivered!',
+            'link' => route('customer.orders.show', $order->id),
+        ]);
+
+        event(new Notify($notification));
 
         return redirect(route('driver.orders.index'));
     }

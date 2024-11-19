@@ -1,7 +1,8 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import Orders from '../Partials/Orders.vue';
+import Orders from '../Partials/Orders.vue'
+import Profile from '../Profile.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
@@ -10,8 +11,7 @@ defineOptions({
 })
 
 defineProps({
-    active_orders: Object,
-    past_orders: Object
+    orders: Object,
 })
 
 const showPastOrders = ref(false)
@@ -20,17 +20,18 @@ const showPastOrders = ref(false)
 
 <template>
     <Head title="Orders" />
-    <div class="q-pa-md">
-        <q-card  flat>
-            <q-card-section>
-                <div class="row reverse justify-center">
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <Orders :active_orders="active_orders" :past_orders="past_orders" />
+    <Profile>
+            <q-card flat bordered>
+                <q-card-section>
+                    <div class="text-h6">Orders</div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <Orders :orders="orders" />
+                        </div>
                     </div>
-                </div>
-            </q-card-section>
-        </q-card>
-    </div>
+                </q-card-section>
+            </q-card>
+    </Profile>
     <!-- <div class="q-pa-md">
         <q-card flat bordered>
             <q-card-section>

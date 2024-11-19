@@ -31,7 +31,8 @@ class PaymentController extends Controller
             'cart_id' => $cart->id,
             'status' => Order::STATUS_PENDING,
             'payment_method' => $request->payment_method,
-            'mode' => $request->mode
+            'mode' => $request->mode,
+            'total' => $request->total
         ]);
 
         if($order->mode == Order::MODE_DELIVERY) {
@@ -74,8 +75,6 @@ class PaymentController extends Controller
     public function pay(Request $request, CartService $cartService) 
     {
 
-        // dd($request->all());
-
         if($request->payment_method != 'right_now') {
             session(['payment_session' => true]);
             return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
@@ -114,8 +113,6 @@ class PaymentController extends Controller
                 ],
             ];
         }
-
-        // dd($line_items);
 
         $checkout = Paymongo::checkout()->create([
             'cancel_url' => route('customer.cart.index'),

@@ -26,6 +26,14 @@ const navigation_list = [
         icon: 'restaurant',
         navigations: [
             { 
+                label: 'Dashboard', 
+                value: 'dashboard', 
+                href: 'admin.products.dashboard', 
+                component: 'Admin/Product/Dashboard',
+                components: [],
+                icon: 'restaurant'
+            },
+            { 
                 label: 'Products', 
                 value: 'products', 
                 href: 'admin.products.index', 
@@ -80,6 +88,14 @@ const navigation_list = [
         icon: 'event',
         navigations: [
             { 
+                label: 'Dashboard', 
+                value: 'dashboard', 
+                href: 'admin.events.dashboard', 
+                component: 'Admin/Event/Dashboard',
+                components: [],
+                icon: 'restaurant'
+            },
+            { 
                 label: 'Events', 
                 value: 'events', 
                 href: 'admin.events.index', 
@@ -88,7 +104,7 @@ const navigation_list = [
                     'Admin/Event/CreateEvent',
                     'Admin/Event/EditEvent',
                     'Admin/Event/ShowEvent',
-                    'Admin/Event/Dashboard',
+                    'Admin/Event/EventDashboard',
                 ],
                 icon: 'event'
             },
@@ -113,6 +129,14 @@ const navigation_list = [
         name: 'Facility Management',
         icon: 'cottage',
         navigations: [
+            { 
+                label: 'Dashboard', 
+                value: 'dashboard', 
+                href: 'admin.facilities.dashboard', 
+                component: 'Admin/Facility/Dashboard',
+                components: [],
+                icon: 'restaurant'
+            },
             { 
                 label: 'Facilities', 
                 value: 'facility', 
@@ -151,49 +175,33 @@ const navigation_list = [
 <template>
     <q-layout view="lHh LpR lFf">
         <q-drawer show-if-above v-model="drawerStore.drawer" side="left" bordered>
-            <q-img 
-                class="absolute-top" 
-                src="/taytayan.jpg"
-                style="height: 150px">
-                    <q-item  class="absolute-bottom">
-                        <q-item-section avatar>
-                            <q-avatar color="primary" text-color="white">
-                                <q-img 
-                                    src="/logo.jpg"
-                                />
-                            </q-avatar>
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label class="text-subtitle1 text-weight-bold">Taytayan Camp Hub</q-item-label>
-                        </q-item-section>
-
-                         <!-- <q-item-section side top>
-                            <q-btn 
-                                round
-                                :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'" 
-                                color="white" 
-                                class="text-black" 
-                                @click="$q.dark.toggle"
-                            />
-                        </q-item-section>  -->
-                    </q-item>
-            </q-img>
+            <q-item  class="absolute-top q-my-md">
+                <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white">
+                        <q-img 
+                            src="/logo.jpg"
+                        />
+                    </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label class="text-h6 text-weight-bold">Taytayan Camp Hub</q-item-label>
+                </q-item-section>
+            </q-item>
             <!-- drawer content -->
-            <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd;">
+            <q-scroll-area style="height: calc(100% - 150px); margin-top: 60px; border-right: 1px solid #ddd;">
                 <q-list class="q-mx-sm q-mt-md" style="margin-bottom: 130px">
                     <q-item-label header class="q-pa-none q-px-md q-py-xs">Management</q-item-label>
                     <Link :href="route('admin.dashboard')">
                         <q-item clickable v-ripple class="rounded-borders" :active="$page.component == 'Admin/Dashboard'" active-class="bg-primary text-white">
-                            <q-item-section avatar>
+                            <!-- <q-item-section avatar>
                                 <q-icon name="dashboard" />
-                            </q-item-section>
+                            </q-item-section> -->
                             <q-item-section>
                                 Dashboard
                             </q-item-section>
                         </q-item>
                     </Link>
                     <q-expansion-item 
-                        :icon="navigation.icon" 
                         :label="navigation.name" 
                         v-for="navigation in navigation_list" 
                         class="rounded-borders"
@@ -201,9 +209,9 @@ const navigation_list = [
                         <q-card class="q-mx-md">
                             <Link :href="route(nav.href)" v-for="nav in navigation.navigations">
                                 <q-item clickable v-ripple class="rounded-borders" :active="$page.component == nav.component || nav.components.includes($page.component)" active-class="bg-primary text-white">
-                                    <q-item-section avatar>
+                                    <!-- <q-item-section avatar>
                                         <q-icon :name="nav.icon" />
-                                    </q-item-section>
+                                    </q-item-section> -->
                                     <q-item-section>
                                         {{ nav.label }}
                                     </q-item-section>
@@ -213,9 +221,9 @@ const navigation_list = [
                     </q-expansion-item>
                     <Link :href="route(`admin.users.index`)">
                         <q-item clickable v-ripple class="rounded-borders" :active="$page.component == 'Admin/UserManagement'" active-class="bg-primary text-white">
-                            <q-item-section avatar>
+                            <!-- <q-item-section avatar>
                                 <q-icon name="people" />
-                            </q-item-section>
+                            </q-item-section> -->
                             <q-item-section class="text-capitalize">
                                 <!-- {{ user_role }} -->
                                 User Management
@@ -228,15 +236,15 @@ const navigation_list = [
                 <q-list >
                     <Link :href="route('conversations.index')">
                         <q-item clickable class="q-mx-sm rounded-borders" :active="$page.component == 'Admin/Inbox'" active-class="bg-primary text-white">
-                            <q-item-section avatar>
+                            <!-- <q-item-section avatar>
                                 <q-icon name="inbox" />
-                            </q-item-section>
+                            </q-item-section> -->
                             <q-item-section>
                                 <q-item-label>Inbox</q-item-label>
                             </q-item-section>
-                            <q-item-section side top>
+                            <!-- <q-item-section side top>
                                 <q-chip>2</q-chip>
-                            </q-item-section> 
+                            </q-item-section>  -->
                         </q-item>
                     </Link>
                     <q-separator></q-separator>
@@ -255,25 +263,23 @@ const navigation_list = [
                         </q-item-section>
                         <q-item-section side top class="">
                             <q-btn :color="$page.component == 'Admin/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
-                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start">
-                                    <q-item clickable v-ripple  @click="$q.dark.toggle">
-                                        <q-item-section avatar>
-                                            <q-icon name="drafts" />
-                                        </q-item-section>
+                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start" style="max-width: 180px; width: 180px;">
+                                    <!-- <q-item clickable v-ripple  @click="$q.dark.toggle">
+                                      
                                         <q-item-section>
                                             Dark Mode
                                         </q-item-section>
                                     <q-item-section side top>
                                             <q-toggle v-model="$q.dark.isActive"></q-toggle>
                                         </q-item-section>
-                                    </q-item>
+                                    </q-item> -->
                                     <Link :href="route('admin.profile')">
                                         <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
-                                            <q-item-section avatar >
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="school" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
-                                                <q-item-label>View Profile</q-item-label>
+                                                <q-item-label>Profile</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                                             </q-item-section>
                                         </q-item>
@@ -284,10 +290,10 @@ const navigation_list = [
                                                 Logout
                                             </q-tooltip>
                                         </q-btn> -->
-                                        <q-item clickable class="rounded-borders">
-                                            <q-item-section avatar >
+                                        <q-item clickable class="rounded-borders text-negative">
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="logout" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
                                                 <q-item-label>Log out</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->

@@ -22,7 +22,7 @@ class ProductController extends Controller
         return Inertia::render('Admin/Product/Products', 
         [
             'categories' => Category::all(),
-            'products' => Product::with('categories')->get()
+            'products' => Product::with('categories')->latest()->get()
         ]);
     }
 

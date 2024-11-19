@@ -10,9 +10,10 @@ use App\Http\Controllers\Admin\Product\ProductRatingController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::patch('/admin/orders/update-order-status/{id}', function() {
-    dd('hhh');
-})->name('admin.orders.update_status');
+// Route::patch('/admin/orders/update-order-status/{id}', function() {
+//     dd('hhh');
+// })->name('admin.orders.update_status');
+Route::get('/dashboard/products', [ViewController::class, 'dashboard'])->name('admin.products.dashboard');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 // Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
 Route::resource('/admin/product/ratings', ProductRatingController::class)->names([

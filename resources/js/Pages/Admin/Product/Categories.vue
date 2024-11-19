@@ -69,6 +69,12 @@ const columns = [
     { name: 'items', label: 'Items', align: 'center', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 10
+}
 
 </script>
 
@@ -86,6 +92,7 @@ const columns = [
                 row-key="name"
                 :grid="$q.screen.lt.md"
                 :filter="filter"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>

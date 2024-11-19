@@ -184,7 +184,7 @@ const getTextColor = computed((component) => {
                         </q-btn>
                         <q-btn class="q-px-xs" flat unelevated no-caps :class="getTextColor">
                             <q-icon name="menu" class="lt-md" />
-                            <q-avatar size="3em" text-color="white" color="primary" class="gt-sm">
+                            <q-avatar size="md" text-color="white" color="primary" class="gt-sm">
                                 <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"
                                     v-if="$page.props.auth.user.profile_pic" />
                                 <div v-else>
@@ -192,7 +192,7 @@ const getTextColor = computed((component) => {
                                 </div>
                             </q-avatar>
                             <span class="q-ml-sm gt-sm">{{ $page.props.auth.user.first_name }}</span>
-                            <q-menu class="q-pa-sm" style="width: 300px" auto-close @show="drawerStore.getCartLength">
+                            <q-menu class="q-pa-sm" style="width: 250px" auto-close @show="drawerStore.getCartLength">
                                 <q-list>
                                     <div class="lt-md">
                                         <MainLinks />
@@ -200,17 +200,17 @@ const getTextColor = computed((component) => {
                                     <q-separator class="lt-md" />
                                     <Link :href="route('customer.profile')" class="text-black">
                                     <q-item clickable class="rounded-borders">
-                                        <q-item-section avatar>
+                                        <!-- <q-item-section avatar>
                                             <q-icon name="person" />
-                                        </q-item-section>
+                                        </q-item-section> -->
                                         <q-item-section>Profile</q-item-section>
                                     </q-item>
                                     </Link>
                                     <Link :href="route('customer.cart.index')" class="text-black">
                                     <q-item clickable class="rounded-borders">
-                                        <q-item-section avatar>
+                                        <!-- <q-item-section avatar>
                                             <q-icon name="shopping_cart" />
-                                        </q-item-section>
+                                        </q-item-section> -->
                                         <q-item-section>Cart</q-item-section>
                                         <q-item-section side>
                                             <q-chip>{{ drawerStore.cart }}</q-chip>
@@ -219,16 +219,16 @@ const getTextColor = computed((component) => {
                                     </Link>
                                     <Link :href="route('conversations.index')" class="text-black">
                                     <q-item clickable class="rounded-borders">
-                                        <q-item-section avatar>
+                                        <!-- <q-item-section avatar>
                                             <q-icon name="inbox" />
-                                        </q-item-section>
+                                        </q-item-section> -->
                                         <q-item-section>Inbox</q-item-section>
                                     </q-item>
                                     </Link>
                                     <q-item clickable class="rounded-borders text-negative" @click="logout()" >
-                                        <q-item-section avatar>
+                                        <!-- <q-item-section avatar>
                                             <q-icon name="logout" />
-                                        </q-item-section>
+                                        </q-item-section> -->
                                         <q-item-section>Logout</q-item-section>
                                     </q-item>
                                 </q-list>

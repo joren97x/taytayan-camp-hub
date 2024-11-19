@@ -8,13 +8,8 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { Head } from '@inertiajs/vue3'
 
-defineOptions({
-    layout: DriverLayout
-})
-
-const props = defineProps({
-    orders: Object
-})
+defineOptions({ layout: DriverLayout })
+const props = defineProps({ orders: Object, google_maps_api_key: String })
 
 const $q = useQuasar()
 const orders = ref([])
@@ -73,7 +68,7 @@ Echo.private('orders')
             >
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <ViewOrderDialog :order="props.row"/>
+                        <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key"/>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-items="props">
@@ -125,7 +120,7 @@ Echo.private('orders')
                                     <div class="text-caption text-grey">
                                         Actions
                                     </div>
-                                    <ViewOrderDialog :order="props.row" />
+                                    <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key" />
                                 </div>
                             </div>
                         </q-card-section>

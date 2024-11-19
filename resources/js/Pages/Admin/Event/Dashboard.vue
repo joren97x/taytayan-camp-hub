@@ -1,155 +1,130 @@
 <script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { useDrawerStore } from '@/Stores/DrawerStore';
+import { onMounted, ref } from 'vue';
+import { date } from 'quasar';
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  BarController,
+  BarElement,
+  ArcElement,
+  Legend,
+  Tooltip,
+  LineController,
+  LineElement,
+  PointElement,
+  Title,
+} from 'chart.js';
+import { formatDistanceToNow } from 'date-fns';
 
-import AdminLayout from '@/Layouts/AdminLayout.vue'
-import { ref, computed } from 'vue'
-import { useQuasar, date } from 'quasar'
-import { Link } from '@inertiajs/vue3'
+Chart.register(BarController, BarElement, CategoryScale, LinearScale, PieController, ArcElement, Legend, Tooltip, LineController, LineElement, PointElement, Title);
 
-defineOptions({ layout: AdminLayout })
-const props = defineProps({ event: Object, tickets: Object })
+defineOptions({ layout: AdminLayout });
 
-const $q = useQuasar()
-const filter = ref('')
-const columns = [
-    { name: 'attendee', align: 'center', label: 'Attendee Name', field: 'attendee', sortable: true },
-    { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
-    { name: 'checked_in', align: 'center', label: 'Checked in', field: 'checked_in', sortable: true },
-    { name: 'actions', align: 'center', label: '', field: 'actions', sortable: true },
-]
-const checkedIn = computed(() => {
-    return props.tickets.filter((tix) => tix.status == 'used') 
+const props = defineProps({
+    event_data: Object,
+    event_labels: Object,
+    total_events: Object,
+    total_revenue: Object,
+    total_tickets_sold: Object,
+    tickets_sold_today: Object,
+});
+
+const eventsCanva = ref(null)
+onMounted(() => {
+    new Chart(eventsCanva.value.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: props.event_labels, // Dates
+            datasets: [{
+                label: 'Tickets Sold',
+                data: props.event_data, // Ticket counts
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Tickets Sold per Event',
+                }
+            }
+        }
+    });
 })
-
+const formatMoney = (money) => {
+    return `₱${parseFloat(money).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
 </script>
 
 <template>
-    
-    <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
-        <q-card class="q-mb-md" bordered flat>
-            <q-card-actions class="justify-center">
-                <div class="flex justify-center items-center">
-                    <Link :href="route('admin.tickets.index')" class="absolute-left q-mt-sm">
-                        <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
-                    </Link>
-                    <div class="text-h6">Event Dashboard</div>
-                </div>
-            </q-card-actions>
-            <q-card-section >
-                <!-- <q-btn 
-                    label="Scan Qr Code" 
-                    no-caps 
-                    icon="qr_code" 
-                    color="primary" 
-                    class="absolute-top-right q-mt-md q-mr-md" 
-                    @click="showScanner = true"
-                    rounded 
-                    unelevated
-                /> -->
-                <q-item class="q-my-sm">
-                    <q-item-section avatar class="items-center">
-                        <div class="text-weight-bold text-secondary">{{ date.formatDate(event.date, 'MMM') }}</div>
-                        <div>{{ date.formatDate(event.date, 'D') }}</div>
-                    </q-item-section>
-                    <q-item-section avatar>
-                        <q-img :src="`/storage/${event.cover_photo}`" height="60px" width="60px" class="rounded-borders" />
-                    </q-item-section>
-                    <q-item-section class="items-start">
-                        <q-item-label class="text-weight-bold">{{ event.title }}</q-item-label>
-                        <q-item-label caption>{{ date.formatDate(event.date, 'MMM D, YYYY') + ' at ' +  event.start_time}}</q-item-label>
-                    </q-item-section>
-                </q-item>
-                <div>Check in attendees using their name or email</div>
-                <div class="row items-center flex">
-                    <div class="col-10"><q-linear-progress :value="checkedIn.length / tickets.length" /></div>
-                    <div class="col-2 text-center text-subtitle1">
-                        {{ checkedIn.length }} / {{ tickets.length }}
-                    </div>
-                </div>
-            </q-card-section>
-        </q-card>
-        <q-card bordered flat>
-            <q-table
-                class="my-sticky-header-column-table"
-                flat
-                :grid="$q.screen.lt.md"
-                title="Treats"
-                :rows="tickets"
-                :columns="columns"
-                row-key="name"
-                :filter="filter"
-            >
-                <template v-slot:top>
-                    <p class="text-h6 q-pt-md">Attendees</p>
-                    <q-space />
-                    <q-input rounded outlined dense label="Search..." v-model="filter" class="q-mx-md" debounce="300" color="primary">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                    <!-- <Link :href="route('admin.facilities.create')">
-                        <q-btn no-caps color="primary">Create Facility</q-btn>
-                    </Link> -->
-                </template>
-                <template v-slot:body-cell-attendee="props">
-                    <q-td :props="props">
-                        {{ props.row.name }}
-                    </q-td>
-                </template>
-                <template v-slot:body-cell-actions="props">
-                    <q-td :props="props">
-                        <EventCheckinDialog :ticket="props.row" />
-                    </q-td>
-                </template>
-                <template v-slot:body-cell-checked_in="props">
-                    <q-td :props="props">
-                        <q-chip v-if="props.row.status == 'used'" color="green-3">Checked-in</q-chip>
-                        <q-chip v-else>Pending</q-chip>
-                    </q-td>
-                </template>
-                <template v-slot:no-data>
-                    <div class="full-width row flex-center q-gutter-sm text-grey" style="height: 50vh">
-                        No Attendees Found. Check again later...
-                    </div>
-                </template>
-                <template v-slot:item="props">
-                    <div class="col-12 q-mb-sm">
-                        <q-card class="q-mx-sm" bordered flat>
-                            <q-card-section>
-                                <q-item class="q-pa-none">
-                                    <q-item-section class="items-start">
-                                        <q-item-label>{{ props.row.name }}</q-item-label>
-                                        <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.status }}</q-item-label>
-                                    </q-item-section>
-                                    <q-item-section side>
-                                        <q-chip>{{ props.row.status == 'used' ? 'Checked in' : 'Pending' }}</q-chip>
-                                    </q-item-section>
-                                </q-item>
-                            </q-card-section>
-                        </q-card>
-                    </div>
-                </template>
-            </q-table>
-        </q-card>
+    <Head title="Events Dashboard" />
+<div :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'">
+    <div class="flex">
+        <q-btn icon="menu" class="lt-md" @click="drawerStore.drawer = true" flat/>
+        <div class="text-h6"> Dashboard </div>
     </div>
-    <!-- <q-dialog v-model="showScanner" persistent>
-      <q-card flat class="q-pa-md" style="max-width: 90%; max-height: 90%;">
-        <q-card-actions class="justify-end">
-            <q-btn icon="close" flat round dense @click="showScanner = false"/>
-        </q-card-actions>
-        <qrcode-stream 
-            @decode="onDecode" 
-            @init="onInit" 
-            @detect="onDetect"
-            @error="cameraError"
-            @camera-on="onCameraReady"
-        />
-        <q-spinner v-if="loading" />
-      </q-card>
-    </q-dialog> -->
+    <div class="row q-col-gutter-md ">
+        <div class="col-3">
+            <q-card borderd>
+                <q-card-section>
+                    <div class="text-subtitle1">Total Events</div>
+                    <div class="text-h6">
+                        {{ total_events }}
+                    </div>
+                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                </q-card-section>
+            </q-card>
+        </div>
+        <div class="col-3">
+            <q-card borderd>
+                <q-card-section>
+                    <div class="text-subtitle1">Total Revenue </div>
+                    <div class="text-h6">
+                        {{ formatMoney(total_revenue) }}
+                    </div>
+                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                </q-card-section>
+            </q-card>
+        </div>
+        <div class="col-3">
+            <q-card borderd>
+                <q-card-section>
+                    <div class="text-subtitle1">Total Tickets Sold</div>
+                    <div class="text-h6">
+                        {{ formatMoney(total_tickets_sold) }}
+                    </div>
+                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                </q-card-section>
+            </q-card>
+        </div>
+        <div class="col-3">
+            <q-card borderd>
+                <q-card-section>
+                    <div class="text-subtitle1">Tickets Sold Today</div>
+                    <div class="text-h6">
+                        {{ tickets_sold_today }}
+                    </div>
+                </q-card-section>
+            </q-card>
+        </div>
+        <div class="col-6">
+            <q-card class="q-pa-sm" style="max-height: 350px; height: 350px">
+                <canvas ref="eventsCanva"></canvas>
+            </q-card>
+        </div>
+        
+    </div>
+</div>
 </template>
-
-<style scoped>
-a {
-    color: black;
-}
-</style>

@@ -70,7 +70,9 @@ const directionsService = ref(null)
 const duration = ref(null)
 const delivery_time = ref('')
 const getDuration = () => {
-    console.log(props.google_maps_api_key)
+    if(props.order.mode == 'pickup') {
+        return
+    }
     const loader = initializeLoader(props.google_maps_api_key)
     loader.load().then(() => {
     directionsService.value = new google.maps.DirectionsService()
@@ -150,7 +152,11 @@ const parseDurationToMinutes = (durationText) => {
 >
     <OrderDetails :order="order">
         <div class="text-subtitle1 text-weight-medium text-center q-mt-md">Estimated Time of Arrival</div>
-        Delivery Time: {{ delivery_time }}
+
+            <div class="q-pa-md q-my-xs rounded-borders bg-grey-4" v-if="order.mode == 'delivery'">
+                Estimated Delivery Time: {{ delivery_time }}
+            </div>
+
             <q-input
                 outlined 
                 rounded

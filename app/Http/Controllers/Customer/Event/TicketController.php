@@ -38,8 +38,7 @@ class TicketController extends Controller
         $today = Carbon::today();
         $active_ticket_orders = TicketOrder::with([
             'event', 
-            'ticket_order_items', 
-            'ticket_order_items.ticket.ticket_holder',
+            'tickets',
         ])
         ->whereHas('event', function($query) use ($today) {
             $query->where('date', '>=', $today);
@@ -49,8 +48,7 @@ class TicketController extends Controller
 
         $past_ticket_orders = TicketOrder::with([
             'event', 
-            'ticket_order_items', 
-            'ticket_order_items.ticket.ticket_holder',
+            'tickets',
         ])
         ->whereHas('event', function($query) use ($today) {
             $query->where('date', '<', $today);

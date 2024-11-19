@@ -124,7 +124,7 @@ const columns = [
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <Link :href="route('admin.events.dashboard', props.row.id)">
+                        <Link :href="route('admin.events.event_dashboard', props.row.id)">
                             <q-btn no-caps unelevated color="primary">View Tickets</q-btn>
                         </Link>
                     </q-td>
@@ -174,7 +174,7 @@ const columns = [
                                     <!-- <div class="text-caption text-grey">
                                         Actions
                                     </div> -->
-                                    <Link :href="route('admin.events.dashboard', props.row.id)" class="full-width">
+                                    <Link :href="route('admin.events.event_dashboard', props.row.id)" class="full-width">
                                         <q-btn label="View Tickets" no-caps color="primary" rounded unelevated class="full-width"/>
                                     </Link>
                                 </div>

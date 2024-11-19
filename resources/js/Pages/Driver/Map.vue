@@ -9,9 +9,7 @@ defineOptions({
 
 // Define props for passing coordinates and Google Maps API key
 const props = defineProps({
-    customers_coordinates: Object,
-    stores_coordinates: Object,
-    drivers_coordinates: Object,
+    order: Object,
     google_maps_api_key: String
 })
 
@@ -43,10 +41,14 @@ const initMap = () => {
 
 // Function to calculate and display the route on the map
 const calculateAndDisplayRoute = () => {
+    console.log(props.order.user)
     directionsService.value.route({
-        origin: props.stores_coordinates,
-        destination: props.drivers_coordinates,
-        waypoints: [{ location: props.customers_coordinates, stopover: true }],
+        //stores coordinates
+        origin: {
+            lat: 10.25893392782387, 
+            lng: 124.03877067362872
+        },
+        destination: JSON.parse(props.order.user.address_coordinates),
         travelMode: google.maps.TravelMode.DRIVING,
     })
     .then(response => {

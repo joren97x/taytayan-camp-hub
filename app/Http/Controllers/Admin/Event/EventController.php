@@ -40,7 +40,7 @@ class EventController extends Controller
         ->get();
         // $tickets = Ticket::with('tickets')->where('event_id', $event->id)->get();
 
-        return Inertia::render('Admin/Event/Dashboard', [
+        return Inertia::render('Admin/Event/EventDashboard', [
             'event' => $event,
             'tickets' => $tickets
         ]);

@@ -73,9 +73,9 @@ Echo.private(`orders`)
             <q-list class="q-mx-sm" style="margin-top: 160px;">
                 <Link :href="route('driver.dashboard')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/Dashboard'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="dashboard" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Dashboard</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -84,9 +84,9 @@ Echo.private(`orders`)
                 </Link>
                 <Link :href="route('driver.orders.index')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/Orders'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="shopping_cart" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Orders</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -95,9 +95,9 @@ Echo.private(`orders`)
                 </Link>
                 <Link :href="route('driver.active_deliveries')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/ActiveDeliveries'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="shopping_cart_checkout" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Active Deliveries </q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -106,9 +106,9 @@ Echo.private(`orders`)
                 </Link>
                 <Link :href="route('driver.delivery_history')">
                     <q-item clickable class="rounded-borders" :active="$page.component == 'Driver/DeliveryHistory'" active-class="bg-primary text-white">
-                        <q-item-section avatar>
+                        <!-- <q-item-section avatar>
                             <q-icon name="school" />
-                        </q-item-section>
+                        </q-item-section> -->
                         <q-item-section>
                             <q-item-label>Delivery History</q-item-label>
                             <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
@@ -126,16 +126,19 @@ Echo.private(`orders`)
                             <q-item-section>
                                 <q-item-label>Inbox</q-item-label>
                             </q-item-section>
-                            <q-item-section side top>
+                            <!-- <q-item-section side top>
                                 <q-chip>2</q-chip>
-                            </q-item-section> 
+                            </q-item-section>  -->
                         </q-item>
                     </Link>
                     <q-separator></q-separator>
                     <q-item class="q-pa-md rounded-borders q-ma-sm" :active="$page.component == 'Driver/Profile'" active-class="bg-primary text-white">
                         <q-item-section top avatar>
                             <q-avatar color="primary" text-color="white">
-                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" class="fit" fit="cover" />
+                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" v-if="$page.props.auth.user.profile_pic" class="fit" fit="cover" />
+                                <div v-else>
+                                    {{ $page.props.auth.user.first_name[0] }}
+                                </div>
                             </q-avatar>
                         </q-item-section>
                         <q-item-section>
@@ -145,7 +148,7 @@ Echo.private(`orders`)
                         <q-item-section side top class="">
                             <q-btn :color="$page.component == 'Driver/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
                                 <q-menu class="q-pa-sm" anchor="center right" self="bottom start" auto-close>
-                                    <q-item clickable v-ripple  @click="$q.dark.toggle">
+                                    <!-- <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>
                                             <q-icon name="drafts" />
                                         </q-item-section>
@@ -155,14 +158,14 @@ Echo.private(`orders`)
                                     <q-item-section side top>
                                             <q-toggle v-model="$q.dark.isActive"></q-toggle>
                                         </q-item-section>
-                                    </q-item>
+                                    </q-item> -->
                                     <Link :href="route('driver.profile')">
                                         <q-item clickable class="rounded-borders" :active="$page.component == 'Cashier/Profile'" active-class="bg-primary text-white">
-                                            <q-item-section avatar >
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="school" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
-                                                <q-item-label>View Profile</q-item-label>
+                                                <q-item-label>Profile</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->
                                             </q-item-section>
                                         </q-item>
@@ -173,10 +176,10 @@ Echo.private(`orders`)
                                                 Logout
                                             </q-tooltip>
                                         </q-btn> -->
-                                        <q-item clickable class="rounded-borders">
-                                            <q-item-section avatar >
+                                        <q-item clickable class="rounded-borders text-negative">
+                                            <!-- <q-item-section avatar >
                                                 <q-icon name="logout" />
-                                            </q-item-section>
+                                            </q-item-section> -->
                                             <q-item-section>
                                                 <q-item-label>Log out</q-item-label>
                                                 <!-- <q-item-label caption>https://quasar.dev</q-item-label> -->

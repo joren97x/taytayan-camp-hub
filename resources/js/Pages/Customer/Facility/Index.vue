@@ -18,7 +18,7 @@ defineProps({
     <Head title="Facilities" />
     <CustomerLayout>
     <template v-slot:cover>
-        <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+        <div style="position: absolute; width: 100vw; height: 55vh; overflow: hidden; top: 0" class="bg-grey-3">
             <div style="
                 position: absolute;
                 top: 0;
@@ -44,16 +44,15 @@ defineProps({
                 text-align: center;
                 padding: 20px; /* For smaller screens */
             ">
-                <h1 style="
+                <div style="
                     margin: 0;
-                    font-size: 3.5rem;
                     font-weight: bold;
                     text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
                     " 
-                    class="text-h1 text-weight-bold"
+                    class="text-h3 text-weight-bold"
                 >
                     Explore Our Camp Facilities
-                </h1>
+                </div>
                 <div style="
                     font-size: 1.25rem;
                     font-weight: bold;
@@ -65,7 +64,7 @@ defineProps({
             </div>
         </div>
     </template>
-    <div style="margin-top: 45vh">
+    <div style="margin-top: 50vh">
         <!-- <q-card bordered flat style="height: 40vh; position: relative;" class="full-width bg-grey row justify-center" v-if="facilities.length > 0">
             <q-img class="fit" fit="cover" src="images/huts2.jpg" />
             <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5);" class="flex items-center justify-center">

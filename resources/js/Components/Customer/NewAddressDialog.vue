@@ -96,6 +96,8 @@ async function map() {
             center: form.address_coordinates,
             zoom: 17,
             mapId: '4504f8b37365c3d0',
+            mapTypeControl: false,        // Disables Map/Satellite options
+            streetViewControl: false,
         })
         const infoWindow = new InfoWindow()
         const draggableMarker = new AdvancedMarkerElement({

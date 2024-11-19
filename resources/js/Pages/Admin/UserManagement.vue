@@ -178,12 +178,13 @@ const initialPagination = {
                     <q-td :props="props">
                         <q-item class="q-pa-none">
                             <q-item-section avatar>
-                                <q-avatar v-if="props.row.profile_pic">
-                                    <q-img class="fit" fit="cover" :src="`/storage/${props.row.profile_pic}`"/>
+                                <q-avatar color="primary" text-color="white">
+                                    <q-img class="fit" fit="cover" :src="`/storage/${props.row.profile_pic}`" v-if="props.row.profile_pic"/>
+                                    <div v-else>
+                                        {{ props.row.first_name[0] }}
+                                    </div>
                                 </q-avatar>
-                                <q-avatar v-else>
-                                    <q-img fit="cover" src="https://static.vecteezy.com/system/resources/thumbnails/020/911/737/small_2x/user-profile-icon-profile-avatar-user-icon-male-icon-face-icon-profile-icon-free-png.png" ></q-img>
-                                </q-avatar>
+                                
                             </q-item-section>
                             <q-item-section class="text-left">
                                 <q-item-label>{{ props.row.first_name + ' ' + props.row.last_name }}</q-item-label>

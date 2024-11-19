@@ -8,14 +8,13 @@ use App\Http\Controllers\Admin\Facility\FacilityRatingController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/admin/facilities/reservations', [ReservationController::class, 'index'])->name('admin.reservations.index');
-Route::resource('/admin/bookings', BookingController::class)->names([
-    'index' => 'admin.bookings.index'
-]);
-Route::resource('/admin/facility/ratings', FacilityRatingController::class)->names([
+Route::get('/bookings', [ViewController::class, 'bookings'])->name('admin.bookings.index');
+Route::get('/dashboard/facilities', [ViewController::class, 'dashboard'])->name('admin.facilities.dashboard');
+Route::resource('/facility/ratings', FacilityRatingController::class)->names([
     'index' => 'admin.facility_ratings.index'
 ]);
-Route::post('/admin/facilities/{facility}/update-images', [FacilityController::class, 'update_images'])->name('admin.facilities.update_images');
-Route::resource('/admin/facilities', FacilityController::class)->names([
+Route::post('/facilities/{facility}/update-images', [FacilityController::class, 'update_images'])->name('admin.facilities.update_images');
+Route::resource('/facilities', FacilityController::class)->names([
     'index' => 'admin.facilities.index',
     'create' => 'admin.facilities.create',
     'show' => 'admin.facilities.show',

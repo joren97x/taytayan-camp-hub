@@ -1,16 +1,21 @@
 <script setup>
 
-defineProps({
-    cart_products: Object,
-    subtotal: Number,
-    delivery_fee: Number
-})
+defineProps(
+    withDefaults({
+        cart_products: Object,
+        subtotal: Number,
+        delivery_fee: Number,
+        show_items_label: Boolean
+    }, {
+        show_items_label: true
+    })
+)
 
 </script>
 
 <template>
      <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
-                <div class="text-subtitle1 text-weight-medium text-center">
+                <div class="text-subtitle1 text-weight-medium text-center" v-if="show_items_label">
                     {{ cart_products.length }} Items
                 </div>
                 <q-item v-for="item in cart_products" :class="$q.screen.lt.md ? 'q-mx-none q-px-none' : ''">
@@ -51,8 +56,8 @@ defineProps({
                     </q-item-section>
                 </q-item>
 
-                <q-separator inset class="q-my-md" />
-                <div class="row q-my-md q-mr-md">
+                <q-separator inset class="q-my-xs gt-sm" />
+                <div :class="[$q.screen.gt.sm ? ' q-my-md ' : '', 'row q-mr-md']">
                     <div class="col-12 justify-end items-end flex">
                         <span class="q-mr-md">Subtotal</span> 
                         <span>₱{{ parseFloat(subtotal).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>

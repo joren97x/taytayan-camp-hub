@@ -4,6 +4,7 @@ import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import Bookings from '../Partials/Bookings.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Profile from '../Profile.vue'
 
 defineOptions({
     layout: CustomerLayout
@@ -20,6 +21,7 @@ const showPastBookings = ref(false)
 
 <template>
     <Head title="Bookings"/>
+    <Profile>
     <div class="q-pa-md">
         <q-card  flat>
             <q-card-section>
@@ -31,6 +33,7 @@ const showPastBookings = ref(false)
             </q-card-section>
         </q-card>
     </div>
+</Profile>
     <!-- <div class="q-pa-md">
         <q-card flat bordered>
             <q-card-section>

@@ -25,7 +25,10 @@ const order = ref(props.order)
 const completeOrder = () => {
     completeOrderForm.patch(route('customer.orders.update', order.value.id), {
         onSuccess: () => {
+            $q.notify('hi')
             rateDialog.value = true
+            $q.notify('hi')
+            console.log(rateDialog.value)
         }
     })
 }
@@ -128,7 +131,7 @@ Echo.private(`orders.${order.value.id}`)
     .listen('Product\\OrderStatusUpdated', (data) => {
         $q.notify('new order arrived')
         console.log(data.order)
-        order.value = data.order
+        order.value.status = data.order.status
         console.log(order.value)
         calculateSteps()
         // axios.get(route('cashier.orders.show', data.order.id))
@@ -176,42 +179,83 @@ const getStatusColor = (status) => {
 </script>
 <template>
     <q-card bordered flat class="q-my-sm">
-    <q-item clickable @click="viewOrderDialog = true">
-        <q-item-section>
-            <!-- Order ID and Date -->
-            <q-item-label class="text-subtitle1 text-primary">
-                Order #{{ order.id }}
-            </q-item-label>
-            <!-- <q-item-label caption class="text-grey">
-                Ordered at
-            </q-item-label>
-            <q-item-label>
-                {{ new Date(order.created_at).toLocaleString() }}
-            </q-item-label>
-        </q-item-section>
+        <!-- <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3">
+                Date Placed
 
-        <q-item-section> -->
-            <q-item-label>
-                {{ order.cart_products.length }} items
-            </q-item-label>
-            <!-- <q-item-label caption>
-                Mode
-            </q-item-label>
-            <q-item-label>
-                {{ order.mode.charAt(0).toUpperCase() + order.mode.slice(1) }}
-            </q-item-label> -->
-        </q-item-section>
-
-        <q-item-section side>
-            <!-- Status with color indication -->
-            <q-badge :color="getStatusColor(order.status)" class="text-capitalize">
-                {{ order.status }}
-            </q-badge>
-            ₱{{ parseFloat(order.subtotal).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
-        </q-item-section>
-    </q-item>
-        <!-- <q-btn rounded no-caps label="View Details" class="absolute-bottom-right q-mb-sm q-mr-sm" icon="visibility" unelevated color="primary" /> -->
-</q-card>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3"></div>
+            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3"></div>
+        </div> -->
+        <q-item @click="viewOrderDialog = true">
+            <q-item-section>
+                <q-item-label caption>Date Placed</q-item-label>
+                <q-item-label>{{ date.formatDate(order.created_at, 'MMM D, YYYY') }}</q-item-label>
+            </q-item-section>
+            <q-item-section>
+                <q-item-label caption>Order Status</q-item-label>
+                <q-item-label>{{ order.status }}</q-item-label>
+            </q-item-section>
+            <q-item-section class="gt-sm">
+                <q-item-label caption>Fullfillment Type</q-item-label>
+                <q-item-label>
+                    {{ order.mode }}
+                </q-item-label>
+            </q-item-section>
+            <q-item-section side>
+                <div class="button-group gt-sm">
+                    <Link :href="route('customer.orders.show', order.id)">
+                        <q-btn label="View Order" no-caps color="primary" outline rounded />
+                    </Link>
+                    <q-btn 
+                        @click="reorder()" 
+                        label="Reorder" 
+                        color="primary" 
+                        no-caps 
+                        unelevated 
+                        rounded
+                        v-if="order.status == 'completed' || order.status == 'cancelled'" 
+                    />
+                    
+                    <q-btn 
+                        v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
+                        no-caps 
+                        @click="completeOrder()"
+                        :loading="completeOrderForm.processing"
+                        :disable="completeOrderForm.processing"
+                        color="primary"
+                        rounded
+                        label="Complete Order"
+                    />
+                </div>
+                <q-btn icon="more_horiz" round flat class="lt-md"></q-btn>
+            </q-item-section>
+        </q-item>
+        <q-separator class="q-my-xs"/>
+            <OrderedItems 
+                :subtotal="order.subtotal" 
+                :cart_products="order.cart_products" 
+                :delivery_fee="order.delivery_fee" 
+                :show_items_label="false"
+            />   
+        <!-- <q-item clickable @click="viewOrderDialog = true">
+            <q-item-section>
+                <q-item-label class="text-subtitle1 text-primary">
+                    Order #{{ order.id }}
+                </q-item-label>
+                <q-item-label>
+                    {{ order.cart_products.length }} items
+                </q-item-label>
+            </q-item-section>
+            <q-item-section side>
+                <q-badge :color="getStatusColor(order.status)" class="text-capitalize">
+                    {{ order.status }}
+                </q-badge>
+                ₱{{ parseFloat(order.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </q-item-section>
+        </q-item> -->
+            <!-- <q-btn rounded no-caps label="View Details" class="absolute-bottom-right q-mb-sm q-mr-sm" icon="visibility" unelevated color="primary" /> -->
+    </q-card>
         <!-- <div class="row">
             <div class="col-4">
                 <div style="height: 150px; width: 100%;" class="bg-grey"></div>
@@ -298,20 +342,23 @@ const getStatusColor = (status) => {
                                 <div>{{ order.status }}</div>
                             </div>
                         </div>
-                        <div style="height: 250px; position: relative" class="full-width bg-grey-3" v-if="order.driver && order.status != 'completed'">
-                            <q-item class="bg-grey">
-                                <q-item-section avatar>
-                                    <q-avatar color="secondary">
-                                        <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
-                                        <div v-else>{{ order.driver.first_name[0] }}</div>
-                                    </q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
-                                    <q-item-label label>{{ order.driver.phone_number }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        </div>
+                        <q-item class="bg-grey-3 q-my-md" v-if="order.driver && order.status != 'completed'">
+                            <q-item-section avatar>
+                                <q-avatar color="secondary">
+                                    <q-img :src="`/storage/${order.driver.profile_pic}`" fit="cover" class="fit" v-if="order.driver.profile_pic"/>
+                                    <div v-else>{{ order.driver.first_name[0] }}</div>
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ order.driver.first_name + ' ' + order.driver.last_name }}</q-item-label>
+                                <q-item-label caption>Delivery Rider</q-item-label>
+                            </q-item-section>
+                            <q-item-section side top>
+                                <Link :href="route('conversations.show', order.conversation_id)">
+                                    <q-btn class="full-width q-mt-sm" no-caps color="primary" icon="chat" round/>
+                                </Link>
+                            </q-item-section>
+                        </q-item>
                         <q-btn 
                             class="full-width q-mt-md" 
                             @click="reorder()" 
@@ -322,9 +369,7 @@ const getStatusColor = (status) => {
                             rounded
                             v-if="order.status == 'completed' || order.status == 'cancelled'" 
                         />
-                        <Link :href="route('conversations.show', order.conversation_id)" v-if="order.driver && order.status != 'completed'">
-                            <q-btn class="full-width q-mt-sm" no-caps label="Message Driver"/>
-                        </Link>
+                        
                         <q-btn 
                             v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'"
                             no-caps 
@@ -332,6 +377,7 @@ const getStatusColor = (status) => {
                             @click="completeOrder()"
                             :loading="completeOrderForm.processing"
                             :disable="completeOrderForm.processing"
+                            color="primary"
                             rounded
                             label="Complete Order"
                         />
@@ -391,3 +437,11 @@ const getStatusColor = (status) => {
         </q-card>
     </q-dialog>
 </template>
+
+<style scoped>
+.button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 4px; /* Adds spacing between buttons */
+}
+</style>

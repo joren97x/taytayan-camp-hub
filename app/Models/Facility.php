@@ -29,4 +29,9 @@ class Facility extends Model
         return $this->hasMany(FacilityRating::class);
     }
 
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
 }

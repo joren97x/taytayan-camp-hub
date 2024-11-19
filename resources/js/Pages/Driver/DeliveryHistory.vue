@@ -4,13 +4,8 @@ import DriverLayout from '@/Layouts/DriverLayout.vue'
 import ViewOrderDialog from './Partials/ViewOrderDialog.vue'
 import { Head, Link } from '@inertiajs/vue3'
 
-defineOptions({
-    layout: DriverLayout
-})
-
-defineProps({
-    orders: Object
-})
+defineOptions({ layout: DriverLayout })
+defineProps({ orders: Object, google_maps_api_key: String})
 
 const columns = [
   { name: 'name', label: 'User', align: 'center', field: row => row.user.first_name + ' ' + row.user.last_name, sortable: true },
@@ -21,8 +16,6 @@ const columns = [
   { name: 'payment_method', align: 'center', label: 'Payment Method', field: 'payment_method', sortable: true },
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: false },
 ];
-
-
 </script>
 
 <template>
@@ -41,7 +34,7 @@ const columns = [
             >
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <ViewOrderDialog :order="props.row"/>
+                        <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key"/>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-items="props">
@@ -93,7 +86,7 @@ const columns = [
                                     <div class="text-caption text-grey">
                                         Actions
                                     </div>
-                                    <ViewOrderDialog :order="props.row" />
+                                    <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key"/>
                                 </div>
                             </div>
                         </q-card-section>

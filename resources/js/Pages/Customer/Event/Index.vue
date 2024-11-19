@@ -20,7 +20,7 @@ defineProps({
     <Head  title="Events" />
     <CustomerLayout>
     <template v-slot:cover>
-        <div style="position: absolute; width: 100vw; height: 50vh; overflow: hidden; top: 0" class="bg-grey-3">
+        <div style="position: absolute; width: 100vw; height: 55vh; overflow: hidden; top: 0" class="bg-grey-3">
             <div style="
                 position: absolute;
                 top: 0;
@@ -46,16 +46,15 @@ defineProps({
                 text-align: center;
                 padding: 20px; /* For smaller screens */
             ">
-                <h1 style="
+                <div style="
                     margin: 0;
-                    font-size: 3.5rem;
                     font-weight: bold;
                     text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
                     " 
-                    class="text-h1 text-weight-bold"
+                    class="text-h3 text-weight-bold"
                 >
                     Explore Our Camp Facilities
-                </h1>
+                </div>
                 <div style="
                     font-size: 1.25rem;
                     font-weight: bold;
@@ -102,7 +101,7 @@ defineProps({
             <div>Check back soon for exciting new events. Stay tuned for updates!</div>
         </div>
     </div> -->
-    <div class="q-ma-sm" style="margin-top: 45vh">
+    <div class="q-ma-sm" style="margin-top: 50vh">
         <div class="text-h6 q-my-md">Upcoming Events</div>
         <div class="row q-col-gutter-lg" v-if="upcoming_events.length > 0">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in upcoming_events">

@@ -6,6 +6,7 @@ import { date } from 'quasar'
 import { format, parse, isBefore, isToday, parseISO } from 'date-fns'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
+import Profile from '../Profile.vue'
 
 defineOptions({ layout: CustomerLayout })
 const props = defineProps({ ticket_order: Object })
@@ -42,6 +43,7 @@ const showCancelButton = computed(() => {
 <template>
     
     <Head title="Tickets" />
+    <Profile>
     <!-- <div :class="$q.screen.lt.md ? '' : 'q-pa-md'"> -->
         <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
             <q-card-actions class="justify-between lt-md">
@@ -189,7 +191,7 @@ const showCancelButton = computed(() => {
             </q-card>
         </q-dialog>
     <!-- </div> -->
-	
+</Profile>
 </template>
 	
 <style scoped>

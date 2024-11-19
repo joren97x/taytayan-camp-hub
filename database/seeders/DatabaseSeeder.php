@@ -54,8 +54,8 @@ class DatabaseSeeder extends Seeder
         //cashier account
         User::factory()->create([
             'email' => 'cashier@gmail.com',
-            'first_name' => 'Chaewon',
-            'last_name' => 'Maganda',
+            'first_name' => 'Kim',
+            'last_name' => 'Chaewon',
             'role' => 'cashier',
             'password' => Hash::make('asdasd')
         ]);
@@ -68,17 +68,17 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('asdasd')
         ]);
         //customer account :)
-        $user = User::factory()->create([
-            'email' => 'sumagangjoren@gmail.com',
-            'first_name' => 'Joren',
-            'last_name' => 'Sumagang',
-            'role' => 'customer',
-            'password' => Hash::make('asdasd')
-        ]);
+        // $user = User::factory()->create([
+        //     'email' => 'sumagangjoren@gmail.com',
+        //     'first_name' => 'Joren',
+        //     'last_name' => 'Sumagang',
+        //     'role' => 'customer',
+        //     'password' => Hash::make('asdasd')
+        // ]);
         
-        Cart::create([
-            'user_id' => $user->id
-        ]);
+        // Cart::create([
+        //     'user_id' => $user->id
+        // ]);
         
     }
 }

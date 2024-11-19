@@ -3,6 +3,7 @@
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import Tickets from '../Partials/Tickets.vue'
+import Profile from '../Profile.vue';
 
 defineOptions({
     layout: CustomerLayout
@@ -18,6 +19,7 @@ defineProps({
 <template>
     
     <Head title="Tickets" />
+    <Profile>
     <div class="q-pa-md">
         <q-card  flat>
             <q-card-section>
@@ -29,6 +31,7 @@ defineProps({
             </q-card-section>
         </q-card>
     </div>
+</Profile>
 	<!-- <div class="row">
         {{ ticket_orders }}
         <div class="col-6"></div>

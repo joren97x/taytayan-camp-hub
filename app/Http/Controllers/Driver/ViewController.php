@@ -28,6 +28,7 @@ class ViewController extends Controller
         $orders = Order::whereIn('status', [Order::STATUS_DELIVERED, Order::STATUS_COMPLETED, Order::STATUS_CANCELLED])
         ->where('driver_id', auth()->id())
         ->with('user')
+        ->latest()
         ->get();
 
         foreach($orders as $order) {
@@ -38,7 +39,8 @@ class ViewController extends Controller
         }
 
         return Inertia::render('Driver/DeliveryHistory', [
-            'orders' => $orders
+            'orders' => $orders,
+            'google_maps_api_key' => config('app.google_maps_api_key')
         ]);
     }
 
@@ -56,22 +58,11 @@ class ViewController extends Controller
         return Inertia::render('Driver/Inbox');
     }
 
-    public function map() 
+    public function map(string $id) 
     {
         return Inertia::render('Driver/Map', [
-            'customers_coordinates' => [
-                'lat' => 10.258557282636918, 
-                'lng' => 124.04994738846034
-            ],
-            'stores_coordinates' => [
-                'lat' => 10.25893392782387, 
-                'lng' => 124.03877067362872
-            ],
-            'drivers_coordinates' => [
-                'lat' => 10.24915105319012, 
-                'lng' => 124.02561227312167
-            ],
-            'google_maps_api_key' => config('app.google_maps_api_key')
+            'google_maps_api_key' => config('app.google_maps_api_key'),
+            'order' => Order::with('user')->find($id)
         ]);
     }
 

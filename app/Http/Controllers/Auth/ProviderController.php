@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,11 @@ class ProviderController extends Controller
                     'provider_token' => $socialiteUser->token,
                     'email_verified_at' => now(),
                 ]);
+
+                Cart::create([
+                    'user_id' => $user->id
+                ]);
+
             } else {
                 // If the user exists, update their provider-related information
                 $user->update([
