@@ -19,25 +19,13 @@ class BookingController extends Controller
     {
         
         // dd(User::where('role', 'cashier')->orderBy('updated_at', 'desc')->first());
-        $active_bookings = Booking::with('facility')->whereIn('status', [
-            Booking::STATUS_CHECKED_IN,
-            Booking::STATUS_CONFIRMED,
-            Booking::STATUS_PENDING,
-            Booking::STATUS_CHECKED_OUT,
-        ])
+        $bookings = Booking::with('facility')
         ->where('user_id', auth()->id())
-        ->get();
-
-        $past_bookings = Booking::with('facility')->whereIn('status', [
-            Booking::STATUS_CANCELLED,
-            Booking::STATUS_COMPLETE,
-        ])
-        ->where('user_id', auth()->id())
+        ->latest()
         ->get();
 
         return Inertia::render('Customer/Facility/Bookings', [
-            'active_bookings' => $active_bookings,
-            'past_bookings' => $past_bookings
+            'bookings' => $bookings,
         ]);
     }
 

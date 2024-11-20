@@ -16,6 +16,7 @@ use App\Http\Controllers\Customer\Product\ViewController;
     // Route::get('/order/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/profile/past-orders', [OrderController::class, 'past_orders'])->name('customer.orders.past_orders');
 
+    Route::patch('/profile/orders/cancel-order/{order}', [OrderController::class, 'cancel'])->name('customer.orders.cancel');
     Route::resource('/profile/orders', OrderController::class)->names([
         'show' => 'customer.orders.show',
         'index' => 'customer.orders.index',

@@ -148,7 +148,7 @@ const decrementGuests = () => {
                 <q-card class="gt-sm">
                     <q-card-section class="q-pb-xs"> 
                         <span class="text-subtitle1">P{{ facility.price }}</span>
-                        kada adlaw
+                        / day
                     </q-card-section>
                     <q-card-section class="row q-py-none q-col-gutter-sm q-mb-sm" @click="dialog = true">
                         <div class="col-6">

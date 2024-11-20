@@ -87,7 +87,7 @@ const setContainer = (category) => {
     </div> -->
     <CustomerLayout>
     <template v-slot:cover>
-        <div style="position: absolute; width: 100vw; height: 80vh; overflow: hidden; top: 0" class="bg-grey-3">
+        <div :style="`position: absolute; width: 100vw; height: ${$q.screen.gt.sm ? '60vh' : '40vh'}; overflow: hidden; top: 0`" class="bg-grey-3">
             <div style="
                 position: absolute;
                 top: 0;
@@ -115,22 +115,16 @@ const setContainer = (category) => {
                 text-align: center;
                 padding: 20px; /* For smaller screens */
             ">
-                <h1 style="
-                    margin: 0;
-                    font-size: 3.5rem;
-                    font-weight: bold;
-                    text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
-                    " 
-                    class="text-h1 text-weight-bold"
+                <div 
+                    :class="[$q.screen.gt.sm ? 'text-h2' : 'text-h5 q-pt-xl', 'text-weight-bold']"
+                    style=" margin: 0; text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);" 
                 >
                     Explore Our Camp Facilities
-                </h1>
-                <div style="
-                    font-size: 1.25rem;
-                    font-weight: bold;
-                    text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
-                    max-width: 800px;
-                ">
+                </div>
+                <div
+                    :class="[$q.screen.gt.sm ? 'text-h6' : 'text-subtitle1', 'text-weight-medium']"
+                    style=" text-shadow: 10px 10px 10px rgba(10, 10, 10, 10); max-width: 800px;"
+                >
                     Find your perfect spot to relax and enjoy nature
                 </div>
             </div>

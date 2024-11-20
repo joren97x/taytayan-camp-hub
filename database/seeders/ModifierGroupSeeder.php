@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\ModifierGroup;
 use App\Models\ModifierGroupItem;
+use App\Models\ModifierGroupProduct;
 use App\Models\ModifierItem;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,43 +22,43 @@ class ModifierGroupSeeder extends Seeder
             [
                 'group_name' => 'Choose your classic flavour milk tea size',
                 'items' => [
-                    ['name' => 'Petite', 'price' => 35.00],
-                    ['name' => 'Moyen', 'price' => 55.00],
-                    ['name' => 'Grand', 'price' => 65.00],
+                    ['name' => 'Petite', 'price' => 0.00],
+                    ['name' => 'Moyen', 'price' => 20.00],
+                    ['name' => 'Grand', 'price' => 30.00],
                 ],
             ],
             [
                 'group_name' => 'Choose your special flavour milk tea size',
                 'items' => [
-                    ['name' => 'Petite', 'price' => 45.00],
-                    ['name' => 'Moyen', 'price' => 65.00],
-                    ['name' => 'Grand', 'price' => 75.00],
+                    ['name' => 'Petite', 'price' => 0.00],
+                    ['name' => 'Moyen', 'price' => 20.00],
+                    ['name' => 'Grand', 'price' => 30.00],
                 ],
             ],
             [
                 'group_name' => 'Choose your frappe size',
                 'items' => [
-                    ['name' => 'Moyen', 'price' => 75.00],
-                    ['name' => 'Grand', 'price' => 85.00],
+                    ['name' => 'Moyen', 'price' => 0.00],
+                    ['name' => 'Grand', 'price' => 10.00],
                 ],
             ],
             [
                 'group_name' => 'Choose your halo-halo size',
                 'items' => [
-                    ['name' => 'Petite', 'price' => 35.00],
-                    ['name' => 'Grand', 'price' => 45.00],
+                    ['name' => 'Petite', 'price' => 0.00],
+                    ['name' => 'Grand', 'price' => 10.00],
                 ],
             ],
             [
                 'group_name' => 'Choose your fruit shake size',
                 'items' => [
-                    ['name' => 'Moyen', 'price' => 55.00],
-                    ['name' => 'Grand', 'price' => 65.00],
+                    ['name' => 'Moyen', 'price' => 0.00],
+                    ['name' => 'Grand', 'price' => 10.00],
                 ],
             ],
         ];
         
-        foreach ($menu as $groupData) {
+        foreach ($menu as $group_index => $groupData) {
             // Create a ModifierGroup
             $modifier_group = ModifierGroup::create([
                 'name' => $groupData['group_name'],
@@ -76,6 +78,21 @@ class ModifierGroupSeeder extends Seeder
                     'modifier_group_id' => $modifier_group->id,
                     'modifier_item_id' => $modifier_item->id
                 ]);
+            }
+
+            if ($group_index < 5) {
+                // Get categories with products for IDs 1 to 5
+                $categories = Category::with('products')->where('id', $group_index + 1)->get();
+        
+                foreach ($categories as $category) {
+                    foreach ($category->products as $product) {
+                        // Create ModifierGroupProduct with product and modifier group IDs
+                        ModifierGroupProduct::create([
+                            'product_id' => $product->id,
+                            'modifier_group_id' => $modifier_group->id
+                        ]);
+                    }
+                }
             }
         }
 

@@ -55,7 +55,7 @@ class PaymentController extends Controller
         
         session()->forget('payment_session');
 
-        return redirect(route('customer.bookings.index'));
+        return redirect(route('customer.bookings.show', $booking->id))->with('success', 'You`re all set! Your booking is confirmed, and we cant wait to welcome you!');
 
     }
 

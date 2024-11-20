@@ -1,8 +1,8 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import Bookings from '../Partials/Bookings.vue'
-import { Head } from '@inertiajs/vue3'
+import BookingCard from './Partials/BookingCard.vue'
+import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import Profile from '../Profile.vue'
 
@@ -11,8 +11,7 @@ defineOptions({
 })
 
 defineProps({
-    active_bookings: Object,
-    past_bookings: Object,
+    bookings: Object,
 })
 
 const showPastBookings = ref(false)
@@ -22,17 +21,32 @@ const showPastBookings = ref(false)
 <template>
     <Head title="Bookings"/>
     <Profile>
-    <div class="q-pa-md">
-        <q-card  flat>
-            <q-card-section>
-                <div class="row reverse justify-center">
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <Bookings :active_bookings="active_bookings" :past_bookings="past_bookings" />
+    <q-card bordered flat>
+        <q-card-actions class="text-center justify-center items-center flex">
+            <Link :href="route('customer.profile')" class="lt-md">
+                <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
+            </Link>
+                <div class="text-h6">Bookings</div>
+        </q-card-actions>
+        <q-separator />
+        <q-card-section>
+            <!-- <Link :href="route('customer.profile')" class="text-h6">
+                <q-icon name="arrow_back"></q-icon> Bookings
+            </Link>
+            <div class="text-h6">Bookings</div> -->
+            <div class="row reverse justify-center">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <BookingCard v-for="booking in bookings" :booking="booking"/>
+                    <div v-show="bookings.length <= 0">
+                        <div class="flex items-center justify-center" style="height: 100px;">
+                            <q-icon name="confirmation_number" size="50px"/>
+                        </div>
+                        <div class="text-subtitle1 text-center">No Upcoming/Active Bookings</div>
                     </div>
                 </div>
-            </q-card-section>
-        </q-card>
-    </div>
+            </div>
+        </q-card-section>
+    </q-card>
 </Profile>
     <!-- <div class="q-pa-md">
         <q-card flat bordered>

@@ -184,16 +184,14 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                         font-weight: bold;
                         text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
                         " 
-                        class="text-h3 text-weight-bold"
+                        :class="[$q.screen.gt.sm ? 'text-h2' : 'text-h5 q-pt-xl', 'text-weight-bold']"
                     >
                         RJC Cafe
                     </div>
-                    <div style="
-                        font-size: 1.25rem;
-                        font-weight: bold;
-                        text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
-                        max-width: 800px;
-                    ">
+                    <div 
+                        :class="[$q.screen.gt.sm ? 'text-h6' : 'text-subtitle1', 'text-weight-medium']"
+                        style=" text-shadow: 10px 10px 10px rgba(10, 10, 10, 10); max-width: 800px;"
+                    >
                         Savor the Flavor, Embrace the Adventure!
                     </div>
                 </div>
@@ -226,7 +224,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             class="bg-primary" 
                             v-if="!$page.props.auth.user.address"
                         >
-                            <span class="text-white text-weight-bold text-subtitle1">Please enter your address to place an order.</span>
+                            <span class="text-white text-weight-bold text-subtitle1">Enter your address to place an order.</span>
                             <q-btn 
                                 icon="pin_drop" 
                                 label="Place your address" 
@@ -240,7 +238,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                     </div>
                     <div v-else>
                         <q-banner rounded class="bg-primary">
-                            <span class="text-white text-weight-bold text-subtitle1">Please enter your address to place an order.</span>
+                            <span class="text-white text-weight-bold text-subtitle1">Enter your address to place an order.</span>
                             <Link :href="route('login')">
                                 <q-btn 
                                     icon="pin_drop" 

@@ -105,7 +105,7 @@ const getTextColor = computed((component) => {
             <q-toolbar class="row items-center justify-between" style="margin: 0 auto; max-width: 1280px">
                 <div class="row items-center">
                     <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder">
-                        <q-avatar size="xl" class="q-mr-sm">
+                        <q-avatar size="lg" class="q-mr-sm">
                             <q-img src="../logo.jpg" fill="cover" />
                         </q-avatar>
                     </Link>
@@ -151,7 +151,7 @@ const getTextColor = computed((component) => {
                             </Link>
                         </div>
                         <div class="lt-md">
-                            <q-btn icon="menu" unelevated @click="drawer = true" class="lt-md">
+                            <q-btn icon="menu" round unelevated @click="drawer = true" class="lt-md">
                                 <q-menu style="width: 200px;">
                                     <q-list>
                                         <MainLinks />
@@ -198,13 +198,13 @@ const getTextColor = computed((component) => {
                                         <MainLinks />
                                     </div>
                                     <q-separator class="lt-md" />
-                                    <Link :href="route('customer.profile')" class="text-black">
-                                    <q-item clickable class="rounded-borders">
-                                        <!-- <q-item-section avatar>
-                                            <q-icon name="person" />
-                                        </q-item-section> -->
-                                        <q-item-section>Profile</q-item-section>
-                                    </q-item>
+                                    <Link :href="route($q.screen.gt.sm ? 'customer.edit_profile' : 'customer.profile')" class="text-black">
+                                        <q-item clickable class="rounded-borders">
+                                            <!-- <q-item-section avatar>
+                                                <q-icon name="person" />
+                                            </q-item-section> -->
+                                            <q-item-section>Profile</q-item-section>
+                                        </q-item>
                                     </Link>
                                     <Link :href="route('customer.cart.index')" class="text-black">
                                     <q-item clickable class="rounded-borders">

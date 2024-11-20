@@ -71,17 +71,60 @@ const showCancelButton = computed(() => {
 
 <template>
     <Profile>
-<q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-actions class="justify-between lt-md">
-                <div class="text-h6">
-                    Booking Details
-                </div>
-                <q-btn round icon="close" v-close-popup unelevated />
-            </q-card-actions>
-            <q-card-section :class="$q.screen.lt.md ? 'q-py-none' : ''">
-                <div class="row q-col-gutter-md">
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <q-carousel
+        <q-card bordered flat >
+            <q-card-section >
+                <div class="text-h6">Booking Details</div>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-img 
+                                    :height="$q.screen.gt.md ? '100px' : '80px'"
+                                    :width="$q.screen.gt.md ? '100px' : '80px'"
+                                    class="rounded-borders"
+                                    :src="`/storage/${JSON.parse(booking.facility.images)[0]}`"
+                                ></q-img>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label class="text-subtitle1 text-weight-bold">{{ booking.facility.name }}</q-item-label>
+                                <q-item-label caption class="ellipsis-2-lines	">{{ booking.facility.description }}</q-item-label>
+                                <!-- <div class="text-weight-bold">₱{{ parseFloat(booking.facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div> -->
+                            </q-item-section>
+                            <q-item-section side top>
+                                <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(booking.facility.average_rating).toFixed(2) }}
+                            </q-item-section>
+                        </q-item>
+                        <q-separator class="q-my-sm" />
+                        <div class="row q-col-gutter-md ">
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Check-in</div>
+                                <div>{{ date.formatDate(booking.check_in, 'dddd, MMMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Check-out</div>
+                                <div>{{ date.formatDate(booking.check_out, 'dddd, MMMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Guests</div>
+                                <div>{{ booking.guests }} guests</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Status</div>
+                                <q-chip>{{ booking.status }}</q-chip>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Payment Method</div>
+                                <div>{{ booking.payment_method }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Total</div>
+                                <div class="text-weight-bold">₱{{ parseFloat(booking.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
+                                <!-- <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div> -->
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-grey-9">Purchased At</div>
+                                <div>{{ date.formatDate(booking.created_at, 'MM/D/YYYY') }}</div>
+                            </div>
+                        </div>
+                        <!-- <q-carousel
                             v-model="slide"
                             transition-prev="slide-right"
                             transition-next="slide-left"
@@ -102,9 +145,9 @@ const showCancelButton = computed(() => {
                                 <q-btn v-if="active" size="5px" :icon="btnProps.icon" color="primary" flat round dense @click="onClick" />
                                 <q-btn v-else size="5px" :icon="btnProps.icon" color="grey" flat round dense @click="onClick" />
                             </template>
-                        </q-carousel>
+                        </q-carousel> -->
                         <!-- <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/> -->
-                        <div class="text-h6">{{ booking.facility.name }}</div>
+                        <!-- <div class="text-h6">{{ booking.facility.name }}</div>
                         <div>{{ booking.facility.description }}</div>
                         <q-btn 
                             v-if="booking.status == 'checked_out'"
@@ -130,12 +173,9 @@ const showCancelButton = computed(() => {
                             rounded 
                             outline 
                             v-if="showCancelButton"
-                        />
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
+                        /> -->
+                    <!-- <q-btn round icon="close" class="absolute-top-right q-mt-sm q-mr-sm gt-sm" v-close-popup unelevated />
                         <div class="text-h6">Booking Details</div>
-                        <!-- <q-separator class="q-my-md"/> -->
                         <div class="row q-col-gutter-md ">
                             <div class="col-6">
                                 <div class="text-caption text-grey-9">Check-in</div>
@@ -161,11 +201,35 @@ const showCancelButton = computed(() => {
                                 <div class="text-caption text-grey-9">Amount</div>
                                 <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div>
                             </div>
-                        </div>
-                        
-                    </div>
-                </div>
+                        </div> -->
             </q-card-section>
+            <q-card-actions class="justify-end">
+                <q-btn 
+                    label="Cancel Booking" 
+                    @click="cancelDialog = true" 
+                    color="negative" 
+                    class="full-width q-mt-sm" 
+                    no-caps 
+                    rounded 
+                    outline 
+                    v-if="showCancelButton"
+                />
+                <Link :href="route('conversations.chat_cashier')">
+                    <q-btn class="full-width q-mt-sm" label="Contact Host" no-caps color="primary" rounded />
+                </Link>
+                <q-btn 
+                    v-if="booking.status == 'checked_out'"
+                    color="green" 
+                    label="Complete Booking"
+                    class=" q-mt-md full-width"
+                    no-caps 
+                    @click="completeBooking()"
+                    :loading="completeBookingForm.processing"
+                    :disable="completeBookingForm.processing"
+                    rounded
+                    outline
+                />
+            </q-card-actions>
         </q-card>
         <q-dialog v-model="completeBookingDialog">
         <q-card>

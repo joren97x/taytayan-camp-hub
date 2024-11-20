@@ -47,6 +47,7 @@ class PaymentController extends Controller
                 'payment_id' => $checkout_session->payments[0]['id']
             ]);
         }
+        
         foreach($request->query('ticket_holders') as $ticket_holder) {
             Ticket::create([
                 'ticket_order_id' => $ticket_order->id,
@@ -67,7 +68,7 @@ class PaymentController extends Controller
 
         session()->forget('payment_session');
 
-        return redirect(route('customer.tickets.show', $ticket_order->id));
+        return redirect(route('customer.tickets.show', $ticket_order->id))->with('success', 'Your purchase was successful! See you at the event!');
     }
 
     public function pay(Request $request) 

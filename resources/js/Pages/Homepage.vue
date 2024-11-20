@@ -20,7 +20,7 @@ const showVideo = ref(false)
     <Head title="Welcome" />
     <CustomerLayout>
         <template v-slot:cover>
-            <div style="position: absolute; width: 100vw; height: 85vh; overflow: hidden; top: 0">
+            <div :style="`position: absolute; width: 100vw; height: ${$q.screen.gt.sm ? '60vh' : '40vh'}; overflow: hidden; top: 0`">
                 <div style="
                     position: absolute;
                     top: 0;
@@ -31,43 +31,45 @@ const showVideo = ref(false)
                     z-index: 1;
                 "></div>
                 <q-img src="taytayan.jpg" class="fit" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
-                <div style="
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 80%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    color: white;
-                    z-index: 2;
-                    text-align: center;
-                    padding: 20px; /* For smaller screens */
-                ">
-                    <h1 style="
+                <div 
+                    style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 80%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        color: white;
+                        z-index: 2;
+                        text-align: center;
+                    "
+                >
+                    <div style="
                         margin: 0;
-                        font-size: 3.5rem;
                         font-weight: bold;
                         text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
                         " 
-                        class="text-h1 text-weight-bold"
+                        :class="[$q.screen.gt.sm ? 'text-h2' : 'text-h5 q-pt-xl', 'text-weight-bold']"
                     >
                         Welcome to Taytayan Camp
-                    </h1>
-                    <div style="
-                        font-size: 1.25rem;
-                        font-weight: bold;
-                        text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
-                        max-width: 800px;
-                    ">
-                        "Sip, Explore, and Stay - Discover More at Taytayan Camp Adventure Island"
+                    </div>
+                    <div 
+                        :class="[$q.screen.gt.sm ? 'text-h6' : 'text-subtitle1', 'text-weight-medium']"
+                        style="
+                            font-weight: bold;
+                            text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
+                            max-width: 800px;
+                        "
+                    >
+                        Sip, Explore, and Stay - Discover More at Taytayan Camp Adventure Island
                     </div>
                 </div>
             </div>
         </template>
-    <div style="margin-top: 85vh;">
+    <div :style="`margin-top: ${$q.screen.gt.sm ? '60vh' : '40vh'}`">
         <q-dialog 
             v-model="showVideo" 
             persistent 

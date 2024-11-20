@@ -17,49 +17,16 @@ class TicketController extends Controller
     public function index(Request $request) 
     {
 
-        // $active_ticket_orders = TicketOrder::with([
-        //     'event', 
-        //     'ticket_order_items', 
-        //     'ticket_order_items.ticket.ticket_holder',
-        // ])
-        // ->whereIn('status', [
-        //     TicketOrder::STATUS_CONFIRMED,
-        //     TicketOrder::STATUS_PENDING,
-        //     TicketOrder::STATUS_SCANNED,
-        //     TicketOrder::S,
-        // ])
-        // ->where('user_id', auth()->user()->id)
-        // ->get();
-
-        // $past_ticket_orders = T
-        // ->where('user_id', auth()->user()->id)
-        // ->get();
-
-        $today = Carbon::today();
-        $active_ticket_orders = TicketOrder::with([
+        $ticket_orders = TicketOrder::with([
             'event', 
             'tickets',
         ])
-        ->whereHas('event', function($query) use ($today) {
-            $query->where('date', '>=', $today);
-        })
         ->where('user_id', auth()->id())
+        ->latest()
         ->get();
-
-        $past_ticket_orders = TicketOrder::with([
-            'event', 
-            'tickets',
-        ])
-        ->whereHas('event', function($query) use ($today) {
-            $query->where('date', '<', $today);
-        })
-        ->where('user_id', auth()->id())
-        ->get();
-        
         
         return Inertia::render('Customer/Event/Tickets', [
-            'active_ticket_orders' =>  $active_ticket_orders,
-            'past_ticket_orders' =>  $past_ticket_orders,
+            'ticket_orders' =>  $ticket_orders
         ]);
         
     }

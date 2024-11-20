@@ -10,6 +10,7 @@ use App\Services\CartService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Luigel\Paymongo\Facades\Paymongo;
 
 class OrderController extends Controller
 {
@@ -106,6 +107,20 @@ class OrderController extends Controller
     public function update(Order $order)
     {
         $order->update(['status' => Order::STATUS_COMPLETED, 'completed_at' => Carbon::now()]);
+        return back();
+    }
+
+    public function cancel(Order $order)
+    {
+        $order->update(['status' => Order::STATUS_CANCELLED]);
+        if(($order->payment_method != 'walk_in' && $order->payment_method != 'cash_on_delivery')) {
+            $payment = Paymongo::payment()->find($order->payment_id);
+            Paymongo::refund()->create([
+                'amount' => $payment->amount,
+                'reason' => \Luigel\Paymongo\Models\Refund::REASON_REQUESTED_BY_CUSTOMER, // `duplicate`, `fraudulent`, required by customer
+                'payment_id' => $order->payment_id
+            ]);
+        }
         return back();
     }
 

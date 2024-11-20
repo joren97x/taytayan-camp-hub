@@ -44,21 +44,16 @@ defineProps({
                 text-align: center;
                 padding: 20px; /* For smaller screens */
             ">
-                <div style="
-                    margin: 0;
-                    font-weight: bold;
-                    text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);
-                    " 
-                    class="text-h3 text-weight-bold"
+                <div 
+                    style=" margin: 0; font-weight: bold; text-shadow: 20px 20px 20px rgba(0, 2, 2, 2.9);" 
+                    :class="[$q.screen.gt.sm ? 'text-h2' : 'text-h5 q-pt-xl', 'text-weight-bold']"
                 >
                     Explore Our Camp Facilities
                 </div>
-                <div style="
-                    font-size: 1.25rem;
-                    font-weight: bold;
-                    text-shadow: 10px 10px 10px rgba(10, 10, 10, 10);
-                    max-width: 800px;
-                ">
+                <div 
+                    style=" text-shadow: 10px 10px 10px rgba(10, 10, 10, 10); max-width: 800px;"
+                    :class="[$q.screen.gt.sm ? 'text-h6' : 'text-subtitle1', 'text-weight-medium']"
+                >
                     Find your perfect spot to relax and enjoy nature
                 </div>
             </div>

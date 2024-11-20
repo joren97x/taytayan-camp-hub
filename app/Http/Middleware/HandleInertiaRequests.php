@@ -45,6 +45,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'cart_id' => $active_cart ? $active_cart->id : null,
             ],
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ]
         ];
     }
 }

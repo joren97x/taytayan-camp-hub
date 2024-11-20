@@ -179,28 +179,20 @@ const getStatusColor = (status) => {
 </script>
 <template>
     <q-card bordered flat class="q-my-sm">
-        <!-- <div class="row">
-            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3">
-                Date Placed
-
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3"></div>
-            <div class="col-xs-4 col-sm-4 col-md-2 col-lg-3 col-xl-3"></div>
-        </div> -->
         <q-item @click="viewOrderDialog = true">
             <q-item-section>
                 <q-item-label caption>Date Placed</q-item-label>
-                <q-item-label>{{ date.formatDate(order.created_at, 'MMM D, YYYY') }}</q-item-label>
-            </q-item-section>
-            <q-item-section>
-                <q-item-label caption>Order Status</q-item-label>
-                <q-item-label>{{ order.status }}</q-item-label>
+                <q-item-label>{{ date.formatDate(order.created_at, 'ddd, MMM D, YYYY') }}</q-item-label>
             </q-item-section>
             <q-item-section class="gt-sm">
                 <q-item-label caption>Fullfillment Type</q-item-label>
                 <q-item-label>
                     {{ order.mode }}
                 </q-item-label>
+            </q-item-section>
+            <q-item-section>
+                <q-item-label caption>Order Status</q-item-label>
+                <q-item-label>{{ order.status }}</q-item-label>
             </q-item-section>
             <q-item-section side>
                 <div class="button-group gt-sm">

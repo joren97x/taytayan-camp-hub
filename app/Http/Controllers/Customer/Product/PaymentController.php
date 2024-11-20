@@ -69,7 +69,7 @@ class PaymentController extends Controller
         
         session()->forget('payment_session');
       
-        return redirect(route('customer.orders.index'));
+        return redirect(route('customer.orders.show', $order->id))->with('success', 'Your order has been successfully placed! Well have it ready for you shortly.');
     }
 
     public function pay(Request $request, CartService $cartService) 

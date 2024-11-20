@@ -1,21 +1,20 @@
 <script setup>
 
-defineProps(
-    withDefaults({
-        cart_products: Object,
-        subtotal: Number,
-        delivery_fee: Number,
-        show_items_label: Boolean
-    }, {
-        show_items_label: true
-    })
-)
+defineProps({
+    cart_products: Object,
+    subtotal: Number,
+    delivery_fee: Number,
+    show_items_label: {
+        type: Boolean,
+        default: true
+    }
+})
 
 </script>
 
 <template>
      <div class="col-8 col-md-8 col-lg-8 col-xl-8 col-xs-12 col-sm-12">
-                <div class="text-subtitle1 text-weight-medium text-center" v-if="show_items_label">
+                <div class="text-subtitle1 text-weight-medium text-start" v-if="show_items_label">
                     {{ cart_products.length }} Items
                 </div>
                 <q-item v-for="item in cart_products" :class="$q.screen.lt.md ? 'q-mx-none q-px-none' : ''">

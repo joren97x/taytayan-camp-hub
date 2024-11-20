@@ -35,13 +35,10 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('public/products');
         Storage::makeDirectory('public/facilities');
 
-        // $this->call(ModifierItemSeeder::class);
-        // $this->call(ModifierGroupSeeder::class);
-        // $this->call(ProductSeeder::class);
         $this->call(CategorySeeder::class);
-        // $this->call(EventSeeder::class);
-        // $this->call(FacilitySeeder::class);
-        // $this->call(ConversationSeeder::class);
+        $this->call(EventSeeder::class);
+        $this->call(FacilitySeeder::class);
+        $this->call(ModifierGroupSeeder::class);
 
         //admin account
         User::factory()->create([

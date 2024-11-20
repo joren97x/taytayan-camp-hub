@@ -1,34 +1,56 @@
 <script setup>
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import { Head, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import Orders from './Partials/Orders.vue'
-import Bookings from './Partials/Bookings.vue'
-import Tickets from './Partials/Tickets.vue'
+import { Head, Link, usePage } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 
-defineOptions({
-    layout: CustomerLayout
-})
+defineOptions({ layout: CustomerLayout })
+const $q = useQuasar()
+const $page = usePage()
 
-defineProps({
-    active_orders: Object,
-    past_orders: Object,
-    active_bookings: Object,
-    past_bookings: Object,
-    active_ticket_orders: Object,
-    past_ticket_orders: Object
-})
+if ($page.props.flash?.success) {
+    $q.notify({
+        message: $page.props.flash.success,
+        color: 'positive',  // Success message style (you can use 'negative', 'warning', 'info', etc.)
+        position: 'top',  // Position can be 'top-right', 'bottom-left', etc.
+        timeout: 4000,  // Notification stays for 3 seconds
+        icon: 'check_circle',  // Optional icon for success
+        textColor: 'white',  // Text color inside the notification
+        action: {
+            label: 'Close',
+            color: 'white',  // Close button color
+            handler: () => {
+                console.log('Notification closed')
+            }
+        },
+        style: {
+            borderRadius: '10px',  // Rounded corners
+            padding: '50px',  // Padding inside the notification
+            fontSize: '16px',  // Font size of the text
+        }
+    });
+}
 
-const tab = ref('orders')
+const ordersComponents = [
+    'Customer/Product/Orders',
+    'Customer/Product/ShowOrder'
+]
+
+const bookingsComponents = [
+    'Customer/Facility/Bookings',
+    'Customer/Facility/ShowBooking'
+]
+
+const ticketsComponents = [
+    'Customer/Event/Tickets',
+    'Customer/Event/ShowTicket'
+]
+
 </script>
 
 <template>
     <Head title="Profile" />
-    <div :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
-
-        <div class="text-h5 q-mt-md">My Account</div>
-        <div class="row q-col-gutter-md">
-            <div class="col-xs-12 col-sm-12 xol-md-4 col-lg-4 col-xl-4">
+        <div :class="`row q-col-gutter-md ${$q.screen.gt.md ? 'q-mt-lg' : ''}`">
+            <div class="col-xs-12 col-sm-12 xol-md-4 col-lg-4 col-xl-4" v-if="$page.component == 'Customer/Profile' || $q.screen.gt.sm">
                 <q-card flat bordered>
                     <q-card-section>
                         <div class=" items-center justify-center flex">
@@ -48,23 +70,35 @@ const tab = ref('orders')
                         </div>
                         <q-list class="q-my-md">
                             <Link :href="route('customer.edit_profile')">
-                                <q-item clickable class="rounded-borders">
+                                <q-item clickable class="rounded-borders" :active="$page.component == 'Customer/EditProfile'" active-class="bg-primary text-white">
                                     <q-item-section> Account Details </q-item-section>
+                                    <q-item-section side class="lt-md">
+                                        <q-icon name="chevron_right" color="black"/>
+                                    </q-item-section>
                                 </q-item>
                             </Link>
                             <Link :href="route('customer.orders.index')">
-                                <q-item clickable class="rounded-borders">
+                                <q-item clickable class="rounded-borders" :active="ordersComponents.includes($page.component)" active-class="bg-primary text-white">
                                     <q-item-section> Orders </q-item-section>
+                                    <q-item-section side class="lt-md">
+                                        <q-icon name="chevron_right" color="black"/>
+                                    </q-item-section>
                                 </q-item>
                             </Link>
                             <Link :href="route('customer.bookings.index')">
-                                <q-item clickable class="rounded-borders">
+                                <q-item clickable class="rounded-borders" :active="bookingsComponents.includes($page.component)" active-class="bg-primary text-white">
                                     <q-item-section> Bookings </q-item-section>
+                                    <q-item-section side class="lt-md">
+                                        <q-icon name="chevron_right" color="black"/>
+                                    </q-item-section>
                                 </q-item>
                             </Link>
                             <Link :href="route('customer.tickets.index')">
-                            <q-item clickable class="rounded-borders">
+                                <q-item clickable class="rounded-borders" :active="ticketsComponents.includes($page.component)" active-class="bg-primary text-white">
                                     <q-item-section> Ticket Orders </q-item-section>
+                                    <q-item-section side class="lt-md">
+                                        <q-icon name="chevron_right" color="black"/>
+                                    </q-item-section>
                                 </q-item>
                             </Link>
                         </q-list>
@@ -75,78 +109,13 @@ const tab = ref('orders')
                 <slot />
             </div>
         </div>
-
-
-        <!-- <div :class="`${$q.screen.gt.sm ? 'q-mt-sm' : ''} row q-col-gutter-y-sm`">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="text-h6">Profile</div>
-                <q-card bordered flat class="full-width">
-                    <q-item>
-                        <q-item-section avatar>
-                            <q-avatar size="80px" color="primary" class="text-white">
-                                <q-img :src="`/storage/${$page.props.auth.user.profile_pic}`" fit="cover" class="fit" v-if="$page.props.auth.user.profile_pic" />
-                                <div v-else>
-                                    {{ $page.props.auth.user.first_name[0] }}
-                                </div>
-                            </q-avatar>
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label class="text-h6">{{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}</q-item-label>
-                            <q-item-label caption>{{ $page.props.auth.user.email }}</q-item-label>
-                            <q-item-label>
-                                <Link :href="route('customer.edit_profile')">
-                                    <q-btn label="Edit" no-caps unelevated rounded color="primary" class="q-mr-sm"/>
-                                </Link>
-                                <Link :href="route('conversations.index')">
-                                    <q-btn label="Inbox" no-caps unelevated rounded outline color="primary"/>
-                                </Link>
-                            </q-item-label>
-                        </q-item-section>
-                    </q-item>
-                </q-card>
-            </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <q-card bordered flat>
-                    <q-tabs
-                        v-model="tab"
-                        class="text-black"
-                        active-color="primary"
-                        indicator-color="primary"
-                        align="justify"
-                        no-caps
-                    >
-                        <q-tab name="orders" label="Orders" icon="shopping_cart" />
-                        <q-tab name="bookings" label="Bookings" icon="calendar_today" />
-                        <q-tab name="tickets" label="Tickets" icon="confirmation_number" />
-                    </q-tabs>
-
-                    <q-separator />
-
-                    <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="orders" class="q-pa-none q-px-sm q-pb-sm">
-                            <Orders :active_orders="active_orders" :past_orders="past_orders" />
-                            <div class="text-center q-mt-md">
-                                    <q-btn flat color="primary" label="See Past Orders" />
-                            </div>
-                        </q-tab-panel>
-
-                        <q-tab-panel name="bookings" class="q-pa-none q-px-sm q-pb-sm">
-                            <Bookings :active_bookings="active_bookings" :past_bookings="past_bookings" />
-                            <div class="text-center q-mt-md">
-                                    <q-btn flat color="primary" label="See Past Bookings" />
-                            </div>
-                        </q-tab-panel>
-
-                        <q-tab-panel name="tickets" class="q-pa-none q-px-sm q-pb-sm">
-                            <Tickets :active_ticket_orders="active_ticket_orders" :past_ticket_orders="past_ticket_orders" />
-                            <div class="text-center q-mt-md">
-                                    <q-btn flat color="primary" label="See Past Tickets" />
-                            </div>
-                        </q-tab-panel>
-                    </q-tab-panels>
-                </q-card>
-            </div>
-        </div> -->
-    </div>
 </template>
+
+<style scoped>
+
+a {
+    color: black;
+    text-decoration: none
+}
+
+</style>
