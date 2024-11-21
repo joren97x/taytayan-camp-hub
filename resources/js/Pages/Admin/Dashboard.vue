@@ -231,60 +231,60 @@ const formatMoney = (money) => {
         <div class="text-h6"> Dashboard </div>
     </div>
     <div class="row q-col-gutter-md ">
-        <div class="col-3">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6">
             <q-card borderd>
                 <q-card-section>
-                    <div class="text-subtitle1">Total Sales All Time</div>
+                    <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Total Sales All Time</div>
                     <div class="text-h6">
                         {{ formatMoney(totalSales) }}
                     </div>
-                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                    <!-- <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon> -->
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6">
             <q-card borderd>
                 <q-card-section>
-                    <div class="text-subtitle1">Products Sales</div>
+                    <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Products Sales</div>
                     <div class="text-h6">
                         {{ formatMoney(products_sales) }}
                     </div>
-                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                    <!-- <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon> -->
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6">
             <q-card borderd>
                 <q-card-section>
-                    <div class="text-subtitle1">Event Tickets Sales</div>
+                    <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Event Tickets Sales</div>
                     <div class="text-h6">
                         {{ formatMoney(tickets_sales) }}
                     </div>
-                    <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon>
+                    <!-- <q-icon name="attach_money" size="xl" class="absolute-top-right q-mr-md q-mt-lg"></q-icon> -->
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6">
             <q-card borderd>
                 <q-card-section>
-                    <div class="text-subtitle1">Booking Revenue</div>
+                    <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Booking Revenue</div>
                     <div class="text-h6">
                         {{ formatMoney(booking_revenue) }}
                     </div>
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-4">
-            <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
+        <div class="col-4 col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
+            <q-card class="q-pa-sm" :style="$q.screen.gt.sm ? 'max-height: 450px; height: 450px' : 'max-height: 350px; height: 350px'">
                 <canvas ref="salesBreakdownCanvas"></canvas>
             </q-card>
         </div>
-        <div class="col-8">
+        <div class="col-md-8 col-xl-8 col-lg-8 col-sm-12 col-xs-12">
             <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
                 <canvas ref="salesTrendCanvas"></canvas>
             </q-card>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <q-card borderd>
                 <q-table
                     flat
@@ -302,17 +302,17 @@ const formatMoney = (money) => {
                 </q-table>
             </q-card>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <q-card class="q-pa-sm full-height">
                 <canvas ref="userRegistrationsChart"></canvas>
             </q-card>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <q-card class="q-pa-sm" style="max-height: 100%; height: 100%">
                 <canvas ref="paymentCanvas"></canvas>
             </q-card>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <q-card class="q-pa-sm" style="max-height: 350px; height: 350px">
                 <canvas ref="eventsCanva"></canvas>
             </q-card>

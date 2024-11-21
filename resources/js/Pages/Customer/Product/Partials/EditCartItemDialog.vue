@@ -173,7 +173,8 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
                             </span>
                             <br>
                             <span class="text-subtitle1">
-                                P{{ cart_item.product.price }}
+                                <!-- P{{ cart_item.product.price }} -->
+                                ₱{{ parseFloat(cart_item.product.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                             </span>
                             <br>
                             {{ cart_item.product.description }}
@@ -199,7 +200,7 @@ const handleRadioSelection = (modifierGroupId, modifierItemId) => {
                                 >
                                     <q-item-section>
                                         <q-item-label>{{ modifier_item.name }}</q-item-label>
-                                        <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
+                                        <q-item-label caption class="text-green">+₱{{ parseFloat(modifier_item.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <q-radio 

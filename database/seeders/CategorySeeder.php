@@ -24,7 +24,7 @@ class CategorySeeder extends Seeder
                 ['name' => 'Okinawa', 'description' => 'A caramel twist to satisfy your sweet cravings.', 'price' => 35],
                 ['name' => 'Matcha', 'description' => 'Bold and earthy, a treat for true matcha lovers!', 'price' => 35],
                 ['name' => 'Strawberry Milktea', 'description' => 'Sweet, fruity, and oh-so-refreshing!', 'price' => 35],
-                ['name' => 'Double Chocolate', 'description' => 'Double the chocolate, double the indulgence!', 'price' => 35],
+                ['name' => 'Double Chocolate Milktea', 'description' => 'Double the chocolate, double the indulgence!', 'price' => 35],
             ],
             'Milk Tea - Special Flavours' => [
                 ['name' => 'Oreo', 'description' => 'Crunchy, creamy, and cookie-delicious!', 'price' => 45],
@@ -82,7 +82,7 @@ class CategorySeeder extends Seeder
                     'description' => $product['description'], // Add descriptions if needed
                     'photo' => "products/{$product['name']}.png", // Replace this with your image handling logic
                     'price' => $product['price'],
-                    'is_featured' => false,
+                    'is_featured' => fake()->boolean(10),
                     'available' => true
                 ]);
 

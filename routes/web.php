@@ -12,17 +12,17 @@ use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    if(Auth::check()) {
-        return redirect('/home');
-    }
-    return Inertia::render('Homepage', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->name('homepage');
+// Route::get('/', function () {
+//     if(Auth::check()) {
+//         return redirect('/home');
+//     }
+//     return Inertia::render('Homepage', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// })->name('homepage');
 
 
 // Route::get('/home', [ViewController::class, 'home'])->name('home');
@@ -31,9 +31,10 @@ Route::get('/', function () {
 //     return Inertia::render('Customer/Event/Index');
 // })->name('events');
 
-Route::middleware(['auth', 'customer'])->group(function () {
-    Route::get('/home', [ViewController::class, 'home'])->name('home');
-});
+// Route::middleware(['customer'])->group(function () {
+    // Route::get('/home', [ViewController::class, 'home'])->name('home');
+Route::get('/', [ViewController::class, 'home'])->name('home');
+// });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-profile-pic', [ProfileController::class, 'update_profile_pic'])->name('profile.update_profile_pic');

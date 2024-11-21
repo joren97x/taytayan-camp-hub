@@ -61,18 +61,32 @@ const calculateAndDisplayRoute = () => {
         })
         .then((response) => {
             const duration = response.routes[0].legs[0].duration.text;
-            const distance = response.routes[0].legs[0].distance.text;
-            const distanceValue = parseFloat(distance.split(' ')[0]);
+            const distanceText = response.routes[0].legs[0].distance.text;
+            const distanceValueInMeters = response.routes[0].legs[0].distance.value; // This is the raw distance value in meters
+            let distanceValue;
+
+            // Check if the distance is in kilometers or meters
+            if (distanceText.includes('km')) {
+                // If distance is in kilometers, parse it
+                distanceValue = parseFloat(distanceText.split(' ')[0]);
+            } else if (distanceText.includes('M')) {
+                // If distance is in meters, convert to kilometers
+                distanceValue = parseFloat(distanceText.split(' ')[0]) / 1000;
+            }
+
+            console.log(`Distance: ${distanceValue} km`);
 
             let deliveryFee = MIN_DELIVERY_FEE;
 
             // Calculate additional fees only if distance exceeds threshold
             if (distanceValue > THRESHOLD_DISTANCE) {
                 const extraDistance = Math.floor(distanceValue - THRESHOLD_DISTANCE);
+                console.log(`Extra distance: ${extraDistance} km`);
+
                 deliveryFee += extraDistance * 10; // Each km above threshold costs an extra 10 pesos
             }
 
-            console.log(`Shipping fee: ${deliveryFee} pesos`);
+            console.log(`DeliveryFee: ${deliveryFee} pesos`);
             const path = response.routes[0].overview_path;
             const midpointIndex = Math.floor(path.length / 2);
 
@@ -356,7 +370,7 @@ watch(mode, () => {
                                         </q-item-section>
                                     </q-item>
                                     <q-item v-if="form.mode == 'delivery'">
-                                        <q-item-section>Shipping Fee</q-item-section>
+                                        <q-item-section>Delivery Fee</q-item-section>
                                         <q-item-section side>
                                             <!-- P{{ form.delivery_fee }} -->
                                             ₱{{ parseFloat(form.delivery_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}

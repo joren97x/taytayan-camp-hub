@@ -55,7 +55,7 @@ Echo.private('orders')
 <template>
     <Head title="Orders" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
-        <q-card bordered flat>
+        <q-card bordered flat :square="$q.screen.lt.md">
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -77,8 +77,8 @@ Echo.private('orders')
                     </q-td>
                 </template>
                 <template v-slot:item="props">
-                    <q-card class="col-12 q-mb-md" bordered flat>
-                        <q-card-section>
+                    <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
+                        <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">

@@ -1,9 +1,16 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
 import { date } from 'quasar'
-import { parse, format, formatDistanceToNow } from 'date-fns'
+import { parse, format, formatDistanceToNow, isFuture, parseISO } from 'date-fns'
+import { ref, computed } from 'vue';
 
-const props = defineProps({ event: Object })
+const props = defineProps({ 
+    event: Object, 
+    show_remaining_time: {
+        default: false,
+        type: Boolean
+    } 
+})
 
 const page = usePage()
 const url = page.url
@@ -14,6 +21,18 @@ function shareOnFacebook() {
     // console.log(facebookShareUrl)
     // window.open(facebookShareUrl, '_blank');
 }
+
+const eventDateTime = ref(
+  parseISO(`${props.event.date}T${props.event.start_time}`)
+);
+
+// Computed property to show time remaining
+const timeRemaining = computed(() => {
+  if (isFuture(eventDateTime.value)) {
+    return `In about ${formatDistanceToNow(eventDateTime.value, { addSuffix: false })}`;
+  }
+  return 'The event has started or passed.';
+});
 
 const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date()), 'h a');
 
@@ -37,11 +56,17 @@ const formattedTime = format(parse(props.event.start_time, 'HH:mm:ss', new Date(
                             />
                         </div>
                     </q-card-section>
-                    <q-card-section class="q-pa-md full-width">
+                    <q-card-section class="q-pa-sm full-width">
                         <q-item class="q-pa-none">
                             <q-item-section>
                                 <q-item-label class="text-h6">
-                                    <slot name="badge" />
+                                    <!-- <slot name="badge" /> -->
+                                    <div v-if="show_remaining_time"> 
+                                        <q-chip color="primary" text-color="white">
+                                            {{ timeRemaining  }}
+                                        </q-chip>
+                                        <br>
+                                    </div>
                                     {{ event.title }}
                                 </q-item-label>
                                 <q-item-label caption class="">

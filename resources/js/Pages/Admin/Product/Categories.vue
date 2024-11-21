@@ -69,6 +69,8 @@ const columns = [
     { name: 'items', label: 'Items', align: 'center', field: 'items', sortable: true },
     { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
+
+
 const initialPagination = {
     sortBy: 'desc',
     descending: false,
@@ -98,10 +100,10 @@ const initialPagination = {
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>
                     <div class="text-h6">Categories</div>
                     <q-space />
-                    <q-btn icon="search" class="q-mr-xs" round dense flat @click="showSearch = !showSearch"/>
+                    <q-btn icon="search" class="" round dense flat @click="showSearch = !showSearch"/>
                     
                     <Link :href="route('admin.categories.create')">
-                        <q-btn class="q-ml-sm" no-caps color="primary" rounded unelevated label="Create Category"/>
+                        <q-btn class="q-ml-xs" no-caps color="primary" rounded unelevated label="Create Category"/>
                     </Link>
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
@@ -210,7 +212,7 @@ const initialPagination = {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"
         >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-section class="row items-center q-pb-none">
+            <q-card-section class="row items-center q-pb-none q-px-sm">
                 <q-icon name="warning" color="negative" size="32px" />
                 <div class="text-h6 q-ml-md">Delete Category</div>
                 <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
@@ -246,12 +248,12 @@ const initialPagination = {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"
         >
         <q-card :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                 <div class="text-h6">{{ currentCategory.name }}</div>
                 <q-btn round icon="close" v-close-popup flat class="absolute-top-right q-mt-sm q-mr-sm"/>
             </q-card-section>
-            <q-card-section>
-                <q-list>
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
+                <q-list >
                     <q-item-label header>Products Belonged To this Category</q-item-label>
                     <q-item v-for="product in currentCategory.products">
                         <q-item-section avatar>

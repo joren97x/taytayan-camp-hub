@@ -127,23 +127,14 @@ function calculateSteps() {
     }
 }
 
-Echo.private(`orders.${order.value.id}`)
-    .listen('Product\\OrderStatusUpdated', (data) => {
-        $q.notify('new order arrived')
-        console.log(data.order)
-        order.value.status = data.order.status
-        console.log(order.value)
-        calculateSteps()
-        // axios.get(route('cashier.orders.show', data.order.id))
-        // .then((orderData) => {
-        //     $q.notify('fetched and ykwis bruh')
-        //     console.log(orderData)
-        //     orders.value.push(orderData.data)
-        // })
-        // .catch((err) => {
-        //     console.error(err)
-        // })
-    })
+// Echo.private(`orders.${order.value.id}`)
+//     .listen('Product\\OrderStatusUpdated', (data) => {
+//         $q.notify('new order arrived')
+//         console.log(data.order)
+//         order.value.status = data.order.status
+//         console.log(order.value)
+//         calculateSteps()
+//     })
 
 const reorder = () => {
     reorderForm.get(route('customer.checkout'))
@@ -178,7 +169,7 @@ const getStatusColor = (status) => {
 }
 </script>
 <template>
-    <q-card bordered flat class="q-my-sm">
+    <q-card bordered flat class="q-my-sm" :square="$q.screen.lt.md">
         <q-item @click="viewOrderDialog = true">
             <q-item-section>
                 <q-item-label caption>Date Placed</q-item-label>
@@ -220,7 +211,28 @@ const getStatusColor = (status) => {
                         label="Complete Order"
                     />
                 </div>
-                <q-btn icon="more_horiz" round flat class="lt-md"></q-btn>
+                <q-btn icon="more_horiz" round flat class="lt-md">
+                    <q-menu>
+                        <q-list>
+                            <Link :href="route('customer.orders.show', order.id)">
+                                <q-item>
+                                    <q-item-section>View Order</q-item-section>
+                                </q-item>
+                            </Link>
+                            <q-item v-if="order.status == 'completed' || order.status == 'cancelled'" @click="reorder()" >
+                                <q-item-section>Reorder</q-item-section>
+                            </q-item>
+                            <q-item 
+                                v-if="order.status == 'delivered' || order.status == 'ready_for_pickup'" 
+                                @click="completeOrder()"
+                                :loading="completeOrderForm.processing"
+                                :disable="completeOrderForm.processing"
+                            >
+                                <q-item-section>Complete Order</q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-menu>
+                </q-btn>
             </q-item-section>
         </q-item>
         <q-separator class="q-my-xs"/>
@@ -435,5 +447,9 @@ const getStatusColor = (status) => {
     display: flex;
     flex-direction: row;
     gap: 4px; /* Adds spacing between buttons */
+}
+
+a {
+    text-decoration: none
 }
 </style>

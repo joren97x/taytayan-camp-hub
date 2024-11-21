@@ -104,13 +104,13 @@ const getTextColor = computed((component) => {
         >
             <q-toolbar class="row items-center justify-between" style="margin: 0 auto; max-width: 1280px">
                 <div class="row items-center">
-                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder">
+                    <Link :href="route('home')" class="text-primary text-h6 text-weight-bolder">
                         <q-avatar size="lg" class="q-mr-sm">
                             <q-img src="../logo.jpg" fill="cover" />
                         </q-avatar>
                     </Link>
 
-                    <Link :href="route('homepage')" class="text-primary text-h6 text-weight-bolder q-mr-lg">
+                    <Link :href="route('home')" class="text-primary text-h6 text-weight-bolder q-mr-lg">
                         <!-- Taytayan CAMP -->
                         <div class="text-design">
                             taytayan<br>
@@ -122,7 +122,7 @@ const getTextColor = computed((component) => {
                     <Link :href="route('customer.products.index')" :class="getTextColor">
                         Products
                     </Link>
-                    <Link :href="route('customer.events.index')" :class="`${getTextColor} q-mx-md`">
+                    <Link :href="route('customer.events.index')" :class="`${getTextColor} q-mx-lg`">
                         Events
                     </Link>
                     <Link :href="route('customer.facilities.index')" :class="getTextColor">
@@ -165,8 +165,8 @@ const getTextColor = computed((component) => {
                     </div>
                     <div v-else class="flex items-center">
                         <q-btn flat round class="q-mx-xs" @click="notificationMenu = true" :class="getTextColor" >
-                            <q-icon size="2em" name="notifications" />
-                            <q-badge color="red" floating v-if="notificationStore.unreadCount > 0">
+                            <q-icon name="notifications" />
+                            <q-badge color="red" floating v-if="notificationStore.unreadCount > 0" class="q-mt-xs q-mr-xs">
                                 {{ notificationStore.unreadCount }}
                             </q-badge>
                             <q-menu @show="notificationStore.readNotifications()" class="gt-sm">
@@ -184,6 +184,7 @@ const getTextColor = computed((component) => {
                         </q-btn>
                         <q-btn class="q-px-xs" flat unelevated no-caps :class="getTextColor">
                             <q-icon name="menu" class="lt-md" />
+                            
                             <q-avatar size="md" text-color="white" color="primary" class="gt-sm">
                                 <q-img class="fit" fit="cover" :src="`/storage/${$page.props.auth.user.profile_pic}`"
                                     v-if="$page.props.auth.user.profile_pic" />

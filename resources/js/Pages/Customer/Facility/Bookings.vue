@@ -21,7 +21,7 @@ const showPastBookings = ref(false)
 <template>
     <Head title="Bookings"/>
     <Profile>
-    <q-card bordered flat>
+    <q-card bordered flat :square="$q.screen.lt.md">
         <q-card-actions class="text-center justify-center items-center flex">
             <Link :href="route('customer.profile')" class="lt-md">
                 <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
@@ -29,7 +29,7 @@ const showPastBookings = ref(false)
                 <div class="text-h6">Bookings</div>
         </q-card-actions>
         <q-separator />
-        <q-card-section>
+        <q-card-section :class="$q.screen.lt.md ? 'q-pa-none' : ''">
             <!-- <Link :href="route('customer.profile')" class="text-h6">
                 <q-icon name="arrow_back"></q-icon> Bookings
             </Link>

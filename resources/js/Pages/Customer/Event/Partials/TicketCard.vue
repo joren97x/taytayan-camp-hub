@@ -13,19 +13,19 @@ const dialog = ref(false)
 </script>
 
 <template>
-    <q-card bordered flat class="q-mt-sm">
-        <q-item >
+    <q-card bordered flat class="q-mt-sm" :square="$q.screen.lt.md">
+        <q-item :class="$q.screen.lt.md ? 'q-px-sm' : ''">
             <q-item-section>
                 <q-item-label caption>Date</q-item-label>
                 <q-item-label>{{ date.formatDate(ticket_order.event.date, 'MMM D, YYYY') }}</q-item-label>
             </q-item-section>
-            <q-item-section>
+            <q-item-section class="gt-sm">
                 <q-item-label caption>Attendees</q-item-label>
                 <q-item-label>{{ ticket_order.tickets.length}}</q-item-label>
             </q-item-section>
             <q-item-section>
                 <q-item-label caption>Status</q-item-label>
-                <q-item-label>{{ ticket_order.status }}</q-item-label>
+                <q-item-label class="text-capitalize">{{ ticket_order.status }}</q-item-label>
             </q-item-section>
             <q-item-section side>
                 <div class="button-group gt-sm">
@@ -33,18 +33,33 @@ const dialog = ref(false)
                         <q-btn label="View Ticket" no-caps color="primary" outline rounded />
                     </Link>
                 </div>
-                <q-btn icon="more_horiz" round flat class="lt-md"></q-btn>
+                <q-btn icon="more_horiz" round flat class="lt-md">
+                    <q-menu>
+                        <q-list>
+                            <Link :href="route('customer.tickets.show', ticket_order.id)">
+                                <q-item>
+                                    <q-item-section>View Ticket</q-item-section>
+                                </q-item>
+                            </Link>
+                            <Link :href="route('conversations.chat_cashier')">
+                                <q-item>
+                                    <q-item-section>Contact Organizer</q-item-section>
+                                </q-item>
+                            </Link>
+                        </q-list>
+                    </q-menu>
+                </q-btn>
             </q-item-section>
         </q-item>
         <q-separator class="q-my-xs"/>
         <q-card>
-            <q-item @click="dialog = true" >
-                <q-item-section avatar class="items-center">
+            <q-item @click="dialog = true" class="">
+                <q-item-section avatar class="items-center gt-sm">
                     <div class="text-weight-bold text-secondary">{{ date.formatDate(ticket_order.event.date, 'MMM') }}</div>
                     <div>{{ date.formatDate(ticket_order.event.date, 'D') }}</div>
                 </q-item-section>
                 <q-item-section avatar>
-                    <q-img :src="`/storage/${ticket_order.event.cover_photo}`" height="100px" width="100px" fit="cover" class="rounded-borders" />
+                    <q-img :src="`/storage/${ticket_order.event.cover_photo}`" height="80px" width="80px" fit="cover" class="rounded-borders" />
                 </q-item-section>
                 <q-item-section top>
                     <q-item-label class="text-subtitle1">{{ ticket_order.event.title }}</q-item-label>

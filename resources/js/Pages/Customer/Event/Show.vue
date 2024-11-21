@@ -5,7 +5,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import { computed, ref } from 'vue'
 import { useQuasar, date } from 'quasar'
-import { parse, format } from 'date-fns'
+import { parse, format, parseISO, isFuture, formatDistanceToNow } from 'date-fns'
 
 defineOptions({ layout: CustomerLayout })
 const props = defineProps({
@@ -33,13 +33,25 @@ const total = computed(() => {
     return attendees.value * props.event.admission_fee
 })
 
+// const eventDateTime = ref(
+//   parseISO(`${props.event.date}T${props.event.start_time}`)
+// );
+
+// // Computed property to show time remaining
+// const timeRemaining = computed(() => {
+//   if (isFuture(eventDateTime.value)) {
+//     return `In about ${formatDistanceToNow(eventDateTime.value, { addSuffix: false })}`;
+//   }
+//   return 'The event has started or passed.';
+// });
+
 </script>
 
 <template>
     <Head :title="event.title" />
     <div>
         <!-- <div class="full-width bg-grey q-my-md rounded-borders" style="height: 50vh;"> -->
-        <div class="full-width q-my-md rounded-borders" style="height: 50vh; position: relative; overflow: hidden;">
+        <div :class="`full-width q-mb-md ${$q.screen.gt.sm ? 'rounded-borders' : ''}`" style="height: 50vh; position: relative; overflow: hidden;">
             <div class="blurred-background" :style="`background-image: url('/storage/${event.cover_photo}');`"></div>
             <q-img 
                 :src="`/storage/${event.cover_photo}`"
@@ -53,6 +65,7 @@ const total = computed(() => {
         <div class="row q-mx-sm">
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
                 <div class="text-subtitle1">
+                    
                     {{ date.formatDate(event.date, 'dddd, MMMM D') }} at {{ formattedTime }}
                 </div>
                 <div class="text-h5 text-weight-bold">
@@ -93,7 +106,7 @@ const total = computed(() => {
                         <q-card class="row rounded-borders q-pa-md" bordered flat>
                             <div class="col-6">
                                 <div>Admission</div>
-                                <div class="text-h6 text-weight-bold">P{{ total }}</div>
+                                <div class="text-h6 text-weight-bold">₱{{ parseFloat(total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                             </div>
                             <div class="col-6 justify-end items-center flex">
                                 <q-btn icon="remove" size="sm" round unelevated class="bg-grey-4" @click="decrementTicket"/>
@@ -119,7 +132,7 @@ const total = computed(() => {
         </div>
         <q-card class="bg-white fixed-bottom lt-md z-top" bordered square>
             <!-- <div class="row q-pa-none q-col-gutter-md"> -->
-            <q-card-section class="row">
+            <q-card-section class="row q-py-xs q-px-xs">
                 <div class="col-3">
                     <div>Admission</div>
                     <!-- <div class="text-weight-bold">P{{ parseFloat(total).toFixed(2) }}</div> -->

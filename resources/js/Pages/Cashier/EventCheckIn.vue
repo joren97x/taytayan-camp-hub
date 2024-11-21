@@ -145,8 +145,8 @@ const initialPagination = {
 <template>
     
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
-        <q-card class="q-mb-md" bordered flat>
-            <q-card-section>
+        <q-card class="q-mb-md" bordered flat  :square="$q.screen.lt.md">
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                 <!-- <Link :href="route('cashier.tickets.index')">
                     <q-btn rounded label="Go Back" no-caps icon="arrow_back" flat />
                 </Link> -->
@@ -191,7 +191,7 @@ const initialPagination = {
                 </div>
             </q-card-section>
         </q-card>
-        <q-card bordered flat>
+        <q-card bordered flat :square="$q.screen.lt.md">
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -218,6 +218,7 @@ const initialPagination = {
                         rounded
                         dense
                     />
+                    <q-btn no-caps color="primary" @click="createAttendeeDialog = true" unelevated label="Create" rounded class="q-ml-sm"/>
                     <div class="full-width q-mt-sm" v-if="showSearch">
                         <q-input
                             v-model="searchTerm"
@@ -236,7 +237,6 @@ const initialPagination = {
                     </div>
                     <!-- <Link :href="route('admin.facilities.create')">f
                     </Link> -->
-                        <q-btn no-caps color="primary" @click="createAttendeeDialog = true" label="Create Attendee" rounded class="q-ml-sm"/>
                     </template>
                 <template v-slot:body-cell-attendee="props">
                     <q-td :props="props">
@@ -254,13 +254,13 @@ const initialPagination = {
                             <q-card-section>
                                 <q-item class="q-pa-none">
                                     <q-item-section class="items-start">
-                                        {{ props.row }}
+                                        <!-- {{ props.row }} -->
+                                        <q-item-label caption>Name</q-item-label>
                                         <q-item-label>{{ props.row.name }}</q-item-label>
-                                        <q-item-label caption>Attendee Name</q-item-label>
                                     </q-item-section>
                                     <q-item-section>
-                                        <q-item-label>{{ props.row.status }}</q-item-label>
                                         <q-item-label caption>Status</q-item-label>
+                                        <q-item-label>{{ props.row.status }}</q-item-label>
                                     </q-item-section>
                                     <q-item-section side>
                                         <EventCheckinDialog :ticket="props.row" />
@@ -331,11 +331,13 @@ const initialPagination = {
                     v-model="createAttendeeForm.status"
                 /> -->
             </q-card-section>
-            <q-card-actions class="justify-end">
+            <q-card-actions>
                 <q-btn 
-                    label="Create" 
+                    label="Create"
+                    unelevated 
                     no-caps 
                     rounded 
+                    class="full-width"
                     @click="submitCreateAttendeeForm" 
                     color="primary"
                     :loading="createAttendeeForm.processing"

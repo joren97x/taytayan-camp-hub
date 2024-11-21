@@ -38,6 +38,21 @@ const showCancelButton = computed(() => {
     return isStatusValid && !hasEventStarted;
 });
 
+const STATUS_PENDING = 'pending';
+const STATUS_COMPLETED = 'completed';
+const STATUS_CONFIRMED = 'confirmed';
+const STATUS_CANCELLED = 'cancelled';
+
+const getChipColor = (status) => {
+    const colorMap = {
+        pending: 'orange',
+        completed: 'green',
+        confirmed: 'green',
+        cancelled: 'red',
+    };
+    return colorMap[status] || 'grey'; // Default to grey if no match
+}
+
 </script>
 
 <template>
@@ -45,11 +60,18 @@ const showCancelButton = computed(() => {
     <Head title="Tickets" />
     <Profile>
         <!-- <div :class="$q.screen.lt.md ? '' : 'q-pa-md'"> -->
-        <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''">
-            <q-card-section :class="$q.screen.lt.md ? 'q-pa-none' : ''">
+        <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''" :square="$q.screen.lt.md">
+            <q-card-actions class="text-center justify-center items-center flex">
+                <Link :href="route('customer.tickets.index')" class="lt-md">
+                    <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
+                </Link>
+                <div class="text-h6">Ticket Details</div>
+            </q-card-actions>
+            <q-separator/>
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm q-py-none' : ''">
                 <!-- Header -->
                 <div class="row items-center">
-                    <q-item class="col-12 col-md-8">
+                    <q-item class="col-12 col-md-8 q-px-none">
                         <q-item-section avatar>
                             <q-img :height="$q.screen.gt.md ? '100px' : '80px'"
                                 :width="$q.screen.gt.md ? '100px' : '80px'" class="rounded-borders"
@@ -72,11 +94,12 @@ const showCancelButton = computed(() => {
                 <!-- Status and Payment Details -->
                 <div class="row q-col-gutter-md">
                     <div class="col-6">
-                        <div class="text-caption text-grey-9">Status</div>
-                        <q-chip :color="ticket_order.status === 'approved' ? 'green' : 'orange'"
-                            class="text-white">
-                            {{ ticket_order.status }}
-                        </q-chip>
+                        <div class="text-caption text-grey-9 ">Status</div>
+                        <q-chip 
+                            :color="getChipColor(ticket_order.status)" 
+                            class="text-white text-capitalize"
+                            :label="ticket_order.status"
+                        />
                     </div>
                     <div class="col-6">
                         <div class="text-caption text-grey-9">Payment Method</div>
@@ -84,7 +107,7 @@ const showCancelButton = computed(() => {
                     </div>
                     <div class="col-6">
                         <div class="text-caption text-grey-9">Purchased On</div>
-                        <div>{{ date.formatDate(ticket_order.created_at, 'ddd, MMM D, h:mm A') }}</div>
+                        <div>{{ date.formatDate(ticket_order.created_at, 'ddd, MMM D') }}</div>
                     </div>
                     <div class="col-6">
                         <div class="text-caption text-grey-9">Total</div>
@@ -102,17 +125,22 @@ const showCancelButton = computed(() => {
                 <!-- Attendees Section -->
                 <div>
                     <div class="text-weight-bold text-subtitle1 q-mb-md">Attendees</div>
-                    <div class="row q-gutter-md">
-                        <q-card bordered flat v-for="ticket in ticket_order.tickets" :key="ticket.id" class="col-12 col-sm-6 col-md-4">
-                            <q-item clickable class="rounded-borders shadow-1">
-                                <q-item-section avatar>
-                                    <q-avatar color="primary" text-color="white">{{ ticket.name[0] }}</q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{ ticket.name }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        </q-card>
+                    <div class="row q-col-gutter-sm">
+                        <div v-for="ticket in ticket_order.tickets" :key="ticket.id" class="col-12 col-sm-6 col-md-4">
+                            <q-card bordered flat >
+                                <q-item clickable class="rounded-borders">
+                                    <q-item-section avatar>
+                                        <q-avatar color="primary" text-color="white">{{ ticket.name[0] }}</q-avatar>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>{{ ticket.name }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <q-chip>{{ ticket.status }}</q-chip>
+                                    </q-item-section>
+                                </q-item>
+                            </q-card>
+                        </div>
                     </div>
                 </div>
 
@@ -133,10 +161,10 @@ const showCancelButton = computed(() => {
                     </a>
                 </div>
             </q-card-section>
-            <q-card-actions class="justify-end">
-                <q-btn label="Cancel" @click="cancelDialog = true" v-if="showCancelButton"/>
+            <q-card-actions class="justify-end q-mt-md">
+                <q-btn label="Cancel" @click="cancelDialog = true" v-if="showCancelButton" outline color="negative" class="q-mr-sm" no-caps rounded/>
                 <Link :href="route('conversations.chat_cashier')">
-                    <q-btn label="Contact Organizer"/>
+                    <q-btn label="Contact Organizer" unelevated no-caps color="primary" rounded/>
                 </Link>
             </q-card-actions>
         </q-card>

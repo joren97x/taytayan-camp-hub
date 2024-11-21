@@ -51,7 +51,7 @@ const ticketsComponents = [
     <Head title="Profile" />
         <div :class="`row q-col-gutter-md ${$q.screen.gt.md ? 'q-mt-lg' : ''}`">
             <div class="col-xs-12 col-sm-12 xol-md-4 col-lg-4 col-xl-4" v-if="$page.component == 'Customer/Profile' || $q.screen.gt.sm">
-                <q-card flat bordered>
+                <q-card flat bordered :square="$q.screen.lt.md">
                     <q-card-section>
                         <div class=" items-center justify-center flex">
                             <div>
@@ -63,8 +63,11 @@ const ticketsComponents = [
                                         </div>
                                     </q-avatar>
                                 </div>
-                                <div class="text-h6">
-                                    {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}
+                                <div>
+                                    <div class="text-h6 text-center">
+                                        {{ $page.props.auth.user.first_name + ' ' + $page.props.auth.user.last_name }}
+                                    </div>
+                                    <div class="">{{ $page.props.auth.user.email }}</div>
                                 </div>
                             </div>
                         </div>

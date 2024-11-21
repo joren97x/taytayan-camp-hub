@@ -100,7 +100,7 @@ defineProps({
         <div class="text-h6 q-my-md">Upcoming Events</div>
         <div class="row q-col-gutter-lg" v-if="upcoming_events.length > 0">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in upcoming_events">
-                <EventCard :event="event" />
+                <EventCard :event="event" :show_remaining_time="true" />
             </div>
             <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6" v-for="event in events">
                 <EventCard :event="event" />

@@ -1,10 +1,32 @@
+
+<script setup>
+import { Link } from '@inertiajs/vue3'
+
+</script>
+
 <template>
-    <div class="bg-dark text-white q-mt-xl">
-        <div class="q-pa-md row justify-between items-center">
+    <div class="bg-dark q-mt-xl " style="color: white;">
+        <div class="q-pa-md row justify-between items-center footer">
             <!-- Left Section: Company Info -->
             <div class="col-auto">
-                <div class="text-body2">© {{ new Date().getFullYear() }} Taytayan Camp. All rights reserved.</div>
+                <div class="flex items-center">
+                    <q-avatar>
+                        <q-img
+                            src="logo.png"
+                            alt="Logo"
+                            contain
+                            class="q-mb-sm"
+                        />
+                    </q-avatar>
+                    <div class="text-h6 q-ml-md">Taytayan Camp Hub</div>
+                </div>
+                <div class="q-my-sm">
+                    <div>RJC San Vicente Olango Island</div>
+                    <div>09267495567</div>
+                    <div>taytayancamp@email.com</div>
+                </div>
                 <div>
+                    <div class="text-weight-bold text-subtitle1">Follow Us</div>
                     <q-btn round>
                         <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 16 16" id="facebook">
                             <path fill="#1976D2"
@@ -45,8 +67,7 @@
                             </g>
                         </svg>
                     </q-btn>
-                    <q-btn>
-                        <q-avatar square>
+                    <q-btn round>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="twitter">
                                 <path fill="#050505" fill-rule="evenodd"
                                     d="m60,12c0-4.42-3.58-8-8-8H12C7.58,4,4,7.58,4,12v40c0,4.42,3.58,8,8,8h40c4.42,0,8-3.58,8-8V12h0Z">
@@ -55,29 +76,37 @@
                                     d="m15.07,48.28h4l10.68-12.14,9.29,12.12h10.86l-14.25-18.84,12.06-13.7h-4l-9.91,11.26-8.5-11.25h-11.21l13.79,17.99-12.82,14.57Zm5.11-29.56h3.64l20.06,26.54h-3.35l-20.34-26.54Z">
                                 </path>
                             </svg>
-                        </q-avatar>
                     </q-btn>
                 </div>
             </div>
 
             <!-- Right Section: Links -->
             <div class="col-auto">
-                <div class="q-btn-group">
-                    <q-btn flat label="Privacy Policy" to="/privacy-policy" class="text-white" />
-                    <q-btn flat label="Terms of Service" to="/terms" class="text-white" />
+                <div class="q-mt-md">
+                    <Link :href="route('home')">Home</Link>
+                    <Link :href="route('home')" class="q-mx-lg">About Us</Link>
+                    <Link :href="route('home')">Contact Us</Link>
                 </div>
             </div>
         </div>
+        <div class="text-body2 text-center q-pb-md">© {{ new Date().getFullYear() }} Taytayan Camp. All rights reserved.</div>
     </div>
 </template>
-
-<script setup>
-// No specific script required for this footer
-</script>
 
 <style scoped>
 .q-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     /* Optional: Adds subtle border at the top of the footer */
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.footer {
+    max-width: 1280px;
+    margin: auto;
+    z-index: 0;
 }
 </style>

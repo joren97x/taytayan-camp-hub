@@ -4,6 +4,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CashierMiddleware;
 use App\Http\Middleware\CustomerMiddleware;
 use App\Http\Middleware\DriverMiddleware;
+use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\UpgradeToHttpsUnderNgrok;
@@ -36,7 +37,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminMiddleware::class,
             'customer' => CustomerMiddleware::class,
             'cashier' => CashierMiddleware::class,
-            'driver' => DriverMiddleware::class
+            'driver' => DriverMiddleware::class,
+            'guest' => GuestMiddleware::class
         ]);
 
     })

@@ -21,7 +21,7 @@ const columns = [
 <template>
     <Head title="Orders" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
-        <q-card bordered flat>
+        <q-card bordered flat :square="$q.screen.lt.md">
             <q-table
                 class="my-sticky-header-column-table"
                 flat
@@ -43,8 +43,8 @@ const columns = [
                     </q-td>
                 </template>
                 <template v-slot:item="props">
-                    <q-card class="col-12 q-mb-md" bordered flat>
-                        <q-card-section>
+                    <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
+                        <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
@@ -83,9 +83,6 @@ const columns = [
                                     {{ props.row.payment_method }}
                                 </div>
                                 <div class="col-xs-12 col-sm-12">
-                                    <div class="text-caption text-grey">
-                                        Actions
-                                    </div>
                                     <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key"/>
                                 </div>
                             </div>

@@ -14,7 +14,7 @@ defineProps({ ticket_orders: Object })
     
     <Head title="Tickets" />
     <Profile>
-    <q-card bordered flat>
+    <q-card bordered flat :square="$q.screen.lt.md">
         <q-card-actions class="text-center justify-center items-center flex">
             <Link :href="route('customer.profile')" class="lt-md">
                 <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
@@ -22,7 +22,7 @@ defineProps({ ticket_orders: Object })
                 <div class="text-h6">Tickets</div>
         </q-card-actions>
         <q-separator/>
-        <q-card-section>
+        <q-card-section :class="$q.screen.lt.md ? 'q-pa-none' : ''">
             <div class="row reverse justify-center">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <TicketCard v-for="ticket_order in ticket_orders" :ticket_order="ticket_order"/>
@@ -37,28 +37,6 @@ defineProps({ ticket_orders: Object })
         </q-card-section>
     </q-card>
 </Profile>
-	<!-- <div class="row">
-        {{ ticket_orders }}
-        <div class="col-6"></div>
-        <div class="col-6">
-            <q-card v-for="ticket_order in ticket_orders" class="q-my-md">
-                {{ ticket_order }}
-                <div>Event</div>
-                <q-img height="200px" width="200px" :src="`/storage/${ticket_order.qr_code_path}`"></q-img>
-                {{ ticket_order.event.title }}
-                <p>{{ ticket_order.ticket_order_items.length }}x admission</p>
-                <p>Total: {{ ticket_order.amount }}</p>
-                <p>Ticket Order Status: {{ ticket_order.status }}</p>
-                <q-card-section v-for="ticket_order_item in ticket_order.ticket_order_items">
-                    {{ ticket_order_item }}
-                </q-card-section>
-                <a :href="`/storage/${ticket_order.qr_code_path}`" download>
-                    <q-btn>
-                        Download Qr Code
-                    </q-btn>
-                </a>
-            </q-card>
-        </div>
-    </div> -->
+	
 </template>
 	

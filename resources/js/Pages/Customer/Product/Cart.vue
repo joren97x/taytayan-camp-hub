@@ -254,10 +254,21 @@ const onGridSelection = (id) => {
                                         
                                     </q-item-section>
                                     <q-item-section class="items-start">
-                                        <q-item-label>{{ props.row.product.name }}</q-item-label>
-                                        <q-item-label caption class="ellipsis q-mr-xl">{{ props.row.product.description }} pcs</q-item-label>
-                                        <q-item-label caption >{{ props.row.quantity }} qty</q-item-label>
-                                        <div class="absolute-top-right text-black q-mr-sm">
+                                        <q-item-label class="q-mr-xl">{{ props.row.product.name }} ({{ props.row.quantity }})</q-item-label>
+                                        <q-item-label caption>
+                                            <template v-for="(modifier, index) in props.row.grouped_modifiers" :key="index">
+                                                <q-item-label caption>{{ modifier.modifier_group.name }}</q-item-label>
+                                                <q-item-label caption v-for="(modifier_item, index) in modifier.modifier_items" :key="index">
+                                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }}
+                                                </q-item-label>
+                                            </template>
+                                            <q-item-label caption v-if="props.row.special_instruction" class="text-grey-7">
+                                                Note: {{ props.row.special_instruction }}
+                                            </q-item-label>
+                                        </q-item-label>
+                                        <!-- <q-item-label caption class="ellipsis q-mr-xl">{{ props.row.product.description }}</q-item-label> -->
+                                        <!-- <q-item-label caption >{{ props.row.quantity }} qty</q-item-label> -->
+                                        <div class="absolute-top-right text-black q-mr-sm text-weight-medium">
                                             ₱{{ parseFloat(props.row.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                                         </div>
                                     </q-item-section>

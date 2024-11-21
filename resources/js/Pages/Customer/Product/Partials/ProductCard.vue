@@ -15,7 +15,7 @@ const dialog = ref(false)
             <div class="col-6">
                 <q-card-section>
                     <div class="text-subtitle1 ellipsis"> {{ product.name }} </div>
-                    <div class="text-regular">P{{ product.price }} </div>
+                    <div class="text-regular">₱{{ parseFloat(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                     <div class="text-caption text-grey ellipsis-3-lines">
                         {{ product.description }}
                     </div>

@@ -17,7 +17,7 @@ defineProps({
                 <div class="text-subtitle1 text-weight-medium text-start" v-if="show_items_label">
                     {{ cart_products.length }} Items
                 </div>
-                <q-item v-for="item in cart_products" :class="$q.screen.lt.md ? 'q-mx-none q-px-none' : ''">
+                <q-item v-for="item in cart_products" :class="$q.screen.lt.md ? 'q-mx-none q-pl-none q-px-none' : ''">
                     <q-item-section avatar>
                         <q-img 
                             :src="`/storage/${item.product.photo}`"
@@ -28,7 +28,7 @@ defineProps({
                     </q-item-section>
                     <q-item-section>
                         <q-item-label class="text-weight-medium">
-                            • {{ item.product.name }} - {{ item.quantity }} pcs
+                            • {{ item.product.name }} ({{ item.quantity }})
                         </q-item-label>
                         <template 
                             v-for="(modifier, index) in item.grouped_modifiers" 
@@ -65,7 +65,7 @@ defineProps({
                         <span class="q-mr-md">Delivery Fee</span> 
                         <span>₱{{ parseFloat(delivery_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
                     </div>
-                    <div class="col-12 justify-end items-end flex text-weight-bold" v-if="delivery_fee">
+                    <div class="col-12 justify-end items-end flex text-weight-bold q-mb-md" v-if="delivery_fee">
                         <span class="q-mr-md">Total</span> 
                         <!-- <span>P{{ parseFloat(subtotal) + parseFloat(delivery_fee) }}</span> -->
                         ₱{{ (parseFloat(subtotal) + parseFloat(delivery_fee)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}

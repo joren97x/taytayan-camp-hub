@@ -133,14 +133,14 @@ const decrementGuests = () => {
             <div class="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
                 <div class="lt-md q-mb-xs justify-between flex">
                     <div style="position: relative">
-                        <div class="q-mr-xl">
-                            <div class="text-h5 text-weight-bold">{{ facility.name }}</div>
+                        <div class="">
+                            <div class="text-h5 text-weight-bold q-mr-xl">{{ facility.name }}</div>
                             <div style="white-space: pre-line;">{{ facility.description }}</div>
                             <!-- <div class="q-mr-xl" style="white-space: pre-line;">
                                 {{ facility.amenities }}
                             </div> -->
                         </div>
-                        <div class="text-subtitle1 q-mt-sm absolute-top-right q-mr-sm">
+                        <div class="text-subtitle1 absolute-top-right q-mr-sm">
                             <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(facility.average_rating).toFixed(2) }}
                         </div>
                     </div>
@@ -232,6 +232,9 @@ const decrementGuests = () => {
         <q-separator class="q-my-md" />
         <div class="col-12">
             <div class="text-h6 q-mb-md">Ratings and Reviews</div>
+            <q-card v-if="facility.facility_ratings.length == 0" bordered flat class="flex items-center q-pa-xl justify-center bg-grey-3 text-grey col-12">
+                No ratings yet...
+            </q-card>
             <div class="row q-col-gutter-md">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in facility.facility_ratings">
                     <q-card bordered flat>
@@ -264,9 +267,7 @@ const decrementGuests = () => {
                         </q-card-section>
                     </q-card>
                 </div>
-                <q-card v-if="facility.facility_ratings.length == 0" bordered flat class="flex items-center justify-center bg-grey-3 text-grey col-12 q-ma-sm" style="height: 100px">
-                    No ratings yet...
-                </q-card>
+                
             </div>
         </div>
     </div>
@@ -302,15 +303,21 @@ const decrementGuests = () => {
             </q-carousel>
         </q-card>
     </q-dialog>
-    <q-card class="bg-white fixed-bottom lt-md" bordered square>
+    <q-card class="bg-white fixed-bottom lt-md z-top" bordered square v-if="!dialog">
             <!-- <div class="row q-pa-none q-col-gutter-md"> -->
         <q-card-actions class="justify-between">
             <div class="">
                 <div>
-                    <span class="text-subtitle1 text-weight-bold">P{{ facility.price }} </span>
+                    <span class="text-subtitle1 text-weight-bold">₱{{ parseFloat(facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
                     night
                 </div>
-                <div v-if="form.date.from && form.date.to">{{ qdate.formatDate(form.date.from, 'MMM D') + ' - ' + qdate.formatDate(form.date.to, 'MMM D') }}</div>
+                <div 
+                    @click="dialog = true" 
+                    v-if="form.date.from && form.date.to"
+                    style="text-decoration: underline;"
+                >
+                    {{ qdate.formatDate(form.date.from, 'MMM D') + ' - ' + qdate.formatDate(form.date.to, 'MMM D') }}
+                </div>
             </div>
             <div class="justify-end items-center flex">
                     <!-- <q-btn icon="remove" round unelevated size="sm" class="bg-grey-4" @click="decrementGuests" />

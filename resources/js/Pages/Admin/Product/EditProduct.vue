@@ -131,7 +131,7 @@ const onFileChange = (file) => {
                 </div>
                 <q-separator class="q-mt-md"/>
             </q-card-section>
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                 <q-form @submit="submit">
                     <!-- <div class="row justify-between" style="z-index: 400;">
                         <div class="text-center col-12" style="position: relative">
@@ -225,6 +225,7 @@ const onFileChange = (file) => {
                     <q-input 
                         rounded 
                         outlined 
+                        disable
                         label="Default Price" 
                         v-model="form.price" 
                         placeholder="None" 

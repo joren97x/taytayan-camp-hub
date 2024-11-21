@@ -71,7 +71,7 @@ const addCategoryDialog = ref(false)
                 <q-separator class="q-mt-md"/>
             </q-card-section>
 
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                 <q-form @submit="submit">
                     <!-- <div>Build Your Event Page</div>
                     <div>Add all of your event details and let attendees know what to expect</div> -->

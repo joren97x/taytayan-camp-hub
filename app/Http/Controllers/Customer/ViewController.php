@@ -7,8 +7,10 @@ use App\Models\Booking;
 use App\Models\Conversation;
 use App\Models\Event;
 use App\Models\Facility;
+use App\Models\FacilityRating;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductRating;
 use App\Models\TicketOrder;
 use App\Models\User;
 use App\Services\CartService;
@@ -42,10 +44,15 @@ class ViewController extends Controller
             }])
             ->get();
 
+        $product_ratings = ProductRating::with('user')->latest()->get();
+        $facility_ratings = FacilityRating::with('user')->latest()->get();
+
+        $ratings = collect($product_ratings)->merge($facility_ratings);
         return Inertia::render('Customer/Index', [
             'products' => $products,
             'events' => $events,
-            'facilities' => $facilities
+            'facilities' => $facilities,
+            'ratings' => $ratings
         ]);
     }
 

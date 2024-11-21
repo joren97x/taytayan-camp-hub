@@ -67,63 +67,88 @@ const showCancelButton = computed(() => {
     return isBefore(now, twoDaysBeforeCheckIn)
 })
 
+const getChipColor = (status) => {
+    const colorMap = {
+        pending: 'orange',
+        checked_in: 'blue',
+        confirmed: 'green',
+        checked_out: 'purple',
+        cancelled: 'red',
+    };
+    return colorMap[status] || 'grey'; // Default to grey if no match
+}
+
 </script>
 
 <template>
     <Profile>
-        <q-card bordered flat >
-            <q-card-section >
+        <q-card bordered flat :square="$q.screen.lt.md">
+            <q-card-actions class="text-center justify-center items-center flex">
+                <Link :href="route('customer.bookings.index')" class="lt-md">
+                    <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
+                </Link>
                 <div class="text-h6">Booking Details</div>
-                        <q-item>
-                            <q-item-section avatar>
-                                <q-img 
-                                    :height="$q.screen.gt.md ? '100px' : '80px'"
-                                    :width="$q.screen.gt.md ? '100px' : '80px'"
-                                    class="rounded-borders"
-                                    :src="`/storage/${JSON.parse(booking.facility.images)[0]}`"
-                                ></q-img>
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label class="text-subtitle1 text-weight-bold">{{ booking.facility.name }}</q-item-label>
-                                <q-item-label caption class="ellipsis-2-lines	">{{ booking.facility.description }}</q-item-label>
-                                <!-- <div class="text-weight-bold">₱{{ parseFloat(booking.facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div> -->
-                            </q-item-section>
-                            <q-item-section side top>
-                                <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(booking.facility.average_rating).toFixed(2) }}
-                            </q-item-section>
-                        </q-item>
-                        <q-separator class="q-my-sm" />
-                        <div class="row q-col-gutter-md ">
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Check-in</div>
-                                <div>{{ date.formatDate(booking.check_in, 'dddd, MMMM D, YYYY') }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Check-out</div>
-                                <div>{{ date.formatDate(booking.check_out, 'dddd, MMMM D, YYYY') }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Guests</div>
-                                <div>{{ booking.guests }} guests</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Status</div>
-                                <q-chip>{{ booking.status }}</q-chip>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Payment Method</div>
-                                <div>{{ booking.payment_method }}</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Total</div>
-                                <div class="text-weight-bold">₱{{ parseFloat(booking.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
-                                <!-- <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div> -->
-                            </div>
-                            <div class="col-6">
-                                <div class="text-caption text-grey-9">Purchased At</div>
-                                <div>{{ date.formatDate(booking.created_at, 'MM/D/YYYY') }}</div>
-                            </div>
-                        </div>
+            </q-card-actions>
+            <q-separator/>
+            <q-card-section class="q-pa-sm">
+                <q-item>
+                    <q-item-section avatar>
+                        <q-img 
+                            :height="$q.screen.gt.md ? '100px' : '80px'"
+                            :width="$q.screen.gt.md ? '100px' : '80px'"
+                            class="rounded-borders"
+                            :src="`/storage/${JSON.parse(booking.facility.images)[0]}`"
+                        ></q-img>
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label class="text-subtitle1 text-weight-bold">{{ booking.facility.name }}</q-item-label>
+                        <q-item-label caption class="ellipsis-2-lines	">{{ booking.facility.description }}</q-item-label>
+                        <!-- <div class="text-weight-bold">₱{{ parseFloat(booking.facility.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div> -->
+                    </q-item-section>
+                    <q-item-section side top>
+                        <q-icon name="star" color="orange" size="sm"/> {{ parseFloat(booking.facility.average_rating).toFixed(2) }}
+                    </q-item-section>
+                </q-item>
+                <q-separator class="q-my-sm" />
+                <div class="row q-col-gutter-md ">
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Check-in</div>
+                        <div>{{ date.formatDate(booking.check_in, 'dddd, MMMM D, YYYY') }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Check-out</div>
+                        <div>{{ date.formatDate(booking.check_out, 'dddd, MMMM D, YYYY') }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Guests</div>
+                        <div>{{ booking.guests }} guests</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Status</div>
+                        <!-- <q-chip>{{ booking.status }}</q-chip> -->
+                        <q-chip
+                            :label="booking.status"
+                            :color="getChipColor(booking.status)"
+                            text-color="white"
+                            class="q-pa-sm text-capitalize"
+                            square
+                            dense
+                        />
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Payment Method</div>
+                        <div>{{ booking.payment_method }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Total</div>
+                        <div class="text-weight-bold">₱{{ parseFloat(booking.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
+                        <!-- <div class="text-weight-bold text-subtitle1">P{{ booking.total }}</div> -->
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption text-grey-9">Purchased At</div>
+                        <div>{{ date.formatDate(booking.created_at, 'MM/D/YYYY') }}</div>
+                    </div>
+                </div>
                         <!-- <q-carousel
                             v-model="slide"
                             transition-prev="slide-right"
@@ -208,20 +233,20 @@ const showCancelButton = computed(() => {
                     label="Cancel Booking" 
                     @click="cancelDialog = true" 
                     color="negative" 
-                    class="full-width q-mt-sm" 
+                    :class="`${$q.screen.lt.md ? ' full-width q-mb-sm' : ''}`"
                     no-caps 
                     rounded 
                     outline 
                     v-if="showCancelButton"
                 />
-                <Link :href="route('conversations.chat_cashier')">
-                    <q-btn class="full-width q-mt-sm" label="Contact Host" no-caps color="primary" rounded />
+                <Link :href="route('conversations.chat_cashier')" :class="`${$q.screen.lt.md ? 'full-width' : ''}`">
+                    <q-btn :class="`${$q.screen.lt.md ? 'full-width q-mb-sm' : ''}`" label="Contact Host" no-caps color="primary" rounded />
                 </Link>
                 <q-btn 
                     v-if="booking.status == 'checked_out'"
                     color="green" 
                     label="Complete Booking"
-                    class=" q-mt-md full-width"
+                    :class="`${$q.screen.lt.md ? ' full-width' : ''}`"
                     no-caps 
                     @click="completeBooking()"
                     :loading="completeBookingForm.processing"

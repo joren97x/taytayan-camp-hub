@@ -34,7 +34,13 @@ const setDates = () => {
             if(!options(checkInDate)) {
                 pwede = false
                 date.value = null
-                alert('Please choose a date that doesnt overlap')
+                // alert('Please choose a date that doesnt overlap')
+                $q.notify({
+                    message: `Please choose a date that doesnt overlap`,
+                    color: 'negative', // or any custom color defined in the brand config
+                    textColor: 'white',
+                    position: 'top'
+                })
                 break;
             }
             checkInDate = qdate.addToDate(checkInDate, { days: 1})
@@ -98,8 +104,14 @@ function processReservedDates() {
 }
 
 function options(date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set the time to 00:00:00 to only compare dates
+
     const formattedIncomingDate = qdate.formatDate(new Date(date), 'YYYY-MM-DD');
-    return !disabled_dates.value.includes(formattedIncomingDate);
+    const formattedToday = qdate.formatDate(today, 'YYYY-MM-DD'); // Format today's date as 'YYYY-MM-DD'
+
+    // Disable dates that are before today or already booked
+    return formattedIncomingDate >= formattedToday && !disabled_dates.value.includes(formattedIncomingDate);
 }
 
 </script>

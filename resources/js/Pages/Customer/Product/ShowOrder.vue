@@ -5,21 +5,13 @@ import { onMounted, ref } from 'vue'
 import OrderedItems from '@/Components/OrderedItems.vue'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
 import Profile from '../Profile.vue'
-import { formatDistance } from 'date-fns'
 // import FoodCardItem from './FoodCardItem.vue'
 
 const props = defineProps({ order: Object })
 defineOptions({ layout: CustomerLayout })
 const $q = useQuasar()
-const completeOrderForm = useForm({})
 const step = ref(1)
-const completeOrder = () => {
-    completeOrderForm.patch(route('customer.orders.update', props.order.id), {
-        onSuccess: () => {
-            rateDialog.value = true
-        }
-    })
-}
+const order = ref(props.order)
 
 const pickupSteps = [
     {
@@ -139,21 +131,78 @@ function cancelOrder() {
     })
 }
 
+const completeOrderForm = useForm({})
+const completeOrder = () => {
+    completeOrderForm.patch(route('customer.orders.update', props.order.id), {
+        onSuccess: () => {
+            rateDialog.value = true
+        }
+    })
+}
+
+Echo.private(`orders.${props.order.id}`)
+    .listen('Product\\OrderStatusUpdated', (data) => {
+        // $q.notify('new order arrived')
+        // console.log(data.order)
+        order.value.status = data.order.status
+        // console.log(order.value)
+        calculateSteps()
+    })
+
+function formatText(text) {
+    if (!text) return '';
+    return text
+        .replace(/_/g, ' ') // Replace underscores with spaces
+        .toLowerCase() // Convert to lowercase
+        .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); // Capitalize each word
+}
+
+const getChipColor = (status) => {
+    const colorMap = {
+        pending: 'orange',
+        preparing: 'blue',
+        ready_for_delivery: 'green',
+        delivering: 'cyan',
+        delivered: 'teal',
+        completed: 'purple',
+        ready_for_pickup: 'yellow',
+        to_be_delivered: 'amber',
+        cancelled: 'red',
+    };
+    return colorMap[status] || 'grey'; // Default to grey if no match
+}
+
 </script>
 
 <template>
     <Profile>
-    <q-card flat bordered class="">
-        <q-card-section>
-            <div class="text-h6 text-weight-medium q-m-md">Order Details</div>
-            <q-item @click="viewOrderDialog = true">
+    <q-card flat bordered :square="$q.screen.lt.md">
+        <q-card-actions class="text-center justify-center items-center flex">
+            <Link :href="route('customer.orders.index')" class="lt-md">
+                <q-btn icon="arrow_back" flat class="absolute-top-left q-mt-sm q-ml-sm text-black" rounded :label="$q.screen.gt.sm ? 'Go Back' : ''" no-caps/>
+            </Link>
+            <div class="text-h6">Order Details</div>
+        </q-card-actions>
+        <q-separator/>
+        <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
+            <!-- <div class="text-h6 text-weight-medium q-m-md">Order Details</div> -->
+            <!-- <q-item @click="viewOrderDialog = true" :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                 <q-item-section>
                     <q-item-label caption>Date Placed</q-item-label>
-                    <q-item-label>{{ date.formatDate(order.created_at, 'ddd, MMM D, YYYY') }}</q-item-label>
+                    <q-item-label>{{ date.formatDate(order.created_at, 'ddd, MMM D') }}</q-item-label>
                 </q-item-section>
                 <q-item-section>
                     <q-item-label caption>Order Status</q-item-label>
-                    <q-item-label>{{ order.status }}</q-item-label>
+                    <q-item-label>
+                            <q-chip
+                                :label="formatText(order.status)"
+                                :color="getChipColor(order.status)"
+                                text-color="white"
+                                class="q-mb-sm"
+                                square
+                                dense
+                            />
+                    </q-item-label>
                 </q-item-section>
                 <q-item-section>
                     <q-item-label caption>Payment Method</q-item-label>
@@ -165,9 +214,36 @@ function cancelOrder() {
                         {{ order.mode }}
                     </q-item-label>
                 </q-item-section>
-            </q-item>
+            </q-item> -->
+            <div class="row q-col-gutter-md">
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                    <div class="text-caption text-grey-6">Date Placed</div>
+                    <div>{{ date.formatDate(order.created_at, 'ddd, MMM D') }}</div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                    <div class="text-caption text-grey-6">Payment Method</div>
+                    <div>{{ order.payment_method }}</div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                    <div class="text-caption text-grey-6">Fulfillment Type</div>
+                    <div>{{ order.mode }}</div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                    <div class="text-caption text-grey-6">Order Status</div>
+                    <div>
+                        <q-chip
+                            :label="formatText(order.status)"
+                            :color="getChipColor(order.status)"
+                            text-color="white"
+                            class="q-pa-sm"
+                            square
+                            dense
+                        />
+                    </div>
+                </div>
+            </div>
         </q-card-section>
-        <q-card-section class="q-py-none">
+        <q-card-section class="q-px-sm">
             <q-stepper
                 flat
                 v-model="step"
@@ -222,7 +298,7 @@ function cancelOrder() {
                         </q-item-section>
                         <q-item-section side top>
                             <Link :href="route('conversations.show', order.conversation_id)">
-                                <q-btn class="full-width q-mt-sm" no-caps color="primary" icon="chat" round/>
+                                <q-btn class="full-width" no-caps color="primary" icon="chat" round/>
                             </Link>
                         </q-item-section>
                     </q-item>
@@ -282,12 +358,16 @@ function cancelOrder() {
                         unelevated 
                         v-close-popup
                     />
-                    <div class="text-h6">Rate</div>
-                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
-                    <q-rating 
-                        size="xl" 
-                        v-model="ratingForm.rating" 
-                    />
+                    <div class="text-h6">Thank You!</div>
+                    <div>
+                        We hope you enjoyed your experience. Please take a moment to rate your order and share your feedback with us. Your input helps us improve!
+                    </div>
+                    <div class="justify-center items-center flex q-my-md">
+                        <q-rating 
+                            size="xl" 
+                            v-model="ratingForm.rating" 
+                        />
+                    </div>
                     <div class="text-red" v-if="ratingForm.errors.rating ? true : false">
                         {{ ratingForm.errors.rating }}
                     </div>
@@ -305,6 +385,7 @@ function cancelOrder() {
                         :loading="ratingForm.processing"
                         :disable="ratingForm.processing"
                         type="submit"
+                        rounded unelevated no-caps
                     >
                         Submit
                     </q-btn>

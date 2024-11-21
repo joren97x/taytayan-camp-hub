@@ -15,7 +15,7 @@ defineProps({ order: Object })
         <q-btn icon="close" class="absolute-top-right q-mr-sm q-mt-xs" round v-close-popup flat/>
     </q-card-actions>
     <!-- {{ order }} -->
-    <q-card-section class="row q-col-gutter-md q-pa-md">
+    <q-card-section :class="`row q-col-gutter-md ${$q.screen.lt.md ? 'q-px-sm' : ''}`">
         <!-- Order Items Section -->
         <div class="col-7 col-md-7 col-lg-7 col-xl-7 col-xs-12 col-sm-12">
             <q-item class="q-py-none q-my-sm">

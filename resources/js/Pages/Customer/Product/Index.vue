@@ -288,7 +288,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                                     </q-card-section>
                                     <q-card-actions class="q-pt-sm">
                                         <q-rating v-model="rating.rating" readonly/>
-                                        • {{ rating.user.first_name }} • {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
+                                        {{ rating.user.first_name }} • {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
                                     </q-card-actions>
                                 </q-card>
                             </div>
@@ -298,27 +298,18 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                 </div>
                 <div class="col-4 gt-sm">
                 
-                    <q-card bordered>
+                    <q-card bordered flat>
                         <div style="height: 200px;" class="bg-grey">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123065.8494400433!2d123.92886618907012!3d10.25398460253611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99184b152420b%3A0x6bebeab9d8bca659!2sRJC%20CAFE!5e0!3m2!1sen!2sph!4v1724885213335!5m2!1sen!2sph" 
-                                width="100%" 
-                                height="100%" 
-                                style="border:0;" 
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade"
-                            >
-                            </iframe>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.037964833761!2d124.0386881!3d10.258521799999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a9910217dd8947%3A0x9769230c1338b6c!2sTaytayan%20Camp!5e0!3m2!1sen!2sph!4v1732162203820!5m2!1sen!2sph" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                         <q-card-section class="q-pa-none q-mx-md">
-                            <q-item class="q-pa-none q-mx-none">
+                            <q-item class="q-pa-none q-my-none">
                                 <q-item-section avatar>
-                                    <q-icon name="shopping_cart" />
+                                    <q-icon name="location_on" />
                                 </q-item-section>
                                 <q-item-section >
                                     <q-item-label>RJC CAFE</q-item-label>
-                                    <!-- <q-item-label caption>725Q+CHH, Lapu-Lapu City, Cebu</q-item-label> -->
+                                    <q-item-label caption>Store Location</q-item-label>
                                 </q-item-section>
                                 <q-item-section side>Side</q-item-section>
                             </q-item>
@@ -439,9 +430,9 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
             </div>
             <div class="row q-col-gutter-md" v-if="ratings.length > 0">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" v-for="rating in ratings">
-                    <q-card bordered flat class="q-py-md">
+                    <q-card bordered flat class="">
                         <q-item>
-                            <q-item-section avatar>
+                            <q-item-section avatar top>
                                 <q-avatar color="primary" text-color="white">
                                     <q-img v-if="rating.user.profile_pic" :src="`/storage/${rating.user.profile_pic}`" class="fit" fit="cover"/>
                                     <div v-else>
@@ -451,16 +442,19 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>
-                                    {{ rating.user.first_name + ' ' + rating.user.last_name }} • 
-                                    <span class="text-caption">
-                                        {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
-                                    </span>
+                                    <div class="text-weight-medium">{{ rating.user.first_name + ' ' + rating.user.last_name }} •  
+                                        <span class="text-caption">
+                                            {{ date.formatDate(rating.created_at, 'M/D/YYYY') }}
+                                        </span>
+                                    </div>
                                 </q-item-label>
                                 <q-item-label>{{ rating.review }}</q-item-label>
+                                <div>
+                                    <q-rating v-model="rating.rating" readonly/> 
+                                </div>
                             </q-item-section>
-                            <q-item-section side top>
-                                <q-rating v-model="rating.rating" readonly/> 
-                            </q-item-section>
+                            <!-- <q-item-section side top>
+                            </q-item-section> -->
                         </q-item>
                     </q-card>
                 </div>
@@ -481,7 +475,7 @@ const overAllRating = parseFloat(props.rating_stats.average_rating).toFixed(2)
         position="bottom"
     >
         <q-card>
-            <q-card-section>
+            <q-card-section class="q-mb-xl">
                 <div class="text-start text-h6">Categories</div>
                 <q-list>
                     <q-item 

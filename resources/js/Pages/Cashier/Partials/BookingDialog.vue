@@ -106,7 +106,7 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"     
     >
         <q-card>
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                 <div class="text-subtitle1 text-weight-medium">Confirm Check-in</div>
                 Are you sure you want to check in this booking for {{ booking.facility.name }} ?
                 <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>
@@ -125,12 +125,14 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
                             </q-item-label>
                         </q-item-section>
                     </q-item>
-                    <div class="col-xs-6 col-sm-6">
-                        <div class="text-caption text-grey">
-                            Dates
-                        </div>
-                        {{ date.formatDate(booking.check_in, 'MMM D, YYYY') }} - {{ date.formatDate(booking.check_out, 'MMM D, YYYY') }}
-                    </div>
+                    <div class="col-6">
+                                <div class="text-caption">Check-in</div>
+                                <div>{{ date.formatDate(booking.check_in, 'MMMM D, YYYY') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption">Check-out</div>
+                                <div>{{ date.formatDate(booking.check_out, 'MMMM D, YYYY') }}</div>
+                            </div>
                 </div>
             </q-card-section>
             <q-card-actions class="justify-end">
@@ -156,7 +158,7 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"    
     >
         <q-card class="rounded-borders">
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                 <div class="text-subtitle1 text-weight-medium">Confirm Check-out</div>
                 Are you sure you want to check out this booking for {{ booking.facility.name }} ?
                 <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>
@@ -175,11 +177,13 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
                             </q-item-label>
                         </q-item-section>
                     </q-item>
-                    <div class="col-xs-6 col-sm-6">
-                        <div class="text-caption text-grey">
-                            Dates
-                        </div>
-                        {{ date.formatDate(booking.check_in, 'MMM D, YYYY') }} - {{ date.formatDate(booking.check_out, 'MMM D, YYYY') }}
+                    <div class="col-6">
+                        <div class="text-caption">Check-in</div>
+                        <div>{{ date.formatDate(booking.check_in, 'MMMM D, YYYY') }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-caption">Check-out</div>
+                        <div>{{ date.formatDate(booking.check_out, 'MMMM D, YYYY') }}</div>
                     </div>
                 </div>
             </q-card-section>
@@ -209,7 +213,7 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
                 <div class="text-h6">Booking Details</div>
                 <q-btn round icon="close" class="absolute-top-right q-mt-xs q-mr-xs" v-close-popup unelevated />
             </q-card-actions>
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                 <div class="row q-col-gutter-md">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" class="rounded-borders" width="100%" height="300px"/>
@@ -289,7 +293,7 @@ const statuses = props.booking_statuses.reduce((obj, status) => {
         :position="$q.screen.lt.md ? 'bottom' : 'standard'"
     >
     <q-card>
-            <q-card-section>
+            <q-card-section :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                 <div class="text-subtitle1 text-weight-medium">Cancel Booking</div>
                 Are you sure you want to cancel this booking for {{ booking.facility.name }}? This cannot be undone
                 <q-btn class="absolute-top-right q-mt-xs q-mr-sm" flat round icon="close" v-close-popup/>

@@ -136,18 +136,6 @@ const decrementQuantity = () => {
                         <q-btn round icon="close" flat @click="emit('close')" class="absolute-top-right q-mt-md lt-md"></q-btn>
                     </div>
                     <div class="col-12 col-md-7 col-lg-7 col-xl-7 col-sm-12 col-xs-12">
-                        <!-- <p>
-                            <span class="text-h5">
-                                {{ product.name }}
-                            </span>
-                            <br>
-                            <span class="text-h6 text-weight-light">
-                                P{{ product.price }}
-                            </span>
-                        </p>
-                        <p>
-                            {{ product.description }}
-                        </p> -->
                         <div class="row justify-end">
                             <div>
                                 <q-btn round icon="close" flat @click="emit('close')" class="gt-sm"></q-btn>
@@ -156,7 +144,7 @@ const decrementQuantity = () => {
                         <q-item>
                             <q-item-section class="text-center">
                                 <q-item-label class="text-h6">{{ product.name }}</q-item-label>
-                                <q-item-label class="text-subtitle1">P{{ product.price }}</q-item-label>
+                                <q-item-label class="text-subtitle1 text-weight-bold">₱{{ parseFloat(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</q-item-label>
                                 <q-item-label caption>P{{ product.description }}</q-item-label>
                             </q-item-section>
                         </q-item>
@@ -182,7 +170,7 @@ const decrementQuantity = () => {
                                 >
                                     <q-item-section>
                                         <q-item-label>{{ modifier_item.name }}</q-item-label>
-                                        <q-item-label caption class="text-green">+P{{ modifier_item.price }} </q-item-label>
+                                        <q-item-label caption class="text-green">+₱{{ parseFloat(modifier_item.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</q-item-label>
                                     </q-item-section>
                                     <!-- <q-item-section side>
                                         <q-checkbox 
@@ -223,10 +211,10 @@ const decrementQuantity = () => {
                                 </q-item-section>
                             </q-item>
                             <q-input type="textarea" v-model="form.special_instruction" filled placeholder="Add a note"></q-input>
-                            <div :class="['row q-col-gutter-md bg-white q-mt-xs', $q.screen.width <= 700 ? 'fixed-bottom' : '']">
+                            <div :class="['row bg-white', $q.screen.width <= 700 ? 'fixed-bottom' : '']">
                                 <div class="col-8">
                                     <q-card flat>
-                                        <q-card-section class="row">
+                                        <q-card-section class="row q-pr-sm">
                                             <div class="col-6 items-center flex">
                                                 <div>Quantity</div>
                                             </div>

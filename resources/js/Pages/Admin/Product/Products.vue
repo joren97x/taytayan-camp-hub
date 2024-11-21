@@ -45,7 +45,6 @@ const initialPagination = {
     descending: false,
     page: 1,
     rowsPerPage: 10
-    // rowsNumber: xx if getting data from a server
 }
 
 const columns = [
@@ -144,7 +143,7 @@ const columns = [
                 <template v-slot:item="props">
                     <div class="col-12 q-mb-sm">
                         <q-card class="q-mx-sm" bordered flat>
-                            <q-card-section>
+                            <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                                 <q-item class="q-pa-none">
                                     <q-item-section avatar>
                                         <q-img :src="`/storage/${props.row.photo}`" fit="contain"height="60px" width="60px" class="rounded-borders" />
@@ -152,7 +151,7 @@ const columns = [
                                     <q-item-section class="items-start">
                                         <q-item-label>{{ props.row.name }}</q-item-label>
                                         <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.description }}</q-item-label>
-                                        <q-item-label caption >P{{ props.row.price }}</q-item-label>
+                                        <q-item-label caption >₱{{ parseFloat(props.row.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</q-item-label>
                                         <q-btn icon="more_horiz" class="absolute-top-right z-top text-black" flat color="white" round>
                                             <q-menu>
                                                 <q-list style="min-width: 100px">

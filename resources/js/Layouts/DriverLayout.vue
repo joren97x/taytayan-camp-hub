@@ -147,7 +147,7 @@ Echo.private(`orders`)
                         </q-item-section>
                         <q-item-section side top class="">
                             <q-btn :color="$page.component == 'Driver/Profile' ? 'white' : 'black'" icon="unfold_more" flat round>
-                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start" auto-close>
+                                <q-menu class="q-pa-sm" anchor="center right" self="bottom start" auto-close style="max-width: 180px; width: 180px;">
                                     <!-- <q-item clickable v-ripple  @click="$q.dark.toggle">
                                         <q-item-section avatar>
                                             <q-icon name="drafts" />

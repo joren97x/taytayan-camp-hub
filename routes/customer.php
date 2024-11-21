@@ -11,6 +11,11 @@ use App\Http\Controllers\Customer\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+Route::middleware('guest')->group(function () {
+
+});
+
 Route::resource('events', EventController::class)->names([
     'index' => 'customer.events.index',
     'show' => 'customer.events.show',
@@ -28,7 +33,7 @@ Route::resource('products', ProductController::class)->names([
     'show' => 'customer.products.show'
 ]);
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'customer')->group(function () {
     Route::get('/cart-length', [CartController::class, 'length'])->name('customer.cart.length');
     Route::resource('/cart', CartController::class)->names([
         'index' => 'customer.cart.index',

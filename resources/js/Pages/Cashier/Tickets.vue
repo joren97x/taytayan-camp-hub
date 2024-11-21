@@ -150,14 +150,14 @@ const formatTime = (time) => {
                     </q-td>
                 </template>
                 <template v-slot:item="props">
-                    <q-card class="col-12 q-mb-md" bordered flat>
-                        <q-card-section>
+                    <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
+                        <q-card-section :class="$q.screen.lt.md ? 'q-pa-sm' : ''">
                             <div class="row q-col-gutter-x-md">
                                 <div class="col-xs-12 col-sm-12">
                                     <div class="text-caption text-grey">
                                         Event
                                     </div>
-                                    <q-item>
+                                    <q-item class="q-pa-none">
                                         <q-item-section avatar class="items-center">
                                             <div class="text-weight-bold text-secondary">{{ date.formatDate(props.row.date, 'MMM') }}</div>
                                             <div>{{ date.formatDate(props.row.date, 'D') }}</div>
@@ -170,6 +170,18 @@ const formatTime = (time) => {
                                             <q-item-label caption>{{ date.formatDate(props.row.date, 'MMM D, YYYY') + ' at ' +  formatTime(props.row.start_time) }}</q-item-label>
                                         </q-item-section>
                                     </q-item>
+                                    <q-btn icon="more_horiz" class="text-black absolute-top-right q-mr-sm" flat color="white" round>
+                                        <q-menu>
+                                            <q-list style="min-width: 100px">
+                                                <Link :href="route('cashier.events.check_in', props.row.id)" class="full-width">
+                                                    <q-item>
+                                                        <q-item-section>View Tickets</q-item-section>
+                                                    </q-item>
+                                                    <!-- <q-btn label="View Tickets" no-caps color="primary" rounded unelevated class="full-width"/> -->
+                                                </Link>
+                                            </q-list>
+                                        </q-menu>
+                                    </q-btn>
                                 </div>
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="text-caption text-grey">
@@ -178,26 +190,19 @@ const formatTime = (time) => {
                                     <q-linear-progress :value="props.row.tickets_sold / props.row.capacity" class="q-mt-xs" size="5px" />
                                     {{ props.row.tickets_sold + ' / ' + props.row.capacity }}
                                 </div>
-                                <div class="col-xs-6 col-sm-6">
+                                <div class="col-xs-6 col-sm-6 text-weight-bold">
                                     <div class="text-caption text-grey">
                                         Gross
                                     </div>
-                                    {{ props.row.tickets_sold * props.row.admission_fee }}
+                                    ₱{{ parseFloat(props.row.tickets_sold * props.row.admission_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                                    <!-- {{ props.row.tickets_sold * props.row.admission_fee }} -->
                                 </div>
-                                <!-- <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Status
-                                    </div>
-                                    {{ props.row.status }}
-                                </div> -->
-                                <div class="col-xs-12 col-sm-12 q-mt-sm">
-                                    <!-- <div class="text-caption text-grey">
-                                        Actions
-                                    </div> -->
+                                
+                                <!-- <div class="col-xs-12 col-sm-12 q-mt-sm">
                                     <Link :href="route('cashier.events.check_in', props.row.id)" class="full-width">
                                         <q-btn label="View Tickets" no-caps color="primary" rounded unelevated class="full-width"/>
                                     </Link>
-                                </div>
+                                </div> -->
                             </div>
                         </q-card-section>
                     </q-card>
@@ -206,3 +211,11 @@ const formatTime = (time) => {
         </q-card>
     </div>
 </template>
+
+<style scoped>
+
+a {
+    text-decoration: none;
+    color: black
+}
+</style>

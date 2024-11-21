@@ -11,27 +11,8 @@ const dialog = ref(false)
 </script>
 
 <template>
-    <!-- <q-card bordered flat>
-        <q-item @click="dialog = true" clickable >
-            <q-item-section avatar>
-                <q-img :src="`/storage/${JSON.parse(booking.facility.images)[0]}`" height="100px" :width="$q.screen.lt.md ? '100px' : '200px'" class="rounded-borders" />
-            </q-item-section>
-            <q-item-section top :class="$q.screen.lt.md ? ' q-py-md' : ''">
-                <q-item-label class="text-subtitle1">{{ booking.facility.name }}</q-item-label>
-                <q-item-label caption>{{ date.formatDate(booking.check_in, 'MMM D, YYYY') + ' - ' + date.formatDate(booking.check_out, 'MMM D, YYYY')}}</q-item-label>
-                <q-item-label caption>P{{ booking.total }}</q-item-label>
-            </q-item-section>
-            <q-item-section side top>
-                <div  class="q-pt-sm q-pr-sm">
-                    <q-chip size="12px">
-                        {{ booking.status }}
-                    </q-chip>
-                </div>
-            </q-item-section>
-        </q-item>
-    </q-card> -->
-    <q-card bordered flat class="q-my-sm">
-        <q-item @click="viewOrderDialog = true">
+    <q-card bordered flat class="q-my-sm" :square="$q.screen.lt.md">
+        <q-item @click="viewOrderDialog = true" class="q-px-sm">
             <q-item-section>
                 <q-item-label caption>Check-in</q-item-label>
                 <q-item-label>{{ date.formatDate(booking.check_in, 'ddd, MMM D, YYYY') }}</q-item-label>
@@ -40,8 +21,8 @@ const dialog = ref(false)
                 <q-item-label caption>Check-out</q-item-label>
                 <q-item-label>{{ date.formatDate(booking.check_out, 'ddd, MMM D, YYYY') }}</q-item-label>
             </q-item-section>
-            <q-item-section>
-                <q-item-label caption>Status</q-item-label>
+            <q-item-section class="gt-sm">
+                <q-item-label caption >Status</q-item-label>
                 <q-item-label>{{ booking.status }}</q-item-label>
             </q-item-section>
             <q-item-section side>
@@ -50,7 +31,22 @@ const dialog = ref(false)
                         <q-btn label="View Booking" no-caps color="primary" outline rounded />
                     </Link>
                 </div>
-                <q-btn icon="more_horiz" round flat class="lt-md"></q-btn>
+                <q-btn icon="more_horiz" round flat class="lt-md">
+                    <q-menu>
+                        <q-list>
+                            <Link :href="route('customer.bookings.show', booking.id)">
+                                <q-item>
+                                    <q-item-section>View booking</q-item-section>
+                                </q-item>
+                            </Link>
+                            <Link :href="route('conversations.chat_cashier')">
+                                <q-item>
+                                    <q-item-section>Contact Host</q-item-section>
+                                </q-item>
+                            </Link>
+                        </q-list>
+                    </q-menu>
+                </q-btn>
             </q-item-section>
         </q-item>
         <q-separator class="q-my-xs"/>
@@ -88,3 +84,10 @@ const dialog = ref(false)
         <ShowBooking :booking="booking" />
     </q-dialog>
 </template>
+
+<style scoped>
+a {
+    text-decoration: none;
+    color: black;
+}
+</style>

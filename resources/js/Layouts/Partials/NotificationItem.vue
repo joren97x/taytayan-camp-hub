@@ -57,13 +57,8 @@ const onClick = () => {
         "
         @click="onClick()"
     >
-        <q-item-section avatar>
-            <q-avatar class="bg-red">
-                <q-icon name="close"/>
-            </q-avatar>
-        </q-item-section>
         <q-item-section>
-            <q-item-label> {{ notification.id }} {{ notification.title }}</q-item-label>
+            <q-item-label> {{ notification.title }}</q-item-label>
             <q-item-label caption>{{ notification.description }}</q-item-label>
             <q-item-label caption>{{ date.formatDate(notification.created_at, 'MMM D, YYYY') }}</q-item-label>
         </q-item-section>

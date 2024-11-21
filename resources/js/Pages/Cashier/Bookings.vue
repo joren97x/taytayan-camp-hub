@@ -175,11 +175,14 @@ const initialPagination = {
                         </q-td>
                     </template>
                     <template v-slot:item="props">
-                        <q-card class="col-12 q-mb-md" bordered flat>
-                            <q-card-section class="q-pb-sm">
+                        <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
+                            <q-card-section :class="`q-pb-sm ${$q.screen.lt.md ? 'q-pa-sm' : ''}`">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
-                                        <q-item>
+                                        <div class="text-caption text-grey">
+                                            Booking
+                                        </div>
+                                        <q-item class="q-pa-none">
                                             <q-item-section avatar>
                                                 <q-img :src="`/storage/${JSON.parse(props.row.facility.images)[0]}`" width="65  px" height="65    px"></q-img>
                                             </q-item-section>
@@ -187,18 +190,14 @@ const initialPagination = {
                                                 <q-item-label>{{ props.row.user.first_name + ' ' + props.row.user.last_name }}</q-item-label>
                                                 <q-item-label caption>{{ props.row.facility.name }}</q-item-label>
                                             </q-item-section>
-                                            <q-item-section side>
-                                                <div class="flex">
-                                                    <q-btn icon="more_horiz" class="text-black" flat color="white" round>
-                                                        <q-menu>
-                                                            <q-list style="min-width: 100px">
-                                                                <BookingDialog :booking="props.row" :booking_statuses="booking_statuses" />
-                                                            </q-list>
-                                                        </q-menu>
-                                                    </q-btn>
-                                                </div>
-                                            </q-item-section>
                                         </q-item>
+                                        <q-btn icon="more_horiz" class="text-black absolute-top-right q-mr-sm" flat color="white" round>
+                                            <q-menu>
+                                                <q-list style="min-width: 100px">
+                                                    <BookingDialog :booking="props.row" :booking_statuses="booking_statuses" />
+                                                </q-list>
+                                            </q-menu>
+                                        </q-btn>
                                     </div>
                                     <div class="col-xs-6 col-sm-6">
                                         <div class="text-caption text-grey">
