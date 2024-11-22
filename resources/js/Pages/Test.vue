@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import CustomerLayout from '@/Layouts/CustomerLayout.vue';
 
-defineOptions({ layout: O})
+defineOptions({ layout: CustomerLayout})
 const $q = useQuasar()
 const message = ref('')
 
