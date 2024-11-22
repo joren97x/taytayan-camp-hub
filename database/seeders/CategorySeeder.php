@@ -82,7 +82,7 @@ class CategorySeeder extends Seeder
                     'description' => $product['description'], // Add descriptions if needed
                     'photo' => "products/{$product['name']}.png", // Replace this with your image handling logic
                     'price' => $product['price'],
-                    'is_featured' => fake()->boolean(10),
+                    'is_featured' => rand(0,1) == 1,
                     'available' => true
                 ]);
 
