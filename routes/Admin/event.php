@@ -27,7 +27,7 @@ Route::resource('/admin/tickets', TicketController::class)->names([
     'index' => 'admin.tickets.index',
     'show' => 'admin.tickets.show',
     'create' => 'admin.tickets.create',
-    'store' => 'admin.tickets.index',
+    'store' => 'admin.tickets.store',
     'update' => 'admin.tickets.update',
     'destroy' => 'admin.tickets.destroy',
     'edit' => 'admin.tickets.edit',
