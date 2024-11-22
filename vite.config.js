@@ -7,18 +7,17 @@ import path from 'path';
 
 export default defineConfig({
     // uncomment if 
-    // server: {
-    //     host: '0.0.0.0', // Makes the Vite dev server accessible on all network interfaces
-    //     port: 5173, // Port for Vite
-    //     https: {
-    //         key: fs.readFileSync(path.resolve(__dirname, 'vite.key')),
-    //         cert: fs.readFileSync(path.resolve(__dirname, 'vite.crt')),
-    //     },
-    //     hmr: {
-    //         host: '10.0.20.2', // Use Ngrok domain
-    //         protocol: 'wss', // WebSocket over secure connection
-    //     },
-    // },
+    server: {
+        host: '0.0.0.0', // Makes the Vite dev server accessible on all network interfaces
+        port: 5173, // Port for Vite
+        // https: {
+        //     key: fs.readFileSync(path.resolve(__dirname, 'vite.key')),
+        //     cert: fs.readFileSync(path.resolve(__dirname, 'vite.crt')),
+        // },
+        hmr: {
+            host: '192.168.1.18', // Use Ngrok domain
+        },
+    },
     // uncomment if
     plugins: [
         laravel({

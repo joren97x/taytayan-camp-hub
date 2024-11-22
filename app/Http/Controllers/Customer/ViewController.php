@@ -96,7 +96,6 @@ class ViewController extends Controller
 
     public function profile(Request $request, CartService $cartService)
     {
-
         $active_orders = Order::with('driver')
         ->whereIn('status', [
             Order::STATUS_PENDING,

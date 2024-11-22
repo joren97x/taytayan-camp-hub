@@ -68,7 +68,7 @@ class ReportController extends Controller
     public function main_dashboard()
     {
         // 1. Total Sales (All Modules): Overall revenue across all three modules
-        $products_sales = Order::where('status', 'completed')->sum('total');
+        $products_sales = Order::whereIn('status', [Order::STATUS_COMPLETED, Order::STATUS_DELIVERED])->sum('total');
         $tickets_sales = TicketOrder::where('status', 'completed')->sum('amount');
         $booking_revenue = Booking::where('status', 'complete')->sum('total');
         $totalSales = $products_sales + $tickets_sales + $booking_revenue;

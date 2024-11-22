@@ -20,7 +20,7 @@ const formatMoney = (money) => {
         <div class="text-h6"> Dashboard </div>
     </div>
     <div class="row q-col-gutter-md ">
-        <div class="col-3">
+        <div class="col-3 col-xs-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
             <q-card borderd>
                 <q-card-section>
                     <div class="text-subtitle1">Total Sales All Time</div>
@@ -31,7 +31,7 @@ const formatMoney = (money) => {
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-3 col-xs-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
             <q-card borderd>
                 <q-card-section>
                     <div class="text-subtitle1">Products Sales</div>
@@ -42,7 +42,7 @@ const formatMoney = (money) => {
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-3 col-xs-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
             <q-card borderd>
                 <q-card-section>
                     <div class="text-subtitle1">Event Tickets Sales</div>
@@ -53,7 +53,7 @@ const formatMoney = (money) => {
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-3">
+        <div class="col-3 col-xs-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
             <q-card borderd>
                 <q-card-section>
                     <div class="text-subtitle1">Booking Revenue</div>
