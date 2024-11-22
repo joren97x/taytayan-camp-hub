@@ -6,6 +6,8 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const message = ref('')
 
+defineProps({ products: Object})
+
 Echo.channel('notify')
     .listen('HelloEvent', (data) => {
         console.log(data)
@@ -20,4 +22,5 @@ Echo.channel('notify')
 <template>
     Test
     <q-input v-model="message" filled label="your message"></q-input>
+    {{ products }}
 </template>

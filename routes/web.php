@@ -10,12 +10,13 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\MessageController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
 
 Route::get('/test', function() {
-    return Inertia::render('Test');
+    return Inertia::render('Test', ['products' => Product::get()]);
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
