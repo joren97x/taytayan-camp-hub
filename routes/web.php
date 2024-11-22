@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\TestController;
 use Inertia\Inertia;
@@ -19,6 +20,8 @@ Route::get('/home2', function () {
 Route::resource('/home3', TestController::class)->names([
     'index' => 'home.index'
 ]);
+Route::get('/home4', [HomeController::class, 'home']);
+Route::get('/home5', [HomeController::class, 'home'])->name('home5');
 Route::resource('/test', TestController::class)->names([
     'index' => 'test.index'
 ]);
