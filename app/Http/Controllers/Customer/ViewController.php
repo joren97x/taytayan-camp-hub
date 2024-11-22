@@ -25,35 +25,35 @@ class ViewController extends Controller
 {
     //
     public function home() {
-        // $products = Product::with('modifier_groups.modifier_items')
-        //     ->where('available', true)
-        //     ->get();
+        $products = Product::with('modifier_groups.modifier_items')
+            ->where('available', true)
+            ->get();
 
-        // $currentDateTime = now();
-        // $events = Event::where('date', '>', $currentDateTime->toDateString())
-        // ->orWhere(function ($query) use ($currentDateTime) {
-        //     $query->where('date', '=', $currentDateTime->toDateString())
-        //         ->where('start_time', '>', $currentDateTime->toTimeString());
-        // })
-        // ->where('status', Event::STATUS_ON_SALE)
-        // ->get();
+        $currentDateTime = now();
+        $events = Event::where('date', '>', $currentDateTime->toDateString())
+        ->orWhere(function ($query) use ($currentDateTime) {
+            $query->where('date', '=', $currentDateTime->toDateString())
+                ->where('start_time', '>', $currentDateTime->toTimeString());
+        })
+        ->where('status', Event::STATUS_ON_SALE)
+        ->get();
 
-        // $facilities = Facility::where('available', true)
-        //     ->withCount(['facility_ratings as average_rating' => function ($query) {
-        //         $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        //     }])
-        //     ->get();
+        $facilities = Facility::where('available', true)
+            ->withCount(['facility_ratings as average_rating' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get();
 
-        // $product_ratings = ProductRating::with('user')->latest()->get();
-        // $facility_ratings = FacilityRating::with('user')->latest()->get();
+        $product_ratings = ProductRating::with('user')->latest()->get();
+        $facility_ratings = FacilityRating::with('user')->latest()->get();
 
-        // $ratings = collect($product_ratings)->merge($facility_ratings);
+        $ratings = collect($product_ratings)->merge($facility_ratings);
         
         return Inertia::render('Customer/Index', [
-            // 'products' => $products,
-            // 'events' => $events,
-            // 'facilities' => $facilities,
-            // 'ratings' => $ratings
+            'products' => $products,
+            'events' => $events,
+            'facilities' => $facilities,
+            'ratings' => $ratings
         ]);
     }
 
