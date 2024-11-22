@@ -11,6 +11,11 @@ Route::put('/tickets/cancel/{ticket_order}', [TicketController::class, 'cancel']
 Route::resource('/profile/tickets', TicketController::class)->names([
     'index' => 'customer.tickets.index',
     'show' => 'customer.tickets.show',
+    'create' => 'customer.tickets.create',
+    'store' => 'customer.tickets.store',
+    'edit' => 'customer.tickets.edit',
+    'update' => 'customer.tickets.update',
+    'destroy' => 'customer.tickets.destroy',
 ]);
 Route::get('/event-checkout', [ViewController::class, 'checkout'])->name('event.checkout');
 Route::post('/event-pay', [PaymentController::class, 'pay'])->name('event.pay');

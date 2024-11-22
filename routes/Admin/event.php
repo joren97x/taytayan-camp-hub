@@ -24,5 +24,11 @@ Route::resource('/admin/events', EventController::class)->names([
 ]);
 
 Route::resource('/admin/tickets', TicketController::class)->names([
-    'index' => 'admin.tickets.index'
+    'index' => 'admin.tickets.index',
+    'show' => 'admin.tickets.show',
+    'create' => 'admin.tickets.create',
+    'store' => 'admin.tickets.index',
+    'update' => 'admin.tickets.update',
+    'destroy' => 'admin.tickets.destroy',
+    'edit' => 'admin.tickets.edit',
 ]);

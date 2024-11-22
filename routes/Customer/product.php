@@ -20,7 +20,11 @@ use App\Http\Controllers\Customer\Product\ViewController;
     Route::resource('/profile/orders', OrderController::class)->names([
         'show' => 'customer.orders.show',
         'index' => 'customer.orders.index',
-        'update' => 'customer.orders.update'
+        'update' => 'customer.orders.update',
+        'create' => 'customer.orders.create',
+        'edit' => 'customer.orders.edit',
+        'destroy' => 'customer.orders.destroy',
+        'store' => 'customer.orders.store',
     ]);
     
     Route::get('/on-progress-orders', [OrderController::class, 'on_progress'])->name('orders.on_progress');

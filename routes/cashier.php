@@ -18,7 +18,12 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::get('/cashier/get-orders', [OrderController::class, 'get_orders'])->name('cashier.orders.get_orders');
     Route::resource('/cashier/orders', OrderController::class)->names([
         'index' => 'cashier.orders.index',
-        'show' => 'cashier.orders.show'
+        'show' => 'cashier.orders.show',
+        'create' => 'cashier.orders.create',
+        'store' => 'cashier.orders.show',
+        'destroy' => 'cashier.orders.destroy',
+        'edit' => 'cashier.orders.edit',
+        'update' => 'cashier.orders.update',
     ]);
 
     Route::get('/cashier/chat-user/{user}', [ViewController::class, 'show_conversation'])->name('cashier.conversations.show');
@@ -26,7 +31,13 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::patch('/cashier/bookings/{booking}/check-in', [BookingController::class, 'check_in'])->name('cashier.bookings.check_in');
     Route::patch('/cashier/bookings/{booking}/check-out', [BookingController::class, 'check_out'])->name('cashier.bookings.check_out');
     Route::resource('/cashier/bookings', BookingController::class)->names([
-        'index' => 'cashier.bookings.index'
+        'index' => 'cashier.bookings.index',
+        'show' => 'cashier.bookings.show',
+        'create' => 'cashier.bookings.create',
+        'index' => 'cashier.bookings.index',
+        'store' => 'cashier.bookings.store',
+        'destroy' => 'cashier.bookings.destroy',
+        'update' => 'cashier.bookings.update',
     ]);
     Route::get('/cashier/profile', [ViewController::class, 'profile'])->name('cashier.profile');
     // Route::get('/cashier/inbox', [ViewController::class, 'inbox'])->name('cashier.inbox');
@@ -39,7 +50,11 @@ Route::middleware(['auth', 'cashier'])->group(function () {
     Route::resource('/cashier/tickets', TicketController::class)->names([
         'index' => 'cashier.tickets.index',
         'update' => 'cashier.tickets.update',
-        'store' => 'cashier.tickets.store'
+        'store' => 'cashier.tickets.store',
+        'destroy' => 'cashier.tickets.destroy',
+        'create' => 'cashier.tickets.create',
+        'show' => 'cashier.tickets.store',
+        'edit' => 'cashier.tickets.edit',
     ]);
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');
     Route::patch('/cashier/orders/update-order-status/{id}', [OrderController::class, 'update_status'])->name('cashier.orders.update_status');

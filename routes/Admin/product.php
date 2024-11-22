@@ -17,7 +17,13 @@ Route::get('/dashboard/products', [ViewController::class, 'dashboard'])->name('a
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 // Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
 Route::resource('/admin/product/ratings', ProductRatingController::class)->names([
-    'index' => 'admin.product_ratings.index'
+    'index' => 'admin.product_ratings.index',
+    'create' => 'admin.product_ratings.create',
+    'show' => 'admin.product_ratings.show',
+    'store' => 'admin.product_ratings.store',
+    'update' => 'admin.product_ratings.update',
+    'destroy' => 'admin.product_ratings.destroy',
+    'edit' => 'admin.product_ratings.edit',
 ]);
 Route::resource('/admin/products', ProductController::class)->names([
     'index' => 'admin.products.index',
@@ -25,7 +31,8 @@ Route::resource('/admin/products', ProductController::class)->names([
     'store' => 'admin.products.store',
     'edit' => 'admin.products.edit',
     'update' => 'admin.products.update',
-    'destroy' => 'admin.products.destroy'
+    'destroy' => 'admin.products.destroy',
+    'show' => 'admin.products.show',
 ]);
 
 Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.products.update_modifier_group');

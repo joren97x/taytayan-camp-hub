@@ -23,7 +23,11 @@ Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])
 Route::resource('/profile/bookings', BookingController::class)->names([
     'index' => 'customer.bookings.index',
     'show' => 'customer.bookings.show',
-    'update' => 'customer.bookings.update'
+    'update' => 'customer.bookings.update',
+    'destroy' => 'customer.bookings.destroy',
+    'create' => 'customer.bookings.create',
+    'store' => 'customer.bookings.store',
+    'edit' => 'customer.bookings.edit',
 ]);
 
 // Route::resource('facilities', FacilityController::class)->names([
