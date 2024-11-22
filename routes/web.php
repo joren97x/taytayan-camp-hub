@@ -24,10 +24,10 @@ Route::get('/test', function() {
 });
 
 Route::get('/events', function() {
-    return Inertia::render('Customer/Events/Index', ['events' => Event::all()]);
+    return Inertia::render('Customer/Event/Index', ['events' => Event::all()]);
 })->name('customer.events.index');
-Route::get('/events/{id}', function() {
-    return Inertia::render('Customer/Events/show', ['event' => Event::find($id)]);
+Route::get('/events/{id}', function(string $id) {
+    return Inertia::render('Customer/Event/show', ['event' => Event::find($id)]);
 })->name('customer.events.show');
 // Route::resource('events', EventController::class)->names([
 //     'index' => 'customer.events.index',
