@@ -1,9 +1,9 @@
 <script setup>
 
 import CustomerLayout from '@/Layouts/CustomerLayout.vue'
-import FeaturedProductCard from './Product/Partials/FeaturedProductCard.vue'
-import EventCard from './Event/Partials/EventCard.vue'
-import FacilityCard from './Facility/Partials/FacilityCard.vue'
+import FeaturedProductCard from '../Customer/Product/Partials/FeaturedProductCard.vue'
+import EventCard from '../Customer/Event/Partials/EventCard.vue'
+import FacilityCard from '../Customer/Facility/Partials/FacilityCard.vue'
 import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { formatDistanceToNow } from 'date-fns'
