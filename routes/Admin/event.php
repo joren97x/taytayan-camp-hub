@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard/events', [ViewController::class, 'dashboard'])->name('admin.events.dashboard');
 // Route::get('/admin/events/{event}/dashboard', [EventController::class, 'event_dashboard'])->name('event.dashboard');
-Route::get('/admin/events/reviews', [ViewController::class, 'reviews'])->name('admin.events.reviews');
-Route::patch('/admin/events/change-status/{event}', [EventController::class, 'change_status'])->name('admin.events.change_status');
-Route::post('/admin/events/update-cover_photo/{id}', [EventController::class, 'update_cover_photo'])->name('admin.events.update_cover_photo');
-Route::get('/admin/events/dashboard/{event}', [EventController::class, 'dashboard'])->name('admin.events.event_dashboard');
-Route::resource('/admin/events', EventController::class)->names([
+Route::get('/events/reviews', [ViewController::class, 'reviews'])->name('admin.events.reviews');
+Route::patch('/events/change-status/{event}', [EventController::class, 'change_status'])->name('admin.events.change_status');
+Route::post('/events/update-cover_photo/{id}', [EventController::class, 'update_cover_photo'])->name('admin.events.update_cover_photo');
+Route::get('/events/dashboard/{event}', [EventController::class, 'dashboard'])->name('admin.events.event_dashboard');
+Route::resource('/events', EventController::class)->names([
     'index' => 'admin.events.index',
     'create' => 'admin.events.create',
     'show' => 'admin.events.show',
@@ -23,7 +23,7 @@ Route::resource('/admin/events', EventController::class)->names([
     'update' => 'admin.events.update'
 ]);
 
-Route::resource('/admin/tickets', TicketController::class)->names([
+Route::resource('/tickets', TicketController::class)->names([
     'index' => 'admin.tickets.index',
     'show' => 'admin.tickets.show',
     'create' => 'admin.tickets.create',

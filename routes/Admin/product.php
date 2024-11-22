@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 //     dd('hhh');
 // })->name('admin.orders.update_status');
 Route::get('/dashboard/products', [ViewController::class, 'dashboard'])->name('admin.products.dashboard');
-Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-// Route::patch('/admin/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
-Route::resource('/admin/product/ratings', ProductRatingController::class)->names([
+Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+// Route::patch('/update-order-status/{id}', [OrderController::class, 'update_status'])->name('admin.order.update_status');
+Route::resource('/product/ratings', ProductRatingController::class)->names([
     'index' => 'admin.product_ratings.index',
     'create' => 'admin.product_ratings.create',
     'show' => 'admin.product_ratings.show',
@@ -25,7 +25,7 @@ Route::resource('/admin/product/ratings', ProductRatingController::class)->names
     'destroy' => 'admin.product_ratings.destroy',
     'edit' => 'admin.product_ratings.edit',
 ]);
-Route::resource('/admin/products', ProductController::class)->names([
+Route::resource('/products', ProductController::class)->names([
     'index' => 'admin.products.index',
     'create' => 'admin.products.create',
     'store' => 'admin.products.store',
@@ -35,11 +35,11 @@ Route::resource('/admin/products', ProductController::class)->names([
     'show' => 'admin.products.show',
 ]);
 
-Route::put('/admin/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.products.update_modifier_group');
-Route::delete('/admin/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.products.clear_modifier_group');
-Route::post('/admin/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.products.update_photo');
+Route::put('/products/{product}/update-modifier-group', [ProductController::class, 'update_modifier_group'])->name('admin.products.update_modifier_group');
+Route::delete('/products/{product}/clear-modifier-group', [ProductController::class, 'clear_modifier_group'])->name('admin.products.clear_modifier_group');
+Route::post('/products/{product}/update-photo', [ProductController::class, 'update_photo'])->name('admin.products.update_photo');
 
-Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names([
+Route::resource('/modifier-groups', ModifierGroupController::class)->names([
     'index' => 'admin.modifier_groups.index',
     'create' => 'admin.modifier_groups.create',
     'store' => 'admin.modifier_groups.store',
@@ -48,7 +48,7 @@ Route::resource('/admin/modifier-groups', ModifierGroupController::class)->names
     'destroy' => 'admin.modifier_groups.destroy',
 ]);
 
-Route::resource('/admin/categories', CategoryController::class)->names([
+Route::resource('/categories', CategoryController::class)->names([
     'index' => 'admin.categories.index',
     'create' => 'admin.categories.create',
     'store' => 'admin.categories.store',
@@ -56,7 +56,7 @@ Route::resource('/admin/categories', CategoryController::class)->names([
     'update' => 'admin.categories.update'
 ]);
 
-Route::resource('/admin/modifier-items', ModifierItemController::class)->names([
+Route::resource('/modifier-items', ModifierItemController::class)->names([
     'store' => 'admin.modifier_items.store',
     'update' => 'admin.modifier_items.update',
     'destroy' => 'admin.modifier_items.destroy',
