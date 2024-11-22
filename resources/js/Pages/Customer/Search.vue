@@ -15,6 +15,7 @@ defineProps({
     events: Object,
     facilities: Object
 })
+
 const $q = useQuasar()
 const tab = ref('products')
 const query = ref('')

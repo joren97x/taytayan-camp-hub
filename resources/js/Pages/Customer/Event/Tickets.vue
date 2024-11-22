@@ -13,7 +13,7 @@ defineProps({ ticket_orders: Object })
 <template>
     
     <Head title="Tickets" />
-    <Profile>
+<Profile>
     <q-card bordered flat :square="$q.screen.lt.md">
         <q-card-actions class="text-center justify-center items-center flex">
             <Link :href="route('customer.profile')" class="lt-md">
@@ -37,6 +37,5 @@ defineProps({ ticket_orders: Object })
         </q-card-section>
     </q-card>
 </Profile>
-	
 </template>
 	

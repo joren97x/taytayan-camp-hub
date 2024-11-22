@@ -10,7 +10,6 @@ export const useConversationStore = defineStore('conversations', () => {
     const conversation = ref(null)
     const receiver = ref(null)
 
-
     // const unreadCount = computed(() => {
     //     return notifications.value.filter(notification => !notification.is_read).length
     // })

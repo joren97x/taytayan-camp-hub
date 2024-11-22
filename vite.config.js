@@ -8,16 +8,17 @@ import path from 'path';
 export default defineConfig({
     // uncomment if 
     // server: {
-    //     host: '0.0.0.0', // This makes the Vite dev server accessible on all network interfaces
-    //     port: 5173, // The port Vite runs on
+    //     host: '0.0.0.0', // Makes the Vite dev server accessible on all network interfaces
+    //     port: 5173, // Port for Vite
+    //     https: {
+    //         key: fs.readFileSync(path.resolve(__dirname, 'vite.key')),
+    //         cert: fs.readFileSync(path.resolve(__dirname, 'vite.crt')),
+    //     },
     //     hmr: {
-    //     // sa wifi ip address
-    //       host: '192.168.1.9' // Use your laptop’s local IP here
-    //     // piso wifi nga ip address
-    //     //   host: '10.0.20.1' // Use your laptop’s local IP here
-    //     }
-    // }, 
-    
+    //         host: '10.0.20.2', // Use Ngrok domain
+    //         protocol: 'wss', // WebSocket over secure connection
+    //     },
+    // },
     // uncomment if
     plugins: [
         laravel({

@@ -90,8 +90,6 @@ class OrderController extends Controller
         if($order->mode == Order::MODE_DELIVERY && $request->status != Order::STATUS_CANCELLED) {
             event(new OrderReadyForDelivery($order));
         }
-        // dd($order);
-
         if($request->status == Order::STATUS_CANCELLED && ($order->payment_method != 'walk_in' || $order->payment_method != 'cash_on_delivery')) {
             $payment = Paymongo::payment()->find($order->payment_id);
             Paymongo::refund()->create([
@@ -100,32 +98,6 @@ class OrderController extends Controller
                 'payment_id' => $order->payment_id
             ]);
         }
-
-
-        // switch($request->status) {
-        //     case Order::STATUS_PREPARING:
-        //         $order->status = Order::STATUS_PREPARING;
-        //         $order->update();
-        //         break;
-        //     case Order::STATUS_DELIVERING:
-        //         $order->status = Order::STATUS_DELIVERING;
-        //         $order->update();
-        //         break;
-        //     case Order::STATUS_COMPLETED:
-        //         $order->status = Order::STATUS_COMPLETED;
-        //         $order->update();
-        //         break;
-        //     case Order::STATUS_READY_FOR_DELIVERY:
-        //         $order->status = Order::STATUS_READY_FOR_DELIVERY;
-        //         event(new OrderReadyForDelivery($order));
-        //         $order->update();
-        //         break;
-        //     case Order::STATUS_READY_FOR_PICKUP:
-        //         $order->status = Order::STATUS_READY_FOR_PICKUP;
-        //         $order->update();
-        //         break;
-        // }
-        // event(new OrderStatusUpdated($order));
 
         return redirect(route('cashier.orders.index'));
 
