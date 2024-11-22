@@ -13,26 +13,21 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\TestController;
 use App\Models\Event;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
 
-Route::get('/test', function() {
-    return Inertia::render('Test', ['products' => Product::get()]);
-});
+Route::resource('/test', TestController::class)->names([
+    'index' => 'test.index'
+]);
 
-Route::get('/events', function() {
-    return Inertia::render('Customer/Event/Index', ['events' => Event::all()]);
-})->name('customer.events.index');
-Route::get('/events/{id}', function(string $id) {
-    return Inertia::render('Customer/Event/Show', ['event' => Event::find($id)]);
-})->name('customer.events.show');
-// Route::resource('events', EventController::class)->names([
-//     'index' => 'customer.events.index',
-//     'show' => 'customer.events.show',
-// ]);
+Route::resource('events', EventController::class)->names([
+    'index' => 'customer.events.index',
+    'show' => 'customer.events.show',
+]);
 Route::resource('facilities', FacilityController::class)->names([
     'index' => 'customer.facilities.index',
     'show' => 'customer.facilities.show',
