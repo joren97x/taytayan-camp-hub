@@ -50,10 +50,10 @@ class ViewController extends Controller
         $ratings = collect($product_ratings)->merge($facility_ratings);
         
         return Inertia::render('Customer/Index', [
-            'products' => $products,
-            'events' => $events,
-            'facilities' => $facilities,
-            'ratings' => $ratings
+            'products' => [],
+            'events' => [],
+            'facilities' => [],
+            'ratings' => []
         ]);
     }
 

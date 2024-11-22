@@ -1,22 +1,14 @@
 <?php
 
-use App\Http\Controllers\Auth\ProviderController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\Customer\Event\EventController;
 use App\Http\Controllers\Customer\Facility\FacilityController;
 use App\Http\Controllers\Customer\Product\ProductController;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use Luigel\Paymongo\Facades\Paymongo;
-use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\TestController;
-use App\Models\Event;
-use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
 
@@ -32,11 +24,12 @@ Route::resource('facilities', FacilityController::class)->names([
     'index' => 'customer.facilities.index',
     'show' => 'customer.facilities.show',
 ]);
-Route::get('/search/{query?}', [ViewController::class, 'search'])->name('search');
 Route::resource('products', ProductController::class)->names([
     'index' => 'customer.products.index',
     'show' => 'customer.products.show'
 ]);
+Route::get('/search/{query?}', [ViewController::class, 'search'])->name('search');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-profile-pic', [ProfileController::class, 'update_profile_pic'])->name('profile.update_profile_pic');
