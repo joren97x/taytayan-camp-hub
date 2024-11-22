@@ -7,9 +7,9 @@ use App\Models\Facility;
 use App\Models\FacilityRating;
 use App\Models\Product;
 use App\Models\ProductRating;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class HomePageController extends Controller
 {
