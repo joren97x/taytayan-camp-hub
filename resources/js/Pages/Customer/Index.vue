@@ -337,12 +337,12 @@ const testimonials = [
                         </EventCard>
                     </div>
                     <q-card bordered flat class="q-pa-xl items-center col-12 justify-center flex bg-grey-3"
-                        v-if="events.length == 0">
+                        v-if="events && events.length == 0">
                         No upcoming events... Check again later!
                     </q-card>
                 </div>
 
-                <div v-if="ratings.length > 0">
+                <div v-if="ratings && ratings.length > 0">
                     <div class="text-h6 row q-mb-md q-mt-xl">
                         <div class="col items-center flex">
                             Our Customer Says
@@ -384,10 +384,6 @@ const testimonials = [
                                 </q-card-section>
                             </q-card>
                         </div>
-                        <q-card bordered flat class="q-pa-xl items-center col-12 justify-center flex bg-grey-3"
-                            v-if="events.length == 0">
-                            No upcoming events... Check again later!
-                        </q-card>
                     </div>
                 </div>
 
