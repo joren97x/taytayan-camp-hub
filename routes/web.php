@@ -11,7 +11,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\TestController;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
-
+Route::get('/home', [ViewController::class, 'home'])->name('homepage');
 Route::resource('/test', TestController::class)->names([
     'index' => 'test.index'
 ]);
