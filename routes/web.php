@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\Customer\Event\EventController;
+use App\Http\Controllers\Customer\Facility\FacilityController;
+use App\Http\Controllers\Customer\Product\ProductController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Luigel\Paymongo\Facades\Paymongo;
@@ -18,6 +21,19 @@ Route::get('/', [ViewController::class, 'home'])->name('home');
 Route::get('/test', function() {
     return Inertia::render('Test', ['products' => Product::get()]);
 });
+Route::resource('events', EventController::class)->names([
+    'index' => 'customer.events.index',
+    'show' => 'customer.events.show',
+]);
+Route::resource('facilities', FacilityController::class)->names([
+    'index' => 'customer.facilities.index',
+    'show' => 'customer.facilities.show',
+]);
+Route::get('/search/{query?}', [ViewController::class, 'search'])->name('search');
+Route::resource('products', ProductController::class)->names([
+    'index' => 'customer.products.index',
+    'show' => 'customer.products.show'
+]);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-profile-pic', [ProfileController::class, 'update_profile_pic'])->name('profile.update_profile_pic');

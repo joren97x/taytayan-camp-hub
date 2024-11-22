@@ -12,26 +12,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-Route::middleware('guest')->group(function () {
 
-});
 
-Route::resource('events', EventController::class)->names([
-    'index' => 'customer.events.index',
-    'show' => 'customer.events.show',
-]);
-
-Route::resource('facilities', FacilityController::class)->names([
-    'index' => 'customer.facilities.index',
-    'show' => 'customer.facilities.show',
-]);
-
-Route::get('/search/{query?}', [ViewController::class, 'search'])->name('search');
-
-Route::resource('products', ProductController::class)->names([
-    'index' => 'customer.products.index',
-    'show' => 'customer.products.show'
-]);
 
 Route::middleware('auth', 'customer')->group(function () {
     Route::get('/cart-length', [CartController::class, 'length'])->name('customer.cart.length');
