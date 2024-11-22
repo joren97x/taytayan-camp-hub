@@ -11,7 +11,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/bookings', [ViewController::class, 'bookings'])->name('admin.bookings.index');
 Route::get('/dashboard/facilities', [ViewController::class, 'dashboard'])->name('admin.facilities.dashboard');
 Route::resource('/facility/ratings', FacilityRatingController::class)->names([
-    'index' => 'admin.facility_ratings.index'
+    'index' => 'admin.facility_ratings.index',
+    'create' => 'admin.facility_ratings.create',
+    'store' => 'admin.facility_ratings.store',
+    'show' => 'admin.facility_ratings.show',
+    'edit' => 'admin.facility_ratings.edit',
+    'update' => 'admin.facility_ratings.update',
+    'destroy' => 'admin.facility_ratings.destroy',
 ]);
 Route::post('/facilities/{facility}/update-images', [FacilityController::class, 'update_images'])->name('admin.facilities.update_images');
 Route::resource('/facilities', FacilityController::class)->names([
