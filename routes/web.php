@@ -9,9 +9,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\TestController;
+use Inertia\Inertia;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
 Route::get('/home', [ViewController::class, 'home'])->name('homepage');
+Route::get('/home2', function () {
+    return Inertia::render('Customer/Index');
+})->name('home2');
+Route::resource('/home3', TestController::class)->names([
+    'index' => 'home.index'
+]);
 Route::resource('/test', TestController::class)->names([
     'index' => 'test.index'
 ]);
