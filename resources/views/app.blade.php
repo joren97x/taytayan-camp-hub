@@ -10,8 +10,8 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="manifest" href="{{ asset('manifest.json') }}">
-        <script>
+        <!-- <link rel="manifest" href="{{ asset('manifest.json') }}"> -->
+        <!-- <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {
@@ -21,7 +21,7 @@
                 console.error('Service Worker registration failed:', error);
             });
         }
-        </script>
+        </script> -->
 
         <!-- Scripts -->
         @routes
