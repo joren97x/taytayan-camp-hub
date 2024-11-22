@@ -23,6 +23,7 @@ class TestController extends Controller
     public function create()
     {
         //
+        return Inertia::render('Customer/Test/Create', ['products' => Product::all()]);
     }
 
     /**
@@ -47,6 +48,7 @@ class TestController extends Controller
     public function edit(string $id)
     {
         //
+        return Inertia::render('Customer/Test/Edit', ['products' => Product::all()]);
     }
 
     /**

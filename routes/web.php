@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\ViewController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\TestController;
 use Inertia\Inertia;
@@ -22,8 +23,14 @@ Route::resource('/home3', TestController::class)->names([
 ]);
 Route::get('/home4', [HomeController::class, 'home']);
 Route::get('/home5', [HomeController::class, 'home'])->name('home5');
+Route::resource('/homepage', HomePageController::class)->names([
+    'index' => 'homepage.index',
+    'create' => 'homepage.create',
+]);
 Route::resource('/test', TestController::class)->names([
-    'index' => 'test.index'
+    'index' => 'test.index',
+    'create' => 'test.create',
+    'edit' => 'test.edit',
 ]);
 
 Route::resource('events', EventController::class)->names([
