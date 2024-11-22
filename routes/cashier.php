@@ -20,7 +20,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
         'index' => 'cashier.orders.index',
         'show' => 'cashier.orders.show',
         'create' => 'cashier.orders.create',
-        'store' => 'cashier.orders.show',
+        'store' => 'cashier.orders.store',
         'destroy' => 'cashier.orders.destroy',
         'edit' => 'cashier.orders.edit',
         'update' => 'cashier.orders.update',
@@ -53,7 +53,7 @@ Route::middleware(['auth', 'cashier'])->group(function () {
         'store' => 'cashier.tickets.store',
         'destroy' => 'cashier.tickets.destroy',
         'create' => 'cashier.tickets.create',
-        'show' => 'cashier.tickets.store',
+        'show' => 'cashier.tickets.show',
         'edit' => 'cashier.tickets.edit',
     ]);
     Route::get('/cashier/ticket-order/verify/{ticket_order_id}', [TicketOrderController::class, 'verify'])->name('cashier.ticket_order.verify');
