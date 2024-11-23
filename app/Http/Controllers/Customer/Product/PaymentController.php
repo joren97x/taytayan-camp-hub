@@ -19,9 +19,10 @@ class PaymentController extends Controller
     public function success(Request $request, CartService $cartService) 
     {
 
-        $cart = Cart::find($request->cart_id);
+        $checkout_data = session('checkout_data');
+        $cart = Cart::find($checkout_data['cart_id']);
         $payment_session = session('payment_session');
-        
+        // dd($checkout_data['cart_id']);
         if (!$payment_session) {
             return redirect(route('customer.orders.index'));
         }
@@ -30,18 +31,18 @@ class PaymentController extends Controller
             'user_id' => auth()->id(),
             'cart_id' => $cart->id,
             'status' => Order::STATUS_PENDING,
-            'payment_method' => $request->payment_method,
-            'mode' => $request->mode,
-            'total' => $request->total
+            'payment_method' => $checkout_data['payment_method'],
+            'mode' => $checkout_data['mode'],
+            'total' => $checkout_data['total']
         ]);
 
         if($order->mode == Order::MODE_DELIVERY) {
             $order->update([
-                'delivery_fee' => $request->delivery_fee
+                'delivery_fee' => $checkout_data['delivery_fee']
             ]);
         }
 
-        if($request->payment_method == 'right_now') {
+        if($checkout_data['payment_method'] == 'right_now') {
             $checkout_session = Paymongo::checkout()->find(session('checkout_id'));
             // dd($checkout_session);
             $order->update([
@@ -60,7 +61,7 @@ class PaymentController extends Controller
             $cart->status = false;
             $cart->update();
 
-            $cart_product_ids = array_column($request->cart_products, 'id');
+            $cart_product_ids = array_column($checkout_data['cart_products'], 'id');
             CartProduct::where('cart_id', $cart->id)
             ->whereNotIn('id', $cart_product_ids)
             ->update(['cart_id' => $new_cart->id]);
@@ -68,6 +69,7 @@ class PaymentController extends Controller
         }
         
         session()->forget('payment_session');
+        session()->forget('checkout_data');
       
         return redirect(route('customer.orders.show', $order->id))->with('success', 'Your order has been successfully placed! Well have it ready for you shortly.');
     }
@@ -77,7 +79,8 @@ class PaymentController extends Controller
 
         if($request->payment_method != 'right_now') {
             session(['payment_session' => true]);
-            return redirect(route('product.checkout.success') . '?' . http_build_query($request->all()));
+            session(['checkout_data' => $request->all()]);
+            return redirect(route('product.checkout.success'));
         }
 
         $cart = Cart::find($request->cart_id);
@@ -114,6 +117,8 @@ class PaymentController extends Controller
             ];
         }
 
+        // dd($request->all());
+
         $checkout = Paymongo::checkout()->create([
             'cancel_url' => route('customer.cart.index'),
             'billing' => [
@@ -133,7 +138,7 @@ class PaymentController extends Controller
                 'grab_pay', 
                 'paymaya'
             ],
-            'success_url' => route('product.checkout.success') . '?' . http_build_query($request->all()),
+            'success_url' => route('product.checkout.success'),
             'statement_descriptor' => 'Laravel Paymongo Library',
             'metadata' =>  [
                 'mode' => $request->mode,
@@ -142,6 +147,7 @@ class PaymentController extends Controller
             ]
         ]);
 
+        session(['checkout_data' => $request->all()]);
         session(['payment_session' => true]);
         session(['checkout_id' => $checkout->id]);
 

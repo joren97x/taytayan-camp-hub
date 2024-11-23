@@ -38,10 +38,18 @@ const showPastBookings = ref(false)
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <BookingCard v-for="booking in bookings" :booking="booking"/>
                     <div v-show="bookings.length <= 0">
-                        <div class="flex items-center justify-center" style="height: 100px;">
-                            <q-icon name="confirmation_number" size="50px"/>
+                        <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
+                            <div class="text-center">
+                                <q-img src="/images/empty_bookings.png" style="height: 100px; width: 100px;"></q-img>
+                                
+                                <div>
+                                    <div class="text-subtitle1 text-grey-7">No Bookings Found</div>
+                                    <Link :href="route('customer.facilities.index')">
+                                        <q-btn class="q-mt-xl" color="primary" rounded no-caps>Explore Tents</q-btn>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-subtitle1 text-center">No Upcoming/Active Bookings</div>
                     </div>
                 </div>
             </div>

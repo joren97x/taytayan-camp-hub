@@ -27,10 +27,20 @@ defineProps({ ticket_orders: Object })
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <TicketCard v-for="ticket_order in ticket_orders" :ticket_order="ticket_order"/>
                     <div v-show="ticket_orders.length == 0">
-                        <div class="flex items-center justify-center" style="height: 100px;">
-                            <q-icon name="confirmation_number" size="50px"/>
+                        <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
+                            <!-- <q-icon name="confirmation_number" size="50px"/> -->
+                            <div class="text-center">
+                                <q-img src="/images/empty_tickets.png" style="height: 100px; width: 100px;"></q-img>
+                                
+                                <div>
+                                    <div class="text-subtitle1 text-grey-7">No Tickets Found</div>
+                                    <Link :href="route('customer.events.index')">
+                                        <q-btn class="q-mt-xl" color="primary" rounded no-caps>Discover Events</q-btn>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-subtitle1 text-center">No Upcoming Tickets</div>
+                        <!-- <q-img src="/hp_event.png"></q-img> -->
                     </div>
                 </div>
             </div>

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Customer\Facility;
 
+use App\Events\Notify;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -81,7 +83,17 @@ class BookingController extends Controller
 
     public function complete(Request $request, string $id)
     {
-        Booking::find($id)->update(['status' => Booking::STATUS_COMPLETE]);
+        $booking = Booking::find($id)->update(['status' => Booking::STATUS_COMPLETE]);
+
+        $notification = Notification::create([
+            'user_id' => $booking->user_id,
+            'title' => 'Booking Complete',
+            'description' => 'Your Booking Has Been Completed',
+            'link' => route('customer.bookings.show', $booking->id),
+        ]);
+
+        event(new Notify($notification));
+
         return back();
     }
 

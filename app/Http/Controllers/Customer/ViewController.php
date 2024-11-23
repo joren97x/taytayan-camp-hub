@@ -27,6 +27,7 @@ class ViewController extends Controller
     public function home() {
         $products = Product::with('modifier_groups.modifier_items')
             ->where('available', true)
+            ->take(10)
             ->get();
 
         $currentDateTime = now();
@@ -36,12 +37,14 @@ class ViewController extends Controller
                 ->where('start_time', '>', $currentDateTime->toTimeString());
         })
         ->where('status', Event::STATUS_ON_SALE)
+        ->take(5)
         ->get();
 
         $facilities = Facility::where('available', true)
             ->withCount(['facility_ratings as average_rating' => function ($query) {
                 $query->select(DB::raw('coalesce(avg(rating), 0)'));
             }])
+            ->take(5)
             ->get();
 
         $product_ratings = ProductRating::with('user')->latest()->get();
@@ -49,12 +52,12 @@ class ViewController extends Controller
 
         $ratings = collect($product_ratings)->merge($facility_ratings);
         
-        return Inertia::render('Customer/Index', [
-            'products' => [],
-            'events' => [],
-            'facilities' => [],
-            'ratings' => []
-        ]);
+        return Inertia::render('Customer/Index', compact(
+            'products',
+            'events',
+            'facilities',
+            'ratings'
+        ));
     }
 
     public function search(string $query = null)

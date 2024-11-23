@@ -14,24 +14,6 @@ use App\Http\Controllers\TestController;
 use Inertia\Inertia;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
-Route::get('/home', [ViewController::class, 'home'])->name('homepage');
-Route::get('/home2', function () {
-    return Inertia::render('Customer/Index');
-})->name('home2');
-Route::resource('/home3', TestController::class)->names([
-    'index' => 'home.index'
-]);
-Route::get('/home4', [HomeController::class, 'home']);
-Route::get('/home5', [HomeController::class, 'home'])->name('home5');
-Route::resource('/homepage', HomePageController::class)->names([
-    'index' => 'homepage.index',
-    'create' => 'homepage.create',
-]);
-Route::resource('/test', TestController::class)->names([
-    'index' => 'test.index',
-    'create' => 'test.create',
-    'edit' => 'test.edit',
-]);
 
 Route::resource('events', EventController::class)->names([
     'index' => 'customer.events.index',

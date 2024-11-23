@@ -79,7 +79,7 @@ const formatMoney = (money) => {
             <div class="col-3">
                 <q-card borderd>
                     <q-card-section>
-                        <div class="text-subtitle1">Total Earnings</div>
+                        <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Total Earnings</div>
                         <div class="text-h6">
                             {{ total_earnings }}
                         </div>
@@ -90,7 +90,7 @@ const formatMoney = (money) => {
             <div class="col-3">
                 <q-card borderd>
                     <q-card-section>
-                        <div class="text-subtitle1">Active Deliveries</div>
+                        <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Active Deliveries</div>
                         <div class="text-h6">
                             {{ active_deliveries }}
                         </div>
@@ -101,7 +101,7 @@ const formatMoney = (money) => {
             <div class="col-3">
                 <q-card borderd>
                     <q-card-section>
-                        <div class="text-subtitle1">Pending Orders</div>
+                        <div :class="$q.screen.gt.sm ? 'text-subtitle1' : ''">Pending Orders</div>
                         <div class="text-h6">
                             {{ pending_orders }}
                         </div>

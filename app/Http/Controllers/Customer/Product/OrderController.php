@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Customer\Product;
 
+use App\Events\Notify;
 use App\Events\Product\OrderPending;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Services\CartService;
 use Carbon\Carbon;
@@ -104,9 +106,19 @@ class OrderController extends Controller
 
     }
 
-    public function update(Order $order)
+    public function update(Request $request, Order $order)
     {
         $order->update(['status' => Order::STATUS_COMPLETED, 'completed_at' => Carbon::now()]);
+
+        $notification = Notification::create([
+            'user_id' => $order->user_id,
+            'title' => 'Order Complete',
+            'description' => 'Your Order Has Been Completed',
+            'link' => route('customer.orders.show', $order->id),
+        ]);
+
+        event(new Notify($notification));
+
         return back();
     }
 
