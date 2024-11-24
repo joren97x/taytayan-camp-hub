@@ -110,7 +110,7 @@ class OrderController extends Controller
 
         event(new Notify($notification));
 
-        return redirect(route('driver.orders.index'));
+        return redirect(route('driver.delivery_history'));
     }
 
     //might turn this into a service in the future cus its used to different controllers

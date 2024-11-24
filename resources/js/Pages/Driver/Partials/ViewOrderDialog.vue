@@ -101,7 +101,26 @@ const onShow = () => {
 </script>
 
 <template>
-    <q-btn no-caps color="primary" rounded unelevated @click="dialog = !dialog" :class="$q.screen.lt.md ? 'full-width' : ''" label="View Order" />
+    <q-btn 
+        no-caps 
+        color="primary" 
+        rounded 
+        outline 
+        unelevated 
+        @click="dialog = !dialog" 
+        label="View Order" 
+    />
+    <q-btn 
+        color="primary" 
+        no-caps
+        rounded 
+        unelevated
+        :loading="deliverOrderForm.processing"
+        :disable="deliverOrderForm.processing"
+        @click="deliverOrder()"
+        label="Accept Order"
+        v-if="order.status == 'ready_for_delivery'"
+    />
     <q-dialog 
         v-model="dialog" 
         :maximized="$q.screen.lt.md"

@@ -59,23 +59,49 @@ class ViewController extends Controller
                     ->pluck('total', 'payment_method')
             );
 
+            $weekly_sales = Order::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total) as total'))
+            ->whereBetween('created_at', [now()->subDays(6), now()])
+            ->groupBy('date')
+            ->pluck('total', 'date');
+            // dd(Order::select('payment_method', DB::raw('SUM(total) as total'))
+            // ->whereDate('created_at', today())
+            // ->groupBy('payment_method')
+            // ->pluck('total', 'payment_method'));
         // Recent Transactions
-        $recent_transactions = Booking::select('id', 'user_id', 'total', 'created_at', 'status')
+        // dd(Order::with('user')->first());
+        $recent_transactions = Booking::with('user')
+        ->select('id', 'user_id', 'total', 'created_at', 'status')
             ->orderBy('created_at', 'desc')
-            ->take(10)
+            ->take(5)
             ->get()
+            ->map(function ($transaction) {
+                $transaction->type = 'Booking'; // Add type for bookings
+                return $transaction;
+            })
             ->merge(
-                Order::select('id', 'user_id', 'total', 'created_at', 'status')
+                Order::with('user')
+                ->select('id', 'user_id', 'total', 'created_at', 'status')
                     ->orderBy('created_at', 'desc')
-                    ->take(10)
+                    ->take(5)
                     ->get()
+                    ->map(function ($transaction) {
+                        $transaction->type = 'Order'; // Add type for orders
+                        return $transaction;
+                    })
             )
             ->merge(
-                TicketOrder::select('id', 'user_id', 'amount as total', 'created_at', 'status')
+                TicketOrder::with('user')
+                ->select('id', 'user_id', 'amount as total', 'created_at', 'status')
                     ->orderBy('created_at', 'desc')
-                    ->take(10)
+                    ->take(5)
                     ->get()
-            );
+                    ->map(function ($transaction) {
+                        $transaction->type = 'Ticket'; // Add type for ticket orders
+                        return $transaction;
+                    })
+            )
+            ->sortByDesc('created_at') // Sort by created_at after merging
+            ->values(); // Re-index after sorting
 
             $top_selling_products = CartProduct::select('product_id', DB::raw('SUM(quantity) as total_quantity'))
             ->groupBy('product_id')
@@ -99,6 +125,7 @@ class ViewController extends Controller
                 'recent_transactions',
                 'top_selling_products',
                 'least_selling_products',
+                'weekly_sales'
             ));
         }
 

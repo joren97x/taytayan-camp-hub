@@ -1,8 +1,8 @@
 <script setup>
 
 import DriverLayout from '@/Layouts/DriverLayout.vue'
-import ViewOrderDialog from './Partials/ViewOrderDialog.vue'
 import { Head, Link } from '@inertiajs/vue3'
+import OrderCard from './Partials/OrderCard.vue';
 
 defineOptions({ layout: DriverLayout })
 defineProps({ orders: Object, google_maps_api_key: String})
@@ -30,7 +30,7 @@ const columns = [
                 :columns="columns"
                 row-key="name"
                 bordered 
-                :grid="$q.screen.lt.md"
+                grid
             >
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
@@ -43,58 +43,21 @@ const columns = [
                     </q-td>
                 </template>
                 <template v-slot:item="props">
-                    <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
-                        <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        User
-                                    </div>
-                                    {{ props.row.user.first_name + ' ' + props.row.user.last_name }}
-                                </div>
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Items
-                                    </div>
-                                    {{ props.row.cart_products.length }} items
-                                </div>
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Address
-                                    </div>
-                                    {{ props.row.user.address }}
-                                </div>
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Phone
-                                    </div>
-                                    {{ props.row.user.phone_number }}
-                                </div>
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Status
-                                    </div>
-                                    {{ props.row.status }}
-                                </div>
-                                <div class="col-xs-6 col-sm-6">
-                                    <div class="text-caption text-grey">
-                                        Payment Method
-                                    </div>
-                                    {{ props.row.payment_method }}
-                                </div>
-                                <div class="col-xs-12 col-sm-12">
-                                    <ViewOrderDialog :order="props.row" :google_maps_api_key="google_maps_api_key"/>
-                                </div>
-                            </div>
-                        </q-card-section>
-                    </q-card>
+                    <div class="col-md-6 col-xs-12 col-sm-12 col-lg-6 col-xl-6">
+                        <OrderCard :order="props.row" :google_maps_api_key="google_maps_api_key" />
+                    </div>
                 </template>
                 <template v-slot:no-data>
-                    <div class="full-width row flex-center q-gutter-sm" style="height: 70vh;">
-                        <!-- <q-icon size="2em" name="shopping_cart" /> -->
-                        <span>
-                            You dont have any active deliveries... <Link :href="route('driver.orders.index')">Go To Orders</Link>
-                        </span>
+                    <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
+                        <div class="text-center">
+                            <q-img src="/images/empty_orders.png" style="height: 100px; width: 100px;"></q-img>
+                            <div>
+                                <div class="text-subtitle1 text-grey-7">No Active Deliveries Found</div>
+                                <Link :href="route('driver.orders.index')">
+                                    <q-btn class="q-mt-xl" color="primary" rounded no-caps label="Go To Orders"/>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </template>
             </q-table>

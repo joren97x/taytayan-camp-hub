@@ -10,6 +10,10 @@ defineProps({
     }
 })
 
+const formatMoney = (money) => {
+    return `₱${parseFloat(money).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
 </script>
 
 <template>
@@ -42,7 +46,7 @@ defineProps({
                                 :key="index"
                             >
                                 <!-- {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (P${modifier_item.modifier_item.price})` }} -->
-                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (₱${parseFloat(modifier_item.modifier_item.price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})` }}
+                                {{ `${modifier_item.quantity} - ${modifier_item.modifier_item.name} (${formatMoney(modifier_item.modifier_item.price)})` }}
                             </q-item-label>
                             <!-- ₱{{ parseFloat(form.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} -->
                         </template>
@@ -51,7 +55,7 @@ defineProps({
                         </q-item-label>
                     </q-item-section>
                     <q-item-section side>
-                        <div class="text-weight-bold text-right">₱{{ parseFloat(item.total).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
+                        <div class="text-weight-bold text-right"> {{ formatMoney(item.total) }}</div>
                     </q-item-section>
                 </q-item>
 
@@ -59,16 +63,17 @@ defineProps({
                 <div :class="[$q.screen.gt.sm ? ' q-my-md ' : '', 'row q-mr-md']">
                     <div class="col-12 justify-end items-end flex">
                         <span class="q-mr-md">Subtotal</span> 
-                        <span>₱{{ parseFloat(subtotal).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
+                        <span> {{ formatMoney(subtotal) }}</span>
                     </div>
                     <div class="col-12 justify-end items-end flex" v-if="delivery_fee">
                         <span class="q-mr-md">Delivery Fee</span> 
-                        <span>₱{{ parseFloat(delivery_fee).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
+                        <span> {{ formatMoney(delivery_fee) }} </span>
                     </div>
                     <div class="col-12 justify-end items-end flex text-weight-bold q-mb-md" v-if="delivery_fee">
                         <span class="q-mr-md">Total</span> 
                         <!-- <span>P{{ parseFloat(subtotal) + parseFloat(delivery_fee) }}</span> -->
-                        ₱{{ (parseFloat(subtotal) + parseFloat(delivery_fee)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                         {{ formatMoney(parseFloat(subtotal) + parseFloat(delivery_fee)) }}
+                        <!-- ₱{{ (parseFloat(subtotal) + parseFloat(delivery_fee)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} -->
                     </div>
                 </div>
             </div>

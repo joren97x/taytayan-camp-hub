@@ -1,8 +1,8 @@
 <script setup>
 
 import DriverLayout from '@/Layouts/DriverLayout.vue'
-// import ViewOrderDialog from '@/Components/Driver/ViewOrderDialog.vue'
 import ViewOrderDialog from './Partials/ViewOrderDialog.vue'
+import OrderCard from './Partials/OrderCard.vue'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import axios from 'axios'
@@ -50,6 +50,8 @@ Echo.private('orders')
         
     })
 
+
+
 </script>
 
 <template>
@@ -64,7 +66,7 @@ Echo.private('orders')
                 :columns="columns"
                 row-key="name"
                 bordered 
-                :grid="$q.screen.lt.md"
+                grid
             >
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
@@ -77,7 +79,26 @@ Echo.private('orders')
                     </q-td>
                 </template>
                 <template v-slot:item="props">
-                    <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
+                    <div class="col-md-6 col-xs-12 col-sm-12 col-lg-6 col-xl-6">
+                        <OrderCard :order="props.row" :google_maps_api_key="google_maps_api_key" />
+                    </div>
+                </template>
+                <template v-slot:no-data>
+                    <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
+                        <div class="text-center">
+                            <q-img src="/images/empty_orders.png" style="height: 100px; width: 100px;"></q-img>
+                            <div>
+                                <div class="text-subtitle1 text-grey-7"> There are currently no orders, Check again later...</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </q-table>
+        </q-card>
+    </div>
+</template>
+
+ <!-- <q-card class="col-12 q-mb-sm" bordered flat :square="$q.screen.lt.md">
                         <q-card-section :class="$q.screen.lt.md ? 'q-px-sm' : ''">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">
@@ -124,17 +145,4 @@ Echo.private('orders')
                                 </div>
                             </div>
                         </q-card-section>
-                    </q-card>
-                </template>
-                <template v-slot:no-data>
-                    <div class="full-width row flex-center q-gutter-sm" style="height: 70vh;">
-                        <!-- <q-icon size="2em" name="shopping_cart" /> -->
-                        <span>
-                            There are currently no orders, Check again later...
-                        </span>
-                    </div>
-                </template>
-            </q-table>
-        </q-card>
-    </div>
-</template>
+                    </q-card> -->

@@ -34,13 +34,15 @@ const showPastOrders = ref(false)
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <OrderCardItem v-for="order in orders" :order="order"/>
                         <div v-show="orders.length <= 0">
-                            <div class="text-center">
-                                <q-img src="/images/empty_orders.png" style="height: 100px; width: 100px;"></q-img>
-                                <div>
-                                    <div class="text-subtitle1 text-grey-7">No Orders Found</div>
-                                    <Link :href="route('customer.products.index')">
-                                        <q-btn class="q-mt-xl" color="primary" rounded no-caps label="Browse Milkteas"/>
-                                    </Link>
+                            <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
+                                <div class="text-center">
+                                    <q-img src="/images/empty_orders.png" style="height: 100px; width: 100px;"></q-img>
+                                    <div>
+                                        <div class="text-subtitle1 text-grey-7">No Orders Found</div>
+                                        <Link :href="route('customer.products.index')">
+                                            <q-btn class="q-mt-xl" color="primary" rounded no-caps label="Browse Milkteas"/>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
