@@ -41,7 +41,7 @@ onMounted(() => {
 
     Echo.private('orders')
     .listen('Product\\OrderPending', (data) => {
-        $q.notify('new order arrived')
+        $q.notify('New Order Arrived')
         orderStore.getOrders()
         console.log(data)
     })

@@ -30,7 +30,7 @@ function completeOrder() {
             orderStore.getOrders()
             console.log('go fetch')
             isOrderCompleteDialog.value = false
-            $q.notify('Order marked as completed')
+            $q.notify('Order Marked As Completed')
         }
     })
 }

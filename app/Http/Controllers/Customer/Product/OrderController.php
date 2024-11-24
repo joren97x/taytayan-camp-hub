@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\Product;
 
 use App\Events\Notify;
 use App\Events\Product\OrderPending;
+use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Notification;
@@ -117,6 +118,7 @@ class OrderController extends Controller
             'link' => route('customer.orders.show', $order->id),
         ]);
 
+        event(new OrderStatusUpdated($order));
         event(new Notify($notification));
 
         return back();

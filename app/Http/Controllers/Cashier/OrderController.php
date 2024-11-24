@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Cashier;
 
+use App\Events\Notify;
 use App\Events\Product\OrderReadyForDelivery;
 use App\Events\Product\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Services\CartService;
 use Carbon\Carbon;
@@ -80,9 +82,21 @@ class OrderController extends Controller
         $request->validate([
             'status' => 'required'
         ]);
+
         // $order->waiting_time = Carbon::now()->addMinutes($request->waiting_time);
         $order->status = $request->status;
         $order->update();
+
+        if($request->status == Order::STATUS_READY_FOR_PICKUP) {
+            $notification = Notification::create([
+                'user_id' => $order->user_id,
+                'title' => 'Order Ready To Be Picked Up',
+                'description' => 'Your order is ready to be picked up from the store.',
+                'link' => route('customer.orders.show', $order->id),
+            ]);
+    
+            event(new Notify($notification));
+        }
 
         // dd($order);
         // event(new OrderStatusUpdated($order, true, app(CartService::class)));

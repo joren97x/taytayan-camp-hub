@@ -50,7 +50,7 @@ function readyOrder() {
             // orderStore.getOrders()
             console.log('go fetch')
             readyOrderDialog.value = false
-            $q.notify('Order Accepted asdsads')
+            $q.notify('Order Is Ready')
         }
     })
 }
