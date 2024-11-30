@@ -22,11 +22,8 @@ class ViewController extends Controller
     public function dashboard()
     {
 
-        $revenue = Booking::where('status', Booking::STATUS_COMPLETE)
-        ->selectRaw('SUM(total) as total_revenue, DATE(created_at) as date')
-        ->groupBy('date')
-        ->orderBy('date', 'asc')
-        ->get();
+        $revenue = Booking::whereIn('status', [Booking::STATUS_COMPLETE, Booking::STATUS_CHECKED_OUT])
+        ->sum('total');
 
         $status_counts = Booking::selectRaw('status, COUNT(*) as count')
         ->groupBy('status')

@@ -25,6 +25,16 @@ import { Link } from '@inertiajs/vue3'
                     <div>09267495567</div>
                     <div>taytayancamp@email.com</div>
                 </div>
+                
+            </div>
+
+            <!-- Right Section: Links -->
+            <div class="col-auto">
+                <div class="q-mt-md">
+                    <Link :href="route('home')">Home</Link>
+                    <Link :href="route('home')" class="q-mx-lg">About Us</Link>
+                    <Link :href="route('home')">Contact Us</Link>
+                </div>
                 <div>
                     <div class="text-weight-bold text-subtitle1">Follow Us</div>
                     <q-btn round>
@@ -37,7 +47,7 @@ import { Link } from '@inertiajs/vue3'
                                 clip-rule="evenodd"></path>
                         </svg>
                     </q-btn>
-                    <q-btn round>
+                    <q-btn round class="q-mx-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.87 28.87" id="instagram">
                             <defs>
                                 <linearGradient id="linear-gradient" x1="-1.84" x2="32.16" y1="30.47" y2="-3.03"
@@ -77,15 +87,6 @@ import { Link } from '@inertiajs/vue3'
                                 </path>
                             </svg>
                     </q-btn>
-                </div>
-            </div>
-
-            <!-- Right Section: Links -->
-            <div class="col-auto">
-                <div class="q-mt-md">
-                    <Link :href="route('home')">Home</Link>
-                    <Link :href="route('home')" class="q-mx-lg">About Us</Link>
-                    <Link :href="route('home')">Contact Us</Link>
                 </div>
             </div>
         </div>

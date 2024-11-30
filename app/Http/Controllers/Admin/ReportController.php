@@ -70,7 +70,7 @@ class ReportController extends Controller
         // 1. Total Sales (All Modules): Overall revenue across all three modules
         $products_sales = Order::whereIn('status', [Order::STATUS_COMPLETED, Order::STATUS_DELIVERED])->sum('total');
         $tickets_sales = TicketOrder::where('status', 'completed')->sum('amount');
-        $booking_revenue = Booking::where('status', 'complete')->sum('total');
+        $booking_revenue = Booking::whereIn('status', [Booking::STATUS_CHECKED_OUT, Booking::STATUS_COMPLETE])->sum('total');
         $totalSales = $products_sales + $tickets_sales + $booking_revenue;
 
         $order_payments = Order::select('payment_method', DB::raw('count(*) as count'))
@@ -229,7 +229,8 @@ class ReportController extends Controller
                 ? $ticketOrder->user->first_name . ' ' . $ticketOrder->user->last_name 
                 : ($ticketOrder->tickets->first()->name ?? 'No Name'),
                 'status' => $ticketOrder->status, // Adjust if you have statuses
-                'amount' => $ticketOrder->amount,
+                'amount' => $ticketOrder->user 
+                ? $ticketOrder->amount : $ticketOrder->event->admission_fee,
                 'payment_method' => $ticketOrder->payment_method,
                 'created_at' => $ticketOrder->created_at,
             ];

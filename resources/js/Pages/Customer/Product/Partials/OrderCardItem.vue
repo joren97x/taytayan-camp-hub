@@ -411,7 +411,7 @@ const getStatusColor = (status) => {
                         v-close-popup
                     />
                     <div class="text-h6">Rate</div>
-                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
+                    <div class="text-subtitle1">How was the order? We'd appreciate your feedback, thanks!</div>
                     <q-rating 
                         size="xl" 
                         v-model="ratingForm.rating" 

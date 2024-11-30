@@ -26,7 +26,7 @@ const showDeleteFacilityDialog = (facility) => {
 }
 
 const deleteFacility = () => {
-    deleteFacilityForm.delete(route('admin.facilities.destroy', deleteFacilityForm.product.id), {
+    deleteFacilityForm.delete(route('admin.facilities.destroy', deleteFacilityForm.facility.id), {
         onSuccess: () => {
             deleteFacilityDialog.value = false
             deleteFacilityForm.reset()

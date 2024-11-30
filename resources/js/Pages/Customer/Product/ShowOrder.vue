@@ -1,5 +1,5 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3'
+import { Link, useForm, Head } from '@inertiajs/vue3'
 import { useQuasar, date } from 'quasar'
 import { onMounted, ref } from 'vue'
 import OrderedItems from '@/Components/OrderedItems.vue'
@@ -175,6 +175,7 @@ const getChipColor = (status) => {
 </script>
 
 <template>
+    <Head title="Order" />
     <Profile>
     <q-card flat bordered :square="$q.screen.lt.md">
         <q-card-actions class="text-center justify-center items-center flex">

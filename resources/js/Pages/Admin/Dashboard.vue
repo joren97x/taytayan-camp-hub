@@ -4,6 +4,8 @@ import { Head, Link } from '@inertiajs/vue3';
 import { useDrawerStore } from '@/Stores/DrawerStore';
 import { onMounted, ref } from 'vue';
 import { date } from 'quasar';
+import { formatDistanceToNow } from 'date-fns';
+
 import {
   Chart,
   CategoryScale,
@@ -19,7 +21,6 @@ import {
   PointElement,
   Title,
 } from 'chart.js';
-import { formatDistanceToNow } from 'date-fns';
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, PieController, ArcElement, Legend, Tooltip, LineController, LineElement, PointElement, Title);
 
@@ -299,6 +300,11 @@ const formatMoney = (money) => {
                             {{ formatDistanceToNow(props.row.created_at) }} ago 
                         </q-td>
                     </template>
+                    <template v-slot:body-cell-amount="props">
+                        <q-td :props="props">
+                            {{ formatMoney(props.row.amount) }} ago 
+                        </q-td>
+                    </template>
                 </q-table>
             </q-card>
         </div>
@@ -307,7 +313,7 @@ const formatMoney = (money) => {
                 <canvas ref="userRegistrationsChart"></canvas>
             </q-card>
         </div>
-        <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
+        <!-- <div class="col-6 col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <q-card class="q-pa-sm" style="max-height: 100%; height: 100%">
                 <canvas ref="paymentCanvas"></canvas>
             </q-card>
@@ -316,7 +322,7 @@ const formatMoney = (money) => {
             <q-card class="q-pa-sm" style="max-height: 350px; height: 350px">
                 <canvas ref="eventsCanva"></canvas>
             </q-card>
-        </div>
+        </div> -->
         
     </div>
 </div>

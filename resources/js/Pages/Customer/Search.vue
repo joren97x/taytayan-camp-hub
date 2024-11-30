@@ -1,7 +1,7 @@
 
 <script setup>
 
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import ProductCard from './Product/Partials/ProductCard.vue'
@@ -29,6 +29,7 @@ const search = () => {
 
 
 <template>
+    <Head title="Search" />
     <q-toolbar :class="$q.screen.gt.sm ? 'q-mt-xl' : ''">
         <q-toolbar-title>
             <q-input 

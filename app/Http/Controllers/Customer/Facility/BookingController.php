@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Luigel\Paymongo\Facades\Paymongo;
 
@@ -21,7 +22,11 @@ class BookingController extends Controller
     {
         
         // dd(User::where('role', 'cashier')->orderBy('updated_at', 'desc')->first());
-        $bookings = Booking::with('facility')
+        $bookings = Booking::with(['facility' => function ($query) {
+            $query->withCount(['facility_ratings as average_rating' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }]);
+        }])
         ->where('user_id', auth()->id())
         ->latest()
         ->get();
@@ -60,7 +65,11 @@ class BookingController extends Controller
     {
         //
         return Inertia::render('Customer/Facility/ShowBooking', [
-            'booking' => Booking::with('facility')->findOrFail($id)
+            'booking' => Booking::with(['facility' => function ($query) {
+                $query->withCount(['facility_ratings as average_rating' => function ($query) {
+                    $query->select(DB::raw('coalesce(avg(rating), 0)'));
+                }]);
+            }])->findOrFail($id)
         ]);
     }
 

@@ -26,7 +26,7 @@ const submit = () => {
 
 <template>
     
-    <Head title="New Category" />
+    <Head title="Create Category" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card class="round-border">
             <q-card-section  style="position: sticky; top: 0; z-index: 99;" class="q-pa-none q-pt-md q-px-md bg-white">

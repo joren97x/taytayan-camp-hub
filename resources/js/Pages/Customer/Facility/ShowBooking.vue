@@ -81,6 +81,7 @@ const getChipColor = (status) => {
 </script>
 
 <template>
+    <Head title="Booking" />
     <Profile>
         <q-card bordered flat :square="$q.screen.lt.md">
             <q-card-actions class="text-center justify-center items-center flex">
@@ -233,7 +234,7 @@ const getChipColor = (status) => {
                     label="Cancel Booking" 
                     @click="cancelDialog = true" 
                     color="negative" 
-                    :class="`${$q.screen.lt.md ? ' full-width q-mb-sm' : ''}`"
+                    :class="`${$q.screen.lt.md ? ' full-width q-mb-sm' : ''} q-mr-sm`"
                     no-caps 
                     rounded 
                     outline 
@@ -286,7 +287,7 @@ const getChipColor = (status) => {
                         v-close-popup
                     />
                     <div class="text-h6">Rate the facility</div>
-                    <div class="text-subtitle1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, nesciunt?</div>
+                    <div class="text-subtitle1">LThank you for booking in our faiclities here!, How was it?</div>
                     <q-rating 
                         size="xl" 
                         v-model="ratingForm.rating" 

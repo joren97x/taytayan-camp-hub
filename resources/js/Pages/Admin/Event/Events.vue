@@ -92,7 +92,7 @@ const getStatusColor = (status) => {
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Events" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card borderd flat>
             <q-table
@@ -269,7 +269,7 @@ const getStatusColor = (status) => {
                     </q-item-section>
                     <q-item-section>
                         <q-item-label class="text-weight-bold text-subtitle1">{{ deleteEventForm.event.title }}</q-item-label>
-                        <q-item-label class="">{{ deleteEventForm.event.description }}</q-item-label>
+                        <q-item-label class="">{{ date.formatDate(deleteEventForm.event.date, 'MMMM D, YYYY') }}</q-item-label>
                     </q-item-section>
                 </q-item>
             </q-card-section>

@@ -45,11 +45,18 @@ const columns = [
   { name: 'actions', align: 'center', label: 'Actions', field: 'actions', sortable: true },
 ]
 
+const initialPagination = {
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 10
+}
+
 </script>
 
 <template>
     
-    <Head title="Group Modifiers" />
+    <Head title="Modifier Groups" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat>
             <q-table
@@ -61,6 +68,7 @@ const columns = [
                 row-key="name"
                 :filter="filter"
                 :grid="$q.screen.lt.md"
+                :pagination="initialPagination"
             >
                 <template v-slot:top>
                     <q-btn icon="menu" flat dense @click="drawerStore.drawer = true" class="lt-md q-mr-sm"/>

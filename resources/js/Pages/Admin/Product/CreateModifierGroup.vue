@@ -39,7 +39,7 @@ const onModifierItemDeleted = (index) => {
 
 <template>
     
-    <Head title="New Modifiers Groups" />
+    <Head title="Create Modifiers Group" />
     <q-form @submit="submitModifierGroupForm">
         <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
             <q-card bordered flat style="border-radius: 20px">

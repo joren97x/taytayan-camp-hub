@@ -5,7 +5,7 @@ import { useDrawerStore } from '@/Stores/DrawerStore'
 import { Head } from '@inertiajs/vue3'
 import { onMounted, ref } from 'vue'
 import { date } from 'quasar'
-
+import { formatDistanceToNow } from 'date-fns'
 import {
   Chart,
   CategoryScale,
@@ -85,6 +85,15 @@ onMounted(() => {
     });
 })
 
+const recent_transactions_columns = [
+  { name: 'type', label: 'Type', align: 'left', field: 'type' },
+  { name: 'user', label: 'User', align: 'left', field: 'user' },
+  { name: 'status', label: 'Status', align: 'left', field: 'status',  },
+  { name: 'amount', label: 'Amount', align: 'right', field: 'amount' },
+  { name: 'payment_method', label: 'Payment Method', align: 'left', field: 'payment_method' },
+  { name: 'created_at', label: 'Date', align: 'left', field: 'created_at' },
+]
+
 </script>
 
 <template>
@@ -141,39 +150,14 @@ onMounted(() => {
                 <q-table
                     flat
                     title="Recent Transactions"
-                    :rows="recent_transactions"
+                    :rows="Object.values(recent_transactions)"
+                    :columns="recent_transactions_columns"
                     row-key="id"
-                    :columns="recentTransactionsColumns"
-                    :grid="$q.screen.lt.md"
-                    :pagination="pagination"
+                    :paginatin="pagination"
                 >
                     <template v-slot:body-cell-created_at="props">
                         <q-td :props="props">
-                            {{ date.formatDate(props.row.created_at, 'MMM D, YYYY') }}
-                        </q-td>
-                    </template>
-                    <template v-slot:body-cell-total="props">
-                        <q-td :props="props">
-                            {{ formatMoney(props.row.total) }}
-                        </q-td>
-                    </template>
-                    <template v-slot:body-cell-user="props">
-                        <q-td :props="props">
-                            <q-item class="q-pa-none">
-                                <q-item-section avatar>
-                                    <q-avatar class="text-white" color="grey">
-                                        <q-img v-if="props.row.user.profile_pic" :src="`/storage/${props.row.user.profile_pic}`" class="fit" fit="cover"/>
-                                        <div v-else>
-                                            {{ props.row.user.first_name[0] }}
-                                        </div>
-                                    </q-avatar> 
-                                </q-item-section>
-                                <q-item-section class="items-start">
-                                    <q-item-label>{{ props.row.user.first_name + ' ' + props.row.user.last_name  }}</q-item-label>
-                                    <q-item-label caption class="ellipsis-2-lines q-mr-xl">{{ props.row.user.email }}</q-item-label>
-                                    <!-- <q-item-label caption >{{ formatMoney(props.row.user.price) }}</q-item-label> -->
-                                </q-item-section>
-                            </q-item>
+                            {{ formatDistanceToNow(props.row.created_at) }} ago 
                         </q-td>
                     </template>
                 </q-table>

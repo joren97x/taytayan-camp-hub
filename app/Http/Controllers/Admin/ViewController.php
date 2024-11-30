@@ -16,6 +16,7 @@ class ViewController extends Controller
 {
     //
     public function dashboard() {
+        dd('hii');
 
         $orders = Order::with('user')
             ->latest('created_at')
@@ -50,21 +51,21 @@ class ViewController extends Controller
             });
         // Fetch recent ticket orders
         $ticketOrders = TicketOrder::with('user', 'event')
-            ->latest('created_at')
-            ->take(10)
-            ->get()
-            ->map(function ($ticketOrder) {
-                return [
-                    'id' => $ticketOrder->id,
-                    'type' => 'Ticket',
-                    'user' => $ticketOrder->user->name,
-                    'status' => 'Purchased', // Adjust if you have statuses
-                    'amount' => $ticketOrder->amount,
-                    'payment_method' => $ticketOrder->payment_method,
-                    'created_at' => $ticketOrder->created_at,
-                ];
-            });
-
+        ->latest('created_at')
+        ->take(10)
+        ->get()
+        ->map(function ($ticketOrder) {
+            return [
+                'id' => $ticketOrder->id,
+                'type' => 'Ticket',
+                'user' => $ticketOrder->user ? $ticketOrder->user->first_name . $ticketOrder->user->last_name : $ticketOrder->tickets[0]->name,
+                'status' => 'Purchased', // Adjust if you have statuses
+                // 'amount' => $ticketOrder->amount,
+                'amount' => $ticketOrder->user ?  200.00 : 200.00,
+                'payment_method' => $ticketOrder->payment_method,
+                'created_at' => $ticketOrder->created_at,
+            ];
+        });
         // Combine all transactions into a single collection
         $recentTransactions = collect($orders)
             ->merge($bookings)

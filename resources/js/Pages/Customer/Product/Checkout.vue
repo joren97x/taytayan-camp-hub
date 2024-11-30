@@ -303,7 +303,7 @@ watch(mode, () => {
                                             </q-item-section>
                                             <q-item-section>
                                                 <q-item-label>Walk In</q-item-label>
-                                                <q-item-label caption>Lorem ipsum dolor sit amet.</q-item-label>
+                                                <q-item-label caption>Pay with cash directly to the store upon arrival.</q-item-label>
                                             </q-item-section>
                                         </q-item>
                                     </q-card>

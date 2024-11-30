@@ -28,7 +28,6 @@ defineProps({ ticket_orders: Object })
                     <TicketCard v-for="ticket_order in ticket_orders" :ticket_order="ticket_order"/>
                     <div v-show="ticket_orders.length == 0">
                         <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
-                            <!-- <q-icon name="confirmation_number" size="50px"/> -->
                             <div class="text-center">
                                 <q-img src="/images/empty_tickets.png" style="height: 100px; width: 100px;"></q-img>
                                 
@@ -40,7 +39,6 @@ defineProps({ ticket_orders: Object })
                                 </div>
                             </div>
                         </div>
-                        <!-- <q-img src="/hp_event.png"></q-img> -->
                     </div>
                 </div>
             </div>

@@ -51,30 +51,6 @@ const setContainer = (category) => {
     return container
 }
 
-const testimonials = [
-  {
-    title: "Phasellus feugiat lacus vitae neque ornare!",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus feugiat lacus vitae neque ornare, vitae libero.",
-    username: "@buckybns",
-    rating: 4,
-  },
-  {
-    title: "Amazing experience!",
-    description:
-      "I had an amazing time, and everything went smoothly! Highly recommended.",
-    username: "@janedoe",
-    rating: 5,
-  },
-  {
-    title: "Would love to come back!",
-    description:
-      "The service was top-notch, and the experience was unforgettable. I can't wait to return!",
-    username: "@johndoe",
-    rating: 5,
-  },
-];
-
 </script>
 
 <template>

@@ -69,39 +69,64 @@ class ViewController extends Controller
             // ->pluck('total', 'payment_method'));
         // Recent Transactions
         // dd(Order::with('user')->first());
-        $recent_transactions = Booking::with('user')
-        ->select('id', 'user_id', 'total', 'created_at', 'status')
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get()
-            ->map(function ($transaction) {
-                $transaction->type = 'Booking'; // Add type for bookings
-                return $transaction;
-            })
-            ->merge(
-                Order::with('user')
-                ->select('id', 'user_id', 'total', 'created_at', 'status')
-                    ->orderBy('created_at', 'desc')
-                    ->take(5)
-                    ->get()
-                    ->map(function ($transaction) {
-                        $transaction->type = 'Order'; // Add type for orders
-                        return $transaction;
-                    })
-            )
-            ->merge(
-                TicketOrder::with('user')
-                ->select('id', 'user_id', 'amount as total', 'created_at', 'status')
-                    ->orderBy('created_at', 'desc')
-                    ->take(5)
-                    ->get()
-                    ->map(function ($transaction) {
-                        $transaction->type = 'Ticket'; // Add type for ticket orders
-                        return $transaction;
-                    })
-            )
-            ->sortByDesc('created_at') // Sort by created_at after merging
-            ->values(); // Re-index after sorting
+        
+        $orders = Order::with('user')
+        ->latest('created_at')
+        ->take(10)
+        ->get()
+        ->map(function ($order) {
+            return [
+                'id' => $order->id,
+                'type' => 'Order',
+                'user' => $order->user->first_name . $order->user->last_name,
+                'status' => $order->status,
+                'amount' => null, // You can calculate amount based on items if needed
+                'payment_method' => $order->payment_method,
+                'created_at' => $order->created_at,
+            ];
+        });
+    // Fetch recent bookings
+    $bookings = Booking::with('user')
+        ->latest('created_at')
+        ->take(10)
+        ->get()
+        ->map(function ($booking) {
+            return [
+                'id' => $booking->id,
+                'type' => 'Booking',
+                'user' => $booking->user->first_name . $booking->user->last_name,
+                'status' => $booking->status,
+                'amount' => $booking->total,
+                'payment_method' => $booking->payment_method,
+                'created_at' => $booking->created_at,
+            ];
+        });
+    // Fetch recent ticket orders
+    $ticketOrders = TicketOrder::with('user', 'event', 'tickets')
+        ->latest('created_at')
+        ->take(10)
+        ->get()
+        ->map(function ($ticketOrder) {
+            return [
+                'id' => $ticketOrder->id,
+                'type' => 'Ticket',
+                // Check if user exists, else provide a default name
+                'user' => $ticketOrder->user 
+                ? $ticketOrder->user->first_name . ' ' . $ticketOrder->user->last_name 
+                : ($ticketOrder->tickets->first()->name ?? 'No Name'),
+                'status' => $ticketOrder->status, // Adjust if you have statuses
+                'amount' => $ticketOrder->user 
+                ? $ticketOrder->amount : $ticketOrder->event->admission_fee,
+                'payment_method' => $ticketOrder->payment_method,
+                'created_at' => $ticketOrder->created_at,
+            ];
+        });
+
+        $recent_transactions = collect($orders)
+            ->merge($bookings)
+            ->merge($ticketOrders)
+            ->sortByDesc('created_at')
+            ->take(10);
 
             $top_selling_products = CartProduct::select('product_id', DB::raw('SUM(quantity) as total_quantity'))
             ->groupBy('product_id')

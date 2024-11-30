@@ -80,7 +80,7 @@ const initialPagination = {
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Orders" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card flat bordered style="border-radius: 20px">
             <q-table

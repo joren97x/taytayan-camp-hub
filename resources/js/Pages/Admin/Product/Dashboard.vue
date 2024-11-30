@@ -35,7 +35,8 @@ const props = defineProps({
     featured_products: Object,
     top_selling_product: Object,
     average_order_value: Number,
-    pending_orders: Number
+    pending_orders: Number,
+    least_selling_products: Object
 });
 
    
@@ -127,7 +128,7 @@ onMounted(() => {
                         label: function(context) {
                             const value = context.raw;
                             const label = context.label;
-                            return `${label}: $${value.toLocaleString()}`; // Label with value
+                            return `${label}: ${value} Orders`; // Label with value
                         }
                     }
                 },
@@ -162,7 +163,7 @@ const formatMoney = (money) => {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Products Dashboard" />
 <div :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'">
     <div class="flex">
         <q-btn icon="menu" class="lt-md" @click="drawerStore.drawer = true" flat/>
@@ -210,12 +211,21 @@ const formatMoney = (money) => {
                 </q-card-section>
             </q-card>
         </div>
-        <div class="col-6">
-            <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6">
+            <!-- <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
                 <canvas ref="ordersByStatusCanvas"></canvas>
+            </q-card> -->
+            <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
+                <canvas ref="ordersByModeCanvas"></canvas>
             </q-card>
         </div>
-        <div class="col-6">
+        
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-lg-6">
+            <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
+                <canvas ref="ordersByPaymentMethodCanvas"></canvas>
+            </q-card>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <q-card bordered>
                 <q-table
                     flat
@@ -229,7 +239,7 @@ const formatMoney = (money) => {
                         <q-td :props="props">
                             <q-item class="q-pr-none">
                                 <q-item-section avatar>
-                                    <q-img :src="`/storage/${props.row.photo}`"></q-img>
+                                    <q-img :src="`/storage/${props.row.photo}`" height="50px"></q-img>
                                 </q-item-section>
                                 <q-item-section>
                                     <q-item-label>{{ props.row.name }}</q-item-label>
@@ -246,22 +256,48 @@ const formatMoney = (money) => {
                 </q-table>
             </q-card>
         </div>
-        <div class="col-6">
-            <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
-                <canvas ref="ordersByPaymentMethodCanvas"></canvas>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <q-card bordered>
+                <q-table
+                    flat
+                    title="Least Selling Products"
+                    :rows="least_selling_products"
+                    :columns="columns"
+                    row-key="id"
+                    :paginatin="pagination"
+                >
+                    <template v-slot:body-cell-product="props">
+                        <q-td :props="props">
+                            <q-item class="q-pr-none">
+                                <q-item-section avatar>
+                                    <q-img :src="`/storage/${props.row.photo}`" height="50px"></q-img>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>{{ props.row.name }}</q-item-label>
+                                    <q-item-label caption>{{ props.row.description }}</q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </q-td>
+                    </template>
+                    <template v-slot:body-cell-price="props">
+                        <q-td :props="props">
+                            {{ formatMoney(props.row.price) }}
+                        </q-td>
+                    </template>
+                </q-table>
             </q-card>
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
             <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
                 <canvas ref="ordersByModeCanvas"></canvas>
             </q-card>
-        </div>
-        <div class="col-6">
+        </div> -->
+        <!-- <div class="col-6">
             <q-card class="q-pa-sm" style="max-height: 450px; height: 450px">
                 <canvas ref="popularProductsCanvas"></canvas>
             </q-card>
-        </div>
-        
+        </div> -->
+<!--         
         <div class="col-6">
             <q-card class="q-pa-sm full-height">
                 <canvas ref="userRegistrationsChart"></canvas>
@@ -276,7 +312,7 @@ const formatMoney = (money) => {
             <q-card class="q-pa-sm" style="max-height: 350px; height: 350px">
                 <canvas ref="eventsCanva"></canvas>
             </q-card>
-        </div>
+        </div> -->
     </div>
 </div>
 </template>

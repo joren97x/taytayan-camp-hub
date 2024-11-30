@@ -150,6 +150,7 @@ class ProductController extends Controller
 
         ModifierGroupProduct::where('product_id', $id)->delete();
 
+        
         foreach ($request->modifier_group_ids as $modifier_group_id) {
             ModifierGroupProduct::create([
                 'modifier_group_id' => $modifier_group_id,

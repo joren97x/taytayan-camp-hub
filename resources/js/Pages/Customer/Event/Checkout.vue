@@ -186,7 +186,7 @@ const addAttendee = () => {
                                                 </q-item-section>
                                                 <q-item-section>
                                                     <q-item-label>Walk In</q-item-label>
-                                                    <q-item-label caption>Pay with cash directly to the delivery person upon arrival.</q-item-label>
+                                                    <q-item-label caption>Pay with cash directly to the event upon arrival.</q-item-label>
                                                 </q-item-section>
                                             </q-item>
                                         </q-card>

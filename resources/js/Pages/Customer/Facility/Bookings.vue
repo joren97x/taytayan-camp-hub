@@ -41,7 +41,6 @@ const showPastBookings = ref(false)
                         <div class="flex items-center justify-center" style="height: 70vh; width: 100%;">
                             <div class="text-center">
                                 <q-img src="/images/empty_bookings.png" style="height: 100px; width: 100px;"></q-img>
-                                
                                 <div>
                                     <div class="text-subtitle1 text-grey-7">No Bookings Found</div>
                                     <Link :href="route('customer.facilities.index')">

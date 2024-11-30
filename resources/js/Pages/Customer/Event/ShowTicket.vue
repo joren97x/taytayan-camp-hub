@@ -57,7 +57,7 @@ const getChipColor = (status) => {
 
 <template>
 
-    <Head title="Tickets" />
+    <Head title="Ticket" />
     <Profile>
         <!-- <div :class="$q.screen.lt.md ? '' : 'q-pa-md'"> -->
         <q-card bordered flat :style="$q.screen.gt.sm ? 'max-width: 70vw; width: 100%;' : ''" :square="$q.screen.lt.md">

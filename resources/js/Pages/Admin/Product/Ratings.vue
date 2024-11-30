@@ -24,7 +24,7 @@ const columns = [
 
 <template>
     
-    <Head title="Reviews" />
+    <Head title="Ratings" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card bordered flat style="border-radius: 20px">
             <q-table

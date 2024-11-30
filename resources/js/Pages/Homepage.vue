@@ -206,9 +206,7 @@ const showVideo = ref(false)
             <q-card class="q-pa-lg" style="height: 100%;" bordered flat>
                 <img style="height: 35px; width: 35px" src="https://assets-global.website-files.com/609cbadfde419c81adafa17b/609db59d8c7a879cbd837708_Quotation%20Mark.svg" alt="">
                 <div class="q-mt-md text-start ellipsis-3-lines">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, consectetur!
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, consectetur!
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus, consectetur!
+                
                 </div>
                 <br>
                 - John Doe

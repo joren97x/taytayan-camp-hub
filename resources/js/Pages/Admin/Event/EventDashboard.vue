@@ -3,7 +3,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
 import { useQuasar, date } from 'quasar'
-import { Link } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 
 defineOptions({ layout: AdminLayout })
 const props = defineProps({ event: Object, tickets: Object })
@@ -23,7 +23,7 @@ const checkedIn = computed(() => {
 </script>
 
 <template>
-    
+    <Head title="Event Dashboard" />
     <div :class="$q.screen.gt.sm ? 'q-pa-md' : ''">
         <q-card class="q-mb-md" bordered flat>
             <q-card-actions class="justify-center">

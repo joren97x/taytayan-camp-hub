@@ -32,7 +32,7 @@ class Product extends Model
 
     public function modifier_groups() : BelongsToMany
     {
-        return $this->belongsToMany(ModifierGroup::class, 'modifier_group_products');
+        return $this->belongsToMany(ModifierGroup::class, 'modifier_group_products')->whereNull('modifier_group_products.deleted_at');
     }
 
     public function orders(): BelongsToMany

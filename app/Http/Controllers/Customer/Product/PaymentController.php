@@ -19,13 +19,15 @@ class PaymentController extends Controller
     public function success(Request $request, CartService $cartService) 
     {
 
-        $checkout_data = session('checkout_data');
-        $cart = Cart::find($checkout_data['cart_id']);
+     
         $payment_session = session('payment_session');
         // dd($checkout_data['cart_id']);
         if (!$payment_session) {
             return redirect(route('customer.orders.index'));
         }
+
+        $checkout_data = session('checkout_data');
+        $cart = Cart::find($checkout_data['cart_id']);
         
         $order = Order::create([
             'user_id' => auth()->id(),

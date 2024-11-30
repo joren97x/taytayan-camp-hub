@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ViewController extends Controller
@@ -57,6 +58,22 @@ class ViewController extends Controller
             Order::STATUS_DELIVERING,
         ])->count();
 
+        $popular_products = Order::join('cart_products', 'orders.cart_id', '=', 'cart_products.cart_id')
+        ->join('products', 'cart_products.product_id', '=', 'products.id') // Join the products table
+        ->selectRaw('products.id as product_id, products.name, products.description, products.price, products.photo, SUM(cart_products.quantity) as quantity')
+        ->groupBy('cart_products.product_id', 'products.id', 'products.name', 'products.description', 'products.photo', 'products.price') // Group by product details as well
+        ->orderByDesc('quantity') // Order by the total quantity sold
+        ->take(5) // Get top 10 products
+        ->get();
+
+
+        $least_selling_products = Product::leftJoin('cart_products', 'products.id', '=', 'cart_products.product_id')
+        ->select('products.id', 'products.name', 'products.photo', 'products.description', 'products.price', DB::raw('COALESCE(SUM(cart_products.quantity), 0) as quantity'))
+        ->groupBy('products.id', 'products.name', 'products.photo', 'products.description', 'products.price')
+        ->orderBy('quantity', 'asc')
+        ->take(5)
+        ->get();
+
         $top_selling_product = Product::select('products.*')
             ->selectRaw('SUM(cart_products.quantity) as total_quantity')
             ->join('cart_products', 'products.id', '=', 'cart_products.product_id')
@@ -75,7 +92,8 @@ class ViewController extends Controller
             'featured_products',
             'top_selling_product',
             'average_order_value',
-            'pending_orders'
+            'pending_orders',
+            'least_selling_products'
         ));
     }
 
